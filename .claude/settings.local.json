@@ -8,7 +8,9 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8765/_preview.html)",
       "Bash([ -f \"$CHROME\" ])",
       "Read(//Applications/**)",
-      "Bash(grep -nB3 \"text-transform: uppercase\" platform.html)"
+      "Bash(grep -nB3 \"text-transform: uppercase\" platform.html)",
+      "Bash(grep -nE \"domain: ' | '$|domain: '[^']* |[^.]edu'|domain: ''\")",
+      "Bash(grep -nE \"domain: ' | '[[:space:]]*,?$\" funnel.html)"
     ]
   }
 }

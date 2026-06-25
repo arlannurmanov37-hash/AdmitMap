@@ -430,13 +430,13 @@
                     <label class="form-label">Graduation Year</label>
                     <select class="form-input" id="grad-year">
                         <option value="" disabled selected>Select year</option>
-                        <option>2024</option>
-                        <option>2025</option>
                         <option>2026</option>
                         <option>2027</option>
                         <option>2028</option>
                         <option>2029</option>
                         <option>2030</option>
+                        <option>2031</option>
+                        <option>2032</option>
                     </select>
                 </div>
             </div>
@@ -1882,9 +1882,9 @@
             { name: 'University of San Diego', domain: 'sandiego.edu' },
             { name: 'University of San Francisco', domain: 'usfca.edu' },
             { name: 'Chapman University', domain: 'chapman.edu' },
-            { name: 'Occidental College', domain: ' occidental.edu' },
+            { name: 'Occidental College', domain: 'occidental.edu' },
             { name: 'University of Redlands', domain: 'redlands.edu' },
-        ];
+        ].filter((u, i, arr) => arr.findIndex(x => x.domain === u.domain) === i); // de-dupe by domain
 
         // ── NAVIGATION ──
         function goToStep(n) {
