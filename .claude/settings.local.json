@@ -10,7 +10,10 @@
       "Read(//Applications/**)",
       "Bash(grep -nB3 \"text-transform: uppercase\" platform.html)",
       "Bash(grep -nE \"domain: ' | '$|domain: '[^']* |[^.]edu'|domain: ''\")",
-      "Bash(grep -nE \"domain: ' | '[[:space:]]*,?$\" funnel.html)"
+      "Bash(grep -nE \"domain: ' | '[[:space:]]*,?$\" funnel.html)",
+      "Bash(echo \"[exit $?] — empty above means clean\")",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
