@@ -1,0 +1,6 @@
+# Launch preview panel artifacts (generated, not source)
+_preview.html
+_pv_*.html
+
+# Local Claude Code settings (machine-specific)
+.claude/settings.local.json
