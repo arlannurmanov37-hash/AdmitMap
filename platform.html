@@ -2595,21 +2595,101 @@
         }
 
         /* ── RESPONSIVE ── */
-        @media (max-width: 768px) {
+        /* ═══════════════════════════════════════════════
+   RESPONSIVE  —  tablet & mobile
+═══════════════════════════════════════════════ */
+        @media (max-width: 860px) {
+
+            /* Sidebar becomes an off-canvas drawer */
             .sidebar {
-                display: none;
+                transform: translateX(-100%);
+                transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+                box-shadow: 0 0 60px rgba(0, 0, 0, .4);
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sb-overlay.show {
+                display: block;
             }
 
             .main {
                 margin-left: 0;
             }
 
-            .ct-head,
-            .ct-row {
-                grid-template-columns: 1fr 80px 90px;
+            .sb-toggle {
+                display: inline-flex;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .content {
+                padding: 22px 18px;
+            }
+
+            .main {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* Dashboard hero stacks */
+            .dash-hero {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                padding: 26px 24px;
+                gap: 16px;
+            }
+
+            .dash-hero p {
+                max-width: 100%;
+            }
+
+            .dash-quick {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .cd-header {
+                flex-direction: column;
             }
 
             .cd-info-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .content {
+                padding: 18px 14px;
+            }
+
+            .panel-card,
+            .dash-progress {
+                padding: 22px 18px;
+            }
+
+            .topbar-badge,
+            .topbar-bell,
+            .topbar-sep {
+                display: none;
+            }
+
+            .topbar-signout {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
+
+            .dash-quick {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cs-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -2617,8 +2697,31 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            /* My Colleges table → name / chance / actions only */
+            .ct-head,
+            .ct-row {
+                grid-template-columns: 1fr 58px 64px;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .ct-head> :nth-child(3),
+            .ct-row> :nth-child(3),
+            .ct-head> :nth-child(4),
+            .ct-row> :nth-child(4) {
+                display: none;
+            }
+
             .paywall-screen {
                 padding: 20px 12px;
+            }
+
+            .pc {
+                flex-direction: column;
+            }
+
+            .pc-right {
+                text-align: left;
             }
         }
     </style>
@@ -3628,7 +3731,26 @@
             if (id === 'college-search') renderSearch();
             if (id === 'activities-scorer') buildActivityScorer();
             window.scrollTo(0, 0);
+            if (window.innerWidth <= 860) closeSidebar();
         }
+        /* ── Off-canvas sidebar (mobile) ── */
+        function toggleSidebar() {
+            const sb = document.querySelector('.sidebar');
+            sb.classList.contains('open') ? closeSidebar() : openSidebar();
+        }
+        function openSidebar() {
+            document.querySelector('.sidebar').classList.add('open');
+            const ov = document.getElementById('sb-overlay');
+            ov.style.display = 'block';
+            requestAnimationFrame(() => ov.classList.add('show'));
+        }
+        function closeSidebar() {
+            document.querySelector('.sidebar').classList.remove('open');
+            const ov = document.getElementById('sb-overlay');
+            ov.classList.remove('show');
+            setTimeout(() => { if (!document.querySelector('.sidebar').classList.contains('open')) ov.style.display = 'none'; }, 260);
+        }
+        window.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
         function toggleSub(key) {
             const sub = document.getElementById('sub-' + key);
             const arr = document.getElementById('arr-' + key);
