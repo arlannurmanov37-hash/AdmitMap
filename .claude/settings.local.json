@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed 's#</body>#<script>window.addEventListener\\(\"load\",function\\(\\){try{unlockPlatform\\(\\)}catch\\(e\\){}}\\);</script></body>#' platform.html)",
+      "Bash(cp index.html onboarding.html landing.html funnel.html pricing.html AdmitMap.html admitted.html /tmp/)",
+      "Read(//tmp/**)",
+      "Bash(cp /tmp/admitmap_preview.html ./_preview.html)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8765/_preview.html)",
+      "Bash([ -f \"$CHROME\" ])",
+      "Read(//Applications/**)",
+      "Bash(grep -nB3 \"text-transform: uppercase\" platform.html)"
+    ]
+  }
+}

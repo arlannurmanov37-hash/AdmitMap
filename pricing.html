@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdmitMap — Choose Your Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:lining-nums tabular-nums}
+:root{
+  --white:#ffffff;--off:#f8fafc;--navy:#0f1f4b;
+  --royal:#2563eb;--royal-light:#dbeafe;--royal-mid:#3b82f6;
+  --muted:#64748b;--line:#e2e8f0;--error:#ef4444;--success:#10b981;
+  --warn:#f59e0b;--purple:#7c3aed;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Syne',sans-serif;background:var(--off);color:var(--navy);min-height:100vh;overflow-x:hidden}
+button,input{font-family:'Syne',sans-serif}
+a{text-decoration:none;color:inherit}
+
+/* ── TOP BAR ── */
+.pr-topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.pr-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.pr-logo span{color:var(--royal)}
+.pr-back{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--line);padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .2s}
+.pr-back:hover{background:var(--white);border-color:var(--muted);color:var(--navy)}
+
+/* ── HERO ── */
+.pr-hero{padding:120px 48px 60px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--white) 0%,var(--off) 100%)}
+.pr-hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.08) 0%,transparent 65%);pointer-events:none}
+.pr-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--royal);margin-bottom:16px;display:inline-flex;align-items:center;gap:10px;position:relative;z-index:1}
+.pr-eyebrow::before,.pr-eyebrow::after{content:'';width:20px;height:2px;background:var(--royal);border-radius:2px}
+.pr-hero h1{font-family:'Fraunces',serif;font-size:clamp(36px,5vw,64px);font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--navy);margin-bottom:16px;position:relative;z-index:1}
+.pr-hero h1 em{color:var(--royal);font-style:italic;font-weight:300}
+.pr-hero-sub{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7;position:relative;z-index:1}
+
+/* ── TOGGLE ── */
+.pr-toggle-wrap{display:flex;justify-content:center;margin:40px 0 0;position:relative;z-index:1}
+.pr-toggle{display:inline-flex;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:0 2px 12px rgba(15,31,75,.05)}
+.pr-toggle-btn{padding:12px 28px;border-radius:9px;border:none;background:transparent;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:.04em;position:relative}
+.pr-toggle-btn.active{background:var(--royal);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3)}
+.pr-save-badge{display:inline-flex;align-items:center;gap:4px;background:var(--success);color:#fff;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
+
+/* ── PRICING GRID ── */
+.pr-grid-wrap{max-width:1100px;margin:0 auto;padding:48px 48px 80px}
+.pr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+
+/* ── PRICE CARD ── */
+.pr-card{background:var(--white);border:1.5px solid var(--line);border-radius:20px;padding:40px 32px 32px;display:flex;flex-direction:column;transition:all .3s;position:relative}
+.pr-card:hover{box-shadow:0 16px 48px rgba(15,31,75,.08);transform:translateY(-4px);border-color:rgba(37,99,235,.15)}
+.pr-card.featured{border:2px solid var(--royal);box-shadow:0 20px 56px rgba(37,99,235,.14)}
+.pr-card.featured:hover{box-shadow:0 24px 64px rgba(37,99,235,.2);transform:translateY(-6px)}
+.pr-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--royal) 0%,var(--purple) 100%);color:#fff;padding:6px 20px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.pr-card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.icon-basic{background:var(--off);border:1px solid var(--line)}
+.icon-pro{background:var(--royal-light);border:1px solid rgba(37,99,235,.2)}
+.icon-lifetime{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(37,99,235,.1));border:1px solid rgba(124,58,237,.2)}
+.pr-card-name{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;letter-spacing:-.01em}
+.pr-card-desc{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:24px;min-height:42px}
+.pr-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+.pr-price{font-family:'Fraunces',serif;font-size:52px;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--navy)}
+.pr-price-period{font-size:14px;color:var(--muted);font-weight:500}
+.pr-price-note{font-size:12px;color:var(--muted);margin-bottom:28px;font-weight:500}
+.pr-price-note .strike{text-decoration:line-through;color:#b0bec5;margin-right:4px}
+.pr-divider{width:100%;height:1px;background:var(--line);margin-bottom:24px}
+
+/* ── FEATURES LIST ── */
+.pr-features{list-style:none;margin-bottom:32px;flex-grow:1;display:flex;flex-direction:column;gap:14px}
+.pr-features li{display:flex;align-items:flex-start;gap:12px;font-size:14px;font-weight:500;color:var(--navy);line-height:1.45}
+.pr-features li .feat-icon{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-top:1px}
+.feat-check{background:rgba(16,185,129,.12);color:var(--success)}
+.feat-star{background:rgba(37,99,235,.12);color:var(--royal)}
+.pr-features li.disabled{color:var(--muted)}
+.pr-features li.disabled .feat-icon{background:var(--off);color:#cbd5e1}
+
+/* ── CTA BUTTON ── */
+.pr-cta{width:100%;padding:16px;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .25s;text-align:center;border:none}
+.pr-cta-outline{background:var(--white);border:1.5px solid var(--line);color:var(--navy)}
+.pr-cta-outline:hover{background:var(--off);border-color:var(--royal-mid);color:var(--royal)}
+.pr-cta-primary{background:var(--royal);color:#fff;box-shadow:0 6px 20px rgba(37,99,235,.3)}
+.pr-cta-primary:hover{background:var(--royal-mid);box-shadow:0 8px 28px rgba(37,99,235,.4);transform:translateY(-1px)}
+.pr-cta-gradient{background:linear-gradient(135deg,var(--royal) 0%,var(--purple) 100%);color:#fff;box-shadow:0 6px 24px rgba(124,58,237,.25)}
+.pr-cta-gradient:hover{box-shadow:0 10px 32px rgba(124,58,237,.35);transform:translateY(-1px)}
+
+/* ── GUARANTEE ── */
+.pr-guarantee{text-align:center;padding:0 48px 20px;max-width:600px;margin:0 auto}
+.pr-guarantee-badge{display:inline-flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);border-radius:40px;padding:14px 28px;font-size:13px;font-weight:700;color:var(--navy);box-shadow:0 4px 16px rgba(15,31,75,.04);margin-bottom:12px}
+.pr-guarantee-badge .shield{font-size:20px}
+.pr-guarantee p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── FAQ ── */
+.pr-faq{max-width:700px;margin:0 auto;padding:60px 48px 80px}
+.pr-faq-title{font-family:'Fraunces',serif;font-size:32px;font-weight:900;letter-spacing:-.03em;text-align:center;margin-bottom:36px;color:var(--navy)}
+.faq-item{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--white);overflow:hidden;transition:box-shadow .2s}
+.faq-item:hover{box-shadow:0 4px 16px rgba(15,31,75,.04)}
+.faq-q{padding:20px 24px;font-size:15px;font-weight:700;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none}
+.faq-arrow{font-size:18px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(180deg);color:var(--royal)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.faq-item.open .faq-a{max-height:300px;padding:0 24px 20px}
+.faq-a p{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ── FOOTER ── */
+.pr-footer{padding:28px 48px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--white)}
+.pr-f-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--navy)}
+.pr-f-logo span{color:var(--royal)}
+.pr-footer p{font-size:12px;color:var(--muted);font-weight:500}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .pr-topbar{padding:0 20px}
+  .pr-hero{padding:100px 24px 40px}
+  .pr-grid-wrap{padding:32px 20px 60px}
+  .pr-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+  .pr-card.featured{order:-1}
+  .pr-faq{padding:40px 20px 60px}
+  .pr-footer{padding:20px}
+}
+@media(max-width:480px){
+  .pr-toggle-btn{padding:10px 18px;font-size:12px}
+  .pr-price{font-size:44px}
+}
+
+/* ── PAYMENT MODAL ── */
+.pay-overlay{position:fixed;inset:0;background:rgba(15,31,75,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
+.pay-overlay.open{display:flex;opacity:1}
+.pay-modal{background:var(--white);width:100%;max-width:480px;border-radius:20px;padding:40px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.2);transform:translateY(20px);transition:transform .3s}
+.pay-overlay.open .pay-modal{transform:translateY(0)}
+.pay-close{position:absolute;top:16px;right:16px;background:var(--off);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.pay-close:hover{background:var(--line);color:var(--navy)}
+.pay-header{text-align:center;margin-bottom:32px}
+.pay-plan-name{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--royal);margin-bottom:8px}
+.pay-plan-price{font-family:'Fraunces',serif;font-size:40px;font-weight:900;color:var(--navy)}
+.pay-plan-period{font-size:14px;color:var(--muted);font-weight:500}
+.pay-divider{height:1px;background:var(--line);margin:24px 0}
+.pay-form-group{margin-bottom:20px}
+.pay-label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin-bottom:8px}
+.pay-input{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-weight:500;color:var(--navy);background:var(--white);outline:none;transition:border .2s;font-family:'Syne',sans-serif}
+.pay-input:focus{border-color:var(--royal);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.pay-input::placeholder{color:#b0bec5;font-weight:400}
+.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pay-submit{width:100%;padding:16px;border:none;border-radius:12px;background:var(--royal);color:#fff;font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(37,99,235,.3);margin-top:8px}
+.pay-submit:hover{background:var(--royal-mid);box-shadow:0 8px 28px rgba(37,99,235,.4)}
+.pay-secure{text-align:center;margin-top:16px;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+.pay-secure::before{content:'🔒';font-size:14px}
+.pay-cards{display:flex;justify-content:center;gap:12px;margin-top:12px}
+.pay-card-icon{background:var(--off);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<div class="pr-topbar">
+  <a href="index.html" class="pr-logo">Admit<span>Map</span></a>
+  <a href="onboarding.html" class="pr-back">← Back to Profile</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="pr-hero">
+  <div class="pr-eyebrow">Almost there</div>
+  <h1>Unlock your <em>full report.</em></h1>
+  <p class="pr-hero-sub">Your profile is ready. Choose a plan to get your acceptance probability, gap analysis, and personalized roadmap.</p>
+  <div class="pr-toggle-wrap">
+    <div class="pr-toggle">
+      <button class="pr-toggle-btn active" onclick="toggleBilling('monthly')">Monthly</button>
+      <button class="pr-toggle-btn" onclick="toggleBilling('annual')">Annual <span class="pr-save-badge">Save 40%</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRICING GRID ═══ -->
+<div class="pr-grid-wrap">
+  <div class="pr-grid">
+
+    <!-- STARTER -->
+    <div class="pr-card">
+      <div class="pr-card-icon icon-basic">📋</div>
+      <div class="pr-card-name">Starter Report</div>
+      <div class="pr-card-desc">A quick reality check on your top 5 schools.</div>
+      <div class="pr-price-row">
+        <div class="pr-price" data-monthly="29" data-annual="29">$29</div>
+      </div>
+      <div class="pr-price-note">One-time payment</div>
+      <div class="pr-divider"></div>
+      <ul class="pr-features">
+        <li><span class="feat-icon feat-check">✓</span>Acceptance probability for 5 universities</li>
+        <li><span class="feat-icon feat-check">✓</span>Basic strength & weakness summary</li>
+        <li><span class="feat-icon feat-check">✓</span>Essay cliché scan (1 essay)</li>
+        <li><span class="feat-icon feat-check">✓</span>Financial aid fit indicator</li>
+        <li class="disabled"><span class="feat-icon">—</span>No roadmap or action plan</li>
+        <li class="disabled"><span class="feat-icon">—</span>No ongoing tracking</li>
+      </ul>
+      <button class="pr-cta pr-cta-outline" onclick="openPayModal('Starter Report','$29','one-time')">Get Starter Report</button>
+    </div>
+
+    <!-- PRO (FEATURED) -->
+    <div class="pr-card featured">
+      <div class="pr-badge">Most Popular</div>
+      <div class="pr-card-icon icon-pro">⚡</div>
+      <div class="pr-card-name">Pro Monthly</div>
+      <div class="pr-card-desc">Full guidance through the entire application season.</div>
+      <div class="pr-price-row">
+        <div class="pr-price" data-monthly="49" data-annual="29">$49</div>
+        <div class="pr-price-period" data-monthly="/month" data-annual="/month">/month</div>
+      </div>
+      <div class="pr-price-note" data-monthly="Cancel anytime" data-annual="<span class='strike'>$588/yr</span> $348/yr billed annually">Cancel anytime</div>
+      <div class="pr-divider"></div>
+      <ul class="pr-features">
+        <li><span class="feat-icon feat-star">★</span>Unlimited university tracking</li>
+        <li><span class="feat-icon feat-star">★</span>Deep AI essay feedback — unlimited essays</li>
+        <li><span class="feat-icon feat-star">★</span>Week-by-week action roadmap</li>
+        <li><span class="feat-icon feat-star">★</span>Live extracurricular Spike Score</li>
+        <li><span class="feat-icon feat-star">★</span>Financial aid modeling per school</li>
+        <li><span class="feat-icon feat-star">★</span>AP course impact analysis</li>
+        <li><span class="feat-icon feat-check">✓</span>Priority support</li>
+      </ul>
+      <button class="pr-cta pr-cta-primary" onclick="openPayModal('Pro Monthly','$49/mo','monthly')">Start Pro Monthly</button>
+    </div>
+
+    <!-- LIFETIME -->
+    <div class="pr-card">
+      <div class="pr-card-icon icon-lifetime">💎</div>
+      <div class="pr-card-name">Lifetime Access</div>
+      <div class="pr-card-desc">Buy once — use it until you get your acceptance letters.</div>
+      <div class="pr-price-row">
+        <div class="pr-price" data-monthly="199" data-annual="149">$199</div>
+      </div>
+      <div class="pr-price-note" data-monthly="One-time payment" data-annual="<span class='strike'>$199</span> Limited-time offer">One-time payment</div>
+      <div class="pr-divider"></div>
+      <ul class="pr-features">
+        <li><span class="feat-icon feat-star">★</span>Everything in Pro Monthly</li>
+        <li><span class="feat-icon feat-star">★</span>Never pay a subscription fee</li>
+        <li><span class="feat-icon feat-star">★</span>Access for all 4 years of high school</li>
+        <li><span class="feat-icon feat-star">★</span>Early access to new features</li>
+        <li><span class="feat-icon feat-check">✓</span>Priority support forever</li>
+      </ul>
+      <button class="pr-cta pr-cta-gradient" onclick="openPayModal('Lifetime Access','$199','one-time')">Get Lifetime Access</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ GUARANTEE ═══ -->
+<div class="pr-guarantee">
+  <div class="pr-guarantee-badge"><span class="shield">🛡️</span>7-Day Money-Back Guarantee</div>
+  <p>If you don't find your report actionable, we'll refund you — no questions asked. We've helped thousands of students improve their applications and we're confident in the value.</p>
+</div>
+
+<!-- ═══ FAQ ═══ -->
+<div class="pr-faq">
+  <div class="pr-faq-title">Questions? We've got answers.</div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">How is the acceptance probability calculated?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>We use a proprietary model trained on historical admissions data, factoring in your GPA, test scores, extracurriculars, essay quality, demographics, financial fit, and school-specific admit rates. It's not a guarantee — it's the most accurate estimate available without being inside the admissions office.</p></div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Can I upgrade my plan later?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>Absolutely. You can start with the Starter Report and upgrade to Pro or Lifetime at any time. We'll credit your Starter purchase toward the upgrade.</p></div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Is my data private and secure?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>100%. Your data is encrypted and never shared with universities, counselors, or third parties. We use it solely to generate your personalized analysis.</p></div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What if I haven't taken the SAT/ACT yet?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>No problem. We'll calculate your probability based on everything else and show you how different test scores would change your chances. You can add scores later and your report updates instantly.</p></div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">How is this different from a college counselor?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>College counselors charge $150–$400/hr and give subjective advice. AdmitMap is data-driven, available instantly, and costs a fraction of a single counseling session. Think of it as having a 24/7 admissions analyst that never sleeps.</p></div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Can I cancel my Pro Monthly subscription?<span class="faq-arrow">▾</span></div>
+    <div class="faq-a"><p>Yes, anytime with one click. No hidden fees, no cancellation hoops. You keep access through the end of your billing period.</p></div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="pr-footer">
+  <div class="pr-f-logo">Admit<span>Map</span></div>
+  <p>© 2026 AdmitMap. Built for students who mean it.</p>
+</footer>
+
+<!-- ═══ PAYMENT MODAL ═══ -->
+<div class="pay-overlay" id="pay-overlay" onclick="closePayModal(event)">
+  <div class="pay-modal" onclick="event.stopPropagation()">
+    <button class="pay-close" onclick="closePayModal(event)">✕</button>
+    <div class="pay-header">
+      <div class="pay-plan-name" id="pay-plan-name">Pro Monthly</div>
+      <div class="pay-plan-price" id="pay-plan-price">$49<span class="pay-plan-period">/month</span></div>
+    </div>
+    <div class="pay-divider"></div>
+    <div class="pay-form-group">
+      <label class="pay-label">Email</label>
+      <input class="pay-input" type="email" placeholder="you@email.com" id="pay-email">
+    </div>
+    <div class="pay-form-group">
+      <label class="pay-label">Card Number</label>
+      <input class="pay-input" type="text" placeholder="1234  5678  9012  3456" id="pay-card" maxlength="19" oninput="formatCard(this)">
+    </div>
+    <div class="pay-row">
+      <div class="pay-form-group">
+        <label class="pay-label">Expiry</label>
+        <input class="pay-input" type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+      </div>
+      <div class="pay-form-group">
+        <label class="pay-label">CVC</label>
+        <input class="pay-input" type="text" placeholder="123" maxlength="4">
+      </div>
+    </div>
+    <div class="pay-form-group">
+      <label class="pay-label">Name on Card</label>
+      <input class="pay-input" type="text" placeholder="Sarah Johnson">
+    </div>
+    <button class="pay-submit" id="pay-submit-btn" onclick="processPayment()">Pay & Unlock Report →</button>
+    <div class="pay-secure">Secured with 256-bit SSL encryption</div>
+    <div class="pay-cards">
+      <span class="pay-card-icon">VISA</span>
+      <span class="pay-card-icon">MC</span>
+      <span class="pay-card-icon">AMEX</span>
+      <span class="pay-card-icon">DISCOVER</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── BILLING TOGGLE ──
+let billingMode = 'monthly';
+
+function toggleBilling(mode) {
+  billingMode = mode;
+  document.querySelectorAll('.pr-toggle-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  document.querySelectorAll('.pr-price').forEach(el => {
+    const val = el.dataset[mode];
+    if (val) el.textContent = '$' + val;
+  });
+
+  document.querySelectorAll('.pr-price-period').forEach(el => {
+    const val = el.dataset[mode];
+    if (val) el.textContent = val;
+  });
+
+  document.querySelectorAll('.pr-price-note').forEach(el => {
+    const val = el.dataset[mode];
+    if (val) el.innerHTML = val;
+  });
+}
+
+// ── FAQ TOGGLE ──
+function toggleFaq(item) {
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ── PAYMENT MODAL ──
+function openPayModal(planName, price, period) {
+  document.getElementById('pay-plan-name').textContent = planName;
+  const priceEl = document.getElementById('pay-plan-price');
+  if (period === 'one-time') {
+    priceEl.innerHTML = price;
+  } else {
+    priceEl.innerHTML = price.replace('/mo', '') + '<span class="pay-plan-period">/month</span>';
+  }
+  document.getElementById('pay-overlay').classList.add('open');
+}
+
+function closePayModal(e) {
+  if (e) e.preventDefault();
+  document.getElementById('pay-overlay').classList.remove('open');
+}
+
+// ── CARD FORMATTING ──
+function formatCard(input) {
+  let val = input.value.replace(/\D/g, '');
+  val = val.replace(/(\d{4})(?=\d)/g, '$1  ');
+  input.value = val.substring(0, 22);
+}
+
+function formatExpiry(input) {
+  let val = input.value.replace(/\D/g, '');
+  if (val.length >= 2) val = val.substring(0, 2) + ' / ' + val.substring(2);
+  input.value = val.substring(0, 7);
+}
+
+// ── PROCESS PAYMENT (DEMO) ──
+function processPayment() {
+  const btn = document.getElementById('pay-submit-btn');
+  btn.textContent = 'Processing…';
+  btn.style.opacity = '0.7';
+  btn.style.pointerEvents = 'none';
+
+  setTimeout(() => {
+    btn.textContent = '✓ Payment Successful!';
+    btn.style.background = 'var(--success)';
+    btn.style.opacity = '1';
+    btn.style.boxShadow = '0 6px 20px rgba(16,185,129,.3)';
+
+    setTimeout(() => {
+      // In production, redirect to dashboard / report
+      alert('🎉 Welcome to AdmitMap! Your report is being generated. (This is a demo — in production you\'d be redirected to your dashboard.)');
+      closePayModal(null);
+      btn.textContent = 'Pay & Unlock Report →';
+      btn.style.background = 'var(--royal)';
+      btn.style.boxShadow = '0 6px 20px rgba(37,99,235,.3)';
+      btn.style.pointerEvents = 'auto';
+    }, 1500);
+  }, 2000);
+}
+</script>
+</body>
+</html>

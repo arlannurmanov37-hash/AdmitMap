@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdmitMap — Get Into Your Dream School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:#ffffff;
+  --off:#f4f6fb;
+  --navy:#0f1f4b;
+  --blue:#2150c8;
+  --blue-light:#dce8ff;
+  --purple:#6c3cdb;
+  --purple-light:#ede5ff;
+  --purple-mid:#8b5cf6;
+  --muted:#6b7a99;
+  --line:#dde3f0;
+}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--navy);font-family:'Syne',sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:20px 56px;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);
+}
+.logo{font-family:'Fraunces',serif;font-size:23px;font-weight:700;color:var(--navy);letter-spacing:-0.02em;text-decoration:none}
+.logo span{color:var(--purple)}
+.nav-links{display:flex;gap:36px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--navy)}
+.nav-cta{
+  background:var(--purple);color:#fff;padding:11px 22px;border-radius:6px;
+  font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;
+  text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(108,60,219,.28);
+}
+.nav-cta:hover{background:var(--purple-mid);transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0;
+  padding:120px 56px 80px;position:relative;overflow:hidden;
+  background:var(--white);
+}
+/* soft orbs — top-right and bottom-left, well contained */
+.hero::before{
+  content:'';position:absolute;top:-120px;right:-120px;
+  width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(108,60,219,.1) 0%,rgba(33,80,200,.07) 40%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;bottom:-80px;left:-80px;
+  width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(33,80,200,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-left{position:relative;z-index:1}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;
+  font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);
+}
+.hero-eyebrow::before{content:'';width:28px;height:2px;background:var(--purple);border-radius:2px}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(48px,5.5vw,80px);
+  font-weight:900;line-height:.95;letter-spacing:-.04em;
+  color:var(--navy);margin-bottom:28px;
+}
+.hero h1 em{font-style:italic;color:var(--blue);font-weight:300}
+.hero-sub{font-size:16px;line-height:1.75;color:var(--muted);font-weight:400;max-width:400px;margin-bottom:36px}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--navy);color:#fff;
+  padding:15px 30px;border-radius:6px;
+  font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;transition:all .2s;box-shadow:0 8px 28px rgba(15,31,75,.2);
+}
+.hero-cta:hover{background:var(--blue);gap:18px;box-shadow:0 12px 36px rgba(33,80,200,.3)}
+.hero-badges{display:flex;gap:24px;margin-top:36px}
+.hero-badge{display:flex;flex-direction:column}
+.badge-num{font-family:'Fraunces',serif;font-size:36px;font-weight:700;letter-spacing:-.03em;color:var(--navy);line-height:1}
+.badge-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* Hero right — the card mockup */
+.hero-right{position:relative;z-index:1;display:flex;justify-content:flex-end}
+.hero-card{
+  width:100%;max-width:420px;
+  background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:32px;box-shadow:0 24px 64px rgba(15,31,75,.12),0 4px 16px rgba(15,31,75,.06);
+}
+.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.hc-school{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.hc-live{
+  background:rgba(108,60,219,.1);border:1px solid rgba(108,60,219,.25);
+  color:var(--purple);padding:4px 10px;border-radius:4px;
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  display:flex;align-items:center;gap:5px;
+}
+.live-dot{width:6px;height:6px;background:var(--purple);border-radius:50%;animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hc-prob{font-family:'Fraunces',serif;font-size:60px;font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--navy)}
+.hc-prob-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;margin-top:2px}
+.hc-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hc-bar-label{font-size:12px;color:var(--muted);width:90px;flex-shrink:0}
+.hc-bar-track{flex:1;height:6px;background:var(--off);border-radius:3px;overflow:hidden}
+.hc-bar-fill{height:100%;border-radius:3px}
+.bar-blue{background:var(--blue)}
+.bar-purple{background:var(--purple)}
+.bar-green{background:#2d9e6b}
+.hc-insight{border-radius:8px;padding:13px 15px;margin-top:14px;font-size:12px;line-height:1.6}
+.hc-warn{background:rgba(220,60,60,.07);border:1px solid rgba(220,60,60,.15);color:#c0392b}
+.hc-warn b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;font-weight:700}
+.hc-tip{background:rgba(33,80,200,.06);border:1px solid rgba(33,80,200,.14);color:var(--blue)}
+.hc-tip b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;font-weight:700}
+
+/* ── LOGO MARQUEE ── */
+.logo-marquee{
+  padding:0;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--off);
+}
+.logo-track{display:flex;align-items:center;animation:marquee 28s linear infinite;white-space:nowrap}
+.logo-track:hover{animation-play-state:paused}
+.uni-logo{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:18px 36px;flex-shrink:0;
+  font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--muted);
+  transition:color .2s;
+}
+.uni-logo:hover{color:var(--navy)}
+.uni-logo svg{flex-shrink:0;opacity:.55;transition:opacity .2s}
+.uni-logo:hover svg{opacity:1}
+.logo-sep{color:var(--line);font-size:20px;flex-shrink:0;padding:0 4px}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION LABELS ── */
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--purple);margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.section-label::after{content:'';width:28px;height:2px;background:var(--purple);border-radius:2px}
+
+/* ── PROBLEMS ── */
+.problems-section{padding:100px 56px;background:var(--white)}
+.problems-header{margin-bottom:52px}
+.problems-header h2{font-family:'Fraunces',serif;font-size:clamp(36px,4vw,56px);font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--navy)}
+.problems-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.prob-card{
+  background:var(--off);border:1px solid var(--line);border-radius:16px;
+  padding:40px 32px;position:relative;overflow:hidden;transition:all .3s;cursor:default;
+}
+.prob-card:hover{background:#fff;box-shadow:0 16px 48px rgba(15,31,75,.1);transform:translateY(-4px);border-color:var(--blue-light)}
+.prob-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  transform:scaleX(0);transform-origin:left;transition:transform .4s;border-radius:16px 16px 0 0;
+}
+.prob-card:hover::before{transform:scaleX(1)}
+.prob-num{font-family:'Fraunces',serif;font-size:56px;font-weight:700;color:rgba(33,80,200,.07);line-height:1;margin-bottom:16px;letter-spacing:-.04em}
+.prob-icon{font-size:26px;margin-bottom:14px;display:block}
+.prob-title{font-size:17px;font-weight:700;margin-bottom:10px;color:var(--navy);line-height:1.3}
+.prob-body{font-size:14px;line-height:1.75;color:var(--muted)}
+
+/* ── HOW IT WORKS ── */
+.how-section{padding:100px 56px;background:var(--off)}
+.how-inner{max-width:1160px;margin:0 auto}
+.how-inner h2{font-family:'Fraunces',serif;font-size:clamp(36px,4vw,56px);font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--navy);margin-bottom:56px}
+.steps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.step-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:40px 36px;display:flex;gap:22px;transition:all .25s}
+.step-card:hover{box-shadow:0 12px 36px rgba(15,31,75,.09);border-color:var(--blue-light)}
+.step-n{font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.1em;padding-top:3px;flex-shrink:0}
+.step-title{font-size:18px;font-weight:700;margin-bottom:9px;color:var(--navy)}
+.step-body{font-size:14px;line-height:1.75;color:var(--muted)}
+
+/* ── MOCKUP BAND ── */
+.mockup-band{padding:100px 56px;background:var(--navy);display:flex;gap:80px;align-items:center;position:relative;overflow:hidden}
+.mockup-band::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(108,60,219,.18) 0%,transparent 65%);pointer-events:none}
+.mb-left{flex:1;max-width:420px;position:relative;z-index:1}
+.mb-left .section-label{color:rgba(139,92,246,.9)}
+.mb-left .section-label::after{background:rgba(139,92,246,.9)}
+.mb-left h2{font-family:'Fraunces',serif;font-size:clamp(34px,3.5vw,52px);font-weight:900;letter-spacing:-.04em;line-height:1.05;color:#fff;margin-bottom:20px}
+.mb-left p{font-size:15px;line-height:1.75;color:rgba(255,255,255,.5);margin-bottom:32px}
+.mb-cta{display:inline-flex;align-items:center;gap:10px;background:var(--purple);color:#fff;padding:14px 28px;border-radius:6px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:all .2s;box-shadow:0 6px 24px rgba(108,60,219,.4)}
+.mb-cta:hover{background:var(--purple-mid);gap:16px}
+.mb-right{flex:1;position:relative;z-index:1}
+.mb-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px;backdrop-filter:blur(12px)}
+.mb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.mb-school{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+.mb-badge{background:rgba(108,60,219,.25);border:1px solid rgba(139,92,246,.4);color:rgba(167,139,250,1);padding:4px 10px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.mb-prob{font-family:'Fraunces',serif;font-size:60px;font-weight:700;letter-spacing:-.04em;line-height:1;color:#fff}
+.mb-prob-lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:24px;margin-top:3px}
+.mb-insight{border-radius:9px;padding:14px 16px;margin-bottom:10px;font-size:13px;line-height:1.6}
+.mb-warn{background:rgba(220,60,60,.1);border:1px solid rgba(220,60,60,.2);color:#fca5a5}
+.mb-warn b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:#f87171}
+.mb-tip{background:rgba(108,60,219,.15);border:1px solid rgba(139,92,246,.25);color:rgba(196,181,253,.9)}
+.mb-tip b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:#a78bfa}
+
+/* ── REVIEWS ── */
+.reviews-section{padding:100px 56px;background:var(--white)}
+.reviews-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+.reviews-header h2{font-family:'Fraunces',serif;font-size:clamp(32px,3.8vw,52px);font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--navy);max-width:340px}
+.reviews-score-block{text-align:right}
+.reviews-score{font-family:'Fraunces',serif;font-size:52px;font-weight:700;letter-spacing:-.04em;color:var(--blue);line-height:1}
+.reviews-sub{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.review-card{background:var(--off);border:1px solid var(--line);border-radius:16px;padding:30px 26px;transition:all .25s}
+.review-card:hover{background:#fff;box-shadow:0 12px 36px rgba(15,31,75,.09);transform:translateY(-2px)}
+.r-stars{color:var(--blue);font-size:15px;letter-spacing:2px;margin-bottom:14px}
+.r-text{font-size:14px;line-height:1.78;color:#4a5568;font-style:italic;margin-bottom:18px}
+.r-author{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--navy)}
+.r-role{color:var(--muted);font-weight:400}
+
+/* ── CTA FOOTER ── */
+.cta-section{
+  padding:120px 56px;text-align:center;
+  background:var(--off);
+  position:relative;overflow:hidden;
+  border-top:1px solid var(--line);
+}
+.cta-section::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:400px;border-radius:50%;
+  background:radial-gradient(ellipse,var(--purple-light) 0%,var(--blue-light) 45%,transparent 70%);
+  opacity:.7;pointer-events:none;
+}
+.cta-section h2{font-family:'Fraunces',serif;font-size:clamp(40px,6vw,80px);font-weight:900;letter-spacing:-.04em;line-height:.95;color:var(--navy);margin-bottom:24px;max-width:700px;margin-left:auto;margin-right:auto;position:relative;z-index:1}
+.cta-section h2 em{font-style:italic;font-weight:300;color:var(--blue)}
+.cta-section p{font-size:16px;color:var(--muted);max-width:340px;margin:0 auto 40px;line-height:1.75;position:relative;z-index:1}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;background:var(--purple);color:#fff;padding:18px 38px;border-radius:8px;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:all .2s;box-shadow:0 8px 32px rgba(108,60,219,.35);position:relative;z-index:1}
+.cta-btn:hover{background:var(--purple-mid);gap:18px;transform:translateY(-2px)}
+.cta-note{margin-top:16px;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.05em;position:relative;z-index:1}
+
+/* ── SITE FOOTER ── */
+footer{padding:28px 56px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff}
+.f-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--navy)}
+.f-logo span{color:var(--purple)}
+footer p{font-size:12px;color:var(--muted);font-weight:500}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-left .hero-eyebrow{animation:fadeUp .6s ease both}
+.hero-left h1{animation:fadeUp .6s .1s ease both}
+.hero-left .hero-sub{animation:fadeUp .6s .18s ease both}
+.hero-left .hero-cta{animation:fadeUp .6s .24s ease both}
+.hero-left .hero-badges{animation:fadeUp .6s .3s ease both}
+.hero-right{animation:fadeUp .7s .2s ease both}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:16px 24px}.nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:100px 24px 60px;min-height:auto;gap:40px}
+  .hero-right{justify-content:flex-start}
+  .hero-card{max-width:100%}
+  .logo-marquee .uni-logo{padding:14px 22px}
+  .problems-section,.how-section,.mockup-band,.reviews-section,.cta-section,footer{padding-left:24px;padding-right:24px}
+  .problems-grid{grid-template-columns:1fr;gap:14px}
+  .steps-grid{grid-template-columns:1fr}
+  .mockup-band{flex-direction:column;padding-top:60px;padding-bottom:60px}
+  .reviews-header{flex-direction:column;align-items:flex-start;gap:14px}.reviews-score-block{text-align:left}
+  .reviews-grid{grid-template-columns:1fr;gap:14px}
+  .cta-section{padding-top:80px;padding-bottom:80px}
+  footer{flex-direction:column;gap:10px;text-align:center;padding:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Admit<span>Map</span></a>
+  <div class="nav-links">
+    <a href="#problems">Who it's for</a>
+    <a href="#how">How it works</a>
+    <a href="#reviews">Reviews</a>
+  </div>
+  <a href="#waitlist" class="nav-cta">Check my chances →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">College Admissions Intelligence</div>
+    <h1>Stop<br>guessing.<br><em>Get in.</em></h1>
+    <p class="hero-sub">Know your real acceptance probability, identify exactly what's holding you back, and get a step-by-step plan — before deadlines hit.</p>
+    <a href="#waitlist" class="hero-cta">Find out your chances →</a>
+    <div class="hero-badges">
+      <div class="hero-badge"><div class="badge-num">500+</div><div class="badge-label">Students advised</div></div>
+      <div class="hero-badge"><div class="badge-num">4.9</div><div class="badge-label">Average rating</div></div>
+      <div class="hero-badge"><div class="badge-num">94%</div><div class="badge-label">Hit their target</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hc-top">
+        <span class="hc-school">Target: Stanford University</span>
+        <span class="hc-live"><span class="live-dot"></span>Live Report</span>
+      </div>
+      <div class="hc-prob">14%</div>
+      <div class="hc-prob-label">Acceptance Probability</div>
+      <div class="hc-bar-row"><div class="hc-bar-label">GPA</div><div class="hc-bar-track"><div class="hc-bar-fill bar-blue" style="width:88%"></div></div></div>
+      <div class="hc-bar-row"><div class="hc-bar-label">Test Scores</div><div class="hc-bar-track"><div class="hc-bar-fill bar-blue" style="width:72%"></div></div></div>
+      <div class="hc-bar-row"><div class="hc-bar-label">Activities</div><div class="hc-bar-track"><div class="hc-bar-fill bar-purple" style="width:45%"></div></div></div>
+      <div class="hc-bar-row"><div class="hc-bar-label">Essays</div><div class="hc-bar-track"><div class="hc-bar-fill bar-purple" style="width:38%"></div></div></div>
+      <div class="hc-insight hc-warn">
+        <b>⚠ Weakness identified</b>
+        Essay opens with abstract claims. Rewrite opening to a specific visual scene.
+      </div>
+      <div class="hc-insight hc-tip">
+        <b>→ High-impact action</b>
+        Drop debate club. Double down on your coding project — depth beats breadth here.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSITY LOGO MARQUEE -->
+<div class="logo-marquee">
+  <div class="logo-track">
+
+    <!-- Harvard -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#A51C30"/><text x="50" y="68" font-size="52" font-family="serif" font-weight="900" fill="white" text-anchor="middle">H</text></svg>
+      Harvard
+    </span><span class="logo-sep">·</span>
+
+    <!-- MIT -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#A31F34"/><text x="50" y="64" font-size="34" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">MIT</text></svg>
+      MIT
+    </span><span class="logo-sep">·</span>
+
+    <!-- Stanford -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#8C1515"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">SUB</text></svg>
+      Stanford
+    </span><span class="logo-sep">·</span>
+
+    <!-- Yale -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#0F4D92"/><text x="50" y="65" font-size="34" font-family="serif" font-weight="900" fill="white" text-anchor="middle">Y</text></svg>
+      Yale
+    </span><span class="logo-sep">·</span>
+
+    <!-- Princeton -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#FF6600"/><text x="50" y="65" font-size="34" font-family="serif" font-weight="900" fill="white" text-anchor="middle">P</text></svg>
+      Princeton
+    </span><span class="logo-sep">·</span>
+
+    <!-- Columbia -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003087"/><text x="50" y="65" font-size="30" font-family="serif" font-weight="900" fill="white" text-anchor="middle">CU</text></svg>
+      Columbia
+    </span><span class="logo-sep">·</span>
+
+    <!-- UPenn -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#011F5B"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">Penn</text></svg>
+      UPenn
+    </span><span class="logo-sep">·</span>
+
+    <!-- Duke -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003087"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">DUKE</text></svg>
+      Duke
+    </span><span class="logo-sep">·</span>
+
+    <!-- Northwestern -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#4E2A84"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">NU</text></svg>
+      Northwestern
+    </span><span class="logo-sep">·</span>
+
+    <!-- UCLA -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#2D68C4"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">UCLA</text></svg>
+      UCLA
+    </span><span class="logo-sep">·</span>
+
+    <!-- Berkeley -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003262"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">UC</text></svg>
+      Berkeley
+    </span><span class="logo-sep">·</span>
+
+    <!-- Cornell -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#B31B1B"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">CU</text></svg>
+      Cornell
+    </span><span class="logo-sep">·</span>
+
+    <!-- Brown -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#4E3629"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">B</text></svg>
+      Brown
+    </span><span class="logo-sep">·</span>
+
+    <!-- Dartmouth -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#00693E"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">D</text></svg>
+      Dartmouth
+    </span><span class="logo-sep">·</span>
+
+    <!-- DUPLICATE for seamless loop -->
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#A51C30"/><text x="50" y="68" font-size="52" font-family="serif" font-weight="900" fill="white" text-anchor="middle">H</text></svg>
+      Harvard
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#A31F34"/><text x="50" y="64" font-size="34" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">MIT</text></svg>
+      MIT
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#8C1515"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">SUB</text></svg>
+      Stanford
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#0F4D92"/><text x="50" y="65" font-size="34" font-family="serif" font-weight="900" fill="white" text-anchor="middle">Y</text></svg>
+      Yale
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#FF6600"/><text x="50" y="65" font-size="34" font-family="serif" font-weight="900" fill="white" text-anchor="middle">P</text></svg>
+      Princeton
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003087"/><text x="50" y="65" font-size="30" font-family="serif" font-weight="900" fill="white" text-anchor="middle">CU</text></svg>
+      Columbia
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#011F5B"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">Penn</text></svg>
+      UPenn
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003087"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">DUKE</text></svg>
+      Duke
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#4E2A84"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">NU</text></svg>
+      Northwestern
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#2D68C4"/><text x="50" y="65" font-size="26" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">UCLA</text></svg>
+      UCLA
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#003262"/><text x="50" y="65" font-size="28" font-family="sans-serif" font-weight="900" fill="white" text-anchor="middle">UC</text></svg>
+      Berkeley
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#B31B1B"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">CU</text></svg>
+      Cornell
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#4E3629"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">B</text></svg>
+      Brown
+    </span><span class="logo-sep">·</span>
+    <span class="uni-logo">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#00693E"/><text x="50" y="65" font-size="28" font-family="serif" font-weight="900" fill="white" text-anchor="middle">D</text></svg>
+      Dartmouth
+    </span><span class="logo-sep">·</span>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<section id="problems" class="problems-section">
+  <div class="problems-header">
+    <div class="section-label">Who it's for</div>
+    <h2>Sound familiar?</h2>
+  </div>
+  <div class="problems-grid">
+    <div class="prob-card">
+      <div class="prob-num">01</div>
+      <span class="prob-icon">🧭</span>
+      <div class="prob-title">Good grades. No plan.</div>
+      <div class="prob-body">You know the ingredients — GPA, SAT, essays, activities — but no one told you how to combine them into an application that actually gets you in.</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">02</div>
+      <span class="prob-icon">⏱</span>
+      <div class="prob-title">Wasting time on the wrong things.</div>
+      <div class="prob-body">Clubs you barely attend. Volunteer hours that look forced. Most students focus on activities admissions officers quietly ignore.</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">03</div>
+      <span class="prob-icon">📝</span>
+      <div class="prob-title">Essays that sound fine. Aren't.</div>
+      <div class="prob-body">Your essay feels complete to you. To an admissions officer reading 50 essays that day, it's forgettable. The difference is in the specifics.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="how-inner">
+    <div class="section-label">The process</div>
+    <h2>Built to get you results.</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-n">01</div>
+        <div><div class="step-title">Enter your profile</div><div class="step-body">GPA, test scores, activities, awards. Takes under 3 minutes. No fluff, just the data that moves the needle.</div></div>
+      </div>
+      <div class="step-card">
+        <div class="step-n">02</div>
+        <div><div class="step-title">See your real chances</div><div class="step-body">Get an acceptance probability for every school on your list, built from real admissions data — not Reddit threads.</div></div>
+      </div>
+      <div class="step-card">
+        <div class="step-n">03</div>
+        <div><div class="step-title">Find what's holding you back</div><div class="step-body">Specific gaps in your application get surfaced. Not vague advice — exact problems with exact fixes, ranked by impact.</div></div>
+      </div>
+      <div class="step-card">
+        <div class="step-n">04</div>
+        <div><div class="step-title">Execute your roadmap</div><div class="step-body">A week-by-week plan from now until decision day. Know exactly what to do, what to drop, and what actually matters.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOCKUP BAND -->
+<section class="mockup-band">
+  <div class="mb-left">
+    <div class="section-label">What you'll see</div>
+    <h2>Honest.<br>Specific.<br>Actionable.</h2>
+    <p>Most tools tell you what you want to hear. AdmitMap tells you what you need to hear — with the specificity that actually changes your chances.</p>
+    <a href="#waitlist" class="mb-cta">Get your assessment →</a>
+  </div>
+  <div class="mb-right">
+    <div class="mb-card">
+      <div class="mb-header">
+        <span class="mb-school">Target: Stanford University</span>
+        <span class="mb-badge">Live Report</span>
+      </div>
+      <div class="mb-prob">14%</div>
+      <div class="mb-prob-lbl">Acceptance Probability</div>
+      <div class="mb-insight mb-warn">
+        <b>⚠ Weakness identified</b>
+        Your opening paragraph relies on abstract claims. Rewrite to open with a specific scene — make it visual in the first sentence.
+      </div>
+      <div class="mb-insight mb-tip">
+        <b>→ High-impact action</b>
+        Drop the debate club you've attended twice. Double down on your coding project. Depth beats breadth at this tier.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="reviews-section">
+  <div class="reviews-header">
+    <h2>What students<br>are saying.</h2>
+    <div class="reviews-score-block">
+      <div class="reviews-score">4.9</div>
+      <div class="reviews-sub">Average across 500+ students</div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="r-stars">★★★★★</div>
+      <div class="r-text">"It gave me an exact checklist for junior year. I finally stopped panicking about what I was forgetting to do. The specificity was what I needed — not another generic guide."</div>
+      <div class="r-author">Sarah J. <span class="r-role">— High School Junior</span></div>
+    </div>
+    <div class="review-card">
+      <div class="r-stars">★★★★★</div>
+      <div class="r-text">"I thought my essay was strong. AdmitMap flagged three specific problems I couldn't see myself. Rewrote it, got into my dream school. Worth every penny."</div>
+      <div class="r-author">Marcus T. <span class="r-role">— Admitted to Cornell</span></div>
+    </div>
+    <div class="review-card">
+      <div class="r-stars">★★★★★</div>
+      <div class="r-text">"As an international student, the whole process felt like a black box. This broke it down into steps I could actually follow. No more guessing what 'holistic review' actually means."</div>
+      <div class="r-author">Yuna K. <span class="r-role">— International Student</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="waitlist" class="cta-section">
+  <h2>Your dream school<br>is <em>closer</em> than<br>you think.</h2>
+  <p>Stop relying on Reddit for advice that got someone else admitted. Get your honest assessment today.</p>
+  <a href="#waitlist" class="cta-btn">Find out your chances →</a>
+  <div class="cta-note">Free to start · No credit card required</div>
+</section>
+
+<footer>
+  <div class="f-logo">Admit<span>Map</span></div>
+  <p>© 2025 AdmitMap. Built for students who mean it.</p>
+</footer>
+
+</body>
+</html>
