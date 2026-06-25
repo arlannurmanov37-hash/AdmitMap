@@ -626,12 +626,58 @@
             box-shadow: 0 1px 0 var(--line), 0 4px 12px rgba(15,31,75,.04);
         }
 
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
         .topbar-title {
             font-family: var(--font-display);
             font-size: 18px;
             font-weight: 700;
             color: var(--navy);
             letter-spacing: -.02em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* hamburger — hidden on desktop, shown on mobile via media query */
+        .sb-toggle {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--line);
+            background: var(--white);
+            color: var(--navy);
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .sb-toggle:hover {
+            background: var(--off);
+        }
+
+        /* off-canvas backdrop */
+        .sb-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 31, 75, .42);
+            backdrop-filter: blur(1px);
+            z-index: 90;
+            opacity: 0;
+            transition: opacity .25s ease;
+        }
+
+        .sb-overlay.show {
+            opacity: 1;
         }
 
         .topbar-right {
@@ -955,6 +1001,32 @@
             line-height: 1.65;
         }
 
+        /* ── FORM LAYOUT ── */
+        /* focused form column so fields don't float in a near-empty card */
+        .panel-card.form-card {
+            max-width: 860px;
+        }
+
+        /* two-column field layout, collapses to one column on small screens */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 2px 28px;
+        }
+
+        .form-grid .fg input,
+        .form-grid .fg select,
+        .form-grid .fg textarea {
+            max-width: 100% !important;
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ── FORM ELEMENTS ── */
         .fg {
             margin-bottom: 18px;
@@ -1086,7 +1158,7 @@
             background: var(--white);
             transition: border-color .2s;
             margin-bottom: 16px;
-            max-width: 280px;
+            max-width: 380px;
             display: block;
         }
 
@@ -1151,7 +1223,7 @@
 
         .ca-select {
             width: 100%;
-            max-width: 280px;
+            max-width: 380px;
             padding: 10px 13px;
             border: 1px solid var(--line2);
             border-radius: var(--radius-sm);
@@ -1172,7 +1244,7 @@
         .ca-number-input {
             display: block;
             width: 100%;
-            max-width: 280px;
+            max-width: 380px;
             padding: 10px 13px;
             border: 1px solid var(--line2);
             border-radius: var(--radius-sm);
@@ -2739,10 +2811,15 @@
             </div>
         </nav>
 
+        <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
         <!-- MAIN CONTENT -->
         <div class="main">
             <div class="topbar">
-                <div class="topbar-title" id="topbar-title">Dashboard</div>
+                <div class="topbar-left">
+                    <button class="sb-toggle icon" data-icon="menu" aria-label="Open menu" onclick="toggleSidebar()"></button>
+                    <div class="topbar-title" id="topbar-title">Dashboard</div>
+                </div>
                 <div class="topbar-right">
                     <span class="topbar-badge" id="plan-badge">Pro Plan</span>
                     <button class="topbar-bell icon" data-icon="bell" aria-label="Notifications"></button>
@@ -2838,14 +2915,16 @@
 
                 <!-- ── PROFILE ── -->
                 <div class="panel" id="panel-profile">
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Profile</h3>
                         <p class="panel-desc">Your academic foundation — pulled from your intake form. Edit and save
                             changes here.</p>
-                        <div class="fg"><label>Unweighted GPA (out of 4.0)</label><input type="number" id="plt-gpa"
-                                step="0.01" min="0" max="4" placeholder="e.g. 3.85"></div>
-                        <div class="fg"><label>Intended Major</label><input type="text" id="plt-major"
-                                placeholder="e.g. Computer Science"></div>
+                        <div class="form-grid">
+                            <div class="fg"><label>Unweighted GPA (out of 4.0)</label><input type="number" id="plt-gpa"
+                                    step="0.01" min="0" max="4" placeholder="e.g. 3.85"></div>
+                            <div class="fg"><label>Intended Major</label><input type="text" id="plt-major"
+                                    placeholder="e.g. Computer Science"></div>
+                        </div>
                         <button class="save-btn" onclick="saveProfile()">Save Changes</button>
                         <span class="save-confirm" id="conf-profile">✓ Saved</span>
                     </div>
@@ -2857,7 +2936,7 @@
                         <span>Complete your Common Application</span>
                         <button class="ca-preview-btn">Preview</button>
                     </div>
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Grades</h3>
                         <div class="ca-in-progress">In progress</div>
 
@@ -2915,19 +2994,21 @@
 
                 <!-- ── TESTING ── -->
                 <div class="panel" id="panel-testing">
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Testing</h3>
                         <p class="panel-desc">Your standardized test scores and AP exams — each strong AP score boosts your acceptance odds.</p>
-                        <div class="fg"><label>Test Type</label>
-                            <select id="plt-test-type"
-                                style="max-width:280px;padding:11px 13px;border:2px solid var(--line);border-radius:var(--radius);font-family:var(--font-body);font-size:14px;color:var(--navy);background:var(--off);cursor:pointer;display:block;margin-bottom:14px">
-                                <option value="sat">SAT</option>
-                                <option value="act">ACT</option>
-                                <option value="none">Test Optional</option>
-                            </select>
+                        <div class="form-grid">
+                            <div class="fg"><label>Test Type</label>
+                                <select id="plt-test-type"
+                                    style="padding:11px 13px;border:2px solid var(--line);border-radius:var(--radius);font-family:var(--font-body);font-size:14px;color:var(--navy);background:var(--off);cursor:pointer;display:block">
+                                    <option value="sat">SAT</option>
+                                    <option value="act">ACT</option>
+                                    <option value="none">Test Optional</option>
+                                </select>
+                            </div>
+                            <div class="fg"><label>Score</label><input type="number" id="plt-test-score"
+                                    placeholder="e.g. 1480"></div>
                         </div>
-                        <div class="fg"><label>Score</label><input type="number" id="plt-test-score"
-                                placeholder="e.g. 1480" style="max-width:280px"></div>
                         <div style="margin-top:20px;margin-bottom:8px">
                             <label style="display:block;font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em">AP Exams</label>
                             <div id="plt-aps-display"></div>
@@ -2940,7 +3021,7 @@
 
                 <!-- ── ACTIVITIES ── -->
                 <div class="panel" id="panel-activities">
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Activities</h3>
                         <p class="panel-desc">Your extracurricular profile. Rank by importance — your highest-impact activity first.</p>
                         <div id="activities-form-list"></div>
@@ -2958,7 +3039,7 @@
                         <span>Complete your Common Application</span>
                         <button class="ca-preview-btn">Preview</button>
                     </div>
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Honors</h3>
                         <p class="panel-desc" style="margin-bottom:18px">Report academic honors related to your
                             achievements beginning with 9th grade or international equivalent.</p>
@@ -2988,7 +3069,7 @@
 
                 <!-- ── WRITING ── -->
                 <div class="panel" id="panel-writing">
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Writing</h3>
                         <p class="panel-desc">Your Common App personal statement. Paste below for AI feedback — or grade
                             it in the Essay Grader tab.</p>
@@ -3269,25 +3350,27 @@
 
                 <!-- ── FINANCIAL AID ── -->
                 <div class="panel" id="panel-financial-aid">
-                    <div class="panel-card">
+                    <div class="panel-card form-card">
                         <h3>Financial Aid &amp; SAI</h3>
                         <p class="panel-desc">Your financial profile from intake — affects your odds at need-aware
                             schools and surfaces the best aid matches.</p>
-                        <div class="fg"><label>Annual Household Income</label>
-                            <select id="plt-income"
-                                style="max-width:320px;padding:11px 13px;border:2px solid var(--line);border-radius:var(--radius);font-family:var(--font-body);font-size:14px;display:block">
-                                <option value="">—</option>
-                                <option value="0">Under $30,000</option>
-                                <option value="30000">$30,000–$60,000</option>
-                                <option value="60000">$60,000–$100,000</option>
-                                <option value="100000">$100,000–$150,000</option>
-                                <option value="150000">$150,000–$200,000</option>
-                                <option value="200000">$200,000–$250,000</option>
-                                <option value="250000">Over $250,000</option>
-                            </select>
+                        <div class="form-grid">
+                            <div class="fg"><label>Annual Household Income</label>
+                                <select id="plt-income"
+                                    style="padding:11px 13px;border:2px solid var(--line);border-radius:var(--radius);font-family:var(--font-body);font-size:14px;display:block">
+                                    <option value="">—</option>
+                                    <option value="0">Under $30,000</option>
+                                    <option value="30000">$30,000–$60,000</option>
+                                    <option value="60000">$60,000–$100,000</option>
+                                    <option value="100000">$100,000–$150,000</option>
+                                    <option value="150000">$150,000–$200,000</option>
+                                    <option value="200000">$200,000–$250,000</option>
+                                    <option value="250000">Over $250,000</option>
+                                </select>
+                            </div>
+                            <div class="fg"><label>Estimated SAI</label><input type="number" id="plt-sai"
+                                    placeholder="e.g. 12500"></div>
                         </div>
-                        <div class="fg"><label>Estimated SAI</label><input type="number" id="plt-sai"
-                                placeholder="e.g. 12500" style="max-width:280px"></div>
                         <button class="save-btn" onclick="saveTesting()">Save Changes</button>
                         <span class="save-confirm" id="conf-finaid">✓ Saved</span>
                     </div>
@@ -3320,7 +3403,9 @@
             map: '<path d="M9 4 3.5 6.2v13.6L9 17.5l6 2.3 5.5-2.2V4L15 6.2 9 4Z"/><path d="M9 4v13.5M15 6.2v13.6"/>',
             trophy: '<path d="M7 4.5h10v3.5a5 5 0 0 1-10 0V4.5Z"/><path d="M7 6H4.5v1.5A2.5 2.5 0 0 0 7 10M17 6h2.5v1.5A2.5 2.5 0 0 1 17 10"/><path d="M12 13v3.5M9 20.5h6M9.5 20.5l.5-4h4l.5 4"/>',
             book: '<path d="M5 4.5h9a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H5Z"/><path d="M5 4.5v12.5"/><path d="M17 7.5h2v12a2.5 2.5 0 0 0-2.5-2.5"/>',
-            bell: '<path d="M6 9.5a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13.5 6 9.5Z"/><path d="M10 18.5a2 2 0 0 0 4 0"/>'
+            bell: '<path d="M6 9.5a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13.5 6 9.5Z"/><path d="M10 18.5a2 2 0 0 0 4 0"/>',
+            menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+            close: '<path d="M6 6l12 12M18 6 6 18"/>'
         };
         function svgIcon(name) {
             return '<span class="icon">' + (ICONS[name] ? '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[name] + '</svg>' : '') + '</span>';
