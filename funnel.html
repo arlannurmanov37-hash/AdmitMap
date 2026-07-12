@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdmitMap — Build Your Profile</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -86,15 +89,14 @@
         }
 
         .ob-steps-row {
-            display: flex; align-items: center; gap: 0;
+            display: flex; align-items: flex-start; gap: 0;
             max-width: 800px; margin: 0 auto
         }
 
         .ob-step-dot {
-            display: flex; align-items: center; gap: 0;
+            display: flex; flex-direction: column; align-items: center; gap: 0;
             flex: 1; position: relative
         }
-        .ob-step-dot:last-child { flex: 0 }
 
         .ob-step-circle {
             width: 36px; height: 36px; border-radius: 50%;
@@ -111,12 +113,13 @@
         .ob-step-dot.done .ob-step-circle { background: var(--success); border-color: var(--success); color: #fff }
 
         .ob-step-line {
-            flex: 1; height: 2px; background: var(--line); margin: 0 6px; transition: background .3s
+            position: absolute; top: 18px; left: 50%; width: 100%; height: 2px;
+            background: var(--line); transform: translateY(-50%); z-index: 1; transition: background .3s
         }
         .ob-step-dot.done .ob-step-line { background: var(--success) }
 
         .ob-step-label {
-            position: absolute; top: 42px; left: 50%; transform: translateX(-50%);
+            margin-top: 9px; text-align: center;
             font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
             color: var(--muted); white-space: nowrap; transition: color .3s
         }
@@ -124,7 +127,7 @@
         .ob-step-dot.done .ob-step-label { color: var(--success) }
 
         .ob-main {
-            padding-top: 160px; padding-bottom: 80px;
+            padding-top: 172px; padding-bottom: 80px;
             max-width: 720px; margin: 0 auto; padding-left: 24px; padding-right: 24px
         }
 
@@ -359,7 +362,7 @@
 <body>
 
     <div class="ob-topbar">
-        <a href="index.html" class="ob-logo">Admit<span>Map</span></a>
+        <a href="index.html" class="ob-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></a>
         <div class="ob-topbar-right">
             <div class="ob-save-indicator" id="save-indicator">Auto-saved</div>
             <a href="index.html" class="ob-exit">← Back to Home</a>
@@ -430,6 +433,8 @@
                     <label class="form-label">Graduation Year</label>
                     <select class="form-input" id="grad-year">
                         <option value="" disabled selected>Select year</option>
+                        <option>2024</option>
+                        <option>2025</option>
                         <option>2026</option>
                         <option>2027</option>
                         <option>2028</option>
@@ -2186,11 +2191,305 @@
             el.style.color = count > 650 ? 'var(--error)' : 'inherit';
         }
 
-        // ── SUBMIT ──
+        // ── SUBMIT → 15s analysis animation, then pricing ──
         function submitProfile() {
-            window.location.href = 'pricing.html';
+            runAnalysis();
+        }
+
+        if (location.search.indexOf('demo-analyze') > -1) window.addEventListener('load', runAnalysis);
+        function runAnalysis() {
+            var overlay = document.getElementById('analysis-overlay');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            var DURATION = 15000;
+            var steps = Array.prototype.slice.call(document.querySelectorAll('.an-step'));
+            var ringPct = document.getElementById('an-pct');
+            var ring = document.getElementById('an-ring');
+            var start = null;
+
+            function frame(ts) {
+                if (start === null) start = ts;
+                var elapsed = ts - start;
+                var p = Math.min(1, elapsed / DURATION);
+                // ease so it feels like it settles near the end
+                var eased = p < 1 ? 1 - Math.pow(1 - p, 1.6) : 1;
+                var pct = Math.round(eased * 100);
+                ringPct.textContent = pct + '%';
+                ring.style.background =
+                    'conic-gradient(var(--royal) ' + (eased * 360) + 'deg, var(--line) 0deg)';
+
+                var activeIdx = Math.min(steps.length - 1, Math.floor(p * steps.length));
+                steps.forEach(function (el, i) {
+                    el.classList.toggle('done', i < activeIdx);
+                    el.classList.toggle('active', i === activeIdx && p < 1);
+                    if (p >= 1) { el.classList.add('done'); el.classList.remove('active'); }
+                });
+
+                if (p < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    var doneEl = document.getElementById('an-done');
+                    if (doneEl) doneEl.classList.add('show');
+                    setTimeout(function () { window.location.href = 'pricing.html'; }, 900);
+                }
+            }
+            requestAnimationFrame(frame);
         }
     </script>
+
+    <!-- ══ PROFILE ANALYSIS OVERLAY (15s) ══ -->
+    <style>
+        #analysis-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            background:
+                radial-gradient(1100px 620px at 50% -10%, rgba(37, 99, 235, .10), transparent 60%),
+                var(--off);
+        }
+
+        #analysis-overlay.show {
+            display: flex;
+            animation: an-fade .5s ease both;
+        }
+
+        @keyframes an-fade {
+            from { opacity: 0 }
+            to { opacity: 1 }
+        }
+
+        .an-wrap {
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+        }
+
+        .an-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--navy);
+            letter-spacing: -.02em;
+            margin-bottom: 30px;
+        }
+
+        .an-brand span { color: var(--royal) }
+
+        .an-brand .an-pin {
+            width: 24px;
+            height: 24px;
+            color: var(--royal);
+            animation: an-bob 1.8s ease-in-out infinite;
+        }
+
+        @keyframes an-bob {
+            0%, 100% { transform: translateY(0) }
+            50% { transform: translateY(-4px) }
+        }
+
+        .an-ring-wrap {
+            position: relative;
+            width: 168px;
+            height: 168px;
+            margin: 0 auto 30px;
+        }
+
+        #an-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--royal) 0deg, var(--line) 0deg);
+            transition: background .12s linear;
+        }
+
+        .an-ring-inner {
+            position: absolute;
+            inset: 13px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 10px rgba(15, 31, 75, .05);
+        }
+
+        #an-pct {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 42px;
+            color: var(--navy);
+            line-height: 1;
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        .an-ring-lbl {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .an-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 30px;
+            color: var(--navy);
+            letter-spacing: -.02em;
+            margin-bottom: 8px;
+        }
+
+        .an-sub {
+            font-size: 15px;
+            color: var(--muted);
+            max-width: 380px;
+            margin: 0 auto 30px;
+            line-height: 1.5;
+        }
+
+        .an-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .an-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--white);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+            opacity: .55;
+            transition: all .35s ease;
+        }
+
+        .an-step.active {
+            opacity: 1;
+            color: var(--navy);
+            border-color: rgba(37, 99, 235, .35);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, .12);
+        }
+
+        .an-step.done {
+            opacity: 1;
+            color: var(--navy);
+        }
+
+        .an-dot {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .an-step.active .an-dot {
+            border-color: var(--royal);
+        }
+
+        .an-step.active .an-dot::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--royal);
+            animation: an-spin .7s linear infinite;
+        }
+
+        @keyframes an-spin {
+            to { transform: rotate(360deg) }
+        }
+
+        .an-step.done .an-dot {
+            border-color: var(--success);
+            background: var(--success);
+        }
+
+        .an-check {
+            width: 12px;
+            height: 12px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity .2s ease;
+        }
+
+        .an-step.done .an-check { opacity: 1 }
+
+        #an-done {
+            margin-top: 26px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--success);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all .4s ease;
+        }
+
+        #an-done.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (max-width: 560px) {
+            .an-title { font-size: 25px }
+            .an-ring-wrap { width: 148px; height: 148px }
+            #an-pct { font-size: 36px }
+        }
+    </style>
+
+    <div id="analysis-overlay">
+        <div class="an-wrap">
+            <div class="an-brand">
+                <svg class="an-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+                Admit<span>Map</span>
+            </div>
+
+            <div class="an-ring-wrap">
+                <div id="an-ring"></div>
+                <div class="an-ring-inner">
+                    <div id="an-pct">0%</div>
+                    <div class="an-ring-lbl">Analyzing</div>
+                </div>
+            </div>
+
+            <div class="an-title">Analyzing your profile</div>
+            <div class="an-sub">Hang tight — we're running your numbers against real admissions data to build your personalized plan.</div>
+
+            <div class="an-steps">
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Reading your academic profile</div>
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Scoring your activities &amp; honors</div>
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Comparing against 50,000+ admitted students</div>
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Calculating your acceptance odds</div>
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Pinpointing what's holding you back</div>
+                <div class="an-step"><span class="an-dot"><svg class="an-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span>Building your personalized roadmap</div>
+            </div>
+
+            <div id="an-done">Your plan is ready — taking you there…</div>
+        </div>
+    </div>
 </body>
 
 </html>

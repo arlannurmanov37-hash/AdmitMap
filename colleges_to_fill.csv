@@ -1,0 +1,272 @@
+Name,SAT,GPA,AdmitRate,CurrentSource
+"Harvard University",1580,3.96,3.2,REAL
+"Stanford University",1570,3.96,3.7,REAL
+"MIT",1570,3.97,3.9,REAL
+"Yale University",1570,3.95,4.5,REAL
+"Princeton University",1570,3.95,4.0,REAL
+"Columbia University",1560,3.91,3.9,REAL
+"University of Pennsylvania",1550,3.90,5.9,REAL
+"Brown University",1550,3.94,5.0,REAL
+"Dartmouth College",1540,3.90,6.2,REAL
+"Cornell University",1530,3.90,8.7,REAL
+"Duke University",1550,3.94,6.0,REAL
+"Northwestern University",1550,3.92,6.8,REAL
+"Johns Hopkins University",1540,3.90,7.0,REAL
+"Rice University",1540,3.96,9.0,REAL
+"Vanderbilt University",1530,3.90,7.7,REAL
+"WashU St. Louis",1540,3.91,12,REAL
+"Carnegie Mellon University",1540,3.88,11,REAL
+"Tufts University",1500,3.81,10,REAL
+"Emory University",1490,3.82,11,REAL
+"Georgetown University",1490,3.90,12,REAL
+"UC Berkeley",1450,3.89,11,REAL
+"UCLA",1430,3.89,9,REAL
+"University of Michigan",1490,3.90,18,REAL
+"University of Virginia",1460,3.86,18,REAL
+"New York University",1470,3.81,16,REAL
+"Boston University",1430,3.70,22,REAL
+"Northeastern University",1490,3.90,18,REAL
+"Georgia Tech",1490,4.07,17,REAL
+"USC",1490,3.80,11,REAL
+"Boston College",1470,3.83,17,REAL
+"Case Western Reserve",1490,3.91,27,REAL
+"Tulane University",1440,3.70,13,REAL
+"University of Rochester",1470,3.82,25,REAL
+"Purdue University",1320,3.62,60,REAL
+"University of Florida",1350,3.87,24,REAL
+"University of Washington",1390,3.82,52,REAL
+"Williams College",1540,3.92,9.5,REAL
+"Amherst College",1530,3.90,9.5,REAL
+"Bowdoin College",1490,3.88,9,REAL
+"Middlebury College",1460,3.80,17,REAL
+"Grinnell College",1430,3.72,16,REAL
+"University of California, Berkeley",,,,ESTIMATE
+"University of California, Los Angeles",,,,ESTIMATE
+"University of Michigan - Ann Arbor",,,,ESTIMATE
+"University of Virginia, Charlottesville",,,,ESTIMATE
+"University of North Carolina at Chapel Hill",,,,ESTIMATE
+"University of Southern California",,,,ESTIMATE
+"University of Notre Dame",,,,ESTIMATE
+"University of California, San Diego",,,,ESTIMATE
+"Georgia Institute of Technology",,,,ESTIMATE
+"The University of Texas at Austin",,,,ESTIMATE
+"University of Wisconsin - Madison",,,,ESTIMATE
+"University of Illinois Urbana-Champaign",,,,ESTIMATE
+"Ohio State University - Columbus",,,,ESTIMATE
+"Pennsylvania State University",,,,ESTIMATE
+"Case Western Reserve University",,,,ESTIMATE
+"Wake Forest University",,,,ESTIMATE
+"University of California, Davis",,,,ESTIMATE
+"University of California, Irvine",,,,ESTIMATE
+"University of California, Santa Barbara",,,,ESTIMATE
+"College of William and Mary",,,,ESTIMATE
+"Brandeis University",,,,ESTIMATE
+"University of Miami",,,,ESTIMATE
+"Rensselaer Polytechnic Institute",,,,ESTIMATE
+"Lehigh University",,,,ESTIMATE
+"University of Georgia",,,,ESTIMATE
+"University of Maryland, College Park",,,,ESTIMATE
+"University of Minnesota",,,,ESTIMATE
+"Michigan State University",,,,ESTIMATE
+"University of Pittsburgh",,,,ESTIMATE
+"Villanova University",,,,ESTIMATE
+"Southern Methodist University",,,,ESTIMATE
+"Syracuse University",,,,ESTIMATE
+"Pepperdine University",,,,ESTIMATE
+"Fordham University",,,,ESTIMATE
+"George Washington University",,,,ESTIMATE
+"American University",,,,ESTIMATE
+"Baylor University",,,,ESTIMATE
+"Texas A&M University - College Station",,,,ESTIMATE
+"Indiana University - Bloomington",,,,ESTIMATE
+"University of Connecticut",,,,ESTIMATE
+"University of Massachusetts at Amherst",,,,ESTIMATE
+"Clemson University",,,,ESTIMATE
+"Rutgers University",,,,ESTIMATE
+"Virginia Tech",,,,ESTIMATE
+"University of Delaware",,,,ESTIMATE
+"Marquette University",,,,ESTIMATE
+"University of Denver",,,,ESTIMATE
+"Stevens Institute of Technology",,,,ESTIMATE
+"Worcester Polytechnic Institute",,,,ESTIMATE
+"University of San Diego",,,,ESTIMATE
+"Loyola Marymount University",,,,ESTIMATE
+"Santa Clara University",,,,ESTIMATE
+"University of California, Santa Cruz",,,,ESTIMATE
+"University of California, Riverside",,,,ESTIMATE
+"Arizona State University",,,,ESTIMATE
+"University of Arizona",,,,ESTIMATE
+"University of Colorado at Boulder",,,,ESTIMATE
+"University of Oregon",,,,ESTIMATE
+"University of Iowa",,,,ESTIMATE
+"University of Kansas",,,,ESTIMATE
+"University of Nebraska, Lincoln",,,,ESTIMATE
+"University of Tennessee, Knoxville",,,,ESTIMATE
+"University of Kentucky",,,,ESTIMATE
+"The University of Alabama",,,,ESTIMATE
+"Auburn University",,,,ESTIMATE
+"Florida State University",,,,ESTIMATE
+"University of South Carolina",,,,ESTIMATE
+"North Carolina State University",,,,ESTIMATE
+"University of Utah",,,,ESTIMATE
+"Brigham Young University",,,,ESTIMATE
+"Iowa State University",,,,ESTIMATE
+"University of Missouri",,,,ESTIMATE
+"Louisiana State University",,,,ESTIMATE
+"University of Oklahoma",,,,ESTIMATE
+"Texas Christian University",,,,ESTIMATE
+"Drexel University",,,,ESTIMATE
+"Temple University",,,,ESTIMATE
+"Miami University of Ohio",,,,ESTIMATE
+"University of Vermont",,,,ESTIMATE
+"University of New Hampshire",,,,ESTIMATE
+"State University of New York at Binghamton",,,,ESTIMATE
+"State University of New York at Stony Brook",,,,ESTIMATE
+"State University of New York at Buffalo",,,,ESTIMATE
+"Howard University",,,,ESTIMATE
+"Spelman College",,,,ESTIMATE
+"Morehouse",,,,ESTIMATE
+"Swarthmore College",,,,ESTIMATE
+"Pomona College",,,,ESTIMATE
+"Wellesley College",,,,ESTIMATE
+"Carleton College",,,,ESTIMATE
+"Claremont McKenna College",,,,ESTIMATE
+"Davidson College",,,,ESTIMATE
+"Colby College",,,,ESTIMATE
+"Bates College",,,,ESTIMATE
+"Hamilton College",,,,ESTIMATE
+"Haverford College in Pennsylvania",,,,ESTIMATE
+"Vassar College",,,,ESTIMATE
+"Colgate University",,,,ESTIMATE
+"Wesleyan University",,,,ESTIMATE
+"Smith College",,,,ESTIMATE
+"Barnard College",,,,ESTIMATE
+"Washington & Lee University",,,,ESTIMATE
+"Bucknell University",,,,ESTIMATE
+"Kenyon College",,,,ESTIMATE
+"Oberlin College",,,,ESTIMATE
+"Macalester College",,,,ESTIMATE
+"Occidental College",,,,ESTIMATE
+"Reed College",,,,ESTIMATE
+"Harvey Mudd College",,,,ESTIMATE
+"Pitzer College",,,,ESTIMATE
+"Colorado College",,,,ESTIMATE
+"Trinity College (CT)",,,,ESTIMATE
+"Bryn Mawr College",,,,ESTIMATE
+"Mount Holyoke College",,,,ESTIMATE
+"Franklin and Marshall College",,,,ESTIMATE
+"Dickinson College",,,,ESTIMATE
+"Rochester Institute of Technology",,,,ESTIMATE
+"New Jersey Institute of Technology",,,,ESTIMATE
+"Colorado School of Mines",,,,ESTIMATE
+"Illinois Institute of Technology",,,,ESTIMATE
+"Rose-Hulman Institute of Technology",,,,ESTIMATE
+"San Diego State University",,,,ESTIMATE
+"San Jose State University",,,,ESTIMATE
+"California State University, Long Beach",,,,ESTIMATE
+"California State University, Fullerton",,,,ESTIMATE
+"California State University, Northridge",,,,ESTIMATE
+"University of California, Merced",,,,ESTIMATE
+"Chapman University",,,,ESTIMATE
+"University of the Pacific",,,,ESTIMATE
+"Gonzaga University",,,,ESTIMATE
+"Seattle University",,,,ESTIMATE
+"Oregon State University",,,,ESTIMATE
+"Washington State University",,,,ESTIMATE
+"Portland State University",,,,ESTIMATE
+"Colorado State University",,,,ESTIMATE
+"University of Nevada, Las Vegas",,,,ESTIMATE
+"University of New Mexico",,,,ESTIMATE
+"University of Hawaii at Manoa",,,,ESTIMATE
+"Utah State University",,,,ESTIMATE
+"Boise State University",,,,ESTIMATE
+"University of Wyoming",,,,ESTIMATE
+"Kansas State University",,,,ESTIMATE
+"Oklahoma State University",,,,ESTIMATE
+"University of Mississippi",,,,ESTIMATE
+"Mississippi State University",,,,ESTIMATE
+"University of Alabama at Birmingham",,,,ESTIMATE
+"University of Memphis",,,,ESTIMATE
+"University of Louisville",,,,ESTIMATE
+"University of Cincinnati",,,,ESTIMATE
+"Ohio University",,,,ESTIMATE
+"Kent State University",,,,ESTIMATE
+"Bowling Green State University",,,,ESTIMATE
+"Wayne State University",,,,ESTIMATE
+"Western Michigan University",,,,ESTIMATE
+"Central Michigan University",,,,ESTIMATE
+"University of Toledo",,,,ESTIMATE
+"Ball State University",,,,ESTIMATE
+"Illinois State University",,,,ESTIMATE
+"Northern Illinois University",,,,ESTIMATE
+"DePaul University",,,,ESTIMATE
+"Loyola University Chicago",,,,ESTIMATE
+"University of Wisconsin - Milwaukee",,,,ESTIMATE
+"Creighton University",,,,ESTIMATE
+"Saint Louis University",,,,ESTIMATE
+"Missouri University of Science and Technology",,,,ESTIMATE
+"University of Houston",,,,ESTIMATE
+"Texas Tech University",,,,ESTIMATE
+"University of North Texas",,,,ESTIMATE
+"Trinity University",,,,ESTIMATE
+"University of Central Florida",,,,ESTIMATE
+"University of South Florida",,,,ESTIMATE
+"Florida International University",,,,ESTIMATE
+"Stetson University",,,,ESTIMATE
+"Rollins College",,,,ESTIMATE
+"Mercer University",,,,ESTIMATE
+"Georgia State University",,,,ESTIMATE
+"University of North Carolina at Charlotte",,,,ESTIMATE
+"Furman University",,,,ESTIMATE
+"Virginia Commonwealth University",,,,ESTIMATE
+"George Mason University",,,,ESTIMATE
+"James Madison University",,,,ESTIMATE
+"West Virginia University",,,,ESTIMATE
+"University of Maryland, Baltimore County",,,,ESTIMATE
+"Towson University",,,,ESTIMATE
+"Catholic University of America",,,,ESTIMATE
+"Hampton University",,,,ESTIMATE
+"North Carolina A&T State University",,,,ESTIMATE
+"Xavier University of Louisiana",,,,ESTIMATE
+"Tuskegee University",,,,ESTIMATE
+"Duquesne University",,,,ESTIMATE
+"Lafayette College",,,,ESTIMATE
+"Gettysburg College",,,,ESTIMATE
+"Ursinus College",,,,ESTIMATE
+"Seton Hall University",,,,ESTIMATE
+"Hofstra University",,,,ESTIMATE
+"Yeshiva University",,,,ESTIMATE
+"Pratt Institute",,,,ESTIMATE
+"Ithaca College",,,,ESTIMATE
+"Marist College",,,,ESTIMATE
+"Clarkson University",,,,ESTIMATE
+"Union College",,,,ESTIMATE
+"Skidmore College",,,,ESTIMATE
+"Bard College",,,,ESTIMATE
+"Sarah Lawrence College",,,,ESTIMATE
+"Providence College",,,,ESTIMATE
+"University of Rhode Island",,,,ESTIMATE
+"Fairfield University",,,,ESTIMATE
+"University of Maine",,,,ESTIMATE
+"College of the Holy Cross",,,,ESTIMATE
+"Clark University",,,,ESTIMATE
+"Babson College",,,,ESTIMATE
+"Bentley University",,,,ESTIMATE
+"Emerson College",,,,ESTIMATE
+"Berklee College of Music",,,,ESTIMATE
+"Wheaton College",,,,ESTIMATE
+"DePauw University",,,,ESTIMATE
+"Denison University",,,,ESTIMATE
+"College of Wooster",,,,ESTIMATE
+"Whitman College",,,,ESTIMATE
+"Willamette University",,,,ESTIMATE
+"Lewis & Clark College",,,,ESTIMATE
+"Lawrence University",,,,ESTIMATE
+"Beloit College",,,,ESTIMATE
+"Rhodes College",,,,ESTIMATE
+"Centre College",,,,ESTIMATE
+"Wofford College",,,,ESTIMATE
+"Savannah College of Art and Design",,,,ESTIMATE
+"School of the Art Institute of Chicago",,,,ESTIMATE
+"Embry-Riddle Aeronautical University",,,,ESTIMATE
+"Michigan Technological University",,,,ESTIMATE

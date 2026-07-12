@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AdmitMap — Build Your Profile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:lining-nums tabular-nums}
 :root{
@@ -15,8 +19,10 @@
   --warn:#f59e0b;--purple:#7c3aed;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Syne',sans-serif;background:var(--off);color:var(--navy);min-height:100vh;overflow-x:hidden}
-button,input,select,textarea{font-family:'Syne',sans-serif}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;background:var(--off);color:var(--navy);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.006em}
+button,input,select,textarea{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.icon{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.icon svg{width:1em;height:1em;display:block;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;fill:none}
 a{text-decoration:none;color:inherit}
 
 /* ── TOP BAR ── */
@@ -142,7 +148,7 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
 
 <!-- ═══ TOP BAR ═══ -->
 <div class="ob-topbar">
-  <a href="index.html" class="ob-logo">Admit<span>Map</span></a>
+  <a href="index.html" class="ob-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></a>
   <div class="ob-topbar-right">
     <div class="ob-save-indicator" id="save-indicator">Auto-saved</div>
     <a href="index.html" class="ob-exit">← Back to Home</a>
@@ -198,16 +204,6 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
       <div class="ob-card-eyebrow">Step 1 of 7</div>
       <div class="ob-card-title">Let's start with you.</div>
       <div class="ob-card-sub">Basic information so we can personalize your analysis.</div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">First Name</label>
-        <input class="form-input" type="text" placeholder="e.g. Sarah" id="first-name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Last Name</label>
-        <input class="form-input" type="text" placeholder="e.g. Johnson" id="last-name">
-      </div>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -332,7 +328,7 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
       <div class="ob-card-sub">List your most important activities. Quality and depth matter far more than quantity.</div>
     </div>
     <div class="info-box">
-      <span class="info-box-icon">💡</span>
+      <span class="info-box-icon" data-icon="bulb"></span>
       <div>Rank by importance to you. Include leadership roles, hours/week, and whether it's year-round or seasonal. Aim for 5–10 activities.</div>
     </div>
     <div class="dynamic-list" id="ec-list">
@@ -431,7 +427,7 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
       <div class="ob-card-sub">This helps us estimate your financial aid eligibility and surface schools that match your budget.</div>
     </div>
     <div class="info-box">
-      <span class="info-box-icon">🔒</span>
+      <span class="info-box-icon" data-icon="lock"></span>
       <div>Your financial data is never shared. It's only used to model aid packages and flag schools where you're likely to get strong funding.</div>
     </div>
     <div class="form-group">
@@ -514,7 +510,7 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
       <div class="ob-card-sub">Paste your Common App essay or main personal statement. Our AI will grade it for hook quality, structure, and cliché density.</div>
     </div>
     <div class="info-box">
-      <span class="info-box-icon">📝</span>
+      <span class="info-box-icon" data-icon="note"></span>
       <div>This is optional but highly recommended. Essay analysis can shift your acceptance probability by up to 8% at selective schools.</div>
     </div>
     <div class="form-group">
@@ -544,6 +540,14 @@ textarea.form-input{resize:vertical;min-height:120px;line-height:1.6}
 </div>
 
 <script>
+// ── ICON SYSTEM (inline SVG) ──
+const ICONS = {
+  bulb: '<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 1 4 10.5c-.7.6-1 1.2-1 2V16H9v-.5c0-.8-.3-1.4-1-2A6 6 0 0 1 12 3Z"/>',
+  lock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><circle cx="12" cy="15.5" r="1.2" fill="currentColor" stroke="none"/>',
+  note: '<path d="M6 2.5h9l4 4V21a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5Z"/><path d="M14.5 2.5V7H19"/><path d="M8.5 12h7M8.5 15.5h7M8.5 9h3"/>'
+};
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('[data-icon]').forEach(function(el){var n=el.getAttribute('data-icon');if(ICONS[n]&&!el.querySelector('svg')){el.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>';el.classList.add('icon');}});});
+
 // ── STATE ──
 let currentStep = 1;
 const totalSteps = 7;

@@ -3,11 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdmitMap — Get Into Your Dream School</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Syne:wght@400;600;700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Inter:wght@400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
         /* ── GLOBAL RESETS ── */
@@ -32,18 +36,40 @@
         }
 
         html {
-            scroll-behavior: smooth
+            scroll-behavior: smooth;
+            scroll-padding-top: 64px
         }
 
         body {
             background: var(--white);
             color: var(--navy);
-            font-family: 'Syne', sans-serif;
-            overflow-x: hidden
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: -.006em
+        }
+
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+        .icon svg {
+            width: 1em;
+            height: 1em;
+            display: block;
+            stroke: currentColor;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none
         }
 
         button {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             cursor: pointer
         }
 
@@ -79,6 +105,7 @@
         .nav-links {
             display: flex;
             gap: 36px;
+            font-family: 'Syne', sans-serif;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: .08em;
@@ -101,6 +128,7 @@
             padding: 11px 22px;
             border-radius: 6px;
             border: none;
+            font-family: 'Syne', sans-serif;
             font-size: 12px;
             font-weight: 800;
             letter-spacing: .08em;
@@ -121,7 +149,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
-            gap: 0;
+            gap: 48px;
             padding: 100px 56px 80px;
             position: relative;
             overflow: hidden;
@@ -197,7 +225,7 @@
             font-size: 16px;
             line-height: 1.75;
             color: var(--muted);
-            font-weight: 400;
+            font-weight: 500;
             max-width: 420px;
             margin-bottom: 36px
         }
@@ -211,6 +239,7 @@
             border: none;
             padding: 18px 36px;
             border-radius: 12px;
+            font-family: 'Syne', sans-serif;
             font-size: 14px;
             font-weight: 800;
             letter-spacing: .08em;
@@ -242,6 +271,7 @@
             border: 1.5px solid var(--line);
             padding: 18px 30px;
             border-radius: 12px;
+            font-family: 'Syne', sans-serif;
             font-size: 14px;
             font-weight: 800;
             letter-spacing: .08em;
@@ -278,8 +308,9 @@
         }
 
         .badge-label {
+            font-family: 'Syne', sans-serif;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: .1em;
             text-transform: uppercase;
             color: var(--muted);
@@ -297,11 +328,11 @@
 
         .radar-card {
             width: 100%;
-            max-width: 440px;
+            max-width: 500px;
             background: #fff;
             border: 1px solid var(--line);
             border-radius: 24px;
-            padding: 32px;
+            padding: 24px 26px;
             box-shadow: 0 24px 64px rgba(15, 31, 75, .12), 0 4px 16px rgba(15, 31, 75, .06)
         }
 
@@ -309,7 +340,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px
+            margin-bottom: 16px
         }
 
         .radar-school {
@@ -371,15 +402,12 @@
         .radar-score-row {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 24px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--line)
+            gap: 16px
         }
 
         .radar-prob {
             font-family: 'Fraunces', serif;
-            font-size: 56px;
+            font-size: 44px;
             font-weight: 700;
             letter-spacing: -.04em;
             line-height: 1;
@@ -411,17 +439,190 @@
         .radar-svg-wrap {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px
+            margin-bottom: 4px
         }
 
         .radar-svg-wrap svg {
             overflow: visible
         }
 
+        .radar-strength-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-top: 0;
+        }
+
+        .radar-strength-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .radar-strength-num {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: var(--navy);
+        }
+
+        .radar-strength-num small {
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .radar-bar {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0 4px;
+        }
+
+        .radar-bar span {
+            flex: 1;
+            height: 9px;
+            border-radius: 4px;
+            background: var(--line);
+        }
+
+        .radar-bar span.on {
+            background: var(--royal);
+        }
+
+        .radar-bar span.dim {
+            background: #93b4f7;
+        }
+
+        .radar-cats {
+            margin: 6px 0 18px;
+        }
+
+        .radar-cat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-top: 1px solid var(--line);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .radar-cat-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radar-cat-score {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .rc-badge {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: 4px 9px;
+            border-radius: 7px;
+        }
+
+        .rc-strong {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .rc-ok,
+        .rc-weak {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .rc-critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .radar-divider {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 14px 0;
+        }
+
+        .seg-control {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            background: var(--off);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 14px;
+        }
+
+        .seg-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 12px;
+            border-radius: 9px;
+            font-family: 'Syne', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+
+        .seg-btn:hover {
+            color: var(--navy);
+        }
+
+        .seg-btn.active {
+            background: #fff;
+            color: var(--royal);
+            box-shadow: 0 1px 3px rgba(15, 31, 75, .12);
+        }
+
+        .view-stack {
+            display: grid;
+        }
+
+        .view-stack>.view-panel {
+            grid-area: 1 / 1;
+        }
+
+        .view-panel {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .45s ease;
+        }
+
+        .view-panel.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        #panel-radar {
+            align-self: center;
+        }
+
         .radar-insights {
             display: flex;
             flex-direction: column;
-            gap: 8px
+            gap: 7px;
+            margin-top: 12px;
         }
 
         .radar-insight {
@@ -498,12 +699,10 @@
             border: 1px solid var(--line);
             background: #fff;
             padding: 3px;
-            filter: grayscale(100%) opacity(.55);
             transition: all .3s
         }
 
         .uni-logo:hover img {
-            filter: grayscale(0%) opacity(1);
             transform: scale(1.08)
         }
 
@@ -608,11 +807,21 @@
             height: 48px;
             border-radius: 12px;
             background: var(--royal-light);
+            color: var(--royal);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 24px;
             margin-bottom: 20px
+        }
+
+        .ic-inline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: -2px;
+            font-size: 1em;
+            margin-right: 5px
         }
 
         .feature-card h3 {
@@ -648,7 +857,7 @@
         .problems-inner {
             max-width: 1160px;
             margin: 0 auto;
-            padding: 100px 56px;
+            padding: 100px 56px 170px;
             position: relative;
             z-index: 1
         }
@@ -742,9 +951,10 @@
         }
 
         .prob-icon {
-            font-size: 28px;
+            font-size: 30px;
             margin-bottom: 18px;
-            display: block
+            color: #93c5fd;
+            display: inline-flex
         }
 
         .prob-title {
@@ -764,7 +974,7 @@
 
         /* ── HOW ── */
         .how-section {
-            padding: 100px 56px;
+            padding: 52px 56px 90px;
             background: var(--off)
         }
 
@@ -783,48 +993,99 @@
             margin-bottom: 56px
         }
 
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px
+        /* ── PROCESS: journey road ── */
+        .how-road {
+            position: relative;
+            max-width: 1160px;
+            margin: 26px auto 0;
+            height: 470px;
         }
 
-        .step-card {
+        .road-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .road-step {
+            position: absolute;
+            width: 250px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .rn {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
             background: #fff;
             border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 40px 36px;
+            box-shadow: 0 6px 18px rgba(15, 31, 75, .12);
             display: flex;
-            gap: 22px;
-            transition: all .25s
-        }
-
-        .step-card:hover {
-            box-shadow: 0 12px 36px rgba(15, 31, 75, .06);
-            border-color: rgba(37, 99, 235, .2)
-        }
-
-        .step-n {
+            align-items: center;
+            justify-content: center;
             font-family: 'Fraunces', serif;
-            font-size: 13px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--royal);
-            letter-spacing: .1em;
-            padding-top: 3px;
-            flex-shrink: 0
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
         }
 
-        .step-title {
-            font-size: 18px;
+        .rn.active {
+            background: var(--royal);
+            color: #fff;
+            border-color: var(--royal);
+            box-shadow: 0 0 0 7px rgba(37, 99, 235, .22);
+        }
+
+        .rn-title {
+            font-size: 19px;
             font-weight: 700;
-            margin-bottom: 9px;
-            color: var(--navy)
+            color: var(--navy);
+            margin-bottom: 8px;
+            letter-spacing: -.01em;
+            line-height: 1.2;
         }
 
-        .step-body {
+        .rn-body {
             font-size: 14px;
-            line-height: 1.75;
-            color: var(--muted)
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .how-road {
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 26px;
+                margin-top: 32px;
+            }
+
+            .road-svg {
+                display: none;
+            }
+
+            .road-step {
+                position: static !important;
+                width: auto;
+                transform: none;
+                flex-direction: row;
+                align-items: flex-start;
+                text-align: left;
+                gap: 16px;
+            }
+
+            .road-step.above .rn {
+                order: -1;
+            }
         }
 
         /* ── COMPARISON TABLE ── */
@@ -1038,6 +1299,171 @@
         .compare-cta-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, .2)
+        }
+
+        /* ── COMPARE CARDS (two ways to apply) ── */
+        .compare-cards {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .cmp-card {
+            border-radius: 24px;
+            padding: 38px 34px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cmp-card.bad {
+            background: var(--white);
+            border: 1px solid var(--line);
+            box-shadow: 0 12px 40px rgba(15, 31, 75, .06);
+        }
+
+        .cmp-card.good {
+            background: linear-gradient(165deg, #14254f 0%, #0d1a3c 100%);
+            box-shadow: 0 26px 64px rgba(15, 31, 75, .28);
+        }
+
+        .cmp-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .cmp-card.good .cmp-eyebrow {
+            color: #60a5fa;
+        }
+
+        .cmp-title {
+            font-family: 'Fraunces', serif;
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+            margin-bottom: 30px;
+            line-height: 1;
+        }
+
+        .cmp-card.bad .cmp-title {
+            color: #475569;
+        }
+
+        .cmp-card.good .cmp-title {
+            color: #fff;
+        }
+
+        .cmp-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .cmp-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .cmp-card.bad .cmp-item {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .cmp-card.good .cmp-item {
+            color: rgba(255, 255, 255, .92);
+            font-weight: 500;
+        }
+
+        .cmp-ic {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            margin-top: 1px;
+        }
+
+        .cmp-ic.x {
+            border: 1.5px solid #cbd5e1;
+            color: #94a3b8;
+            background: transparent;
+        }
+
+        .cmp-ic.check {
+            background: rgba(16, 185, 129, .10);
+            border: 1.5px solid rgba(52, 211, 153, .55);
+            color: #34d399;
+            box-shadow: 0 0 12px rgba(16, 185, 129, .3);
+        }
+
+        .cmp-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: var(--royal);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            z-index: 3;
+            border: 5px solid var(--off);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, .4);
+        }
+
+        .cmp-cta {
+            display: block;
+            width: 100%;
+            margin-top: 28px;
+            background: var(--royal);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 16px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-size: 15px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, .35);
+            transition: all .2s;
+        }
+
+        .cmp-cta:hover {
+            background: var(--royal-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 38px rgba(37, 99, 235, .45);
+        }
+
+        @media (max-width: 760px) {
+            .compare-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cmp-arrow {
+                display: none;
+            }
         }
 
         /* ── MOCKUP BAND ── */
@@ -1347,7 +1773,7 @@
 
         /* ── REVIEWS ── */
         .reviews-section {
-            padding: 100px 56px;
+            padding: 56px 56px 90px;
             background: var(--off)
         }
 
@@ -1356,7 +1782,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: 64px
+            margin-bottom: 28px
         }
 
         .reviews-header h2 {
@@ -1381,131 +1807,314 @@
             font-weight: 500
         }
 
-        .reviews-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            max-width: 1040px;
-            margin: 0 auto
-        }
-
-        .review-card-wide {
-            display: flex;
-            background: var(--white);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(15, 31, 75, .03);
-            overflow: hidden;
-            transition: all 0.3s
-        }
-
-        .review-card-wide:hover {
-            box-shadow: 0 16px 40px rgba(15, 31, 75, .08);
-            transform: translateY(-2px);
-            border-color: rgba(37, 99, 235, .2)
-        }
-
-        .rc-left {
-            flex: 1;
-            padding: 40px;
-            border-right: 1px solid var(--line);
-            background: var(--white);
-            display: flex;
-            flex-direction: column;
-            justify-content: center
-        }
-
-        .rc-left h3 {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 12px;
-            line-height: 1.3;
-            letter-spacing: -.01em
-        }
-
-        .rc-left p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--muted)
-        }
-
-        .rc-right {
-            flex: 1.3;
-            padding: 40px;
-            background: var(--white);
-            display: flex;
-            flex-direction: column
-        }
-
-        .r-stars {
-            color: #f59e0b;
-            font-size: 15px;
-            letter-spacing: 2px;
-            margin-bottom: 6px
-        }
-
-        .r-topic {
-            color: var(--success);
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .12em;
-            margin-bottom: 16px
-        }
-
-        .r-text {
-            font-size: 15px;
-            line-height: 1.75;
-            color: var(--navy);
-            font-style: italic;
-            margin-bottom: 24px;
-            flex-grow: 1
-        }
-
-        .r-bottom {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            border-top: 1px solid var(--line);
-            padding-top: 20px;
-            margin-top: auto
-        }
-
-        .r-author {
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: .02em;
-            color: var(--navy);
-            line-height: 1.4
-        }
-
-        .r-role {
-            color: var(--muted);
-            font-weight: 500;
-            display: block;
+        /* ── REVIEWS CAROUSEL (peek + blur) ── */
+        .reviews-eyebrow {
             font-size: 12px;
-            margin-top: 2px
-        }
-
-        .r-proof-btn {
-            background: var(--royal-light);
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
             color: var(--royal);
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: .06em
+            margin-bottom: 14px;
+            font-family: 'Syne', sans-serif;
         }
 
-        .r-proof-btn:hover {
+        .rev-carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .rev-viewport {
+            overflow: hidden;
+            flex: 1;
+            padding: 6px 0;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+        }
+
+        .rev-track {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            transition: transform .55s cubic-bezier(.4, 0, .2, 1);
+            will-change: transform;
+        }
+
+        .rev-slide {
+            flex: 0 0 72%;
+            background: linear-gradient(135deg, #eef4ff 0%, #e7f0ff 100%);
+            border: 1px solid #dbe6fb;
+            border-radius: 28px;
+            box-shadow: 0 20px 55px rgba(15, 31, 75, .08);
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 30px;
+            align-items: start;
+            padding: 26px 40px 32px;
+            transition: opacity .45s ease, filter .45s ease, transform .45s ease;
+        }
+
+        .rev-proof {
+            align-self: center;
+        }
+
+        .rev-slide:not(.rev-active) {
+            opacity: .5;
+            filter: blur(3px);
+            transform: scale(.93);
+            pointer-events: none;
+        }
+
+        .rev-qmark {
+            font-family: 'Fraunces', serif;
+            font-size: 58px;
+            font-weight: 700;
+            line-height: .7;
+            color: #b9d2ff;
+            margin: -4px 0 6px;
+        }
+
+        .rev-card-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 8px 0 18px;
+        }
+
+        .rev-topic {
+            background: rgba(37, 99, 235, .12);
+            color: var(--royal);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-family: 'Syne', sans-serif;
+            line-height: 1.2;
+        }
+
+        .rev-stars {
+            color: #f59e0b;
+            letter-spacing: 3px;
+            font-size: 16px;
+        }
+
+        .rev-quote {
+            font-family: 'Fraunces', serif;
+            font-size: 25px;
+            font-weight: 400;
+            line-height: 1.34;
+            color: var(--navy);
+            letter-spacing: -.01em;
+            margin-bottom: 26px;
+        }
+
+        .rev-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rev-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 16px;
+            background: linear-gradient(135deg, var(--royal) 0%, #7c3aed 100%);
+        }
+
+        .rev-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rev-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .rev-role {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* right-side proof card (admission letter / report) */
+        .rev-proof {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(15, 31, 75, .13);
+            padding: 22px 22px 20px;
+            transform: rotate(2.5deg);
+        }
+
+        .rev-proof-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .rev-proof-head img {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .rev-proof-uni {
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--navy);
+            line-height: 1.1;
+        }
+
+        .rev-proof-sub {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .rev-proof-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .rev-proof-line {
+            height: 8px;
+            border-radius: 4px;
+            background: #eef1f6;
+        }
+
+        .rev-proof-line.w1 { width: 100% }
+
+        .rev-proof-line.w2 { width: 84% }
+
+        .rev-proof-line.w3 { width: 62% }
+
+        .rev-proof-hl {
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #10b981;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .rev-proof-link {
+            color: var(--royal);
+            font-weight: 800;
+            font-size: 12.5px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+        }
+
+        .rev-arrow {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--navy);
+            font-size: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(15, 31, 75, .1);
+            transition: all .2s;
+            z-index: 2;
+        }
+
+        .rev-arrow:hover {
             background: var(--royal);
-            color: #fff
+            color: #fff;
+            border-color: var(--royal);
+        }
+
+        .rev-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .rev-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all .25s;
+        }
+
+        .rev-dot.active {
+            background: var(--royal);
+            width: 24px;
+            border-radius: 5px;
+        }
+
+        .rev-studyat {
+            text-align: center;
+            max-width: 1100px;
+            margin: 44px auto 0;
+            padding-top: 34px;
+            border-top: 1px solid var(--line);
+        }
+
+        .rev-studyat-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 18px;
+        }
+
+        .rev-studyat-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .rev-uni {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .rev-uni img {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
         }
 
         /* ── MODAL ── */
@@ -1769,13 +2378,13 @@
                 width: 100%
             }
 
-            .review-card-wide {
-                flex-direction: column
+            .rev-slide {
+                grid-template-columns: 1fr;
+                gap: 20px
             }
 
-            .rc-left {
-                border-right: none;
-                border-bottom: 1px solid var(--line)
+            .rev-left h3 {
+                font-size: 24px
             }
 
             .compare-cta-row {
@@ -1806,14 +2415,14 @@
 
     <div id="landing-view">
         <nav class="landing-nav">
-            <a class="logo" href="#" onclick="window.scrollTo(0,0); return false;">Admit<span>Map</span></a>
+            <a class="logo" href="#" onclick="window.scrollTo(0,0); return false;"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></a>
             <div class="nav-links">
                 <a href="#problems">Who it's for</a>
                 <a href="#how">How it works</a>
                 <a href="#compare">Why AdmitMap</a>
                 <a href="#reviews">Reviews</a>
             </div>
-            <a href="onboarding.html" class="nav-cta">Check my chances →</a>
+            <a href="funnel.html" class="nav-cta">Check my chances →</a>
         </nav>
 
         <section class="hero">
@@ -1823,8 +2432,7 @@
                 <p class="hero-sub">Get an estimated acceptance probability and a clear, step-by-step roadmap to
                     strengthen your application before deadlines hit — built from real admissions data.</p>
                 <div class="hero-cta-row">
-                    <a href="onboarding.html" class="hero-cta" style="text-decoration: none;">Find out your chances →</a>
-                    <a href="#sample" class="hero-cta-secondary">See a sample report →</a>
+                    <a href="funnel.html" class="hero-cta" style="text-decoration: none;">Find out your chances →</a>
                 </div>
                 <div class="hero-badges">
                     <div class="hero-badge">
@@ -1860,6 +2468,10 @@
                         style="display:inline-flex;align-items:center;gap:6px;background:var(--off);border:1px solid var(--line);border-radius:20px;padding:5px 12px 5px 6px;font-size:12px;font-weight:700;color:var(--navy)"><img
                             src="https://www.google.com/s2/favicons?domain=yale.edu&sz=128"
                             style="width:18px;height:18px;border-radius:3px">Yale</span>
+                    <span
+                        style="display:inline-flex;align-items:center;gap:6px;background:var(--off);border:1px solid var(--line);border-radius:20px;padding:5px 12px 5px 6px;font-size:12px;font-weight:700;color:var(--navy)"><img
+                            src="https://www.google.com/s2/favicons?domain=princeton.edu&sz=128"
+                            style="width:18px;height:18px;border-radius:3px">Princeton</span>
                     <span style="font-size:11px;color:var(--muted);font-weight:600">+ 3,800 more</span>
                 </div>
             </div>
@@ -1877,13 +2489,20 @@
                             <div class="radar-prob-label">Acceptance Probability</div>
                         </div>
                         <div style="flex:1">
-                            <div class="radar-strength">⚡ Spike Needed</div>
+                            <div class="radar-strength"><span class="ic-inline" data-icon="bolt"></span>Spike needed</div>
                             <div style="margin-top:8px;font-size:12px;color:var(--muted)">Overall Strength: <strong
                                     style="color:var(--navy)">68 / 100</strong></div>
                         </div>
                     </div>
+                    <hr class="radar-divider">
+                    <div class="seg-control" role="tablist">
+                        <button class="seg-btn active" id="seg-radar" onclick="setHeroView('radar', true)">Radar</button>
+                        <button class="seg-btn" id="seg-breakdown" onclick="setHeroView('breakdown', true)">Breakdown</button>
+                    </div>
+                    <div class="view-stack">
+                        <div class="view-panel active" id="panel-radar">
                     <div class="radar-svg-wrap">
-                        <svg width="220" height="210" viewBox="-10 -10 240 230">
+                        <svg width="250" height="238" viewBox="-10 -10 240 230">
                             <defs>
                                 <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
                                     <stop offset="0%" style="stop-color:#2563eb;stop-opacity:.35" />
@@ -1915,8 +2534,26 @@
                                 font-family="Syne">Activities</text>
                         </svg>
                     </div>
+                        </div>
+                        <div class="view-panel" id="panel-breakdown">
+                            <div class="radar-strength-row">
+                                <span class="radar-strength-lbl">Overall Strength</span>
+                                <span class="radar-strength-num">68<small>/100</small></span>
+                            </div>
+                    <div class="radar-bar">
+                        <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="dim"></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="radar-cats">
+                        <div class="radar-cat">GPA &amp; Rigor<span class="radar-cat-right"><span class="radar-cat-score">92</span><span class="rc-badge rc-strong">Strong</span></span></div>
+                        <div class="radar-cat">Testing<span class="radar-cat-right"><span class="radar-cat-score">88</span><span class="rc-badge rc-strong">Strong</span></span></div>
+                        <div class="radar-cat">Honors<span class="radar-cat-right"><span class="radar-cat-score">74</span><span class="rc-badge rc-ok">OK</span></span></div>
+                        <div class="radar-cat">Essays<span class="radar-cat-right"><span class="radar-cat-score">51</span><span class="rc-badge rc-weak">Weak</span></span></div>
+                        <div class="radar-cat">Activities<span class="radar-cat-right"><span class="radar-cat-score">34</span><span class="rc-badge rc-critical">Critical</span></span></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="radar-insights">
-                        <div class="radar-insight ri-warn"><b>⚠ Critical Gap</b>Activities score is in the bottom 40% —
+                        <div class="radar-insight ri-warn"><b><span class="ic-inline" data-icon="warn"></span>Critical Gap</b>Activities score is in the bottom 40% —
                             no defined spike.</div>
                         <div class="radar-insight ri-tip"><b>→ Highest Leverage</b>Essays are dragging your odds. A
                             rewritten hook can move your probability by +6%.</div>
@@ -2006,43 +2643,43 @@
             <div class="features-inner">
                 <div class="features-head">
                     <div class="section-label">What's inside</div>
-                    <h2>One profile.<br><em>Five ways to win.</em></h2>
-                    <p>Everything you need to find your weak spots and fix them — before the application reader ever sees
-                        them.</p>
+                    <h2>From uncertainty.<br><em>To acceptance.</em></h2>
+                    <p>Understand your chances, strengthen your profile, and build a smarter path to your dream
+                        universities.</p>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">🎯</div>
+                        <div class="feature-icon" data-icon="target"></div>
                         <h3>Chance Estimator</h3>
                         <p>A data-driven acceptance probability for every school on your list, factoring in your full
                             profile, major competitiveness, and financial fit.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
+                        <div class="feature-icon" data-icon="bolt"></div>
                         <h3>Spike Score</h3>
                         <p>See exactly which activities are building a real "spike" and which ones to cut — instead of
                             spreading yourself thin across generic clubs.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">✍️</div>
+                        <div class="feature-icon" data-icon="pen"></div>
                         <h3>AI Essay Grader</h3>
                         <p>Your personal statement scored on Hook, Structure & Tone, with specific rewrites that kill
                             clichés and sharpen your narrative.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">💰</div>
+                        <div class="feature-icon" data-icon="wallet"></div>
                         <h3>Aid Fit Score</h3>
                         <p>Model your exact financials to surface the schools most likely to fund you — so you know what
                             you'll actually pay before you apply.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">📈</div>
+                        <div class="feature-icon" data-icon="trend"></div>
                         <h3>Test & AP Impact</h3>
                         <p>See how your SAT, ACT, and AP scores move your odds at each school — and where one more point
                             actually matters.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🗓️</div>
+                        <div class="feature-icon" data-icon="calendar"></div>
                         <h3>Week-by-Week Roadmap</h3>
                         <p>A clear plan from today until decision day — three focused tasks every Monday so you always
                             know what to do next.</p>
@@ -2058,17 +2695,17 @@
                 <p class="problems-subhead">If any of this sounds like you, your application is in more danger than you
                     think — and deadlines don't care how hard you've worked.</p>
                 <div class="problems-grid">
-                    <div class="prob-card"><span class="prob-icon">📊</span>
+                    <div class="prob-card"><span class="prob-icon" data-icon="chart"></span>
                         <div class="prob-title">Perfect stats aren't enough.</div>
                         <div class="prob-body">You think your 1500+ SAT and perfect GPA make you a top candidate. In
                             top-tier admissions, those numbers don't make you stand out.</div>
                     </div>
-                    <div class="prob-card"><span class="prob-icon">🧩</span>
+                    <div class="prob-card"><span class="prob-icon" data-icon="puzzle"></span>
                         <div class="prob-title">Your profile is a mess.</div>
                         <div class="prob-body">You have great individual pieces, but they don't connect. To an
                             admissions committee, you look scattered and unfocused.</div>
                     </div>
-                    <div class="prob-card"><span class="prob-icon">🥱</span>
+                    <div class="prob-card"><span class="prob-icon" data-icon="moon"></span>
                         <div class="prob-title">Your essay is putting them to sleep.</div>
                         <div class="prob-body">Your parents might love it, but to an admissions officer reading 50 files
                             a day, it's a cliché they've seen a thousand times.</div>
@@ -2081,37 +2718,37 @@
             <div class="how-inner">
                 <div class="section-label">The process</div>
                 <h2>Built to get you results.</h2>
-                <div class="steps-grid">
-                    <div class="step-card">
-                        <div class="step-n">01</div>
+                <div class="how-road">
+                    <svg class="road-svg" viewBox="0 0 1160 470" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M150,185 C 330,185 330,305 475,305 S 640,185 710,185 S 900,305 1010,305" stroke="#c9d5e9" stroke-width="28" stroke-linecap="round" />
+                        <path d="M150,185 C 330,185 330,305 475,305 S 640,185 710,185 S 900,305 1010,305" stroke="#ffffff" stroke-width="3.5" stroke-dasharray="16 16" />
+                    </svg>
+                    <div class="road-step above" style="left:12.93%;bottom:256px">
                         <div>
-                            <div class="step-title">Enter your profile</div>
-                            <div class="step-body">GPA, test scores, activities, honors, APs, SAI. Takes under 5
-                                minutes. No fluff, just the data that actually moves the needle.</div>
+                            <div class="rn-title">Enter your profile</div>
+                            <div class="rn-body">GPA, test scores, activities, honors, APs, SAI. Takes under 5 minutes. No fluff, just the data that actually moves the needle.</div>
+                        </div>
+                        <div class="rn">01</div>
+                    </div>
+                    <div class="road-step" style="left:40.95%;top:276px">
+                        <div class="rn">02</div>
+                        <div>
+                            <div class="rn-title">See your real chances</div>
+                            <div class="rn-body">Acceptance probability for every school on your list, factoring in financial fit, major competitiveness, and your full profile.</div>
                         </div>
                     </div>
-                    <div class="step-card">
-                        <div class="step-n">02</div>
+                    <div class="road-step above" style="left:61.21%;bottom:256px">
                         <div>
-                            <div class="step-title">See your real chances</div>
-                            <div class="step-body">Acceptance probability for every school on your list, factoring in
-                                financial fit, major competitiveness, and your full profile.</div>
+                            <div class="rn-title">Find what's holding you back</div>
+                            <div class="rn-body">Specific gaps get surfaced. Not vague advice — exact problems with exact fixes you can start on today.</div>
                         </div>
+                        <div class="rn">03</div>
                     </div>
-                    <div class="step-card">
-                        <div class="step-n">03</div>
+                    <div class="road-step" style="left:87.07%;top:276px">
+                        <div class="rn active">04</div>
                         <div>
-                            <div class="step-title">Find what's holding you back</div>
-                            <div class="step-body">Specific gaps get surfaced. Not vague advice — exact problems with
-                                exact fixes you can start on today.</div>
-                        </div>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-n">04</div>
-                        <div>
-                            <div class="step-title">Execute your roadmap</div>
-                            <div class="step-body">A week-by-week plan from now until decision day. Know exactly what to
-                                do, what to drop, and what actually matters.</div>
+                            <div class="rn-title">Execute your roadmap</div>
+                            <div class="rn-body">A week-by-week plan from now until decision day. Know exactly what to do, what to drop, and what actually matters.</div>
                         </div>
                     </div>
                 </div>
@@ -2121,94 +2758,42 @@
         <section id="compare" class="compare-section">
             <div class="compare-inner">
                 <div class="compare-header">
-                    <div class="section-label" style="justify-content:center">The difference</div>
-                    <h2>Why AdmitMap beats<br><em>going it alone</em></h2>
-                    <p>Every student who got rejected had a plan. The ones who got in had the right one.</p>
+                    <h2>Two ways to apply.<br><em>One that works.</em></h2>
                 </div>
-                <div class="compare-table">
-                    <div class="compare-thead">
-                        <div class="compare-col-header">Feature</div>
-                        <div class="compare-col-header col-bad">Preparing Alone</div>
-                        <div class="compare-col-header col-good"><span>AdmitMap</span><span class="col-good-pill">✓
-                                Better</span></div>
+                <div class="compare-cards">
+                    <div class="cmp-card bad">
+                        <div class="cmp-eyebrow">Preparing alone</div>
+                        <div class="cmp-title">Guesswork</div>
+                        <ul class="cmp-list">
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Pure guesswork on your odds</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>"Mom says the essay's great"</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Join everything, hope it works</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>No idea how APs affect admissions</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>No idea what you'll actually pay</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Sticky notes and deadline anxiety</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>$150–$400/hr college counselor</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>A generic essay that blends in</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Finding out what went wrong after rejection</li>
+                        </ul>
                     </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Acceptance probability</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>Pure guesswork
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>Data-driven % per school, updated as you improve
-                        </div>
+                    <div class="cmp-card good">
+                        <div class="cmp-eyebrow">With AdmitMap</div>
+                        <div class="cmp-title">A real plan</div>
+                        <ul class="cmp-list">
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Data-driven % per school, updated as you improve</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>AI grader scores Hook, Structure &amp; Tone with rewrites</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Spike Score: exactly what to cut and double down on</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>AP scores factored into your acceptance probability</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Aid fit score — surface the schools that will fund you</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Week-by-week roadmap with 3 tasks every Monday</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Start free — a fraction of one tutoring session</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>An essay hook engineered to stand out in the pile</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Fix weak spots before they cost you the offer</li>
+                        </ul>
                     </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Essay feedback</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>Mom says it's great
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>AI grader scores Hook, Structure & Tone with specific
-                            rewrites
-                        </div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Activity strategy</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>Join everything, hope it works
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>Spike Score that tells you exactly what to cut and
-                            double down on
-                        </div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">AP exam impact</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>No idea how APs affect admissions
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>AP scores factored into your acceptance probability
-                            calculation
-                        </div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Financial aid clarity</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>No idea what you'll actually pay
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>Aid fit score per school — surface the ones that will
-                            fund you
-                        </div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Deadline management</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>Sticky notes and anxiety
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>Week-by-week roadmap with 3 tasks every Monday until
-                            decision day
-                        </div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="cr-feature">Cost</div>
-                        <div class="cr-bad">
-                            <div class="x-icon">✕</div>$150–$400/hr college counselor
-                        </div>
-                        <div class="cr-good">
-                            <div class="check-icon-teal">✓</div>Start free — fraction of a single tutoring session
-                        </div>
-                    </div>
-                    <div class="compare-cta-row">
-                        <div class="compare-cta-text">
-                            <h3>Ready to stop guessing?</h3>
-                            <p>Takes 5 minutes. Free to start. No credit card needed.</p>
-                        </div>
-                        <a href="onboarding.html" class="compare-cta-btn" style="text-decoration:none;">Check my chances
-                            →</a>
-                    </div>
+                    <div class="cmp-arrow">→</div>
                 </div>
+                <a href="funnel.html" class="cmp-cta">Start free — check my chances →</a>
             </div>
         </section>
 
@@ -2218,7 +2803,7 @@
                 <h2>Honest.<br>Specific.<br>Actionable.</h2>
                 <p>Most tools tell you what you want to hear. AdmitMap tells you what you need to hear — with the
                     specificity that actually changes your chances before it's too late.</p>
-                <a href="onboarding.html" class="mb-cta" style="text-decoration:none;">Get your assessment →</a>
+                <a href="funnel.html" class="mb-cta" style="text-decoration:none;">Get your assessment →</a>
             </div>
             <div class="mb-right">
                 <div class="sample-report">
@@ -2274,7 +2859,7 @@
                     <div class="sr-actions">
                         <div class="sr-action">
                             <div class="sr-action-dot dot-warn">!</div>
-                            <div class="sr-action-text"><strong>⚠ Focus your narrative.</strong> Consolidate your
+                            <div class="sr-action-text"><strong><span class="ic-inline" data-icon="warn"></span>Focus your narrative.</strong> Consolidate your
                                 application theme around robotics to create a clear spike.</div>
                         </div>
                         <div class="sr-action">
@@ -2294,71 +2879,118 @@
 
         <section id="reviews" class="reviews-section">
             <div class="reviews-header">
-                <h2>Is AdmitMap <em>right for you?</em></h2>
-                <p>If any of these sound familiar, AdmitMap was built for you.</p>
+                <div class="reviews-eyebrow">Is AdmitMap right for you?</div>
+                <h2>If any of these sound <em>familiar…</em></h2>
+                <p>AdmitMap was built for students exactly like you.</p>
             </div>
-            <div class="reviews-list">
-                <div class="review-card-wide">
-                    <div class="rc-left">
-                        <h3>You're exhausted from doing too many generic clubs.</h3>
-                        <p>Get a clear Activity Score that shows exactly what to drop and what to focus on to build a
-                            true "spike".</p>
-                    </div>
-                    <div class="rc-right">
-                        <div class="r-stars">★★★★★</div>
-                        <div class="r-topic">PROFILE ALIGNMENT</div>
-                        <div class="r-text">"I was exhausting myself juggling student council, sports, and volunteering.
-                            The Activity Scorer flagged my profile as too generic. It gave me permission to quit the
-                            fluff and put all my energy into the one project I actually cared about."</div>
-                        <div class="r-bottom">
-                            <div>
-                                <div class="r-author">Sarah J.</div><span class="r-role">High School Junior, Boston
-                                    MA</span>
-                            </div><button class="r-proof-btn" onclick="openLetterModal('tufts.jpg')">See Admission
-                                Letter</button>
+            <div class="rev-carousel">
+                <button class="rev-arrow" aria-label="Previous" onclick="revGo(-1, true)">←</button>
+                <div class="rev-viewport">
+                    <div class="rev-track" id="rev-track">
+
+                        <div class="rev-slide">
+                            <div class="rev-qbox">
+                                <div class="rev-qmark">&ldquo;</div>
+                                <div class="rev-card-top"><span class="rev-topic">Profile Alignment</span><span class="rev-stars">★★★★★</span></div>
+                                <div class="rev-quote">I was exhausting myself juggling student council, sports, and volunteering. The Activity Scorer flagged my profile as too generic &mdash; it gave me permission to quit the fluff and pour everything into the one project I actually cared about.</div>
+                                <div class="rev-author">
+                                    <div class="rev-avatar">SJ</div>
+                                    <div><div class="rev-name">Sarah J.</div><div class="rev-role">Admitted to Tufts University, Class of 2028</div></div>
+                                </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=tufts.edu&sz=128" alt=""><div><div class="rev-proof-uni">Tufts University</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
+                            </div>
                         </div>
+                        <div class="rev-slide">
+                            <div class="rev-qbox">
+                                <div class="rev-qmark">&ldquo;</div>
+                                <div class="rev-card-top"><span class="rev-topic">Essay Feedback</span><span class="rev-stars">★★★★★</span></div>
+                                <div class="rev-quote">My parents kept telling me my essay was &lsquo;so good!&rsquo;, but the AI grader absolutely roasted my opening paragraph. It was brutal but exactly what I needed. I rewrote the hook and it made a massive difference.</div>
+                                <div class="rev-author">
+                                    <div class="rev-avatar">PM</div>
+                                    <div><div class="rev-name">Priya M.</div><div class="rev-role">Admitted to UCLA, Class of 2028</div></div>
+                                </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=ucla.edu&sz=128" alt=""><div><div class="rev-proof-uni">UCLA</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
+                            </div>
+                        </div>
+                        <div class="rev-slide">
+                            <div class="rev-qbox">
+                                <div class="rev-qmark">&ldquo;</div>
+                                <div class="rev-card-top"><span class="rev-topic">Milestone Tracking</span><span class="rev-stars">★★★★★</span></div>
+                                <div class="rev-quote">I was completely paralyzed by the sheer number of forms, supplements, and deadlines. AdmitMap&rsquo;s Milestone Roadmap broke the entire year down into 3 simple tasks to do every Monday. It took all the anxiety out of the process.</div>
+                                <div class="rev-author">
+                                    <div class="rev-avatar">YK</div>
+                                    <div><div class="rev-name">Yuna K.</div><div class="rev-role">Admitted to Amherst College, Class of 2028</div></div>
+                                </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=amherst.edu&sz=128" alt=""><div><div class="rev-proof-uni">Amherst College</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
+                            </div>
+                        </div>
+                        <div class="rev-slide">
+                            <div class="rev-qbox">
+                                <div class="rev-qmark">&ldquo;</div>
+                                <div class="rev-card-top"><span class="rev-topic">Narrative Cohesion</span><span class="rev-stars">★★★★★</span></div>
+                                <div class="rev-quote">My whole application felt like a giant, scattered puzzle. I had good achievements but no idea how to connect them. AdmitMap took my messy profile and showed me exactly how to structure everything into one clear, powerful story.</div>
+                                <div class="rev-author">
+                                    <div class="rev-avatar">MT</div>
+                                    <div><div class="rev-name">Marcus T.</div><div class="rev-role">Admitted to Cornell, Class of 2028</div></div>
+                                </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=cornell.edu&sz=128" alt=""><div><div class="rev-proof-uni">Cornell University</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
+                            </div>
+                        </div>
+                        <div class="rev-slide">
+                            <div class="rev-qbox">
+                                <div class="rev-qmark">&ldquo;</div>
+                                <div class="rev-card-top"><span class="rev-topic">Financial Aid Match</span><span class="rev-stars">★★★★★</span></div>
+                                <div class="rev-quote">I was terrified to finalize my list. The Financial Aid Modeling took my exact details and instantly surfaced the schools where I had the highest chance of massive aid packages.</div>
+                                <div class="rev-author">
+                                    <div class="rev-avatar"><img src="dani.jpg" alt="Dani R." onerror="this.remove()">DR</div>
+                                    <div><div class="rev-name">Dani R.</div><div class="rev-role">High School Senior &middot; Admitted to U of Michigan</div></div>
+                                </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=umich.edu&sz=128" alt=""><div><div class="rev-proof-uni">University of Michigan</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <div class="review-card-wide">
-                    <div class="rc-left">
-                        <h3>Your personal statement sounds like everyone else's.</h3>
-                        <p>Scan your essay with our Elite AI Grader to catch clichés, fix robotic tones, and restructure
-                            your narrative hook.</p>
-                    </div>
-                    <div class="rc-right">
-                        <div class="r-stars">★★★★★</div>
-                        <div class="r-topic">ESSAY FEEDBACK</div>
-                        <div class="r-text">"My parents kept telling me my essay was 'so good!', but the AI grader
-                            absolutely roasted my opening paragraph. It was brutal but exactly what I needed. I
-                            completely rewrote the hook and it made a massive difference."</div>
-                        <div class="r-bottom">
-                            <div>
-                                <div class="r-author">Priya M.</div><span class="r-role">High School Senior</span>
-                            </div><button class="r-proof-btn" onclick="openLetterModal('tufts.jpg')">See Admission
-                                Letter</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="review-card-wide">
-                    <div class="rc-left">
-                        <h3>You have no idea how much aid you'll actually get.</h3>
-                        <p>Model your exact financial details to instantly surface the schools where you have the
-                            highest chance of massive aid packages.</p>
-                    </div>
-                    <div class="rc-right">
-                        <div class="r-stars">★★★★★</div>
-                        <div class="r-topic">FINANCIAL AID MATCH</div>
-                        <div class="r-text">"I was terrified to finalize my college list because I had no idea how much
-                            financial aid I'd get. AdmitMap's Financial Aid Modeling took my exact details and instantly
-                            surfaced the schools where I had the highest chance of getting massive aid packages."</div>
-                        <div class="r-bottom">
-                            <div>
-                                <div class="r-author">Dani R.</div><span class="r-role">Admitted to U of Michigan, Class
-                                    of 2028</span>
-                            </div><button class="r-proof-btn" onclick="openLetterModal('tufts.jpg')">See Admission
-                                Letter</button>
-                        </div>
-                    </div>
+                <button class="rev-arrow" aria-label="Next" onclick="revGo(1, true)">→</button>
+            </div>
+            <div class="rev-dots" id="rev-dots"></div>
+            <div class="rev-studyat">
+                <div class="rev-studyat-label">Our students now study at</div>
+                <div class="rev-studyat-logos">
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=harvard.edu&sz=128">Harvard</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=stanford.edu&sz=128">Stanford</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=yale.edu&sz=128">Yale</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=mit.edu&sz=128">MIT</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=princeton.edu&sz=128">Princeton</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=columbia.edu&sz=128">Columbia</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=upenn.edu&sz=128">UPenn</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=cornell.edu&sz=128">Cornell</span>
+                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=duke.edu&sz=128">Duke</span>
                 </div>
             </div>
         </section>
@@ -2367,11 +2999,11 @@
             <h2>Your future is waiting.<br><em>Go get it.</em></h2>
             <p>You've already done the hard part — the years of work, the grades, the late nights. Now it's time to turn
                 that hard work into an application they can't ignore.</p>
-            <a href="onboarding.html" class="cta-btn" style="text-decoration:none;">Find out your chances →</a>
+            <a href="funnel.html" class="cta-btn" style="text-decoration:none;">Find out your chances →</a>
             <div class="cta-note">Free to start · No credit card required · Takes 5 minutes</div>
         </section>
         <footer>
-            <div class="f-logo">Admit<span>Map</span></div>
+            <div class="f-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></div>
             <p>© 2026 AdmitMap. Built for students who mean it.</p>
         </footer>
     </div>
@@ -2384,8 +3016,118 @@
     </div>
 
     <script>
+        /* ── ICON SYSTEM (inline SVG) ── */
+        const ICONS = {
+            target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".6" fill="currentColor" stroke="none"/>',
+            bolt: '<path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"/>',
+            pen: '<path d="M14.5 5.5 18.5 9.5"/><path d="M4 20l1-4L16 5a2 2 0 0 1 3 3L8 19l-4 1Z"/>',
+            wallet: '<path d="M3.5 7.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2"/><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M20.5 12.5h-4a2 2 0 0 0 0 4h4"/><circle cx="16.5" cy="14.5" r=".6" fill="currentColor" stroke="none"/>',
+            trend: '<path d="M4 16.5 10 10l3.5 3.5L20 7"/><path d="M15 7h5v5"/>',
+            calendar: '<rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3"/>',
+            chart: '<path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3" height="5" rx=".5"/><rect x="13" y="8.5" width="3" height="8.5" rx=".5"/><rect x="18.5" y="10" width="3" height="7" rx=".5"/>',
+            puzzle: '<path d="M9 4.5h2a1 1 0 0 1 1 1V7a1.5 1.5 0 1 0 3 0V5.5a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1V8a1.5 1.5 0 1 0 0 3v3.5a1 1 0 0 1-1 1H17a1.5 1.5 0 1 0-3 0h-.5a1 1 0 0 1-1-1V14a1.5 1.5 0 1 0-3 0v.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V12a1.5 1.5 0 1 0 0-3V5.5a1 1 0 0 1 1-1h3Z"/>',
+            moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/>',
+            warn: '<path d="M12 4 2.5 20.5h19L12 4Z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.6" r=".7" fill="currentColor" stroke="none"/>'
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-icon]').forEach(function (el) {
+                var n = el.getAttribute('data-icon');
+                if (ICONS[n] && !el.querySelector('svg')) {
+                    el.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[n] + '</svg>';
+                    el.classList.add('icon');
+                }
+            });
+        });
         function openLetterModal(src) { document.getElementById('lm-image').src = src; document.getElementById('letter-modal-overlay').classList.add('open'); }
         function closeLetterModal(e) { if (e) e.preventDefault(); document.getElementById('letter-modal-overlay').classList.remove('open'); }
+
+        /* ── Hero card: Radar / Breakdown toggle + auto-cycle ── */
+        let heroCycleTimer = null;
+        let heroCycleStopped = false;
+        function setHeroView(view, userClick) {
+            ['radar', 'breakdown'].forEach(function (v) {
+                var panel = document.getElementById('panel-' + v);
+                var btn = document.getElementById('seg-' + v);
+                if (panel) panel.classList.toggle('active', v === view);
+                if (btn) btn.classList.toggle('active', v === view);
+            });
+            if (userClick && !heroCycleStopped) {
+                heroCycleStopped = true;
+                if (heroCycleTimer) clearInterval(heroCycleTimer);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var current = 'radar';
+            heroCycleTimer = setInterval(function () {
+                if (heroCycleStopped) return;
+                current = current === 'radar' ? 'breakdown' : 'radar';
+                setHeroView(current);
+            }, 3000);
+        });
+
+        /* ── Reviews carousel: seamless infinite right-loop, auto every 2.5s until user clicks ── */
+        let revIdx = 0;
+        let revN = 0;
+        let revTimer = null;
+        let revStopped = false;
+        function revTrack() { return document.getElementById('rev-track'); }
+        function revRender(anim) {
+            var track = revTrack();
+            if (!track) return;
+            var slides = track.children;
+            if (!slides.length) return;
+            if (anim === false) track.style.transition = 'none';
+            for (var i = 0; i < slides.length; i++) slides[i].classList.toggle('rev-active', i === revIdx);
+            var vp = track.parentElement;
+            var active = slides[revIdx];
+            var offset = active.offsetLeft + (active.offsetWidth / 2) - (vp.offsetWidth / 2);
+            track.style.transform = 'translateX(' + (-offset) + 'px)';
+            var real = revN ? (((revIdx % revN) + revN) % revN) : revIdx;
+            document.querySelectorAll('#rev-dots .rev-dot').forEach(function (d, i) { d.classList.toggle('active', i === real); });
+            if (anim === false) { void track.offsetWidth; track.style.transition = ''; }
+        }
+        window.addEventListener('resize', function () { revRender(false); });
+        function revStop() {
+            if (!revStopped) { revStopped = true; if (revTimer) clearInterval(revTimer); }
+        }
+        function revNext() {
+            revIdx++;
+            revRender(true);
+            if (revIdx >= revN) {
+                // slid into the cloned copy — after it lands, jump back to the real slide with no animation
+                setTimeout(function () { if (revStopped) return; revIdx -= revN; revRender(false); }, 600);
+            }
+        }
+        function revGo(dir, userClick) {
+            if (userClick) revStop();
+            revIdx = revN ? ((((revIdx % revN) + dir) % revN) + revN) % revN : 0;
+            revRender(true);
+        }
+        function revJump(i, userClick) {
+            if (userClick) revStop();
+            revIdx = i;
+            revRender(true);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var track = revTrack();
+            if (!track) return;
+            revN = track.children.length;
+            // clone all slides once so the loop can always travel rightward seamlessly
+            Array.prototype.slice.call(track.children).forEach(function (s) { track.appendChild(s.cloneNode(true)); });
+            var dotsWrap = document.getElementById('rev-dots');
+            if (dotsWrap) {
+                for (var i = 0; i < revN; i++) {
+                    var b = document.createElement('button');
+                    b.className = 'rev-dot' + (i === 0 ? ' active' : '');
+                    b.setAttribute('aria-label', 'Go to review ' + (i + 1));
+                    (function (idx) { b.onclick = function () { revJump(idx, true); }; })(i);
+                    dotsWrap.appendChild(b);
+                }
+            }
+            revRender(false);
+            setTimeout(function () { revRender(false); }, 300);
+            revTimer = setInterval(function () { if (revStopped) return; revNext(); }, 2500);
+        });
     </script>
 </body>
 

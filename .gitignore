@@ -4,3 +4,6 @@ _pv_*.html
 
 # Local Claude Code settings (machine-specific)
 .claude/settings.local.json
+
+# Generated artifacts
+graphify-out/
