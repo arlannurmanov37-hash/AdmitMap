@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Your report is ready · AdmitMap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* design reference 1600 x 1012 — 1rem = 16px there */
+html{font-size:min(1vw, 1.581vh)}
+:root{
+  --navy:#0f1f4b; --ink:#101d42;
+  --royal:#2563eb; --royal-d:#1d4ed8; --royal-l:#dbeafe; --royal-s:#eef4ff;
+  --muted-1:#5b7098; --muted-2:#7d8ba6; --muted-3:#8296b5; --muted-4:#a9b6cc;
+  --line:#e6ebf4; --line-2:#eef1f7; --lip:#f1f4fa;
+  --green:#10b981; --green-d:#059669; --green-l:#d9f5e9;
+  --purple:#7c3aed; --purple-l:#ede9fe;
+  --amber:#f59e0b; --amber-l:#fef3c7; --amber-d:#b45309;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden}
+body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--navy);background:#fbfcfe;letter-spacing:-.008em;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:lining-nums tabular-nums;text-wrap:pretty}
+button{font-family:inherit;cursor:pointer}
+ul{list-style:none;margin:0;padding:0}
+@keyframes up{from{opacity:0;transform:translateY(.75rem)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.u{animation:up .55s var(--ease) both}.f{animation:fade .6s ease-out both}
+.d1{animation-delay:.06s}.d2{animation-delay:.13s}.d3{animation-delay:.2s}
+.d4{animation-delay:.27s}.d5{animation-delay:.34s}.d6{animation-delay:.41s}
+@media(prefers-reduced-motion:reduce){.u,.f{animation:none!important}}
+
+.wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100vh;height:100dvh;overflow:hidden;padding:.75rem 3rem;text-align:center}
+.glow{position:absolute;top:-14rem;left:50%;transform:translateX(-50%);width:60rem;height:38rem;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(37,99,235,.13),transparent 70%);pointer-events:none}
+.in{position:relative;z-index:1;width:100%;max-width:74rem;display:flex;flex-direction:column;align-items:center}
+
+.x{position:absolute;top:1rem;right:2rem;z-index:2;display:flex;align-items:center;justify-content:center;
+  width:2.5rem;height:2.5rem;border-radius:50%;border:1.5px solid var(--line);background:#fff;
+  color:var(--muted-2);box-shadow:0 2px 0 var(--lip);
+  transition:transform .14s var(--ease),box-shadow .14s ease}
+.x:hover{transform:translateY(2px);box-shadow:0 0 0 var(--lip)}
+.x svg{width:.875rem;height:.875rem}
+
+.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:.5rem}
+.brand svg{width:3rem;height:3rem}
+.brand-t{font-family:Fraunces,Georgia,serif;font-size:2.625rem;font-weight:900;
+  letter-spacing:-.045em;color:var(--ink)}
+.brand-t span{color:var(--royal)}
+
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:.875rem;margin-bottom:.5rem}
+.eyebrow i{width:2.125rem;height:2px;border-radius:2px;background:var(--royal);display:block}
+.eyebrow span{font-size:.6875rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--royal)}
+
+h1{font-family:Fraunces,Georgia,serif;font-size:2.6875rem;font-weight:900;letter-spacing:-.048em;
+  line-height:1.04;margin:0 0 .3125rem}
+h1 em{font-style:normal;color:var(--royal)}
+.sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
+.sub b{font-weight:800;color:var(--navy)}
+
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:2.25rem}
+.feat{display:flex;align-items:center;gap:.9375rem;padding:1.0625rem 1.1875rem;border-radius:1.125rem;
+  box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
+.feat-i{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;
+  flex-shrink:0;border-radius:.875rem}
+.feat-i svg{width:1.125rem;height:1.125rem}
+.feat b{font-size:.9375rem;font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.f1{background:linear-gradient(160deg,#fff,#f5f9ff);border:1px solid #e2ebfa}
+.f2{background:linear-gradient(160deg,#fff,#f5fdf9);border:1px solid #d8efe4}
+.f3{background:linear-gradient(160deg,#fff,#faf8ff);border:1px solid #e6e0fa}
+.f4{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid #f3e5cf}
+
+/* the whole ticket block, text included, rendered 10% larger */
+.tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
+  margin-bottom:2.1175rem;}
+.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column}
+.tk-top{flex:1;display:flex;flex-direction:column;border-radius:1.3613rem 1.3613rem 0 0;background:#fff;
+  border:2px solid transparent;border-bottom:0;padding:1.815rem 2.1175rem 1.6637rem;
+  box-shadow:0 0 0 2px var(--line)}
+.tk-h{display:flex;align-items:center;gap:.9075rem}
+.tk-ic{display:flex;align-items:center;justify-content:center;width:3.1763rem;height:3.1763rem;
+  border-radius:.9075rem;background:#eef1f6;color:#475569}
+.tk-ic svg{width:1.5881rem;height:1.5881rem}
+.tk-n{font-family:Fraunces,Georgia,serif;font-size:1.815rem;font-weight:900;letter-spacing:-.035em}
+.tk-n em{font-style:normal;color:var(--royal)}
+.tk-s{font-size:1.0587rem;line-height:1.5;color:#64748b;margin:.9075rem 0 0;min-height:3.1763rem}
+.tk-hr{height:1px;background:var(--line-2);margin:1.2856rem 0 1.21rem}
+.tk-ul{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:.9831rem}
+.tk-ul li{display:flex;align-items:center;gap:.9831rem;font-size:1.0966rem;line-height:1.35;
+  font-weight:600;color:var(--navy)}
+.tk-b{display:flex;align-items:center;justify-content:center;width:2.2687rem;height:2.2687rem;
+  flex-shrink:0;border-radius:.7562rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 1px 2px rgba(15,31,75,.07)}
+.tk-b svg{width:1.21rem;height:1.21rem}
+/* highlighted plan: blue bullet chips. plain plain: gray. */
+.b-blue,.b-green,.b-purple,.b-amber,.b-indigo{
+  background:linear-gradient(160deg,#eaf2ff,#d8e6fd);color:var(--royal);border:1px solid #cfe0fb}
+.tk:not(.hi) .tk-b{background:linear-gradient(160deg,#f6f8fb,#e9edf4);color:#64748b;border:1px solid #e3e8f0}
+/* the strip carries the side borders so the card outline is one continuous ring;
+   the notch circles are absolutely positioned and paint over the straight edge. */
+.tk-perf{position:relative;z-index:1;height:1.815rem;background:#fff;
+  border-left:2px solid transparent;border-right:2px solid transparent}
+.tk-perf i{position:absolute;top:0;width:1.815rem;height:1.815rem;border-radius:50%;
+  background:#fbfcfe;border:2px solid var(--line)}
+.tk-perf i.l{left:calc(-.9075rem - var(--bw) - var(--ring));clip-path:inset(0 0 0 50%)}
+.tk-perf i.r{right:calc(-.9075rem - var(--bw) - var(--ring));clip-path:inset(0 50% 0 0)}
+.tk-perf span{position:absolute;left:1.21rem;right:1.21rem;top:.8319rem;height:2px;
+  background:repeating-linear-gradient(90deg,#dbe2ee 0 .5294rem,transparent .5294rem 1.0587rem)}
+.tk-f{display:flex;align-items:center;justify-content:space-between;gap:1.21rem;
+  border-radius:0 0 1.3613rem 1.3613rem;background:#fff;border:2px solid transparent;border-top:0;
+  padding:1.5125rem 2.1175rem 1.815rem;box-shadow:0 0 0 2px var(--line)}
+.tk-p b{display:block;font-family:Fraunces,Georgia,serif;font-size:3.1763rem;font-weight:900;
+  letter-spacing:-.045em;line-height:1}
+.tk-p i{font-size:.9075rem;font-weight:600;font-style:normal;color:var(--muted-4)}
+.btn-o{border:2px solid #cbd5e1;background:#fff;color:var(--navy);padding:1.21rem 1.815rem;
+  border-radius:.9075rem;font-size:.9453rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  white-space:nowrap;box-shadow:0 4px 0 var(--line-2),0 .5294rem .9831rem rgba(15,31,75,.07);
+  transition:transform .14s var(--ease),box-shadow .14s ease}
+.btn-o:hover{transform:translateY(3px);box-shadow:0 1px 0 var(--line-2),0 3px .605rem rgba(15,31,75,.07)}
+.btn-b{border:0;background:linear-gradient(180deg,#4581f7,#2f6ef0 42%,#2461e4);color:#fff;
+  padding:1.2856rem 1.9663rem;border-radius:.9075rem;font-size:.9453rem;font-weight:800;
+  letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 0 #2359d6,0 2px 0 #2156ce,0 3px 0 #1e51c4,
+    0 4px 0 #1c4cba,0 5px 1px rgba(12,38,110,.5),0 .6806rem 1.21rem rgba(15,31,75,.2),
+    0 1.21rem 1.9663rem rgba(37,99,235,.22);
+  transition:transform .14s var(--ease),box-shadow .14s ease}
+.btn-b:hover{transform:translateY(4px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 0 #2359d6,0 2px 1px rgba(12,38,110,.45),
+    0 .3781rem .7562rem rgba(15,31,75,.2),0 .6806rem 1.21rem rgba(37,99,235,.2)}
+
+/* highlighted ticket.
+   Borders are written as explicit longhands with a literal hex — a `border:`
+   shorthand carrying a var() is the one form that has bitten us across engines,
+   and the ring is the whole point of this card. */
+/* One 2px outline all the way round, from the borders alone. Anything that
+   thickens the straight runs (an extra shadow ring) makes them overshoot the
+   2px arcs at the notch and leaves tabs sticking out of the circle's ends. */
+.tk.hi{--bw:2px}
+.tk.hi .tk-top{background:linear-gradient(165deg,#fff,#f4f9ff);
+  border-top:2px solid transparent;border-left:2px solid transparent;
+  border-right:2px solid transparent;border-bottom:0;box-shadow:0 0 0 2px #2563eb}
+.tk.hi .tk-ic{background:var(--royal-l);color:var(--royal)}
+.tk.hi .tk-hr{background:#dbe6f7}
+.tk.hi .tk-perf{background:#f4f9ff}
+.tk.hi .tk-perf i{border-top:2px solid #2563eb;border-left:2px solid #2563eb;
+  border-right:2px solid #2563eb;border-bottom:2px solid #2563eb}
+.tk.hi .tk-perf span{background:repeating-linear-gradient(90deg,#bcd4f8 0 .5294rem,transparent .5294rem 1.0587rem)}
+.tk.hi .tk-f{background:linear-gradient(180deg,#f4f9ff,#eef5ff);
+  border-bottom:2px solid transparent;border-left:2px solid transparent;
+  border-right:2px solid transparent;border-top:0;box-shadow:0 0 0 2px #2563eb}
+.tk.hi .tk-p i{color:#7d93b8}
+.tk-best{position:absolute;top:-.9831rem;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;
+  background:linear-gradient(180deg,#2f6ef0,#2461e4);color:#fff;padding:.4537rem 1.21rem;border-radius:1.5125rem;
+  font-size:.7562rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 2px 0 #1e51c4,0 .4537rem 1.0587rem rgba(37,99,235,.4)}
+
+.secure{display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
+  font-weight:600;color:var(--muted-3)}
+.secure svg{width:.9375rem;height:.9375rem;color:var(--green)}
+
+/* Legal links at the point of payment. A checkout page without these is the
+   single most common thing a payment provider flags in review. */
+.legal{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.375rem 1.125rem;
+  margin-top:.875rem;font-size:.75rem;font-weight:600}
+.legal a{color:var(--muted-3);text-decoration:none;transition:color .18s ease}
+.legal a:hover{color:var(--royal);text-decoration:underline}
+.legal span{color:var(--muted-3);font-weight:500;opacity:.55}
+
+@media(max-width:1100px){
+  html{font-size:min(2.4vw,1.581vh)}
+  html,body{overflow:auto}
+  .wrap{height:auto;min-height:100vh;padding:2rem 1.25rem 3rem}
+  .feats{grid-template-columns:1fr 1fr}
+  .tickets{grid-template-columns:1fr;gap:2.5rem}
+  .x{top:1rem;right:1.25rem}
+}
+
+
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="glow"></div>
+  <button class="x" aria-label="Close" onclick="history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+
+  <div class="in">
+    <span class="brand u">
+      <svg viewBox="0 0 40 40" fill="none"><path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#101d42"/><circle cx="20" cy="14.6" r="6.4" fill="#fff"/><path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.6 12.1h2.4v2.3" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="brand-t">Admit<span>Map</span></span>
+    </span>
+
+    <div class="eyebrow f"><i></i><span>Your report is ready</span><i></i></div>
+    <h1 class="u d1">See where you <em>actually stand.</em></h1>
+    <p class="sub f d2">Your odds at every school on your list, measured against the profile you actually
+      have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
+
+    <div class="feats">
+      <div class="feat f1 u d2">
+        <span class="feat-i" style="background:var(--royal-l);color:var(--royal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
+        <b>Odds at every school</b>
+      </div>
+      <div class="feat f2 u d3">
+        <span class="feat-i" style="background:var(--green-l);color:var(--green-d)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>
+        <b>Real cost after aid</b>
+      </div>
+      <div class="feat f3 u d4">
+        <span class="feat-i" style="background:var(--purple-l);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.3"/><path d="M19.5 20v-1.4a3.4 3.4 0 0 0-2.6-3.3"/><path d="M15 4.7a3.4 3.4 0 0 1 0 6.6"/></svg></span>
+        <b>Compared to real admits</b>
+      </div>
+      <div class="feat f4 u d5">
+        <span class="feat-i" style="background:var(--amber-l);color:var(--amber-d)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2.5h6"/></svg></span>
+        <b>Ready in under a minute</b>
+      </div>
+    </div>
+
+    <div class="tickets">
+      <div class="tk u d4">
+        <div class="tk-top">
+          <div class="tk-h">
+            <span class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5v1a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5Z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg></span>
+            <span class="tk-n">Odds Report</span>
+          </div>
+          <p class="tk-s">Know your chances at every school on your list.</p>
+          <div class="tk-hr"></div>
+          <ul class="tk-ul">
+            <li><span class="tk-b b-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/></svg></span>Acceptance probability for every school</li>
+            <li><span class="tk-b b-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>Academic &amp; extracurricular strength analysis</li>
+            <li><span class="tk-b b-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.3"/><path d="M19.5 20v-1.4a3.4 3.4 0 0 0-2.6-3.3"/><path d="M15 4.7a3.4 3.4 0 0 1 0 6.6"/></svg></span>Comparison with admitted-student profiles</li>
+            <li><span class="tk-b b-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/></svg></span>Reach, Target and Likely tiering</li>
+            <li><span class="tk-b b-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3.5v4M15 3.5v4"/></svg></span>Every ED, EA and RD deadline</li>
+          </ul>
+        </div>
+        <div class="tk-perf"><i class="l"></i><i class="r"></i><span></span></div>
+        <div class="tk-f">
+          <span class="tk-p"><b>$19</b><i>One-time purchase</i></span>
+          <button class="btn-o" onclick="buy(19)">Get my report</button>
+        </div>
+      </div>
+
+      <div class="tk hi u d5">
+        <span class="tk-best">Most popular</span>
+        <div class="tk-top">
+          <div class="tk-h">
+            <span class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></span>
+            <span class="tk-n">Odds <em>+ Financial Aid</em></span>
+          </div>
+          <p class="tk-s">Know your chances — and what each school could actually cost.</p>
+          <div class="tk-hr"></div>
+          <ul class="tk-ul">
+            <li><span class="tk-b b-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Everything in the Odds Report</li>
+            <li><span class="tk-b b-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>Estimated aid for every school</li>
+            <li><span class="tk-b b-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/></svg></span>Net cost per year after scholarships &amp; aid</li>
+            <li><span class="tk-b b-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 8h12"/><path d="M6 8 3 14h6zM18 8l-3 6h6z"/></svg></span>Affordability compared across your list</li>
+            <li><span class="tk-b b-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 9.5 10l3.5 3.5L20 6.5"/><path d="M20 11V6.5h-4.5"/></svg></span>Average salary after graduation</li>
+          </ul>
+        </div>
+        <div class="tk-perf"><i class="l"></i><i class="r"></i><span></span></div>
+        <div class="tk-f">
+          <span class="tk-p"><b>$29</b><i>One-time purchase</i></span>
+          <button class="btn-b" onclick="buy(29)">Get my full report</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="secure f d6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
+      Secured with 256-bit SSL · One payment, never a subscription
+    </div>
+
+    <nav class="legal f d6">
+      <a href="terms.html">Terms of Service</a>
+      <span>·</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span>·</span>
+      <a href="terms.html#refunds">Refund Policy</a>
+    </nav>
+  </div>
+</div>
+
+<script>
+
+
+(function(){
+  const now=new Date(); now.setHours(0,0,0,0);
+  let t=new Date(now.getFullYear(),10,1);
+  if(t<now) t=new Date(now.getFullYear()+1,10,1);
+  document.getElementById('days').textContent = Math.ceil((t-now)/86400000);
+})();
+/* no payment provider wired yet — hand off to the report */
+function buy(tier){
+  try{ localStorage.setItem('admitmap_tier', String(tier)); }catch(e){}
+  window.location.href = 'report.html?tier='+tier;
+}
+</script>
+</body>
+</html>

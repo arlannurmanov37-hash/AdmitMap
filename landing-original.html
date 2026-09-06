@@ -33,51 +33,11 @@
             --line: #e2e8f0;
             --error: #ef4444;
             --success: #10b981;
-            /* ── Токены дизайн-системы онбординга (funnel.html) ── */
-            --ground: #f4f7fc;
-            --line-soft: #e6ebf4;
-            --lip: #f1f4fa;
-            --royal-s: #eef4ff;
-            --amber: #f59e0b;
-            --amber-l: #fef3c7;
-            --amber-d: #b45309;
-            --purple: #7c3aed;
-            --purple-l: #ede9fe;
-            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-            /* Общий светлый фон: первый экран, «How it works», «Reviews» */
-            --bg-soft:
-                radial-gradient(1150px 760px at 86% 2%, rgba(37, 99, 235, .26) 0%, rgba(37, 99, 235, .10) 40%, transparent 70%),
-                radial-gradient(820px 680px at 0% 98%, rgba(37, 99, 235, .18) 0%, transparent 64%),
-                linear-gradient(166deg, #ffffff 0%, #fbfdff 30%, #eef3ff 68%, #dfe9fd 100%);
-        }
-
-        /* ── Motion (Emil pass) ── */
-        /* Hero: staggered entrance on first paint — the one place the delight budget lives. */
-        .hero-left > * { animation: heroIn .6s var(--ease-out) both }
-        .hero-left > *:nth-child(1){animation-delay:.04s}
-        .hero-left > *:nth-child(2){animation-delay:.10s}
-        .hero-left > *:nth-child(3){animation-delay:.16s}
-        .hero-left > *:nth-child(4){animation-delay:.22s}
-        .hero-left > *:nth-child(5){animation-delay:.28s}
-        .hero-left > *:nth-child(6){animation-delay:.34s}
-        @keyframes heroIn { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: translateY(0) } }
-
-        /* Scroll-reveal: sections settle in as you reach them (added via JS, so no-JS still shows all). */
-        .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s var(--ease-out), transform .6s var(--ease-out) }
-        .reveal.reveal-in { opacity: 1; transform: none }
-
-        /* Press feedback on CTAs. */
-        .hero-cta, button { transition: transform .15s var(--ease-out), background-color .25s ease, box-shadow .25s ease, border-color .25s ease, color .25s ease }
-        .hero-cta:active, button:active { transform: scale(0.97) }
-
-        @media (prefers-reduced-motion: reduce) {
-            .hero-left > *, .reveal { animation: none !important; opacity: 1 !important; transform: none !important; transition: none !important }
-            html { scroll-behavior: auto !important }
         }
 
         html {
             scroll-behavior: smooth;
-            scroll-padding-top: 78px
+            scroll-padding-top: 64px
         }
 
         body {
@@ -193,10 +153,7 @@
             padding: 100px 56px 80px;
             position: relative;
             overflow: hidden;
-            /* Белый держится там, где текст (слева сверху); синий набирает силу
-               справа и снизу — за карточкой, где он не мешает контрасту.
-               Тот же фон используют секции how и reviews — см. --bg-soft. */
-            background: var(--bg-soft)
+            background: var(--white)
         }
 
         .hero::before {
@@ -207,7 +164,7 @@
             width: 640px;
             height: 640px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, .05) 0%, rgba(37, 99, 235, .015) 45%, transparent 70%);
+            background: radial-gradient(circle, rgba(37, 99, 235, .10) 0%, rgba(37, 99, 235, .03) 45%, transparent 70%);
             pointer-events: none
         }
 
@@ -219,7 +176,7 @@
             width: 360px;
             height: 360px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, .035) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(37, 99, 235, .06) 0%, transparent 70%);
             pointer-events: none
         }
 
@@ -279,9 +236,7 @@
             gap: 12px;
             background: var(--royal);
             color: #fff;
-            /* Прозрачная рамка той же толщины, что у вторичной кнопки, — чтобы
-               обе имели одинаковую блочную модель и совпадали по высоте. */
-            border: 1.5px solid transparent;
+            border: none;
             padding: 18px 36px;
             border-radius: 12px;
             font-family: 'Syne', sans-serif;
@@ -334,7 +289,6 @@
 
         .hero-badges {
             display: flex;
-            flex-wrap: wrap;
             gap: 32px;
             margin-top: 36px
         }
@@ -790,37 +744,23 @@
         }
 
         /* ── FEATURES ── */
-                /* Секция на светло-голубой подложке, карточки белые и приподнятые —
-           раньше было наоборот: белая секция и плоские карточки, из-за чего
-           они не читались как отдельные объекты. */
         .features-section {
-            /* Высоту задаёт min-height ниже, поэтому вертикальные отступы
-               минимальны — иначе секция выходила бы за экран. */
-            padding: clamp(12px, calc(-109.99px + 15.249vh), 64px) 56px;
-            /* Занимает весь экран минус фиксированная шапка, содержимое
-               по центру — иначе на большом мониторе снизу оставался провал. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
-            background:
-                radial-gradient(900px 520px at 88% -10%, rgba(37, 99, 235, .10) 0%, transparent 62%),
-                linear-gradient(178deg, #f7faff 0%, #eef4ff 100%)
+            padding: 100px 56px;
+            background: var(--white)
         }
 
         .features-inner {
-            width: 100%;
             max-width: 1160px;
             margin: 0 auto
         }
 
         .features-head {
-            margin-bottom: clamp(18px, calc(-5.46px + 2.933vh), 28px);
-            max-width: 680px
+            margin-bottom: 48px
         }
 
         .features-head h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(40px, min(4.6vw, calc(-44.46px + 10.557vh)), 82px);
+            font-size: clamp(36px, 4vw, 56px);
             font-weight: 900;
             letter-spacing: -.04em;
             line-height: 1;
@@ -842,59 +782,40 @@
             line-height: 1.6
         }
 
-        /* Четыре карточки вместо шести: сетка 2×2 даёт каждой больше веса,
-           чем узкая колонка в ряду из четырёх. */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: clamp(14px, calc(-9.46px + 2.933vh), 24px)
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px
         }
 
         .feature-card {
             background: #fff;
-            border: 1px solid #e6ecf7;
-            border-radius: 22px;
-            padding: clamp(20px, calc(10.62px + 1.173vh), 24px) clamp(22px, 2vw, 44px);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 0 #eef2fa, 0 10px 28px rgba(15, 31, 75, .07);
-            transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), border-color .25s var(--ease-out)
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .feature-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 2px 0 #eef2fa, 0 20px 44px rgba(15, 31, 75, .14);
-                border-color: rgba(37, 99, 235, .28)
-            }
-
-            .feature-card:hover .feature-icon {
-                box-shadow: 0 10px 26px rgba(37, 99, 235, .5)
-            }
-        }
-
-        /* Иконка залита фирменным синим и светится — бледный плоский квадрат
-           терялся на белой карточке. */
-        .feature-icon {
-            width: clamp(42px, calc(13.85px + 3.519vh), 54px);
-            height: clamp(42px, calc(13.85px + 3.519vh), 54px);
+            border: 1px solid var(--line);
             border-radius: 16px;
-            position: relative;
-            z-index: 1;
-            background: linear-gradient(140deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%);
-            color: #fff;
+            padding: 32px 28px;
+            transition: all .25s
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 12px 36px rgba(15, 31, 75, .06);
+            border-color: rgba(37, 99, 235, .2);
+            transform: translateY(-2px)
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--royal-light);
+            color: var(--royal);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: clamp(20px, calc(10.62px + 1.173vh), 24px);
-            margin-bottom: clamp(14px, calc(4.62px + 1.173vh), 18px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, .38);
-            transition: box-shadow .25s var(--ease-out)
+            font-size: 24px;
+            margin-bottom: 20px
         }
 
-        .feature-icon svg { stroke-width: 1.8 }
-
-                .ic-inline {
+        .ic-inline {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -903,93 +824,50 @@
             margin-right: 5px
         }
 
-        /* Заголовок серифом — меняет характер секции, а не только размеры */
         .feature-card h3 {
-            font-family: 'Fraunces', serif;
-            font-size: clamp(19px, calc(2.58px + 2.053vh), 26px);
-            font-weight: 900;
+            font-size: 18px;
+            font-weight: 800;
             color: var(--navy);
-            margin-bottom: clamp(11px, calc(3.96px + 0.880vh), 14px);
-            letter-spacing: -.035em;
-            position: relative;
-            z-index: 1
-        }
-
-        /* Короткая синяя черта под названием — вместо полной линии-разделителя */
-        .feature-card h3::after {
-            content: '';
-            display: block;
-            width: 38px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--royal);
-            margin-top: clamp(10px, calc(5.31px + 0.587vh), 12px)
-        }
-
-        /* Крупный номер водяным знаком в углу карточки */
-        .fc-num {
-            position: absolute;
-            top: clamp(4px, 1vh, 12px);
-            right: clamp(14px, 1.6vw, 26px);
-            font-family: 'Fraunces', serif;
-            font-size: clamp(58px, calc(-21.77px + 9.971vh), 92px);
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -.05em;
-            color: rgba(37, 99, 235, .17);
-            pointer-events: none;
-            user-select: none
+            margin-bottom: 10px;
+            letter-spacing: -.01em
         }
 
         .feature-card p {
-            font-size: clamp(14px, calc(4.62px + 1.173vh), 18px);
-            line-height: 1.68;
-            color: var(--muted);
-            font-weight: 500;
-            position: relative;
-            z-index: 1
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--muted)
         }
 
         /* ── PROBLEMS ── */
-        /* ── ПРОБЛЕМЫ ─────────────────────────────────────────────────────
-           Редакционная композиция вместо трёх коробок: заголовок слева,
-           пронумерованный список справа, разделённый волосяными линиями.
-           Тёмно-синий остаётся основой секции. */
         .problems-section {
             padding: 0;
-            background:
-                radial-gradient(1000px 560px at 88% -10%, rgba(59, 130, 246, .20) 0%, transparent 62%),
-                radial-gradient(760px 540px at -6% 110%, rgba(124, 58, 237, .16) 0%, transparent 64%),
-                linear-gradient(172deg, #16295c 0%, #101f4d 44%, #0a1533 100%);
+            background: var(--navy);
             overflow: hidden;
-            position: relative;
-        
-            /* Секция занимает ровно экран под шапкой: при переходе по меню
-               в кадре не остаётся места, куда попала бы соседняя секция. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
+            position: relative
+        }
+
+        .problems-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255, 255, 255, .025) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255, 255, 255, .025) 80px);
+            pointer-events: none
         }
 
         .problems-inner {
             max-width: 1160px;
             margin: 0 auto;
-            padding: clamp(44px, 6.2vh, 88px) 56px clamp(48px, 6.6vh, 94px);
+            padding: 100px 56px 170px;
             position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 80px;
-            align-items: start;
-            width: 100%;
+            z-index: 1
         }
 
         .problems-eyebrow {
             font-size: 11px;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: .2em;
             text-transform: uppercase;
-            color: #7ea9f7;
+            color: rgba(37, 99, 235, .8);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
@@ -1000,110 +878,109 @@
             content: '';
             width: 28px;
             height: 2px;
-            background: #7ea9f7;
+            background: rgba(37, 99, 235, .8);
             border-radius: 2px
         }
 
         .problems-inner h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(44px, 4.4vw, 66px);
+            font-size: clamp(36px, 4vw, 60px);
             font-weight: 900;
-            letter-spacing: -.045em;
-            line-height: .98;
+            letter-spacing: -.04em;
+            line-height: .95;
             color: #fff;
-            margin-bottom: 20px
+            margin-bottom: 16px
+        }
+
+        .problems-inner h2 em {
+            color: var(--royal-mid);
+            font-style: italic;
+            font-weight: 300
         }
 
         .problems-subhead {
-            font-size: 17px;
-            color: rgba(255, 255, 255, .55);
-            line-height: 1.72;
-            font-weight: 500;
-            margin: 0
+            font-size: 16px;
+            color: rgba(255, 255, 255, .45);
+            margin-bottom: 64px;
+            max-width: 480px;
+            line-height: 1.6
         }
 
-        .prob-list {
-            list-style: none;
-            margin: 0;
-            padding: 0
-        }
-
-        .prob-row {
+        .problems-grid {
             display: grid;
-            grid-template-columns: 84px 1fr;
-            gap: 28px;
-            align-items: start;
-            padding: 34px 0 36px;
-            border-top: 1px solid rgba(255, 255, 255, .11);
-            position: relative
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            border: 2px solid rgba(255, 255, 255, .06);
+            border-radius: 20px;
+            overflow: hidden
         }
 
-        .prob-row:first-child { border-top: none; padding-top: 4px }
-        .prob-row:last-child  { padding-bottom: 4px }
-
-        /* Обе метки в одной колонке: иконка в тонированном квадрате и под ней
-           крупная контурная цифра. Один синий на все три строки — цветовой
-           разнобой ломал спокойный тон секции. */
-        .prob-mark {
-            --accent: #7ea9f7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px
+        .prob-card {
+            background: rgba(255, 255, 255, .03);
+            padding: 48px 36px;
+            position: relative;
+            overflow: hidden;
+            transition: all .35s;
+            cursor: default;
+            border-right: 2px solid rgba(255, 255, 255, .06)
         }
 
-        .prob-num {
-            font-family: 'Fraunces', serif;
-            font-size: 46px;
-            font-weight: 900;
-            line-height: .9;
-            letter-spacing: -.04em;
-            color: transparent;
-            -webkit-text-stroke: 1.2px color-mix(in srgb, var(--accent) 62%, transparent);
-            transition: color .3s var(--ease-out), -webkit-text-stroke-color .3s var(--ease-out)
+        .prob-card:last-child {
+            border-right: none
         }
 
-        .prob-row:hover .prob-num {
-            color: color-mix(in srgb, var(--accent) 92%, transparent);
-            -webkit-text-stroke-color: transparent
+        .prob-card:hover {
+            background: rgba(37, 99, 235, .12)
+        }
+
+        .prob-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--royal), var(--royal-mid));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .4s
+        }
+
+        .prob-card:hover::after {
+            transform: scaleX(1)
+        }
+
+        .prob-icon {
+            font-size: 30px;
+            margin-bottom: 18px;
+            color: #93c5fd;
+            display: inline-flex
         }
 
         .prob-title {
-            font-family: 'Fraunces', serif;
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: -.035em;
-            line-height: 1.1;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 16px;
             color: #fff;
-            margin-bottom: 12px
+            line-height: 1.2;
+            letter-spacing: -.02em
         }
 
         .prob-body {
-            font-size: 16.5px;
-            line-height: 1.72;
-            color: rgba(255, 255, 255, .58);
-            font-weight: 500;
-            max-width: 640px
+            font-size: 14px;
+            line-height: 1.85;
+            color: rgba(255, 255, 255, .5)
         }
-
-        @media(prefers-reduced-motion: reduce) { .prob-num { transition: none } }
 
         /* ── HOW ── */
         .how-section {
-            padding: clamp(32px, 4.3vh, 56px) 56px clamp(38px, 5.4vh, 76px);
-            background: var(--bg-soft);
-        
-            /* Секция занимает ровно экран под шапкой: при переходе по меню
-               в кадре не остаётся места, куда попала бы соседняя секция. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
+            padding: 52px 56px 90px;
+            background: var(--off)
         }
 
         .how-inner {
             max-width: 1160px;
-            margin: 0 auto;
-            width: 100%;
+            margin: 0 auto
         }
 
         .how-inner h2 {
@@ -1161,59 +1038,11 @@
             z-index: 2;
         }
 
-        /* The blue road fills in behind the journey; JS drives stroke-dashoffset. */
-        .road-progress {
-            opacity: 0;
-        }
-        .road-anim .road-progress {
-            opacity: 1;
-        }
-
-        .rn {
-            transition: background-color .45s var(--ease-out), color .45s var(--ease-out),
-                        border-color .45s var(--ease-out), box-shadow .55s var(--ease-out),
-                        transform .55s cubic-bezier(.34, 1.56, .64, 1);
-        }
-
         .rn.active {
             background: var(--royal);
             color: #fff;
             border-color: var(--royal);
-            box-shadow: 0 0 0 7px rgba(37, 99, 235, .22), 0 10px 26px rgba(37, 99, 235, .34);
-            transform: scale(1.14);
-        }
-
-        /* A ring pulses out once at the moment a node lights up. */
-        .rn::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 2px solid var(--royal);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .rn.pinged::after {
-            animation: rnPing .85s var(--ease-out) forwards;
-        }
-        @keyframes rnPing {
-            from { opacity: .55; transform: scale(1) }
-            to   { opacity: 0;   transform: scale(2.1) }
-        }
-
-        /* Copy for a step brightens as its node activates. */
-        .road-step .rn-title,
-        .road-step .rn-body {
-            transition: color .5s var(--ease-out), opacity .5s var(--ease-out);
-        }
-        .road-anim .road-step:not(.lit) .rn-title { color: #8fa0bd }
-        .road-anim .road-step:not(.lit) .rn-body { opacity: .55 }
-
-        @media (prefers-reduced-motion: reduce) {
-            .rn, .road-step .rn-title, .road-step .rn-body { transition: none }
-            .rn.pinged::after { animation: none }
-            .road-anim .road-step:not(.lit) .rn-title { color: var(--navy) }
-            .road-anim .road-step:not(.lit) .rn-body { opacity: 1 }
+            box-shadow: 0 0 0 7px rgba(37, 99, 235, .22);
         }
 
         .rn-title {
@@ -1259,298 +1088,437 @@
             }
         }
 
-        /* ── СРАВНЕНИЕ ────────────────────────────────────────────────────
-           Тёмная секция, две колонки карточек и центральная колонка-ярлык.
-           Слева — как есть сейчас (приглушённо, текст к центру), справа —
-           как с продуктом (залитая синим, текст от центра). Ярлык посередине
-           связывает пару, поэтому строку можно читать как одно предложение. */
+        /* ── COMPARISON TABLE ── */
         .compare-section {
-            /* Поля плавающие: 13px при низком окне, 62px при высоком —
-               фиксированные не оставляли секции шанса влезть в экран. */
-            padding: clamp(48px, calc(-60px + 13.2vh), 96px) 56px;
-            /* Тянется на весь экран за вычетом фиксированной шапки: на большом
-               мониторе секция заполняет вид, на ноутбуке не выходит за него. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            background:
-                radial-gradient(900px 520px at 50% -12%, rgba(59, 130, 246, .18) 0%, transparent 62%),
-                linear-gradient(180deg, #14265a 0%, #0f1f4b 48%, #0b1738 100%)
-        }
-
-        .compare-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255, 255, 255, .035) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255, 255, 255, .035) 80px);
-            pointer-events: none
+            padding: 100px 56px;
+            background: var(--white)
         }
 
         .compare-inner {
-            width: 100%;
-            max-width: 1180px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1
+            max-width: 900px;
+            margin: 0 auto
         }
 
         .compare-header {
             text-align: center;
-            margin-bottom: clamp(9px, calc(1px + 0.95vh), 16px)
-        }
-
-        .cmp-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12.5px;
-            font-weight: 800;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            color: #7ea9f7;
-            margin-bottom: 11px
-        }
-
-        .cmp-eyebrow::after {
-            content: '';
-            width: 28px;
-            height: 2px;
-            background: #7ea9f7;
-            border-radius: 2px
+            margin-bottom: 56px
         }
 
         .compare-header h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(50px, min(5.1vw, calc(-4px + 7.6vh)), 86px);
+            font-size: clamp(36px, 4vw, 56px);
             font-weight: 900;
-            letter-spacing: -.045em;
-            line-height: 1.02;
-            color: #fff;
-            margin-bottom: clamp(10px, 1.3vh, 16px)
+            letter-spacing: -.04em;
+            line-height: 1;
+            color: var(--navy);
+            margin-bottom: 16px
         }
 
         .compare-header h2 em {
-            color: #5b93f7;
+            color: var(--royal);
             font-style: italic;
             font-weight: 300
         }
 
         .compare-header p {
-            font-size: clamp(16px, calc(8.96px + 0.880vh), 19px);
-            color: rgba(255, 255, 255, .58);
+            font-size: 16px;
+            color: var(--muted);
             font-weight: 500;
-            max-width: 480px;
-            margin: 0 auto;
-            line-height: 1.6
+            max-width: 500px;
+            margin: 0 auto
         }
 
-        .cx-grid { display: grid; gap: clamp(6px, calc(0.5px + 0.66vh), 10px) }
+        .compare-table {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 60px rgba(15, 31, 75, .08)
+        }
 
-        .cx-cols,
-        .cx-row {
+        .compare-thead {
             display: grid;
-            grid-template-columns: 1fr 148px 1fr;
-            gap: 13px;
+            grid-template-columns: 2fr 1.5fr 1.5fr;
+            background: var(--off);
+            border-bottom: 2px solid var(--line)
+        }
+
+        .compare-col-header {
+            padding: 20px 24px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase
+        }
+
+        .compare-col-header:first-child {
+            color: var(--muted)
+        }
+
+        .compare-col-header.col-bad {
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .compare-col-header.col-good {
+            color: var(--royal);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .col-good-pill {
+            background: var(--royal);
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .08em
+        }
+
+        .compare-row {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1.5fr;
+            border-bottom: 1px solid var(--line);
+            transition: background .2s;
             align-items: center
         }
 
-        .cx-cols { margin-bottom: clamp(4px, 0.5vh, 12px) }
-
-        .cx-col-h {
-            font-size: clamp(12.5px, 1.25vh, 15px);
-            font-weight: 800;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 9px
+        .compare-row:last-child {
+            border-bottom: none
         }
 
-        .cx-col-h.left  { color: rgba(255, 255, 255, .45); justify-content: center }
-        .cx-col-h.right { color: #fff; justify-content: center }
-        .cx-mark { width: 19px; height: 19px; display: block }
+        .compare-row:hover {
+            background: rgba(37, 99, 235, .02)
+        }
 
-        /* Левая карточка — намеренно тусклая: это состояние «до» */
-        .cx-bad {
+        .cr-feature {
+            padding: 22px 24px;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -.01em
+        }
+
+        .cr-bad {
+            padding: 22px 24px;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 14px;
-            padding: clamp(9px, calc(0.5px + 1.1vh), 15px) clamp(20px, 1.9vw, 28px);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, .028);
-            border: 1px solid rgba(255, 255, 255, .075);
-            font-size: clamp(14.5px, calc(9px + 0.68vh), 17px);
-            line-height: 1.45;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--muted);
             font-weight: 500;
-            color: rgba(255, 255, 255, .52);
-            text-align: right
+            line-height: 1.4
         }
 
-        /* Центральный ярлык связывает пару */
-        .cx-key {
-            padding: 10px 8px;
-            border-radius: 12px;
-            background: rgba(37, 99, 235, .16);
-            border: 1px solid rgba(96, 165, 250, .26);
-            color: #a8c8fb;
-            font-size: clamp(11.5px, 1.2vh, 14px);
-            font-weight: 800;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            text-align: center
-        }
-
-        /* Правая карточка — состояние «после», поэтому залита и ярче */
-        .cx-good {
+        .cr-good {
+            padding: 22px 24px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: clamp(9px, calc(0.5px + 1.1vh), 15px) clamp(22px, 1.9vw, 30px);
-            border-radius: 15px;
-            /* Глубокий приглушённый синий: в макете карточки заметно темнее
-               кнопки внизу, а не одного тона с ней. */
-            background: linear-gradient(135deg, #1b3a86 0%, #142c69 100%);
-            border: 1px solid rgba(147, 197, 253, .24);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 10px 28px rgba(8, 22, 66, .5);
-            font-size: clamp(16px, calc(8.96px + 0.880vh), 19px);
-            line-height: 1.45;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--navy);
             font-weight: 700;
+            line-height: 1.4;
+            background: linear-gradient(90deg, rgba(37, 99, 235, .03) 0%, transparent 100%)
+        }
+
+        .x-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 700
+        }
+
+        .check-icon-teal {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(13, 148, 136, .3)
+        }
+
+        .compare-cta-row {
+            padding: 28px 24px;
+            background: linear-gradient(135deg, var(--royal) 0%, #1d4ed8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .compare-cta-text {
             color: #fff
         }
 
-        .cx-ic {
-            width: 25px;
-            height: 25px;
+        .compare-cta-text h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 4px
+        }
+
+        .compare-cta-text p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .75)
+        }
+
+        .compare-cta-btn {
+            background: #fff;
+            color: var(--royal);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all .2s;
+            flex-shrink: 0
+        }
+
+        .compare-cta-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .2)
+        }
+
+        /* ── COMPARE CARDS (two ways to apply) ── */
+        .compare-cards {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .cmp-card {
+            border-radius: 24px;
+            padding: 38px 34px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cmp-card.bad {
+            background: var(--white);
+            border: 1px solid var(--line);
+            box-shadow: 0 12px 40px rgba(15, 31, 75, .06);
+        }
+
+        .cmp-card.good {
+            background: linear-gradient(165deg, #14254f 0%, #0d1a3c 100%);
+            box-shadow: 0 26px 64px rgba(15, 31, 75, .28);
+        }
+
+        .cmp-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .cmp-card.good .cmp-eyebrow {
+            color: #60a5fa;
+        }
+
+        .cmp-title {
+            font-family: 'Fraunces', serif;
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+            margin-bottom: 30px;
+            line-height: 1;
+        }
+
+        .cmp-card.bad .cmp-title {
+            color: #475569;
+        }
+
+        .cmp-card.good .cmp-title {
+            color: #fff;
+        }
+
+        .cmp-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .cmp-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .cmp-card.bad .cmp-item {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .cmp-card.good .cmp-item {
+            color: rgba(255, 255, 255, .92);
+            font-weight: 500;
+        }
+
+        .cmp-ic {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            font-weight: 800
+            font-weight: 800;
+            margin-top: 1px;
         }
 
-        .cx-ic.x {
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(255, 255, 255, .13);
-            color: rgba(255, 255, 255, .38);
-            order: 2
+        .cmp-ic.x {
+            border: 1.5px solid #cbd5e1;
+            color: #94a3b8;
+            background: transparent;
         }
 
-        .cx-ic.v { background: #9ec5fd; color: #12306e }
+        .cmp-ic.check {
+            background: rgba(16, 185, 129, .10);
+            border: 1.5px solid rgba(52, 211, 153, .55);
+            color: #34d399;
+            box-shadow: 0 0 12px rgba(16, 185, 129, .3);
+        }
 
-        .cmp-cta-wrap { display: flex; justify-content: center; margin-top: clamp(16px, calc(11.31px + 0.587vh), 18px) }
+        .cmp-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: var(--royal);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            z-index: 3;
+            border: 5px solid var(--off);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, .4);
+        }
 
         .cmp-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+            display: block;
+            width: 100%;
+            margin-top: 28px;
             background: var(--royal);
-            border: 1.5px solid transparent;
             color: #fff;
-            padding: clamp(13px, calc(1.27px + 1.466vh), 18px) clamp(34px, 3vw, 46px);
-            border-radius: 13px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 16px;
             font-family: 'Syne', sans-serif;
-            font-size: 14px;
             font-weight: 800;
-            letter-spacing: .09em;
             text-transform: uppercase;
-            cursor: pointer;
+            letter-spacing: .08em;
+            font-size: 15px;
             text-decoration: none;
-            box-shadow: 0 10px 34px rgba(37, 99, 235, .55);
-            transition: transform .18s var(--ease-out), background .2s, box-shadow .2s
+            box-shadow: 0 10px 30px rgba(37, 99, 235, .35);
+            transition: all .2s;
         }
 
         .cmp-cta:hover {
             background: var(--royal-mid);
             transform: translateY(-2px);
-            box-shadow: 0 16px 44px rgba(37, 99, 235, .68)
+            box-shadow: 0 14px 38px rgba(37, 99, 235, .45);
         }
 
-        @media(prefers-reduced-motion: reduce) { .cmp-cta:hover { transform: none } }
+        @media (max-width: 760px) {
+            .compare-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
 
-        /* ── ОБРАЗЕЦ ОТЧЁТА ───────────────────────────────────────────────
-           Светло-голубая подложка вместо тёмно-синей: белая карточка графика
-           на ней читается как лист бумаги, а не как заплатка. */
+            .cmp-arrow {
+                display: none;
+            }
+        }
+
+        /* ── MOCKUP BAND ── */
         .mockup-band {
-            padding: 26px 56px 30px;
-            background:
-                radial-gradient(900px 520px at 88% -14%, rgba(37, 99, 235, .10) 0%, transparent 62%),
-                linear-gradient(176deg, #eaf1ff 0%, #f1f6ff 46%, #e9f0fd 100%);
+            padding: 100px 56px;
+            background: var(--navy);
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 72px;
+            align-items: flex-start;
             position: relative;
-            overflow: hidden;
-            border-top: 1px solid #dbe6fa;
-            border-bottom: 1px solid #dbe6fa
+            overflow: hidden
         }
 
-        /* Шапка в три колонки: заголовок, пояснение, действие — секция тратит
-           меньше высоты, а заголовок может встать в три строки. */
-        /* Ширина зафиксирована: карточка с графиком имеет aspect-ratio,
-           поэтому на широком мониторе она без предела росла бы в высоту
-           и секция переставала помещаться в экран. */
-        .mb-head,
-        .sc-card {
-            width: 100%;
-            max-width: 1030px;
-            margin: 0 auto
-        }
-
-        .mb-head {
-            display: grid;
-            grid-template-columns: minmax(200px, auto) minmax(260px, 1fr) auto;
-            gap: 44px;
-            align-items: start;
-            position: relative;
-            z-index: 1
-        }
-
-        .mb-eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11.5px;
-            font-weight: 800;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--royal);
-            margin-bottom: 14px
-        }
-
-        .mb-eyebrow::before {
+        .mockup-band::before {
             content: '';
-            width: 3px;
-            height: 14px;
-            border-radius: 2px;
-            background: var(--royal)
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, .18) 0%, transparent 65%);
+            pointer-events: none
         }
 
-        .mb-title h2 {
+        .mb-left {
+            flex: 0 0 380px;
+            position: relative;
+            z-index: 1;
+            padding-top: 12px
+        }
+
+        .mb-left .section-label {
+            color: rgba(37, 99, 235, .8)
+        }
+
+        .mb-left .section-label::after {
+            background: rgba(37, 99, 235, .8)
+        }
+
+        .mb-left h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(28px, 2.9vw, 40px);
+            font-size: clamp(34px, 3.5vw, 52px);
             font-weight: 900;
-            letter-spacing: -.05em;
-            line-height: .98;
-            color: var(--navy);
-            margin: 0
+            letter-spacing: -.04em;
+            line-height: 1.05;
+            color: #fff;
+            margin-bottom: 20px
         }
 
-        .mb-title h2 em {
-            font-style: normal;
-            color: var(--royal)
-        }
-
-        .mb-lede {
-            font-size: 15.5px;
-            line-height: 1.65;
-            color: var(--muted);
-            font-weight: 500;
-            margin: 4px 0 0
+        .mb-left p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: rgba(255, 255, 255, .55);
+            margin-bottom: 32px
         }
 
         .mb-cta {
@@ -1558,119 +1526,255 @@
             align-items: center;
             gap: 10px;
             background: var(--royal);
-            border: 1.5px solid transparent;
+            border: none;
             color: #fff;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-family: 'Syne', sans-serif;
+            padding: 14px 28px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 800;
             letter-spacing: .08em;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 8px 26px rgba(37, 99, 235, .3);
-            transition: transform .18s var(--ease-out), background .2s, box-shadow .2s
+            transition: all .2s;
+            box-shadow: 0 6px 24px rgba(37, 99, 235, .45)
         }
 
         .mb-cta:hover {
-            background: var(--royal-mid);
-            transform: translateY(-2px);
-            box-shadow: 0 14px 34px rgba(37, 99, 235, .4)
+            background: var(--royal-mid)
         }
 
-        @media(prefers-reduced-motion: reduce) { .mb-cta:hover { transform: none } }
-
-        /* ── Карточка графика ── */
-        .sc-card {
-            background: #fff;
-            border: 1px solid #e6ecf7;
-            border-radius: 24px;
-            padding: 18px 22px 12px;
-            box-shadow: 0 1px 2px rgba(15, 31, 75, .04), 0 18px 46px rgba(15, 31, 75, .10);
+        .mb-right {
+            flex: 1;
             position: relative;
             z-index: 1
         }
 
-        .sc-head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 6px
+        .sample-report {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 20px;
+            padding: 36px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, .3)
         }
 
-        .sc-title {
-            font-size: 12.5px;
-            font-weight: 800;
-            letter-spacing: .13em;
+        .sr-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px
+        }
+
+        .sr-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .18em;
             text-transform: uppercase;
-            color: var(--navy)
+            color: rgba(255, 255, 255, .4);
+            margin-bottom: 4px
         }
 
-        .sc-hint { font-size: 13px; font-weight: 500; color: #8fa3c8 }
-
-        .sc-svg { width: 100%; aspect-ratio: 1200/470; height: auto; display: block }
-
-        .sc-foot {
+        .sr-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-            padding-top: 14px;
-            border-top: 1px solid #edf1f8
+            gap: 10px
         }
 
-        .sc-legend { display: flex; gap: 22px; flex-wrap: wrap; align-items: center }
-
-        .sc-legend span {
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 9px
+        .sr-name img {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            object-fit: contain;
+            background: rgba(255, 255, 255, .1);
+            padding: 2px;
+            border: 1px solid rgba(255, 255, 255, .15)
         }
 
-        .sc-legend i { width: 19px; height: 10px; border-radius: 5px }
-
-        .sc-legend-k {
-            font-weight: 700 !important;
-            color: #8fa3c8 !important;
-            letter-spacing: .13em;
-            font-size: 11px !important;
+        .sr-badge {
+            background: rgba(16, 185, 129, .15);
+            border: 1px solid rgba(16, 185, 129, .3);
+            color: #34d399;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .1em;
             text-transform: uppercase
         }
 
-        .sc-note { font-size: 13px; color: #8fa3c8; font-weight: 500 }
+        .sr-prob-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08)
+        }
 
-        /* подписи внутри svg */
-        .sc-cost { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900; fill: var(--navy); letter-spacing: -.03em }
-        .sc-aid  { font-size: 11px; font-weight: 700; fill: #059669 }
-        .sc-odds { font-family: 'Fraunces', serif; font-size: 25px; font-weight: 900; letter-spacing: -.03em }
-        .sc-pct  { font-size: 11px; font-weight: 700; fill: #94a3b8 }
-        .sc-name { font-size: 13px; font-weight: 500; fill: #64748b }
-        .sc-tag  { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase }
-        .sc-axis { font-size: 11.5px; font-weight: 500; fill: #a3b2ca }
+        .sr-prob-num {
+            font-family: 'Fraunces', serif;
+            font-size: 64px;
+            font-weight: 700;
+            letter-spacing: -.04em;
+            line-height: 1;
+            color: #fff
+        }
 
-        @media(max-width:760px) {
-            .sc-card { padding: 16px 14px 12px; border-radius: 18px }
-            .sc-hint { display: none }
+        .sr-prob-lbl {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .35);
+            margin-top: 4px
+        }
+
+        .sr-multiplier {
+            background: rgba(37, 99, 235, .2);
+            border: 1px solid rgba(37, 99, 235, .35);
+            border-radius: 10px;
+            padding: 14px 20px;
+            text-align: center
+        }
+
+        .sr-mult-num {
+            font-family: 'Fraunces', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--royal-mid);
+            letter-spacing: -.02em;
+            line-height: 1
+        }
+
+        .sr-mult-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-top: 4px
+        }
+
+        .sr-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px
+        }
+
+        .sr-metric {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 12px;
+            padding: 16px 18px
+        }
+
+        .sr-metric-name {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .4);
+            margin-bottom: 8px
+        }
+
+        .sr-metric-val {
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .sr-metric-val.green {
+            color: #34d399
+        }
+
+        .sr-metric-val.red {
+            color: #fca5a5
+        }
+
+        .sr-metric-val.yellow {
+            color: #fcd34d
+        }
+
+        .sr-metric-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, .08);
+            margin-top: 8px;
+            overflow: hidden
+        }
+
+        .sr-metric-bar-fill {
+            height: 100%;
+            border-radius: 2px
+        }
+
+        .fill-green {
+            background: #34d399
+        }
+
+        .fill-red {
+            background: #fca5a5
+        }
+
+        .fill-yellow {
+            background: #fcd34d
+        }
+
+        .sr-actions {
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .sr-action {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            line-height: 1.5
+        }
+
+        .sr-action-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700
+        }
+
+        .dot-warn {
+            background: rgba(239, 68, 68, .2);
+            color: #fca5a5
+        }
+
+        .dot-tip {
+            background: rgba(37, 99, 235, .25);
+            color: var(--royal-mid)
+        }
+
+        .sr-action-text {
+            color: rgba(255, 255, 255, .65)
+        }
+
+        .sr-action-text strong {
+            color: #fff;
+            font-weight: 700
         }
 
         /* ── REVIEWS ── */
         .reviews-section {
-            padding: clamp(26px, 4.2vh, 50px) 56px clamp(30px, 4.8vh, 56px);
-            background: var(--bg-soft);
-        
-            /* Секция занимает ровно экран под шапкой: при переходе по меню
-               в кадре не остаётся места, куда попала бы соседняя секция. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            justify-content: center;
+            padding: 56px 56px 90px;
+            background: var(--off)
         }
 
         .reviews-header {
@@ -1678,16 +1782,16 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: clamp(13px, 2.1vh, 26px)
+            margin-bottom: 28px
         }
 
         .reviews-header h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(30px, calc(12px + 2.1vh), 44px);
+            font-size: clamp(36px, 4vw, 56px);
             font-weight: 900;
             letter-spacing: -.04em;
             color: var(--navy);
-            line-height: 1.02
+            line-height: 1
         }
 
         .reviews-header h2 em {
@@ -1701,18 +1805,6 @@
             font-size: 16px;
             margin-top: 16px;
             font-weight: 500
-        }
-
-        .reviews-header .rev-note {
-            font-size: 12.5px;
-            color: var(--muted);
-            margin-top: 8px;
-            font-weight: 500;
-            max-width: 620px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.55;
-            opacity: .85
         }
 
         /* ── REVIEWS CAROUSEL (peek + blur) ── */
@@ -1761,7 +1853,7 @@
             grid-template-columns: 1.4fr 1fr;
             gap: 30px;
             align-items: start;
-            padding: clamp(16px, 2.3vh, 24px) clamp(26px, 2.6vw, 38px) clamp(18px, 2.6vh, 28px);
+            padding: 26px 40px 32px;
             transition: opacity .45s ease, filter .45s ease, transform .45s ease;
         }
 
@@ -1778,7 +1870,7 @@
 
         .rev-qmark {
             font-family: 'Fraunces', serif;
-            font-size: clamp(34px, 4.4vh, 48px);
+            font-size: 58px;
             font-weight: 700;
             line-height: .7;
             color: #b9d2ff;
@@ -1813,7 +1905,7 @@
 
         .rev-quote {
             font-family: 'Fraunces', serif;
-            font-size: clamp(17px, calc(7px + 1.28vh), 22px);
+            font-size: 25px;
             font-weight: 400;
             line-height: 1.34;
             color: var(--navy);
@@ -2097,156 +2189,91 @@
             display: block
         }
 
-        /* ── CTA ───────────────────────────────────────────────────────────
-           Тёмная секция: слева логотип, заголовок и текст, справа карточка
-           с кнопкой и тремя снятыми возражениями. Раньше всё было по центру
-           одной колонкой, а условия шли строкой мелким текстом. */
+        /* ── CTA ── */
         .cta-section {
-            padding: 106px 56px 106px;
+            padding: 120px 56px;
+            text-align: center;
+            background: var(--royal);
             position: relative;
-            overflow: hidden;
-            background:
-                radial-gradient(820px 520px at 84% 4%, rgba(59, 130, 246, .22) 0%, transparent 62%),
-                linear-gradient(168deg, #16295c 0%, #0f1f4b 46%, #0a1533 100%);
-        
-            /* Секция занимает ровно экран под шапкой: при переходе по меню
-               в кадре не остаётся места, куда попала бы соседняя секция. */
-            min-height: calc(100vh - 78px);
-            display: flex;
-            align-items: center;
+            overflow: hidden
         }
 
         .cta-section::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255, 255, 255, .035) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255, 255, 255, .035) 80px);
+            top: -150px;
+            right: -150px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, .08) 0%, transparent 65%);
             pointer-events: none
         }
 
-        .cta-inner {
-            max-width: 1160px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 1fr minmax(380px, 500px);
-            gap: 72px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .cta-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-family: 'Fraunces', serif;
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: -.03em;
-            color: #fff;
-            margin-bottom: 38px
-        }
-
-        .cta-logo img { width: 48px; height: 48px }
-        .cta-word span { color: var(--royal-mid) }
-
         .cta-section h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(50px, 6.2vw, 94px);
+            font-size: clamp(40px, 6vw, 78px);
             font-weight: 900;
-            letter-spacing: -.045em;
-            line-height: .96;
-            color: #fff;
-            margin-bottom: 32px
+            letter-spacing: -.04em;
+            line-height: .95;
+            color: var(--white);
+            margin-bottom: 24px;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1
         }
 
         .cta-section h2 em {
             font-style: italic;
-            font-weight: 300;
-            color: #5b93f7
+            font-weight: 300
         }
 
         .cta-section p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, .6);
-            max-width: 600px;
-            margin: 0;
-            line-height: 1.7;
-            font-weight: 500
-        }
-
-        /* Карточка действия: кнопка и снятые возражения в одном блоке */
-        .cta-card {
-            background: rgba(255, 255, 255, .045);
-            border: 1px solid rgba(255, 255, 255, .10);
-            border-radius: 26px;
-            padding: 34px;
-            backdrop-filter: blur(6px)
+            font-size: 16px;
+            color: rgba(255, 255, 255, .75);
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.75;
+            position: relative;
+            z-index: 1
         }
 
         .cta-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            width: 100%;
-            border: 1.5px solid transparent;
-            background: var(--royal);
-            color: #fff;
-            padding: 27px 30px;
-            border-radius: 15px;
-            font-family: 'Syne', sans-serif;
-            font-size: 15px;
+            border: none;
+            background: var(--white);
+            color: var(--royal);
+            padding: 18px 38px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 800;
-            letter-spacing: .07em;
+            letter-spacing: .08em;
             text-transform: uppercase;
-            white-space: nowrap;
             cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 10px 34px rgba(37, 99, 235, .5);
-            transition: transform .18s var(--ease-out), background .2s, box-shadow .2s
+            transition: all .2s;
+            box-shadow: 0 8px 32px rgba(15, 31, 75, .2);
+            position: relative;
+            z-index: 1;
+            text-decoration: none
         }
 
         .cta-btn:hover {
-            background: var(--royal-mid);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 44px rgba(37, 99, 235, .62)
+            background: var(--off);
+            transform: translateY(-2px)
         }
 
-        @media(prefers-reduced-motion: reduce) { .cta-btn:hover { transform: none } }
-
-        .cta-list {
-            list-style: none;
-            margin: 32px 0 0;
-            padding: 32px 4px 4px;
-            border-top: 1px solid rgba(255, 255, 255, .10);
-            display: flex;
-            flex-direction: column;
-            gap: 22px
-        }
-
-        .cta-list li {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            font-size: 19px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, .92)
-        }
-
-        .cta-tick {
-            width: 29px;
-            height: 29px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 800;
-            background: var(--royal);
-            color: #fff
+        .cta-note {
+            margin-top: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, .55);
+            font-weight: 500;
+            letter-spacing: .05em;
+            position: relative;
+            z-index: 1
         }
 
         footer {
@@ -2255,32 +2282,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 28px;
-            flex-wrap: wrap;
             background: #fff
-        }
-
-        /* Юридические ссылки — их ищет проверяющий Paddle и те, кто
-           специально хочет узнать цену до воронки. */
-        .f-links {
-            display: flex;
-            gap: 26px;
-            flex-wrap: wrap
-        }
-
-        .f-links a {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--muted);
-            text-decoration: none;
-            transition: color .18s var(--ease-out)
-        }
-
-        .f-links a:hover { color: var(--royal) }
-
-        @media(max-width:760px) {
-            footer { justify-content: center; text-align: center }
-            .f-links { justify-content: center; gap: 18px }
         }
 
         .f-logo {
@@ -2340,26 +2342,25 @@
                 padding: 60px 24px
             }
 
-            .cx-cols,
-            .cx-row {
-                grid-template-columns: 1fr 124px 1fr;
-                gap: 10px
+            .compare-thead,
+            .compare-row {
+                grid-template-columns: 1.5fr 1fr 1.2fr
             }
 
-            .cx-bad, .cx-good { padding: 15px 16px; font-size: 13.5px }
-
-            .problems-inner {
+            .problems-grid {
                 grid-template-columns: 1fr;
-                gap: 34px
+                gap: 0;
+                border-radius: 16px
             }
 
-            .prob-row {
-                grid-template-columns: 64px 1fr;
-                gap: 18px
+            .prob-card {
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 255, 255, .06)
             }
 
-            .prob-num { font-size: 28px }
-            .prob-title { font-size: 23px }
+            .prob-card:last-child {
+                border-bottom: none
+            }
 
             .steps-grid {
                 grid-template-columns: 1fr
@@ -2397,62 +2398,17 @@
                 gap: 20px
             }
 
-            /* Узкий экран: ярлык сверху, под ним обе карточки подряд */
-            .cx-cols { display: none }
-
-            .cx-row {
-                grid-template-columns: 1fr;
-                gap: 8px
+            .compare-col-header.col-bad,
+            .cr-bad {
+                display: none
             }
 
-            .cx-key {
-                justify-self: start;
-                padding: 9px 15px
+            .compare-thead,
+            .compare-row {
+                grid-template-columns: 1.2fr 1fr
             }
-
-            .cx-bad {
-                justify-content: flex-start;
-                text-align: left
-            }
-
-            .cx-ic.x { order: 0 }
         }
-    
-        /* Вторичная кнопка. Ровно та же высота, что у основной (18px по вертикали),
-           иначе пара кнопок читается как небрежность. margin-left убран —
-           расстояние задаёт gap у .hero-cta-row. */
-        .hero-cta2 {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 18px 30px;
-            border-radius: 12px;
-            border: 1.5px solid rgba(37, 99, 235, .22);
-            background: rgba(37, 99, 235, .05);
-            color: var(--royal);
-            font-family: 'Syne', sans-serif;
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .2s var(--ease-out), box-shadow .2s var(--ease-out)
-        }
-        .hero-cta2:hover {
-            background: rgba(37, 99, 235, .10);
-            border-color: var(--royal);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(37, 99, 235, .16)
-        }
-        .hero-cta2 .cta2-arrow { transition: transform .2s var(--ease-out) }
-        .hero-cta2:hover .cta2-arrow { transform: translateX(4px) }
-        @media(prefers-reduced-motion: reduce){
-            .hero-cta2, .hero-cta2 .cta2-arrow { transition: none }
-            .hero-cta2:hover { transform: none }
-            .hero-cta2:hover .cta2-arrow { transform: none }
-        }
-        @media(max-width:560px){ .hero-cta2 { width: 100%; justify-content: center } }
-</style>
+    </style>
 </head>
 
 <body>
@@ -2473,24 +2429,23 @@
             <div class="hero-left">
                 <div class="hero-eyebrow">Applying to top US colleges?</div>
                 <h1>Improve your<br>chances and<br><em>get admitted.</em></h1>
-                <p class="hero-sub">Your real chance at every school on your list, and what each one would actually
-                    cost your family — built from published admissions and federal aid data.</p>
+                <p class="hero-sub">Get an estimated acceptance probability and a clear, step-by-step roadmap to
+                    strengthen your application before deadlines hit — built from real admissions data.</p>
                 <div class="hero-cta-row">
                     <a href="funnel.html" class="hero-cta" style="text-decoration: none;">Find out your chances →</a>
-                    <a href="report.html" class="hero-cta2" style="text-decoration:none">See a sample report <span class="cta2-arrow" aria-hidden="true">→</span></a>
                 </div>
                 <div class="hero-badges">
                     <div class="hero-badge">
-                        <div class="badge-num">5,000+</div>
+                        <div class="badge-num">50,000+</div>
                         <div class="badge-label">Profiles Analyzed</div>
                     </div>
                     <div class="hero-badge">
-                        <div class="badge-num">Free</div>
-                        <div class="badge-label">Essay Grading Included</div>
+                        <div class="badge-num">3.4x</div>
+                        <div class="badge-label">Acceptance Multiplier</div>
                     </div>
                     <div class="hero-badge">
-                        <div class="badge-num">5 min</div>
-                        <div class="badge-label">To Make Your Report</div>
+                        <div class="badge-num">87%</div>
+                        <div class="badge-label">Top-3 School Match</div>
                     </div>
                 </div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;align-items:center">
@@ -2517,7 +2472,7 @@
                         style="display:inline-flex;align-items:center;gap:6px;background:var(--off);border:1px solid var(--line);border-radius:20px;padding:5px 12px 5px 6px;font-size:12px;font-weight:700;color:var(--navy)"><img
                             src="https://www.google.com/s2/favicons?domain=princeton.edu&sz=128"
                             style="width:18px;height:18px;border-radius:3px">Princeton</span>
-                    <span style="font-size:11px;color:var(--muted);font-weight:600">+ 1,750 more</span>
+                    <span style="font-size:11px;color:var(--muted);font-weight:600">+ 3,800 more</span>
                 </div>
             </div>
             <div class="hero-right">
@@ -2695,31 +2650,39 @@
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon" data-icon="target"></div>
-                        <span class="fc-num" aria-hidden="true">01</span>
                         <h3>Chance Estimator</h3>
-                        <p>A real acceptance probability for every school on your list, shown next to the school's own
-                            published admit rate — so you can see the gap you're betting on.</p>
+                        <p>A data-driven acceptance probability for every school on your list, factoring in your full
+                            profile, major competitiveness, and financial fit.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" data-icon="bolt"></div>
+                        <h3>Spike Score</h3>
+                        <p>See exactly which activities are building a real "spike" and which ones to cut — instead of
+                            spreading yourself thin across generic clubs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" data-icon="pen"></div>
+                        <h3>AI Essay Grader</h3>
+                        <p>Your personal statement scored on Hook, Structure & Tone, with specific rewrites that kill
+                            clichés and sharpen your narrative.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" data-icon="wallet"></div>
-                        <span class="fc-num" aria-hidden="true">02</span>
-                        <h3>Real Cost</h3>
-                        <p>What your family actually pays after grants, school by school, calculated from federal aid
-                            data for a household at your income.</p>
+                        <h3>Aid Fit Score</h3>
+                        <p>Model your exact financials to surface the schools most likely to fund you — so you know what
+                            you'll actually pay before you apply.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" data-icon="puzzle"></div>
-                        <span class="fc-num" aria-hidden="true">03</span>
-                        <h3>Profile Gap Analysis</h3>
-                        <p>Your GPA, scores, activities and honors measured against what each school actually admits —
-                            so you know where you stand before they tell you.</p>
+                        <div class="feature-icon" data-icon="trend"></div>
+                        <h3>Test & AP Impact</h3>
+                        <p>See how your SAT, ACT, and AP scores move your odds at each school — and where one more point
+                            actually matters.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon" data-icon="calendar"></div>
-                        <span class="fc-num" aria-hidden="true">04</span>
-                        <h3>Deadline Map</h3>
-                        <p>Every round and date on your list in one place, counted down from today. Early Decision,
-                            Early Action, Regular — which school closes first, and how long you have.</p>
+                        <h3>Week-by-Week Roadmap</h3>
+                        <p>A clear plan from today until decision day — three focused tasks every Monday so you always
+                            know what to do next.</p>
                     </div>
                 </div>
             </div>
@@ -2727,44 +2690,27 @@
 
         <section id="problems" class="problems-section">
             <div class="problems-inner">
-                <div class="prob-left">
-                    <div class="problems-eyebrow">Who this is for</div>
-                    <h2>Sound familiar?</h2>
-                    <p class="problems-subhead">If any of this sounds like you, your application is in more danger than
-                        you think — and deadlines don't care how hard you've worked.</p>
+                <div class="problems-eyebrow">Who this is for</div>
+                <h2>Sound familiar?</h2>
+                <p class="problems-subhead">If any of this sounds like you, your application is in more danger than you
+                    think — and deadlines don't care how hard you've worked.</p>
+                <div class="problems-grid">
+                    <div class="prob-card"><span class="prob-icon" data-icon="chart"></span>
+                        <div class="prob-title">Perfect stats aren't enough.</div>
+                        <div class="prob-body">You think your 1500+ SAT and perfect GPA make you a top candidate. In
+                            top-tier admissions, those numbers don't make you stand out.</div>
+                    </div>
+                    <div class="prob-card"><span class="prob-icon" data-icon="puzzle"></span>
+                        <div class="prob-title">Your profile is a mess.</div>
+                        <div class="prob-body">You have great individual pieces, but they don't connect. To an
+                            admissions committee, you look scattered and unfocused.</div>
+                    </div>
+                    <div class="prob-card"><span class="prob-icon" data-icon="moon"></span>
+                        <div class="prob-title">Your essay is putting them to sleep.</div>
+                        <div class="prob-body">Your parents might love it, but to an admissions officer reading 50 files
+                            a day, it's a cliché they've seen a thousand times.</div>
+                    </div>
                 </div>
-                <ol class="prob-list">
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">01</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Perfect stats aren't enough.</div>
-                            <div class="prob-body">You think your 1500+ SAT and perfect GPA make you a top candidate. In
-                                top-tier admissions, those numbers don't make you stand out.</div>
-                        </div>
-                    </li>
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">02</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Your profile is a mess.</div>
-                            <div class="prob-body">You have great individual pieces, but they don't connect. To an
-                                admissions committee, you look scattered and unfocused.</div>
-                        </div>
-                    </li>
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">03</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Your essay is putting them to sleep.</div>
-                            <div class="prob-body">Your parents might love it, but to an admissions officer reading 50
-                                files a day, it's a cliché they've seen a thousand times.</div>
-                        </div>
-                    </li>
-                </ol>
             </div>
         </section>
 
@@ -2775,7 +2721,6 @@
                 <div class="how-road">
                     <svg class="road-svg" viewBox="0 0 1160 470" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M150,185 C 330,185 330,305 475,305 S 640,185 710,185 S 900,305 1010,305" stroke="#c9d5e9" stroke-width="28" stroke-linecap="round" />
-                        <path class="road-progress" d="M150,185 C 330,185 330,305 475,305 S 640,185 710,185 S 900,305 1010,305" stroke="#2563eb" stroke-width="28" stroke-linecap="round" />
                         <path d="M150,185 C 330,185 330,305 475,305 S 640,185 710,185 S 900,305 1010,305" stroke="#ffffff" stroke-width="3.5" stroke-dasharray="16 16" />
                     </svg>
                     <div class="road-step above" style="left:12.93%;bottom:256px">
@@ -2788,25 +2733,22 @@
                     <div class="road-step" style="left:40.95%;top:276px">
                         <div class="rn">02</div>
                         <div>
-                            <div class="rn-title">Pick your schools</div>
-                            <div class="rn-body">Search 1,750+ schools and add the ones you&rsquo;re considering. Include the
-                            long shots &mdash; those are the ones you&rsquo;re most likely to be wrong about.</div>
+                            <div class="rn-title">See your real chances</div>
+                            <div class="rn-body">Acceptance probability for every school on your list, factoring in financial fit, major competitiveness, and your full profile.</div>
                         </div>
                     </div>
                     <div class="road-step above" style="left:61.21%;bottom:256px">
                         <div>
-                            <div class="rn-title">See your odds and your costs</div>
-                            <div class="rn-body">Your real chance of getting into each school, and the price your family would
-                            really pay &mdash; not the one on the website.</div>
+                            <div class="rn-title">Find what's holding you back</div>
+                            <div class="rn-body">Specific gaps get surfaced. Not vague advice — exact problems with exact fixes you can start on today.</div>
                         </div>
                         <div class="rn">03</div>
                     </div>
                     <div class="road-step" style="left:87.07%;top:276px">
                         <div class="rn active">04</div>
                         <div>
-                            <div class="rn-title">Build a list worth applying to</div>
-                            <div class="rn-body">Every school on it earns its place: realistic odds, a cost your family can
-                            carry, and a place you&rsquo;d genuinely be glad to end up.</div>
+                            <div class="rn-title">Execute your roadmap</div>
+                            <div class="rn-body">A week-by-week plan from now until decision day. Know exactly what to do, what to drop, and what actually matters.</div>
                         </div>
                     </div>
                 </div>
@@ -2816,45 +2758,121 @@
         <section id="compare" class="compare-section">
             <div class="compare-inner">
                 <div class="compare-header">
-                    <div class="cmp-eyebrow">The difference</div>
                     <h2>Two ways to apply.<br><em>One that works.</em></h2>
-                    <p>Same profile, same schools, same deadlines. The difference is whether you're guessing.</p>
                 </div>
-
-                <div class="cx-grid">
-                    <div class="cx-cols">
-                        <span class="cx-col-h left">On your own</span>
-                        <span></span>
-                        <span class="cx-col-h right"><img src="admitmap-mark-dark.svg" alt="" class="cx-mark">With AdmitMap</span>
+                <div class="compare-cards">
+                    <div class="cmp-card bad">
+                        <div class="cmp-eyebrow">Preparing alone</div>
+                        <div class="cmp-title">Guesswork</div>
+                        <ul class="cmp-list">
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Pure guesswork on your odds</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>"Mom says the essay's great"</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Join everything, hope it works</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>No idea how APs affect admissions</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>No idea what you'll actually pay</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Sticky notes and deadline anxiety</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>$150–$400/hr college counselor</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>A generic essay that blends in</li>
+                            <li class="cmp-item"><span class="cmp-ic x">✕</span>Finding out what went wrong after rejection</li>
+                        </ul>
                     </div>
-
-                    <div class="cx-row">
-                        <div class="cx-bad">You read the acceptance posts from people with your scores and scroll past the rejections.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your odds</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Your real percentage for every school on your list — the first straight answer you&rsquo;ve ever had about your own chances.</div>
+                    <div class="cmp-card good">
+                        <div class="cmp-eyebrow">With AdmitMap</div>
+                        <div class="cmp-title">A real plan</div>
+                        <ul class="cmp-list">
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Data-driven % per school, updated as you improve</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>AI grader scores Hook, Structure &amp; Tone with rewrites</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Spike Score: exactly what to cut and double down on</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>AP scores factored into your acceptance probability</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Aid fit score — surface the schools that will fund you</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Week-by-week roadmap with 3 tasks every Monday</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Start free — a fraction of one tutoring session</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>An essay hook engineered to stand out in the pile</li>
+                            <li class="cmp-item"><span class="cmp-ic check">✓</span>Fix weak spots before they cost you the offer</li>
+                        </ul>
                     </div>
-
-                    <div class="cx-row">
-                        <div class="cx-bad">You cut four schools for money reasons, using a number that was never meant for you.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Real Cost</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Net cost per school after grants, from federal data — the number that was actually meant for you.</div>
-                    </div>
-
-                    <div class="cx-row">
-                        <div class="cx-bad">You&rsquo;ve never known whether you&rsquo;re a strong applicant or just a busy one.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your profile</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>One number for how strong your profile actually is, before any school is involved.</div>
-                    </div>
-
-                    <div class="cx-row">
-                        <div class="cx-bad">Ask yourself why any one of these schools would take you. You don&rsquo;t have an answer — you have a feeling.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your list</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Your list, measured against the profile you actually have — which schools fit it, and which never did.</div>
-                    </div>
+                    <div class="cmp-arrow">→</div>
                 </div>
+                <a href="funnel.html" class="cmp-cta">Start free — check my chances →</a>
+            </div>
+        </section>
 
-                <div class="cmp-cta-wrap">
-                    <a href="funnel.html" class="cmp-cta">Check my chances →</a>
+        <section id="sample" class="mockup-band">
+            <div class="mb-left">
+                <div class="section-label">Sample analysis</div>
+                <h2>Honest.<br>Specific.<br>Actionable.</h2>
+                <p>Most tools tell you what you want to hear. AdmitMap tells you what you need to hear — with the
+                    specificity that actually changes your chances before it's too late.</p>
+                <a href="funnel.html" class="mb-cta" style="text-decoration:none;">Get your assessment →</a>
+            </div>
+            <div class="mb-right">
+                <div class="sample-report">
+                    <div class="sr-header">
+                        <div>
+                            <div class="sr-label">Ivy League Gap Analysis</div>
+                            <div class="sr-name"><img
+                                    src="https://www.google.com/s2/favicons?domain=yale.edu&sz=128">Yale University —
+                                Class of 2029</div>
+                        </div>
+                        <div class="sr-badge">Report Ready</div>
+                    </div>
+                    <div class="sr-prob-row">
+                        <div>
+                            <div class="sr-prob-num">11%</div>
+                            <div class="sr-prob-lbl">Acceptance probability</div>
+                        </div>
+                        <div class="sr-multiplier">
+                            <div class="sr-mult-num">2.4×</div>
+                            <div class="sr-mult-lbl">Potential<br>multiplier</div>
+                        </div>
+                    </div>
+                    <div class="sr-metrics">
+                        <div class="sr-metric">
+                            <div class="sr-metric-name">Narrative Cohesion</div>
+                            <div class="sr-metric-val green">Top 10%</div>
+                            <div class="sr-metric-bar">
+                                <div class="sr-metric-bar-fill fill-green" style="width:90%"></div>
+                            </div>
+                        </div>
+                        <div class="sr-metric">
+                            <div class="sr-metric-name">Extracurricular Spike</div>
+                            <div class="sr-metric-val red">Needs Work</div>
+                            <div class="sr-metric-bar">
+                                <div class="sr-metric-bar-fill fill-red" style="width:28%"></div>
+                            </div>
+                        </div>
+                        <div class="sr-metric">
+                            <div class="sr-metric-name">Academic Rigor</div>
+                            <div class="sr-metric-val yellow">On Track</div>
+                            <div class="sr-metric-bar">
+                                <div class="sr-metric-bar-fill fill-yellow" style="width:68%"></div>
+                            </div>
+                        </div>
+                        <div class="sr-metric">
+                            <div class="sr-metric-name">Financial Fit</div>
+                            <div class="sr-metric-val green">Strong Aid Match</div>
+                            <div class="sr-metric-bar">
+                                <div class="sr-metric-bar-fill fill-green" style="width:82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sr-actions">
+                        <div class="sr-action">
+                            <div class="sr-action-dot dot-warn">!</div>
+                            <div class="sr-action-text"><strong><span class="ic-inline" data-icon="warn"></span>Focus your narrative.</strong> Consolidate your
+                                application theme around robotics to create a clear spike.</div>
+                        </div>
+                        <div class="sr-action">
+                            <div class="sr-action-dot dot-tip">→</div>
+                            <div class="sr-action-text"><strong>Enter a national competition.</strong> One national
+                                robotics award moves your EC score from 28% to 71%.</div>
+                        </div>
+                        <div class="sr-action">
+                            <div class="sr-action-dot dot-tip">→</div>
+                            <div class="sr-action-text"><strong>Yale meets 100% of need.</strong> With your SAI, you
+                                qualify for ~$58k/yr in aid.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2864,8 +2882,6 @@
                 <div class="reviews-eyebrow">Is AdmitMap right for you?</div>
                 <h2>If any of these sound <em>familiar…</em></h2>
                 <p>AdmitMap was built for students exactly like you.</p>
-                <p class="rev-note">Real feedback from early users. Names and initials have been changed at their
-                    request &mdash; college admissions is personal, and they asked to stay anonymous.</p>
             </div>
             <div class="rev-carousel">
                 <button class="rev-arrow" aria-label="Previous" onclick="revGo(-1, true)">←</button>
@@ -2876,55 +2892,85 @@
                             <div class="rev-qbox">
                                 <div class="rev-qmark">&ldquo;</div>
                                 <div class="rev-card-top"><span class="rev-topic">Profile Alignment</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I&rsquo;d already crossed off three schools because of the price on their website. The report showed what my family would actually pay at each one &mdash; two of them came out cheaper than my state school. I put both back on the list.</div>
+                                <div class="rev-quote">I was exhausting myself juggling student council, sports, and volunteering. The Activity Scorer flagged my profile as too generic &mdash; it gave me permission to quit the fluff and pour everything into the one project I actually cared about.</div>
                                 <div class="rev-author">
-                                    <div class="rev-avatar">CH</div>
-                                    <div><div class="rev-name">Claire H.</div><div class="rev-role">High school senior, Class of 2027</div></div>
+                                    <div class="rev-avatar">SJ</div>
+                                    <div><div class="rev-name">Sarah J.</div><div class="rev-role">Admitted to Tufts University, Class of 2028</div></div>
                                 </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=tufts.edu&sz=128" alt=""><div><div class="rev-proof-uni">Tufts University</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
                             </div>
                         </div>
                         <div class="rev-slide">
                             <div class="rev-qbox">
                                 <div class="rev-qmark">&ldquo;</div>
                                 <div class="rev-card-top"><span class="rev-topic">Essay Feedback</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I never said it out loud, but since junior year I&rsquo;d assumed that I probably wasn&rsquo;t good enough for the top of my list. Turns out I was wrong about half of them. I wish I&rsquo;d known that a year ago.</div>
+                                <div class="rev-quote">My parents kept telling me my essay was &lsquo;so good!&rsquo;, but the AI grader absolutely roasted my opening paragraph. It was brutal but exactly what I needed. I rewrote the hook and it made a massive difference.</div>
                                 <div class="rev-author">
-                                    <div class="rev-avatar">RM</div>
-                                    <div><div class="rev-name">Ryan M.</div><div class="rev-role">High school senior, Class of 2027</div></div>
+                                    <div class="rev-avatar">PM</div>
+                                    <div><div class="rev-name">Priya M.</div><div class="rev-role">Admitted to UCLA, Class of 2028</div></div>
                                 </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=ucla.edu&sz=128" alt=""><div><div class="rev-proof-uni">UCLA</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
                             </div>
                         </div>
                         <div class="rev-slide">
                             <div class="rev-qbox">
                                 <div class="rev-qmark">&ldquo;</div>
                                 <div class="rev-card-top"><span class="rev-topic">Milestone Tracking</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I&rsquo;d told my daughter not to bother with two of her schools because I&rsquo;d seen the price on their websites. The report showed what we&rsquo;d actually pay. She&rsquo;s applying to both now.</div>
+                                <div class="rev-quote">I was completely paralyzed by the sheer number of forms, supplements, and deadlines. AdmitMap&rsquo;s Milestone Roadmap broke the entire year down into 3 simple tasks to do every Monday. It took all the anxiety out of the process.</div>
                                 <div class="rev-author">
-                                    <div class="rev-avatar">DH</div>
-                                    <div><div class="rev-name">David H.</div><div class="rev-role">Parent of a Class of 2027 applicant</div></div>
+                                    <div class="rev-avatar">YK</div>
+                                    <div><div class="rev-name">Yuna K.</div><div class="rev-role">Admitted to Amherst College, Class of 2028</div></div>
                                 </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=amherst.edu&sz=128" alt=""><div><div class="rev-proof-uni">Amherst College</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
                             </div>
                         </div>
                         <div class="rev-slide">
                             <div class="rev-qbox">
                                 <div class="rev-qmark">&ldquo;</div>
                                 <div class="rev-card-top"><span class="rev-topic">Narrative Cohesion</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was actually right for me.</div>
+                                <div class="rev-quote">My whole application felt like a giant, scattered puzzle. I had good achievements but no idea how to connect them. AdmitMap took my messy profile and showed me exactly how to structure everything into one clear, powerful story.</div>
                                 <div class="rev-author">
-                                    <div class="rev-avatar">OK</div>
-                                    <div><div class="rev-name">Owen K.</div><div class="rev-role">High school senior, Class of 2027</div></div>
+                                    <div class="rev-avatar">MT</div>
+                                    <div><div class="rev-name">Marcus T.</div><div class="rev-role">Admitted to Cornell, Class of 2028</div></div>
                                 </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=cornell.edu&sz=128" alt=""><div><div class="rev-proof-uni">Cornell University</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
                             </div>
                         </div>
                         <div class="rev-slide">
                             <div class="rev-qbox">
                                 <div class="rev-qmark">&ldquo;</div>
                                 <div class="rev-card-top"><span class="rev-topic">Financial Aid Match</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I was terrified to finalize my list. The report took my exact details and instantly surfaced the schools where I had the highest chance of massive aid packages.</div>
+                                <div class="rev-quote">I was terrified to finalize my list. The Financial Aid Modeling took my exact details and instantly surfaced the schools where I had the highest chance of massive aid packages.</div>
                                 <div class="rev-author">
-                                    <div class="rev-avatar">DR</div>
-                                    <div><div class="rev-name">Dani R.</div><div class="rev-role">High school senior, Class of 2027</div></div>
+                                    <div class="rev-avatar"><img src="dani.jpg" alt="Dani R." onerror="this.remove()">DR</div>
+                                    <div><div class="rev-name">Dani R.</div><div class="rev-role">High School Senior &middot; Admitted to U of Michigan</div></div>
                                 </div>
+                            </div>
+                            <div class="rev-proof">
+                                <div class="rev-proof-head"><img src="https://www.google.com/s2/favicons?domain=umich.edu&sz=128" alt=""><div><div class="rev-proof-uni">University of Michigan</div><div class="rev-proof-sub">Office of Admissions</div></div></div>
+                                <div class="rev-proof-lines"><div class="rev-proof-line w1"></div><div class="rev-proof-line w2"></div><div class="rev-proof-line w3"></div></div>
+                                <div class="rev-proof-hl">Congratulations &mdash; you&rsquo;re in!</div>
+                                <div class="rev-proof-link" onclick="openLetterModal('tufts.jpg')">View full letter &rarr;</div>
                             </div>
                         </div>
 
@@ -2950,35 +2996,24 @@
         </section>
 
         <section id="waitlist" class="cta-section">
-            <div class="cta-inner">
-                <div class="cta-left">
-                    <div class="cta-logo"><img src="admitmap-mark-dark.svg" alt=""><span class="cta-word">Admit<span>Map</span></span></div>
-                    <h2>Your future is waiting.<br><em>Go get it.</em></h2>
-                    <p>You've already done the hard part — the years of work, the grades, the late nights. Now it's time
-                        to turn that hard work into an application they can't ignore.</p>
-                </div>
-                <div class="cta-card">
-                    <a href="funnel.html" class="cta-btn">Find out your chances →</a>
-                    <ul class="cta-list">
-                        <li><span class="cta-tick">&#10003;</span>Free to start</li>
-                        <li><span class="cta-tick">&#10003;</span>No credit card required</li>
-                        <li><span class="cta-tick">&#10003;</span>Takes 5 minutes</li>
-                    </ul>
-                </div>
-            </div>
+            <h2>Your future is waiting.<br><em>Go get it.</em></h2>
+            <p>You've already done the hard part — the years of work, the grades, the late nights. Now it's time to turn
+                that hard work into an application they can't ignore.</p>
+            <a href="funnel.html" class="cta-btn" style="text-decoration:none;">Find out your chances →</a>
+            <div class="cta-note">Free to start · No credit card required · Takes 5 minutes</div>
         </section>
         <footer>
             <div class="f-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></div>
-            <nav class="f-links">
-                <a href="paywall.html">Pricing</a>
-                <a href="terms.html">Terms</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="refunds.html">Refunds</a>
-            </nav>
             <p>© 2026 AdmitMap. Built for students who mean it.</p>
         </footer>
     </div>
 
+    <div class="modal-overlay" id="letter-modal-overlay" onclick="closeLetterModal(event)">
+        <div class="letter-modal" onclick="event.stopPropagation()">
+            <button class="letter-close" onclick="closeLetterModal(event)">✕</button>
+            <img id="lm-image" src="" alt="Official Admission Letter">
+        </div>
+    </div>
 
     <script>
         /* ── ICON SYSTEM (inline SVG) ── */
@@ -2990,7 +3025,7 @@
             trend: '<path d="M4 16.5 10 10l3.5 3.5L20 7"/><path d="M15 7h5v5"/>',
             calendar: '<rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3v4M16 3v4"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3"/>',
             chart: '<path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3" height="5" rx=".5"/><rect x="13" y="8.5" width="3" height="8.5" rx=".5"/><rect x="18.5" y="10" width="3" height="7" rx=".5"/>',
-            puzzle: '<path d="M5.5 4H9.5a2.5 2.5 0 0 1 5 0H18.5A1.5 1.5 0 0 1 20 5.5V9.5a2.5 2.5 0 0 1 0 5V18.5A1.5 1.5 0 0 1 18.5 20H14.5a2.5 2.5 0 0 0-5 0H5.5A1.5 1.5 0 0 1 4 18.5V14.5a2.5 2.5 0 0 0 0-5V5.5A1.5 1.5 0 0 1 5.5 4Z"/>',
+            puzzle: '<path d="M9 4.5h2a1 1 0 0 1 1 1V7a1.5 1.5 0 1 0 3 0V5.5a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1V8a1.5 1.5 0 1 0 0 3v3.5a1 1 0 0 1-1 1H17a1.5 1.5 0 1 0-3 0h-.5a1 1 0 0 1-1-1V14a1.5 1.5 0 1 0-3 0v.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V12a1.5 1.5 0 1 0 0-3V5.5a1 1 0 0 1 1-1h3Z"/>',
             moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/>',
             warn: '<path d="M12 4 2.5 20.5h19L12 4Z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.6" r=".7" fill="currentColor" stroke="none"/>'
         };
@@ -3003,6 +3038,8 @@
                 }
             });
         });
+        function openLetterModal(src) { document.getElementById('lm-image').src = src; document.getElementById('letter-modal-overlay').classList.add('open'); }
+        function closeLetterModal(e) { if (e) e.preventDefault(); document.getElementById('letter-modal-overlay').classList.remove('open'); }
 
         /* ── Hero card: Radar / Breakdown toggle + auto-cycle ── */
         let heroCycleTimer = null;
@@ -3092,289 +3129,6 @@
             revTimer = setInterval(function () { if (revStopped) return; revNext(); }, 2500);
         });
     </script>
-    <script>
-        // Scroll-reveal: reveal section blocks as they enter the viewport, with a small
-        // stagger inside each group. Restraint-first — only structural blocks, one-time,
-        // and it no-ops under reduced-motion or without IntersectionObserver (content stays visible).
-        (function () {
-            if (!('IntersectionObserver' in window)) return;
-            if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            var sel = '.feature-card, .prob-left, .prob-row, .compare-cards, .radar-card, .features-head, .problems-head, .how-head, .compare-head, .reviews-head, .cta-head, .cta-inner, .mock-inner, .how-step';
-            var els = Array.prototype.slice.call(document.querySelectorAll(sel));
-            if (!els.length) return;
-            els.forEach(function (el) { el.classList.add('reveal'); });
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (!e.isIntersecting) return;
-                    var el = e.target;
-                    var sibs = Array.prototype.slice.call(el.parentElement.children).filter(function (c) { return c.classList.contains('reveal'); });
-                    var idx = sibs.indexOf(el);
-                    el.style.transitionDelay = Math.min(idx, 6) * 55 + 'ms';
-                    el.classList.add('reveal-in');
-                    io.unobserve(el);
-                });
-            }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-            els.forEach(function (el) { io.observe(el); });
-        })();
-        // ── The process road: blue progress fills along the path, lighting each
-        // milestone as it passes, then loops. Node timing is derived from the real
-        // path geometry (not guessed percentages) so the light always fires exactly
-        // when the fill reaches the circle.
-        (function () {
-            var road = document.querySelector('.how-road');
-            var prog = document.querySelector('.road-progress');
-            if (!road || !prog || !prog.getTotalLength) return;
-
-            var steps = Array.prototype.slice.call(road.querySelectorAll('.road-step'));
-            var nodes = steps.map(function (s) { return s.querySelector('.rn'); });
-            var NODE_X = [150, 475, 710, 1010];      // viewBox x of each circle
-            var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            nodes.forEach(function (n) { if (n) n.classList.remove('active'); });
-
-            if (reduce) {
-                road.classList.add('road-anim');
-                prog.style.strokeDasharray = 'none';
-                steps.forEach(function (s, i) { s.classList.add('lit'); if (nodes[i]) nodes[i].classList.add('active'); });
-                return;
-            }
-
-            var L = prog.getTotalLength();
-            if (!L) return;
-            prog.style.strokeDasharray = L;
-            prog.style.strokeDashoffset = L;
-
-            // Length along the path where it crosses a given x (path advances L→R).
-            function lenAtX(x) {
-                var lo = 0, hi = L;
-                for (var i = 0; i < 24; i++) {
-                    var mid = (lo + hi) / 2;
-                    if (prog.getPointAtLength(mid).x < x) lo = mid; else hi = mid;
-                }
-                return lo;
-            }
-            var marks = NODE_X.map(lenAtX);
-
-            var DRAW = 3400, HOLD = 1500, FADE = 700;
-            var raf = null, timer = null;
-
-            function reset() {
-                prog.style.transition = '';
-                prog.style.opacity = '';
-                prog.style.strokeDashoffset = L;
-                steps.forEach(function (s) { s.classList.remove('lit'); });
-                nodes.forEach(function (n) { if (n) n.classList.remove('active', 'pinged'); });
-            }
-
-            function light(i) {
-                if (!nodes[i] || nodes[i].classList.contains('active')) return;
-                nodes[i].classList.add('active', 'pinged');
-                steps[i].classList.add('lit');
-            }
-
-            function run() {
-                reset();
-                var t0 = performance.now();
-                (function frame(now) {
-                    var p = Math.min(1, (now - t0) / DRAW);
-                    var drawn = p * L;                            // constant speed — the
-                    // journey should travel evenly, not decelerate toward the end
-                    prog.style.strokeDashoffset = L - drawn;
-                    // small tolerance so the final node lights as the fill arrives,
-                    // rather than snapping on at the very last frame
-                    for (var i = 0; i < marks.length; i++) if (drawn >= marks[i] - 6) light(i);
-                    if (p < 1) { raf = requestAnimationFrame(frame); return; }
-                    // settle, then fade the whole road out and start over
-                    timer = setTimeout(function () {
-                        prog.style.transition = 'opacity ' + FADE + 'ms ease';
-                        prog.style.opacity = '0';
-                        steps.forEach(function (s) { s.classList.remove('lit'); });
-                        nodes.forEach(function (n) { if (n) n.classList.remove('active', 'pinged'); });
-                        timer = setTimeout(run, FADE + 260);
-                    }, HOLD);
-                })(t0);
-            }
-
-            // Rect-based visibility (not IntersectionObserver) so this also works when
-            // the section is already on screen at load, and pauses when scrolled away.
-            var running = false, ticking = false;
-            function visible() {
-                var r = road.getBoundingClientRect();
-                var vh = window.innerHeight || document.documentElement.clientHeight;
-                return r.top < vh * 0.85 && r.bottom > vh * 0.15;
-            }
-            function sync() {
-                ticking = false;
-                var v = visible();
-                if (v && !running) {
-                    running = true;
-                    road.classList.add('road-anim');
-                    run();
-                } else if (!v && running) {
-                    running = false;
-                    cancelAnimationFrame(raf); clearTimeout(timer);
-                    reset();
-                }
-            }
-            function onScroll() {
-                if (ticking) return;
-                ticking = true;
-                requestAnimationFrame(sync);
-            }
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', onScroll);
-            // Re-check after load and once more when late layout (fonts, images) settles,
-            // so the section still starts if it's already on screen at first paint.
-            window.addEventListener('load', onScroll);
-            setTimeout(sync, 400);
-            sync();
-        })();
-    </script>
-
-    <script>
-        /* ── График стоимости ──────────────────────────────────────────────
-           Столбец = что школа реально стоит в год после грантов.
-           Кольцо под ним = шанс поступить. Один цвет уровня на оба.
-           Те же данные и та же формула, что в report.html — лендинг обязан
-           показывать ровно то, что человек получит после оплаты. Код
-           продублирован осознанно: build_single.py не инлайнит внешние
-           скрипты, каждая страница проекта самодостаточна. */
-        (function () {
-            var svg = document.getElementById('sc-chart');
-            if (!svg) return;
-
-            var STUDENT = { gpa: 3.94, sat: 1520, activities: 9, honors: 5 };
-            var SCHOOLS = [
-                { n: 'Harvard University',       d: 'harvard.edu',      admit: 4.2,  sat: 1550, coa: 91634, net: 7283 },
-                { n: 'Stanford University',      d: 'stanford.edu',     admit: 3.8,  sat: 1540, coa: 97545, net: 6351 },
-                { n: 'Duke University',          d: 'duke.edu',         admit: 4.7,  sat: 1550, coa: 96597, net: 5083 },
-                { n: 'Northeastern University',  d: 'northeastern.edu', admit: 5.2,  sat: 1497, coa: 84641, net: 16241 },
-                { n: 'UCLA',                     d: 'ucla.edu',         admit: 9.0,  sat: 1450, coa: 38614, net: 14142 },
-                { n: 'New York University',      d: 'nyu.edu',          admit: 9.2,  sat: 1520, coa: 84374, net: 32766 },
-                { n: 'Boston College',           d: 'bc.edu',           admit: 16.4, sat: 1507, coa: 89493, net: 8200 },
-                { n: 'University of Michigan',   d: 'umich.edu',        admit: 15.6, sat: 1465, coa: 34654, net: 10869 },
-                { n: 'Penn State',               d: 'psu.edu',          admit: 60.6, sat: 1337, coa: 39694, net: 31834 },
-                { n: 'University of Pittsburgh', d: 'pitt.edu',         admit: 58.1, sat: 1370, coa: 38105, net: 31567 }
-            ];
-
-            var usd = function (n) { return '$' + Math.round(n).toLocaleString(); };
-            var k = function (n) { return '$' + Math.round(n / 1000) + 'k'; };
-            var logo = function (d) { return 'https://www.google.com/s2/favicons?domain=' + d + '&sz=128'; };
-            /* Часть школ известна аббревиатурой — обрезка по шаблону дала бы
-               «New York» вместо «NYU». */
-            var ABBR = { 'New York University': 'NYU' };
-            var short = function (n) { return ABBR[n] || n.replace('University of ', '').replace(' University', ''); };
-            var gpaFromSat = function (v) { return Math.max(3.30, Math.min(3.97, Math.round((3.3 + (v - 1100) / 500 * 0.65) * 100) / 100)); };
-
-            var rows = SCHOOLS.map(function (sc) {
-                var mult = 1 + (STUDENT.gpa - gpaFromSat(sc.sat)) * 0.55 + (STUDENT.sat - sc.sat) * 0.00055;
-                var odds = Math.round(Math.min(96, Math.max(1,
-                    sc.admit * mult + Math.min(8, STUDENT.activities * 0.4) + Math.min(6, STUDENT.honors * 0.8))));
-                return { n: sc.n, d: sc.d, net: sc.net, coa: sc.coa, odds: odds };
-            });
-
-            /* Геометрия снята с эталонного макета и пересчитана в единицы viewBox */
-            var W = 1200, L = 74, R = 22;
-            var yBase = 352;                  // ось, на которой стоят столбцы
-            var topBar = 128;                 // верх самого высокого столбца
-            var ringY = 390, ringR = 22;
-            var oddsY = 438, nameY = 459;
-
-            /* Слева направо — от самых низких шансов к самым высоким. */
-            var ordered = rows.slice().sort(function (a, b) { return (a.odds - b.odds) || (a.net - b.net); });
-            var maxNet = Math.max.apply(null, ordered.map(function (r) { return r.net; }));
-            var ppd = (yBase - topBar) / maxNet;          // пикселей на доллар
-            var barH = function (c) { return c * ppd; };
-            var slot = (W - L - R) / ordered.length;
-            var cx = function (i) { return L + slot * (i + 0.5); };
-            var bw = Math.min(58, slot * 0.52);
-
-            var TIER = {
-                reach:  { c: '#94a3b8', lo: '#b6c2d4' },
-                target: { c: '#3b82f6', lo: '#74a8fb' },
-                likely: { c: '#10b981', lo: '#4fd3a4' }
-            };
-            var tierOf = function (p) { return p < 15 ? 'reach' : p < 45 ? 'target' : 'likely'; };
-
-            /* Столбец со скруглением только сверху — низ стоит на оси */
-            var barPath = function (x, y, w, h, r) {
-                r = Math.min(r, w / 2, h);
-                return 'M' + x + ',' + (y + h) + 'V' + (y + r) +
-                    'a' + r + ',' + r + ' 0 0 1 ' + r + ',' + -r +
-                    'h' + (w - 2 * r) +
-                    'a' + r + ',' + r + ' 0 0 1 ' + r + ',' + r +
-                    'V' + (y + h) + 'Z';
-            };
-
-            var cheapest = ordered[0].n;
-            var best = ordered.reduce(function (m, r) { return r.odds > m.odds ? r : m; }, ordered[0]).n;
-
-            var out = '<defs>';
-            Object.keys(TIER).forEach(function (t) {
-                out += '<linearGradient id="sc-g-' + t + '" x1="0" y1="0" x2="0" y2="1">' +
-                    '<stop offset="0" stop-color="' + TIER[t].c + '"/>' +
-                    '<stop offset="1" stop-color="' + TIER[t].lo + '"/></linearGradient>';
-            });
-            out += '</defs>';
-
-            /* сетка: подписи слева, как в макете */
-            for (var v = 10000; v <= maxNet * 1.02; v += 10000) {
-                var gy = yBase - barH(v);
-                out += '<line x1="' + (L - 8) + '" y1="' + gy + '" x2="' + (W - R) + '" y2="' + gy +
-                    '" stroke="#e8edf6" stroke-width="1" stroke-dasharray="2 6"/>' +
-                    '<text class="sc-axis" x="' + (L - 16) + '" y="' + (gy + 4) + '" text-anchor="end">' + k(v) + '</text>';
-            }
-            out += '<line x1="' + (L - 8) + '" y1="' + yBase + '" x2="' + (W - R) +
-                '" y2="' + yBase + '" stroke="#dde4f0" stroke-width="1.5"/>';
-
-            ordered.forEach(function (r, i) {
-                var x = cx(i), t = tierOf(r.odds), col = TIER[t].c;
-                var h = barH(r.net), y = yBase - h;
-                var aid = Math.round((r.coa - r.net) / r.coa * 100);
-
-                out += '<g><title>' + r.n + ' — ' + usd(r.net) + '/yr, ' + r.odds + '% odds</title>';
-
-                /* бейдж → сумма → плашка помощи → столбец */
-                if (r.n === cheapest || r.n === best) {
-                    var isCheap = r.n === cheapest;
-                    var lab = isCheap ? 'Cheapest' : 'Best odds';
-                    var wpx = lab.length * 6.3 + 30;
-                    out += '<g transform="translate(' + (x - wpx / 2) + ',' + (y - 96) + ')">' +
-                        '<rect width="' + wpx + '" height="21" rx="10.5" fill="' + (isCheap ? '#dcf7ea' : '#e0ebff') + '"/>' +
-                        '<circle cx="12" cy="10.5" r="3" fill="' + (isCheap ? '#10b981' : '#2563eb') + '"/>' +
-                        '<text class="sc-tag" x="' + (wpx / 2 + 6) + '" y="14.5" text-anchor="middle" fill="' +
-                        (isCheap ? '#059669' : '#1d4ed8') + '">' + lab + '</text></g>';
-                }
-
-                out += '<text class="sc-cost" x="' + x + '" y="' + (y - 46) + '" text-anchor="middle">' + usd(r.net) + '</text>';
-
-                var aidTxt = 'aid ' + aid + '%', aw = aidTxt.length * 6.2 + 16;
-                out += '<g transform="translate(' + (x - aw / 2) + ',' + (y - 36) + ')">' +
-                    '<rect width="' + aw + '" height="19" rx="6" fill="#e7f8f0"/>' +
-                    '<text class="sc-aid" x="' + (aw / 2) + '" y="13" text-anchor="middle">' + aidTxt + '</text></g>';
-
-                out += '<path d="' + barPath(x - bw / 2, y, bw, h, 8) + '" fill="url(#sc-g-' + t + ')"/>';
-
-                /* кольцо шансов */
-                var C = 2 * Math.PI * ringR, arc = C * Math.min(r.odds, 100) / 100;
-                out += '<circle cx="' + x + '" cy="' + ringY + '" r="' + ringR + '" fill="#fff" stroke="#eef2f8" stroke-width="4.5"/>' +
-                    '<circle cx="' + x + '" cy="' + ringY + '" r="' + ringR + '" fill="none" stroke="' + col +
-                    '" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="' + arc + ' ' + (C - arc) +
-                    '" transform="rotate(-90 ' + x + ' ' + ringY + ')"/>' +
-                    '<circle cx="' + x + '" cy="' + ringY + '" r="15" fill="#fff"/>' +
-                    '<image href="' + logo(r.d) + '" x="' + (x - 11) + '" y="' + (ringY - 11) +
-                    '" width="22" height="22" preserveAspectRatio="xMidYMid meet"/>';
-
-                out += '<text class="sc-odds" x="' + x + '" y="' + oddsY + '" text-anchor="middle" fill="' + col + '">' +
-                    r.odds + '<tspan class="sc-pct" dx="2">%</tspan></text>' +
-                    '<text class="sc-name" x="' + x + '" y="' + nameY + '" text-anchor="middle">' +
-                    short(r.n) + '</text></g>';
-            });
-
-            svg.innerHTML = out;
-        })();
-    </script>
-
 </body>
 
 </html>

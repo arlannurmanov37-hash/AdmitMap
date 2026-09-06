@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policy — AdmitMap</title>
+    <meta name="description" content="The terms that govern your use of AdmitMap.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        :root {
+            --white: #ffffff;
+            --off: #f8fafc;
+            --navy: #0f1f4b;
+            --royal: #2563eb;
+            --royal-s: #eef4ff;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --amber-l: #fef3c7;
+            --amber-d: #b45309;
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        html { scroll-behavior: smooth }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--off);
+            color: var(--navy);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── NAV ── */
+        .lgl-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 18px 56px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .lgl-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .lgl-logo span { color: var(--royal) }
+
+        .lgl-back {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .lgl-back:hover { color: var(--royal) }
+
+        /* ── LAYOUT ── */
+        .lgl-wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 56px 32px 96px;
+            display: grid;
+            grid-template-columns: 232px 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .lgl-toc {
+            position: sticky;
+            top: 96px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 20px 18px;
+        }
+
+        .lgl-toc h4 {
+            font-size: 11px;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .lgl-toc a {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 5px 0;
+            line-height: 1.35;
+            transition: color .16s var(--ease-out);
+        }
+
+        .lgl-toc a:hover { color: var(--royal) }
+
+        .lgl-doc {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 48px 52px 56px;
+        }
+
+        .lgl-doc h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -.02em;
+        }
+
+        .lgl-meta {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .lgl-lede {
+            margin-top: 22px;
+            padding: 18px 20px;
+            background: var(--royal-s);
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.65;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
+        .lgl-doc h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 23px;
+            font-weight: 600;
+            margin: 44px 0 14px;
+            padding-top: 4px;
+            scroll-margin-top: 92px;
+            letter-spacing: -.01em;
+        }
+
+        .lgl-doc h2 .n {
+            color: var(--royal);
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            margin-right: 10px;
+            vertical-align: 2px;
+        }
+
+        .lgl-doc h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 24px 0 8px;
+        }
+
+        .lgl-doc p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #334155;
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        .lgl-doc ul { margin: 0 0 16px 0; padding-left: 20px }
+
+        .lgl-doc li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .lgl-doc li::marker { color: var(--royal) }
+
+        .lgl-doc strong { color: var(--navy); font-weight: 700 }
+
+        .lgl-doc a { color: var(--royal); font-weight: 600 }
+
+        .lgl-note {
+            border-left: 3px solid var(--royal);
+            background: var(--royal-s);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-note p { margin: 0; font-size: 14px; color: #1e3a8a; font-weight: 500 }
+
+        .lgl-warn {
+            border-left: 3px solid #f59e0b;
+            background: var(--amber-l);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-warn p { margin: 0; font-size: 14px; color: var(--amber-d); font-weight: 600 }
+
+        /* Warranty and liability disclaimers have to be "conspicuous" to be enforceable.
+           A bordered, bolded block does that job without shouting in all-caps. */
+        .lgl-consp {
+            border: 2px solid var(--navy);
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 16px 0 18px;
+            background: #fff;
+        }
+
+        .lgl-consp p {
+            margin: 0;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.65;
+        }
+
+        .lgl-consp p + p { margin-top: 10px }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 20px;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 12px 9px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        td {
+            padding: 11px 12px 11px 0;
+            border-bottom: 1px solid var(--line);
+            color: #334155;
+            line-height: 1.55;
+            vertical-align: top;
+        }
+
+        td:first-child { font-weight: 600; color: var(--navy); white-space: nowrap }
+
+        footer {
+            padding: 28px 56px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            background: #fff;
+        }
+
+        .f-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .f-logo span { color: var(--royal) }
+
+        .f-links { display: flex; gap: 26px; flex-wrap: wrap }
+
+        .f-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .f-links a:hover { color: var(--royal) }
+
+        footer p { font-size: 12px; color: var(--muted); font-weight: 500 }
+
+        @media(max-width:900px) {
+            .lgl-nav { padding: 16px 24px }
+            .lgl-wrap { grid-template-columns: 1fr; padding: 32px 20px 64px; gap: 28px }
+            .lgl-toc { position: static }
+            .lgl-doc { padding: 32px 24px 40px; border-radius: 14px }
+            .lgl-doc h1 { font-size: 30px }
+            .lgl-doc h2 { font-size: 20px; margin-top: 36px }
+            footer { padding: 24px; justify-content: center; text-align: center }
+            .f-links { justify-content: center; gap: 18px }
+            table, td:first-child { white-space: normal }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="lgl-nav">
+        <a href="landing.html" class="lgl-logo">Admit<span>Map</span></a>
+        <a href="landing.html" class="lgl-back">← Back to AdmitMap</a>
+    </nav>
+
+    <div class="lgl-wrap">
+        <aside class="lgl-toc">
+            <h4>On this page</h4>
+            <a href="#policy">1. The policy</a>
+            <a href="#why">2. Why all sales are final</a>
+            <a href="#exceptions">3. When we do refund</a>
+            <a href="#how">4. How to reach us</a>
+            <a href="#before">5. Before you buy</a>
+            <a href="#chargebacks">6. Chargebacks</a>
+        </aside>
+
+        <main class="lgl-doc">
+            <h1>Refund Policy</h1>
+            <p class="lgl-meta">Last updated: 3 September 2026 &nbsp;·&nbsp; Effective: 3 September 2026</p>
+
+            <div class="lgl-lede">
+                <strong>The short version.</strong> AdmitMap reports are generated and delivered the moment you pay,
+                so they cannot be returned. All sales are final. If we failed to deliver your report, or it did not
+                work, email <a href="mailto:support@admitmap.com">support@admitmap.com</a> and we will fix it or
+                refund you in full. Being unhappy with what your odds turned out to be is not a fault in the
+                product — please read section 5 before buying.
+            </div>
+
+            <h2 id="policy"><span class="n">1</span>The policy</h2>
+            <p>AdmitMap sells two one-time digital products: the <strong>Odds Report ($19)</strong> and
+                <strong>Odds + Financial Aid ($29)</strong>. Both are generated from the profile you enter and
+                delivered to you immediately after payment.</p>
+            <p><strong>Because the product is delivered instantly and in full, all sales are final and purchases
+                    are not refundable</strong>, except in the circumstances described in <a
+                    href="#exceptions">section 3</a>.</p>
+            <p>By completing a purchase you confirm that you are buying digital content with immediate delivery
+                and — to the extent your local law allows — you agree to begin receiving it right away.</p>
+
+            <h2 id="why"><span class="n">2</span>Why all sales are final</h2>
+            <p>We would rather explain this than hide it in legal text.</p>
+            <p>An AdmitMap report is not a subscription or a service delivered over time. It is a calculation run
+                against your profile and shown to you in seconds. Once you have seen your odds at every school on
+                your list, your estimated net price, and your position against admitted students,
+                <strong>you have received the entire product</strong>. There is nothing to return and nothing we
+                can take back.</p>
+            <p>This is standard for instantly-delivered digital goods, and it is what lets us charge $19 instead of
+                the $3,000 a private counselor charges for the same kind of analysis.</p>
+
+            <h2 id="exceptions"><span class="n">3</span>When we do refund</h2>
+            <p>Two situations, and we honour both without argument:</p>
+            <ul>
+                <li><strong>We failed to deliver.</strong> If you were charged but never received your report, or
+                    a technical fault on our side meant it did not work and we could not fix it, we refund you in
+                    full. No time limit on this one — if it is our failure, it is our failure.</li>
+                <li><strong>The law requires it.</strong> If mandatory consumer-protection law where you live gives
+                    you a non-waivable right to a refund or to withdraw from the purchase, that right applies
+                    regardless of anything in this policy.</li>
+            </ul>
+            <p>We also refund <strong>duplicate charges</strong> — if you were billed twice for the same report,
+                tell us and we will return the second payment.</p>
+            <p>Payments are processed by our payment provider acting as Merchant of Record. They may also issue a
+                refund at their own discretion under their own policies, and nothing here limits that.</p>
+
+            <h2 id="how"><span class="n">4</span>How to reach us</h2>
+            <p>Email <a href="mailto:support@admitmap.com">support@admitmap.com</a> from the address you used to
+                buy, and include:</p>
+            <ul>
+                <li>what went wrong, in as much or as little detail as you like;</li>
+                <li>your order or license key, if you have it.</li>
+            </ul>
+            <p><strong>A real person reads every message</strong>, usually within a couple of days. If something is
+                broken we would much rather fix it or refund you than have you fighting with your bank — so please
+                write to us first. We have never refused a genuine delivery failure.</p>
+
+            <h2 id="before"><span class="n">5</span>Before you buy</h2>
+            <p>Since refunds are limited, here is exactly what you are getting — so nothing is a surprise.</p>
+            <div class="lgl-warn">
+                <p>Your report gives you <strong>statistical estimates, not predictions</strong>. A low number is
+                    not a defect. If your odds come back lower than you hoped, the report is working correctly —
+                    that is the information you paid for, and it is more useful to know it now than in March.</p>
+            </div>
+            <p>Specifically, the following are <strong>not</strong> grounds for a refund:</p>
+            <ul>
+                <li>your acceptance probabilities were lower than you expected;</li>
+                <li>you disagree with an estimate, an essay score, or an activity score;</li>
+                <li>a college's actual decision differed from our estimate;</li>
+                <li>your actual financial aid package differed from our estimate — these are modelled from
+                    published averages and always labelled as estimates;</li>
+                <li>you changed your mind after seeing the report.</li>
+            </ul>
+            <p>All of this is set out in more detail in <a href="terms.html#estimates">section 4 of our Terms of
+                    Service</a>, which is worth two minutes before you buy.</p>
+
+            <h2 id="chargebacks"><span class="n">6</span>Chargebacks</h2>
+            <p>If you believe a charge is wrong, <strong>please email us before contacting your bank</strong>.
+                We can usually resolve it the same week, and a chargeback takes months and helps nobody.</p>
+            <p>Opening a chargeback without contacting us first may result in your access to AdmitMap being
+                closed. We will always provide our payment provider with delivery records when a claim is
+                disputed.</p>
+
+            <h2 id="contact"><span class="n">7</span>Contact</h2>
+            <ul>
+                <li>Email: <a href="mailto:support@admitmap.com">support@admitmap.com</a></li>
+                <li>Operator: Arlan Nurmanov, an individual based in the Republic of Kazakhstan</li>
+            </ul>
+            <p>This policy forms part of our <a href="terms.html">Terms of Service</a>. See also our
+                <a href="privacy.html">Privacy Policy</a>.</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="f-logo">Admit<span>Map</span></div>
+        <nav class="f-links">
+            <a href="paywall.html">Pricing</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="refunds.html">Refunds</a>
+        </nav>
+        <p>© 2026 AdmitMap. Built for students who mean it.</p>
+    </footer>
+</body>
+
+</html>

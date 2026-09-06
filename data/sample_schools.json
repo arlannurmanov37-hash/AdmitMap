@@ -1,0 +1,62 @@
+{
+ "Harvard University": {
+  "admit": 4.2,
+  "sat": 1550,
+  "coa": 91634,
+  "net": 7283
+ },
+ "Stanford University": {
+  "admit": 3.8,
+  "sat": 1540,
+  "coa": 97545,
+  "net": 6351
+ },
+ "Duke University": {
+  "admit": 4.7,
+  "sat": 1550,
+  "coa": 96597,
+  "net": 5083
+ },
+ "Northeastern University": {
+  "admit": 5.2,
+  "sat": 1497,
+  "coa": 84641,
+  "net": 16241
+ },
+ "University of California, Los Angeles": {
+  "admit": 9.0,
+  "sat": null,
+  "coa": 38614,
+  "net": 14142
+ },
+ "Boston University": {
+  "admit": 11.1,
+  "sat": 1480,
+  "coa": 86285,
+  "net": 22517
+ },
+ "Boston College": {
+  "admit": 16.4,
+  "sat": 1507,
+  "coa": 89493,
+  "net": 8200
+ },
+ "University of Michigan": {
+  "admit": 15.6,
+  "sat": 1465,
+  "coa": 34654,
+  "net": 10869
+ },
+ "Pennsylvania State University": {
+  "admit": 60.6,
+  "sat": 1337,
+  "coa": 39694,
+  "net": 31834
+ },
+ "University of Pittsburgh": {
+  "admit": 58.1,
+  "sat": 1370,
+  "coa": 38105,
+  "net": 31567
+ }
+}

@@ -1,0 +1,3 @@
+name,city,state,domain,accept_rate_pct,avg_sat,avg_gpa,avg_act,ED_date,ED2_date,EA_date,REA_date,RD_date,coa_sticker,net_under_30k,net_30_48k,net_48_75k,net_75_110k,net_110k_plus,pell_pct,median_debt
+Harvard University,Cambridge,MA,harvard.edu,3.6,1550,3.9,35,,,,Nov 1,Jan 1,85540,8697,2991,2091,9941,53337,16,14000
+Ohio State University,Columbus,OH,osu.edu,53,1370,3.83,29,,,Nov 1,,Feb 1,29000,12000,14000,18000,22000,26000,20,25000

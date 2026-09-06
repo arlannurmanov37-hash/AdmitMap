@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your account · AdmitMap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:lining-nums tabular-nums}
+
+:root{
+  --bg:#0b1533; --bg-2:#0d1a3d;
+  --royal:#2563eb; --royal-l:#3b82f6;
+  --card:rgba(255,255,255,.045);
+  --card-line:rgba(255,255,255,.09);
+  --field:rgba(255,255,255,.05);
+  --field-line:rgba(255,255,255,.13);
+  --text:#f2f6ff; --muted:#93a6cc; --muted-2:#6f83ad;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+
+html,body{height:100%}
+body{
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--text); background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  padding:40px 20px; -webkit-font-smoothing:antialiased; letter-spacing:-.008em;
+  position:relative; overflow-x:hidden;
+}
+
+/* The glow sits dead centre, behind the card. */
+body::before{
+  content:''; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:min(1100px,150vw); height:min(1100px,150vw); border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(37,99,235,.30) 0%, rgba(37,99,235,.14) 32%, rgba(37,99,235,.05) 55%, transparent 72%);
+  pointer-events:none; z-index:0;
+}
+
+.wrap{position:relative; z-index:1; width:100%; max-width:376px;
+  display:flex; flex-direction:column; align-items:center}
+
+/* ── LOGO ── */
+.brand{display:inline-flex; align-items:center; gap:14px; margin-bottom:30px}
+.brand svg{width:44px; height:44px}
+.brand-t{font-family:Fraunces,Georgia,serif; font-size:40px; font-weight:900;
+  letter-spacing:-.045em; color:#fff; line-height:1}
+
+/* ── CARD ── */
+.card{
+  width:100%; background:var(--card); border:1px solid var(--card-line);
+  border-radius:20px; padding:30px 26px 28px;
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 60px -18px rgba(0,0,0,.55);
+  animation:in .5s var(--ease) both;
+}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+h1{font-family:Fraunces,Georgia,serif; font-size:27px; font-weight:900;
+  letter-spacing:-.04em; text-align:center; color:#fff; line-height:1.1}
+.sub{margin-top:8px; text-align:center; font-size:13.5px; font-weight:500;
+  color:var(--muted); line-height:1.5}
+
+/* ── OAUTH ── */
+.oauth{display:flex; flex-direction:column; gap:9px; margin-top:22px}
+.oa{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; height:46px; border-radius:12px; cursor:pointer;
+  background:var(--field); border:1px solid var(--field-line); color:#fff;
+  font-family:inherit; font-size:14.5px; font-weight:700;
+  transition:background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
+}
+.oa:hover{background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.2)}
+.oa:active{transform:translateY(1px)}
+.oa svg{width:18px; height:18px; flex-shrink:0}
+
+/* ── DIVIDER ── */
+.div{display:flex; align-items:center; gap:12px; margin:18px 0}
+.div::before,.div::after{content:''; flex:1; height:1px; background:var(--field-line)}
+.div span{font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted-2)}
+
+/* ── FIELDS ── */
+.fg{margin-bottom:14px}
+.fl{display:block; margin-bottom:8px; font-size:13px; font-weight:700; color:#dbe5fb}
+.fi-wrap{position:relative}
+.fi{
+  width:100%; height:48px; padding:0 15px; border-radius:12px;
+  background:var(--field); border:1px solid var(--field-line); color:#fff;
+  font-family:inherit; font-size:15px; font-weight:500; outline:none;
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+.fi::placeholder{color:var(--muted-2); font-weight:500}
+.fi:focus{border-color:var(--royal-l); background:rgba(255,255,255,.07);
+  box-shadow:0 0 0 4px rgba(37,99,235,.18)}
+.fi[type=password]{padding-right:50px}
+.eye{position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  width:40px; height:40px; display:grid; place-items:center; border:0; background:none;
+  color:var(--muted-2); cursor:pointer; border-radius:10px; transition:color .16s var(--ease)}
+.eye:hover{color:#cfdcf8}
+.eye svg{width:18px; height:18px}
+
+/* ── AGREE ── */
+.agree{display:flex; align-items:flex-start; gap:10px; margin:16px 0 18px;
+  font-size:12.5px; font-weight:500; color:var(--muted); line-height:1.5}
+.agree input{appearance:none; flex:0 0 19px; height:19px; margin-top:1px;
+  border-radius:6px; background:var(--field); border:1.5px solid var(--field-line);
+  cursor:pointer; display:grid; place-items:center;
+  transition:background .16s var(--ease), border-color .16s var(--ease)}
+.agree input:checked{background:var(--royal); border-color:var(--royal)}
+.agree input:checked::after{content:''; width:10px; height:6px; margin-top:-2px;
+  border-left:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(-45deg)}
+.agree label{cursor:pointer}
+.agree a{color:#a9c3f7; font-weight:700; text-decoration:underline; text-underline-offset:2px}
+.agree a:hover{color:#fff}
+
+/* ── CTA ── */
+.cta{
+  width:100%; height:50px; border-radius:12px; border:0; cursor:pointer;
+  background:var(--royal); color:#fff; font-family:inherit;
+  font-size:15.5px; font-weight:800; letter-spacing:-.01em;
+  box-shadow:0 8px 22px -8px rgba(37,99,235,.75);
+  transition:background .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+.cta:hover{background:var(--royal-l); box-shadow:0 10px 26px -8px rgba(37,99,235,.9)}
+.cta:active{transform:translateY(1px)}
+
+.err{margin-top:14px; font-size:13.5px; font-weight:600; color:#fca5a5;
+  text-align:center; display:none}
+.err.on{display:block}
+
+@media(max-width:480px){
+  .card{padding:30px 22px 28px; border-radius:18px}
+  h1{font-size:26px}
+  .brand{margin-bottom:26px}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <span class="brand">
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#fff"/>
+      <circle cx="20" cy="14.6" r="6.4" fill="#0b1533"/>
+      <path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#5b95ff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21.6 12.1h2.4v2.3" stroke="#5b95ff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-t">AdmitMap</span>
+  </span>
+
+  <div class="card">
+    <h1>Create your account</h1>
+    <p class="sub">Welcome — please fill in your details.</p>
+
+    <div class="oauth">
+      <button class="oa" type="button" onclick="oauth('Google')">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.57c2.08-1.92 3.27-4.74 3.27-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.76c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.11a6.6 6.6 0 0 1 0-4.22V7.05H2.18a11 11 0 0 0 0 9.9l3.66-2.84z"/><path fill="#EA4335" d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.46 14.97.5 12 .5A11 11 0 0 0 2.18 7.05l3.66 2.84c.87-2.6 3.3-4.14 6.16-4.14z"/></svg>
+        Continue with Google
+      </button>
+      <button class="oa" type="button" onclick="oauth('Apple')">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.05 12.54c-.02-2.2 1.8-3.26 1.88-3.31-1.02-1.5-2.61-1.7-3.18-1.72-1.35-.14-2.64.79-3.33.79-.68 0-1.75-.77-2.87-.75-1.48.02-2.84.86-3.6 2.18-1.53 2.66-.39 6.6 1.1 8.76.73 1.06 1.6 2.25 2.75 2.2 1.1-.04 1.52-.71 2.85-.71s1.71.71 2.87.69c1.19-.02 1.94-1.08 2.66-2.14.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.51zM14.9 5.36c.6-.73 1.01-1.75.9-2.76-.87.04-1.92.58-2.55 1.31-.56.65-1.05 1.68-.92 2.68.97.07 1.96-.49 2.57-1.23z"/></svg>
+        Continue with Apple
+      </button>
+    </div>
+
+    <div class="div"><span>or</span></div>
+
+    <form onsubmit="return createAccount(event)">
+      <div class="fg">
+        <label class="fl" for="email">Email address</label>
+        <div class="fi-wrap">
+          <input class="fi" type="email" id="email" placeholder="you@school.edu"
+                 autocomplete="email" required>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl" for="password">Password</label>
+        <div class="fi-wrap">
+          <input class="fi" type="password" id="password" placeholder="At least 8 characters"
+                 minlength="8" autocomplete="new-password" required>
+          <button class="eye" type="button" onclick="togglePw(this)" aria-label="Show password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="agree">
+        <input type="checkbox" id="agree" required>
+        <label for="agree">I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of
+          Service</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a></label>
+      </div>
+
+      <button class="cta" type="submit">Create account</button>
+      <div class="err" id="err"></div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+function togglePw(btn){
+  const i = document.getElementById('password');
+  const on = i.type === 'password';
+  i.type = on ? 'text' : 'password';
+  btn.setAttribute('aria-label', on ? 'Hide password' : 'Show password');
+}
+
+function oauth(p){
+  const e = document.getElementById('err');
+  e.textContent = p + ' sign-in is not connected yet — use email for now.';
+  e.classList.add('on');
+}
+
+function createAccount(e){
+  e.preventDefault();
+  try{
+    localStorage.setItem('admitmap_account', JSON.stringify({
+      email: document.getElementById('email').value.trim(), ts: Date.now()
+    }));
+  }catch(err){}
+  window.location.href = 'onboarding.html';
+  return false;
+}
+</script>
+</body>
+
+</html>

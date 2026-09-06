@@ -1,0 +1,21 @@
+# Legacy and backup pages — kept in the repo, never served.
+# ВНИМАНИЕ: onboarding.html здесь быть НЕ должно — это 4-й шаг живой
+# цепочки signup -> onboarding -> paywall, без него у всех 404 после регистрации.
+AdmitMap-complete.html
+AdmitMap.html
+funnel-legacy.html
+funnel-v2.html
+landing-original.html
+paywall-flow.html
+pricing-v4.html
+AdmitMap-source.zip
+data/platform.bak.html
+data/platform.pre-2yr-filter.html
+
+# Working notes and raw data
+*.md
+!api/README.md
+*.csv
+data/*.py
+data/*.log
+graphify-out/

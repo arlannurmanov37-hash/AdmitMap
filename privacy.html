@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — AdmitMap</title>
+    <meta name="description" content="What AdmitMap collects, why, and how to get it deleted.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        :root {
+            --white: #ffffff;
+            --off: #f8fafc;
+            --navy: #0f1f4b;
+            --royal: #2563eb;
+            --royal-s: #eef4ff;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --amber-l: #fef3c7;
+            --amber-d: #b45309;
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        html { scroll-behavior: smooth }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--off);
+            color: var(--navy);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .lgl-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 18px 56px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .lgl-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .lgl-logo span { color: var(--royal) }
+
+        .lgl-back {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .lgl-back:hover { color: var(--royal) }
+
+        .lgl-wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 56px 32px 96px;
+            display: grid;
+            grid-template-columns: 232px 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .lgl-toc {
+            position: sticky;
+            top: 96px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 20px 18px;
+        }
+
+        .lgl-toc h4 {
+            font-size: 11px;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .lgl-toc a {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 5px 0;
+            line-height: 1.35;
+            transition: color .16s var(--ease-out);
+        }
+
+        .lgl-toc a:hover { color: var(--royal) }
+
+        .lgl-doc {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 48px 52px 56px;
+        }
+
+        .lgl-doc h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -.02em;
+        }
+
+        .lgl-meta {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .lgl-lede {
+            margin-top: 22px;
+            padding: 18px 20px;
+            background: var(--royal-s);
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.65;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
+        .lgl-doc h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 23px;
+            font-weight: 600;
+            margin: 44px 0 14px;
+            padding-top: 4px;
+            scroll-margin-top: 92px;
+            letter-spacing: -.01em;
+        }
+
+        .lgl-doc h2 .n {
+            color: var(--royal);
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            margin-right: 10px;
+            vertical-align: 2px;
+        }
+
+        .lgl-doc h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 26px 0 8px;
+        }
+
+        .lgl-doc p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #334155;
+            margin-bottom: 14px;
+        }
+
+        .lgl-doc ul { margin: 0 0 16px 0; padding-left: 20px }
+
+        .lgl-doc li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .lgl-doc li::marker { color: var(--royal) }
+
+        .lgl-doc strong { color: var(--navy); font-weight: 700 }
+
+        .lgl-doc a { color: var(--royal); font-weight: 600 }
+
+        .lgl-note {
+            border-left: 3px solid var(--royal);
+            background: var(--royal-s);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-note p { margin: 0; font-size: 14px; color: #1e3a8a; font-weight: 500 }
+
+        .lgl-warn {
+            border-left: 3px solid #f59e0b;
+            background: var(--amber-l);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-warn p { margin: 0; font-size: 14px; color: var(--amber-d); font-weight: 600 }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 20px;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 12px 9px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        td {
+            padding: 11px 12px 11px 0;
+            border-bottom: 1px solid var(--line);
+            color: #334155;
+            line-height: 1.55;
+            vertical-align: top;
+        }
+
+        td:first-child { font-weight: 600; color: var(--navy) }
+
+        footer {
+            padding: 28px 56px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            background: #fff;
+        }
+
+        .f-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .f-logo span { color: var(--royal) }
+
+        .f-links { display: flex; gap: 26px; flex-wrap: wrap }
+
+        .f-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .f-links a:hover { color: var(--royal) }
+
+        footer p { font-size: 12px; color: var(--muted); font-weight: 500 }
+
+        @media(max-width:900px) {
+            .lgl-nav { padding: 16px 24px }
+            .lgl-wrap { grid-template-columns: 1fr; padding: 32px 20px 64px; gap: 28px }
+            .lgl-toc { position: static }
+            .lgl-doc { padding: 32px 24px 40px; border-radius: 14px }
+            .lgl-doc h1 { font-size: 30px }
+            .lgl-doc h2 { font-size: 20px; margin-top: 36px }
+            footer { padding: 24px; justify-content: center; text-align: center }
+            .f-links { justify-content: center; gap: 18px }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="lgl-nav">
+        <a href="landing.html" class="lgl-logo">Admit<span>Map</span></a>
+        <a href="landing.html" class="lgl-back">← Back to AdmitMap</a>
+    </nav>
+
+    <div class="lgl-wrap">
+        <aside class="lgl-toc">
+            <h4>On this page</h4>
+            <a href="#summary">1. What this covers</a>
+            <a href="#who">2. Who is responsible</a>
+            <a href="#collect">3. What we collect</a>
+            <a href="#why">4. Why we use it</a>
+            <a href="#essays">5. Essays and AI</a>
+            <a href="#local">6. Data in your browser</a>
+            <a href="#share">7. Who we share with</a>
+            <a href="#marketing">8. Email and marketing</a>
+            <a href="#cookies">9. Cookies</a>
+            <a href="#aggregate">10. Aggregated data</a>
+            <a href="#retention">11. How long we keep it</a>
+            <a href="#security">12. Security</a>
+            <a href="#rights">13. Your rights</a>
+            <a href="#delete">14. How to delete your data</a>
+            <a href="#transfers">15. International transfers</a>
+            <a href="#links">16. Links to other sites</a>
+            <a href="#children">17. Children</a>
+            <a href="#changes">18. Changes</a>
+            <a href="#contact">19. Contact</a>
+        </aside>
+
+        <main class="lgl-doc">
+            <h1>Privacy Policy</h1>
+            <p class="lgl-meta">Last updated: 27 August 2026 &nbsp;·&nbsp; Effective: 27 August 2026</p>
+
+            <div class="lgl-lede">
+                <strong>The short version.</strong> We collect your academic profile because that is the only way to
+                calculate your odds. We never sell it. Your essay is sent for grading and then discarded — we do not
+                keep essay text and it is never used to train any AI model. We never see your card number. You can
+                ask us to delete everything at any time by emailing
+                <a href="mailto:support@admitmap.com">support@admitmap.com</a>, and we will.
+            </div>
+
+            <h2 id="summary"><span class="n">1</span>What this policy covers</h2>
+            <p>This policy explains what information AdmitMap collects when you use our website, funnel, account and
+                reports (the "Service"), why we collect it, who else touches it, and what control you have over it.
+                It applies to everyone who uses AdmitMap, wherever you are.</p>
+            <p>Using the Service is also governed by our <a href="terms.html">Terms of Service</a>.</p>
+
+            <h2 id="who"><span class="n">2</span>Who is responsible for your data</h2>
+            <p>AdmitMap is operated by <strong>Arlan Nurmanov</strong>, an individual sole operator based in the
+                Republic of Kazakhstan. For the purposes of data protection law, we are the "data controller" —
+                meaning we decide what is collected and why, and we are the ones you hold accountable.</p>
+            <p>Contact for any privacy matter, including deletion requests: <a
+                    href="mailto:support@admitmap.com">support@admitmap.com</a>.</p>
+
+            <h2 id="collect"><span class="n">3</span>What we collect</h2>
+
+            <h3>Information you give us</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Account</td>
+                        <td>Email address, password (stored only as a cryptographic hash — we cannot read it), the
+                            date you signed up.</td>
+                    </tr>
+                    <tr>
+                        <td>Academic profile</td>
+                        <td>Graduation year, unweighted GPA, SAT and ACT scores, AP and other coursework, intended
+                            major.</td>
+                    </tr>
+                    <tr>
+                        <td>Activities &amp; honors</td>
+                        <td>Extracurricular activities, roles, hours, descriptions, awards and recognition levels.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Financial</td>
+                        <td>An approximate <em>household income band</em> and household size, used solely to
+                            estimate net price. We do not ask for and do not want exact income, tax documents, bank
+                            details, or a Social Security number.</td>
+                    </tr>
+                    <tr>
+                        <td>School list</td>
+                        <td>The colleges you add, and the application round you are considering for each.</td>
+                    </tr>
+                    <tr>
+                        <td>Essay</td>
+                        <td>Essay text, only if you choose to submit one for grading. See <a
+                                href="#essays">section 5</a> — we do not keep it.</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td>Anything you write to us by email, and our replies.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="lgl-warn">
+                <p>Please do not enter information we have not asked for — no government ID numbers, no financial
+                    account numbers, and no medical details. If an essay you submit happens to mention sensitive
+                    personal circumstances, it is processed only to grade the essay and is then discarded.</p>
+            </div>
+
+            <h3>Information collected automatically</h3>
+            <ul>
+                <li><strong>Technical logs.</strong> Our hosting provider records standard server information for
+                    each request: IP address, browser and device type, pages requested, referring page, and
+                    timestamps. This is used for security, abuse prevention, and debugging.</li>
+                <li><strong>Local storage.</strong> Your progress through the funnel is saved inside your own
+                    browser so you do not lose your work. See <a href="#local">section 6</a>.</li>
+            </ul>
+
+            <h3>Information we deliberately do not collect</h3>
+            <ul>
+                <li><strong>Payment card details.</strong> Checkout is handled entirely by Lemon Squeezy. Your card
+                    number never reaches our servers and we never see it.</li>
+                <li><strong>Exact income, tax records, or financial account information.</strong></li>
+                <li><strong>Government identifiers</strong> of any kind.</li>
+                <li><strong>Precise location.</strong> We do not request GPS or device location.</li>
+            </ul>
+
+            <h2 id="why"><span class="n">4</span>Why we use your information</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Purpose</th>
+                        <th>Legal basis (GDPR/UK GDPR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calculate your acceptance estimates and generate your report</td>
+                        <td>Performance of a contract with you</td>
+                    </tr>
+                    <tr>
+                        <td>Estimate net price and financial aid</td>
+                        <td>Performance of a contract with you</td>
+                    </tr>
+                    <tr>
+                        <td>Grade an essay you submit</td>
+                        <td>Performance of a contract, at your request</td>
+                    </tr>
+                    <tr>
+                        <td>Create and maintain your account, and give you access to what you bought</td>
+                        <td>Performance of a contract with you</td>
+                    </tr>
+                    <tr>
+                        <td>Process your purchase, issue receipts and licence keys</td>
+                        <td>Performance of a contract; legal obligation for tax records</td>
+                    </tr>
+                    <tr>
+                        <td>Security, fraud prevention, abuse and rate-limit enforcement</td>
+                        <td>Legitimate interests in protecting the Service</td>
+                    </tr>
+                    <tr>
+                        <td>Improve our models, data quality and interface using aggregated, non-identifying
+                            statistics</td>
+                        <td>Legitimate interests in improving the Service</td>
+                    </tr>
+                    <tr>
+                        <td>Build advertising audiences from hashed email addresses</td>
+                        <td>Legitimate interests in marketing the Service, and consent where the law requires it</td>
+                    </tr>
+                    <tr>
+                        <td>Send you deadline reminders, product news and offers</td>
+                        <td>Legitimate interests, and consent where the law requires it — see <a
+                                href="#marketing">section 8</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>We never sell your personal information, and we never share it with colleges, universities,
+                    admissions offices, recruiters, scholarship services, lead brokers, or advertisers.</strong> Your
+                profile is not a product we sell to anyone.</p>
+
+            <h2 id="essays"><span class="n">5</span>Essays and AI processing</h2>
+            <p>Your essay is the most personal thing you can give us, so we handle it differently from everything
+                else.</p>
+            <ul>
+                <li>Essay text is sent to us <strong>only when you ask for it to be graded.</strong></li>
+                <li>Our server forwards it to <strong>Anthropic's API</strong>, which scores it against our rubric
+                    and returns the result.</li>
+                <li><strong>Anthropic does not use API inputs to train its models.</strong></li>
+                <li><strong>We do not retain your essay text on our servers after grading.</strong> It is processed
+                    in the request and discarded. We keep only the resulting numeric scores and written feedback so
+                    your report stays intact.</li>
+                <li>No human at AdmitMap reads your essay as a matter of course. We do not review essays to improve
+                    our rubric.</li>
+            </ul>
+            <p>Because we do not store the essay, we also cannot recover it for you. Keep your own copy.</p>
+
+            <h3>Automated decision-making</h3>
+            <p>Your estimates and scores are produced automatically by software. They have no legal effect on you and
+                do not determine anything — no college sees them and no admission outcome depends on them. If you
+                want a human to look at how a number was produced, email us and we will explain it.</p>
+
+            <h2 id="local"><span class="n">6</span>Data stored in your own browser</h2>
+            <p>As you move through the funnel, your answers are saved in your browser's <strong>local
+                    storage</strong> — a storage area on your own device, under keys such as
+                <code>admitmap_profile</code>. This is what stops you losing your work if you refresh or close the
+                tab.</p>
+            <p>Data held there stays on that device, in that browser. Clearing your browser data deletes it
+                permanently, including for us — we cannot recover it. Once you create an account, your profile is
+                also saved on our servers so you can return to it from another device.</p>
+
+            <h2 id="share"><span class="n">7</span>Who we share your information with</h2>
+            <p>We share only what is necessary, only with the providers that run the Service:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>What it does</th>
+                        <th>What it receives</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Vercel</td>
+                        <td>Website hosting and serverless functions</td>
+                        <td>Technical request data, including IP address; any data in transit to the Service</td>
+                    </tr>
+                    <tr>
+                        <td>Anthropic</td>
+                        <td>AI essay grading</td>
+                        <td>Essay text at the moment of grading. Not used for model training.</td>
+                    </tr>
+                    <tr>
+                        <td>Lemon Squeezy</td>
+                        <td>Payments, as Merchant of Record</td>
+                        <td>Your email, billing details and payment information, handled directly by them</td>
+                    </tr>
+                    <tr>
+                        <td>Database provider</td>
+                        <td>Storing account profiles</td>
+                        <td>Account and academic profile data. <em>The specific provider is named here once
+                                accounts launch.</em></td>
+                    </tr>
+                    <tr>
+                        <td>Advertising platforms</td>
+                        <td>Building advertising audiences (see <a href="#marketing">section 8</a>)</td>
+                        <td>Hashed email addresses only. Never your profile, scores, essays or report.</td>
+                    </tr>
+                    <tr>
+                        <td>Email provider</td>
+                        <td>Sending receipts, licence keys and updates</td>
+                        <td>Your email address and message content. <em>Named here once configured.</em></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>We may also disclose information where we are legally required to, or where it is necessary to
+                investigate abuse or protect someone's safety or rights. If AdmitMap is ever sold or transferred,
+                your data may transfer with it — we will tell you before that happens and this policy will continue
+                to apply until you are told otherwise.</p>
+
+            <h2 id="marketing"><span class="n">8</span>Email and marketing</h2>
+            <p>If you give us your email address — whether you complete a purchase or only go through the funnel —
+                we may send you:</p>
+            <ul>
+                <li><strong>Transactional email:</strong> receipts, licence keys, password resets, and messages
+                    about something you bought. You cannot unsubscribe from these while you have an account, because
+                    they are how the Service works.</li>
+                <li><strong>Marketing email:</strong> application deadline reminders, product news, and offers,
+                    including discounts on further reports.</li>
+            </ul>
+            <p><strong>Every marketing email has a one-click unsubscribe link,</strong> and we honour it promptly. You
+                can also unsubscribe any time by emailing <a
+                    href="mailto:support@admitmap.com">support@admitmap.com</a>. Unsubscribing from marketing does
+                not affect access to anything you have purchased.</p>
+            <div class="lgl-warn">
+                <p>If you are in the EU, the UK, or another region with opt-in email rules, you may withdraw consent
+                    or object to marketing at any time using the same links, and we will stop.</p>
+            </div>
+            <p>We do not sell or rent your email address, and we never give it to another company to use for
+                <em>that company's own</em> marketing.</p>
+
+            <h3>Advertising audiences</h3>
+            <p>We advertise AdmitMap on platforms such as Meta (Instagram and Facebook), TikTok and Google. To do
+                that, we may upload a list of email addresses to those platforms so they can:</p>
+            <ul>
+                <li><strong>match existing users</strong>, so we can show you offers or, equally, stop showing you
+                    ads for something you already bought; and</li>
+                <li><strong>build a "lookalike" audience</strong> — the platform finds other people with broadly
+                    similar characteristics, and shows our ads to them instead.</li>
+            </ul>
+            <p>What this means in practice:</p>
+            <ul>
+                <li>Email addresses are sent <strong>hashed</strong> — scrambled into an irreversible code — so the
+                    platform can match them without reading them.</li>
+                <li>The platform is contractually permitted to use the list <strong>only</strong> to build our
+                    audience, and for nothing else of its own.</li>
+                <li>We <strong>never</strong> upload your grades, test scores, income band, school list, essays, or
+                    report contents to an advertising platform. Only email addresses.</li>
+                <li>We do not learn who ends up in a lookalike audience, and those people are strangers to us unless
+                    they click an ad and sign up themselves.</li>
+            </ul>
+            <p><strong>To opt out</strong>, email <a href="mailto:support@admitmap.com">support@admitmap.com</a> and
+                ask us to exclude you from advertising audiences, and we will remove you from any list we upload.
+                Unsubscribing from marketing email also removes you. You can additionally limit ad targeting inside
+                each platform's own ad settings.</p>
+
+            <h2 id="cookies"><span class="n">9</span>Cookies and similar technology</h2>
+            <p>We keep this deliberately minimal:</p>
+            <ul>
+                <li><strong>Strictly necessary</strong> — a session cookie to keep you signed in, and local storage
+                    to hold your funnel progress. These cannot be turned off without breaking the Service.</li>
+                <li><strong>Payment</strong> — Lemon Squeezy may set its own cookies during checkout, governed by
+                    their policy.</li>
+            </ul>
+            <p><strong>We do not currently use advertising cookies, cross-site tracking pixels, session-replay
+                    recording, or third-party behavioural advertising networks on this site.</strong> We advertise
+                AdmitMap elsewhere, as described in <a href="#marketing">section 8</a>, but that is done from an
+                email list rather than by tracking you around the web.</p>
+            <p>If we ever add analytics or an advertising pixel to the site, <strong>we will update this section
+                    before it goes live</strong>, name the provider, and ask for your consent where the law requires
+                it.</p>
+
+            <h3>Do Not Track</h3>
+            <p>Some browsers can send a "Do Not Track" signal. There is no common industry standard for how to
+                respond to one. <strong>We do not track you across other websites at all</strong>, so there is
+                nothing for a Do Not Track signal to switch off, and we do not respond to it. If that ever changes,
+                we will say so here.</p>
+
+            <h2 id="aggregate"><span class="n">10</span>Aggregated and de-identified data</h2>
+            <p>We may combine information across many users to produce <strong>aggregated or de-identified
+                    statistics</strong> — for example, the average profile of students applying to a given school,
+                or how accurate our estimates turn out to be across thousands of applications. Before this is done,
+                anything that identifies you is removed, and we do not attempt to re-identify it afterwards.</p>
+            <p>Aggregated and de-identified data is not personal information, and we may use and publish it to
+                improve our models, check our data quality, and write about admissions trends. Nothing in it names
+                you, quotes you, or can be traced back to you.</p>
+
+            <h2 id="retention"><span class="n">11</span>How long we keep things</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Kept for</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Essay text</td>
+                        <td>Not retained — discarded immediately after grading</td>
+                    </tr>
+                    <tr>
+                        <td>Account and academic profile</td>
+                        <td>While your account is open, and for 12 months after your last sign-in, then deleted</td>
+                    </tr>
+                    <tr>
+                        <td>Generated reports and scores</td>
+                        <td>With your account, on the same schedule</td>
+                    </tr>
+                    <tr>
+                        <td>Purchase and tax records</td>
+                        <td>As long as tax and accounting law requires, typically up to 5 years, even after account
+                            deletion</td>
+                    </tr>
+                    <tr>
+                        <td>Server logs</td>
+                        <td>Up to 90 days</td>
+                    </tr>
+                    <tr>
+                        <td>Support email</td>
+                        <td>Up to 24 months after the conversation ends</td>
+                    </tr>
+                    <tr>
+                        <td>Marketing list</td>
+                        <td>Until you unsubscribe, then a minimal suppression record so we do not email you again
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="security"><span class="n">12</span>Security</h2>
+            <p>We protect your information with encryption in transit (HTTPS/TLS), password hashing rather than
+                plaintext storage, restricted access to production systems, API keys held only on the server and
+                never exposed to the browser, and origin restrictions on our endpoints.</p>
+            <p>No system is perfectly secure and we cannot guarantee absolute security. If a breach affects your
+                personal data and creates a real risk to you, we will notify you and any regulator we are required to
+                notify, without undue delay.</p>
+
+            <h2 id="rights"><span class="n">13</span>Your rights</h2>
+            <p>Wherever you live, you can ask us to:</p>
+            <ul>
+                <li><strong>Access</strong> — get a copy of the personal data we hold about you;</li>
+                <li><strong>Correct</strong> — fix anything inaccurate;</li>
+                <li><strong>Delete</strong> — erase your data and close your account;</li>
+                <li><strong>Export</strong> — receive your data in a portable, machine-readable format;</li>
+                <li><strong>Object or restrict</strong> — object to processing based on legitimate interests, or ask
+                    us to pause processing;</li>
+                <li><strong>Withdraw consent</strong> — where processing relies on consent, withdraw it at any time,
+                    without affecting what happened before;</li>
+                <li><strong>Opt out of marketing</strong> — at any time, via unsubscribe or email;</li>
+                <li><strong>Opt out of advertising audiences</strong> — ask us to exclude your email address from
+                    any list we upload to an advertising platform.</li>
+            </ul>
+            <p>Email <a href="mailto:support@admitmap.com">support@admitmap.com</a>. We respond within 30 days and
+                never charge for it. We may need to confirm your identity before acting, to make sure we are not
+                handing your data to someone else.</p>
+
+            <h3>If you are in the EU, UK, or Switzerland</h3>
+            <p>The rights above are your GDPR / UK GDPR rights. You also have the right to complain to your local
+                data protection authority. We would rather you came to us first, but that right stands either way.
+            </p>
+
+            <h3>If you are in California or another US state with a privacy law</h3>
+            <p>You have the right to know what personal information we collect and why, to request a copy, to
+                request deletion, to correct inaccuracies, and to not be discriminated against for exercising any of
+                these rights. <strong>We do not sell personal information and we do not share it for cross-context
+                    behavioural advertising</strong>, as those terms are defined under the CCPA/CPRA. We do
+                provide hashed email addresses to advertising platforms to build audiences, as described in <a
+                    href="#marketing">section 8</a>; some regulators treat that as "sharing", so to be safe we treat
+                it as opt-out-able — email us and we will exclude you. Use the same email address to make any
+                request.</p>
+            <p><strong>Verification.</strong> Before we act on a request to access, correct, or delete data, we have
+                to be reasonably sure the request is really from you — otherwise we would be handing your academic
+                profile to a stranger. We will normally verify by asking you to send the request from the email
+                address on the account. If we cannot verify you, we will tell you why rather than simply refusing.
+            </p>
+            <p><strong>Authorized agents.</strong> You may appoint someone to make a request on your behalf. We will
+                ask for written proof that you authorised them, and we may still ask you to confirm your identity
+                directly.</p>
+            <p><strong>California "Shine the Light".</strong> California residents may ask, once a year and free of
+                charge, what personal information a business disclosed to third parties for those third parties' own
+                direct marketing. <strong>We do not disclose personal information to anyone for their own direct
+                    marketing</strong>, so there is nothing to report — but you are welcome to ask and we will
+                confirm that in writing.</p>
+
+            <h2 id="delete"><span class="n">14</span>How to delete your data</h2>
+            <p>Two ways, and both work:</p>
+            <ul>
+                <li><strong>Clear your browser data.</strong> This permanently removes everything held locally on
+                    that device.</li>
+                <li><strong>Email <a href="mailto:support@admitmap.com">support@admitmap.com</a></strong> asking us
+                    to delete your account. We erase your account, academic profile, school list, scores and reports
+                    from our systems, and confirm when it is done.</li>
+            </ul>
+            <p>The only things that survive a deletion request are purchase records we are legally obliged to keep
+                for tax purposes, and the minimal suppression record that stops us emailing you again. Deleted
+                reports cannot be restored.</p>
+
+            <h2 id="transfers"><span class="n">15</span>International data transfers</h2>
+            <p>We operate from Kazakhstan, and our providers operate primarily in the United States and the European
+                Union. If you use AdmitMap from outside those countries, your information will be transferred to and
+                processed in them, and their data protection laws may differ from your own.</p>
+            <p>Where we transfer data out of the EEA or the UK, we rely on appropriate safeguards, including
+                Standard Contractual Clauses with our providers where applicable. By using the Service you
+                understand that this transfer is necessary in order to provide it to you.</p>
+
+            <h2 id="links"><span class="n">16</span>Links to other sites</h2>
+            <p>AdmitMap links out to places we do not control: college websites, admissions offices, each school's
+                own Net Price Calculator, and services that supply things like institution logos. A link is not an
+                endorsement and does not mean we are affiliated with that site.</p>
+            <p><strong>This Privacy Policy stops at our edge.</strong> Anything you give a third-party site is
+                governed by that site's privacy policy, not ours, and we are not responsible for how they handle it.
+                Read their policy before you hand over anything personal — especially on any site that offers to
+                review or rewrite your essay, since many such services do use what you submit to improve their own
+                models.</p>
+
+            <h2 id="children"><span class="n">17</span>Children</h2>
+            <p><strong>AdmitMap is available to people aged 13 and over.</strong> If you are under 18, a parent
+                or legal guardian must agree to our <a href="terms.html">Terms of Service</a>, must be the one who
+                makes any purchase, and is responsible for the information entered. We treat that parent or guardian
+                as the account holder.</p>
+            <p>Parents and guardians can ask us at any time to show them what we hold about their child, to correct
+                it, or to delete it and close the account. Email <a
+                    href="mailto:support@admitmap.com">support@admitmap.com</a> from any address and we will verify
+                and act on it.</p>
+            <p><strong>We do not knowingly collect any information from children under 13.</strong> If we discover
+                that we have, we delete it immediately. If you are a parent who believes a child under 13 has given
+                us information, email <a href="mailto:support@admitmap.com">support@admitmap.com</a> and we will
+                remove it right away.</p>
+
+            <h2 id="changes"><span class="n">18</span>Changes to this policy</h2>
+            <p>We will update this policy as AdmitMap develops — in particular when accounts launch and when our
+                database and email providers are finalised. The "Last updated" date at the top always reflects the
+                current version.</p>
+            <p>If a change materially affects how we handle your data, we will tell you by email where we have your
+                address, or by a notice on the site, before it takes effect.</p>
+
+            <h2 id="contact"><span class="n">19</span>Contact</h2>
+            <p>Any privacy question, access request, or deletion request:</p>
+            <ul>
+                <li>Email: <a href="mailto:support@admitmap.com">support@admitmap.com</a></li>
+                <li>Data controller: Arlan Nurmanov, sole operator, Republic of Kazakhstan</li>
+            </ul>
+            <p>A real person reads every message, usually within a few days.</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="f-logo">Admit<span>Map</span></div>
+        <nav class="f-links">
+            <a href="paywall.html">Pricing</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="refunds.html">Refunds</a>
+        </nav>
+        <p>© 2026 AdmitMap. Built for students who mean it.</p>
+    </footer>
+</body>
+
+</html>

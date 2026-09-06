@@ -7,3 +7,15 @@ _pv_*.html
 
 # Generated artifacts
 graphify-out/
+node_modules/
+.env
+.env.local
+.vercel
+
+# Дамп College Scorecard (84 МБ) — качается скриптом, в репозиторий не кладём
+data/raw/
+# Локальная копия проекта из Claude Design (только для чтения макетов)
+_design/
+
+# Резервные копии отчёта перед правками — по 1 МБ каждая, в репозитории не нужны
+.backup-calculator/*.bak

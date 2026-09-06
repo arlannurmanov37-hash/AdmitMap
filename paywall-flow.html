@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unlock your full report · AdmitMap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f1f4b; --ink:#101d42;
+  --royal:#2563eb; --royal-d:#1d4ed8;
+  --muted:#5b7098; --muted2:#7d8ba6; --muted3:#8296b5; --muted4:#94a3b8; --muted5:#a9b6cc;
+  --line:#e6ebf4; --line2:#e2e8f0; --line3:#eef1f7;
+  --green:#10b981; --green-d:#059669; --green-l:#d1fae5;
+  --amber:#f59e0b; --amber-l:#fef3c7; --amber-d:#b45309;
+  --purple:#7c3aed; --purple-l:#ede9fe;
+  --indigo:#4f46e5; --indigo-l:#e0e7ff;
+  --blue-l:#dbeafe;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:#fff;color:var(--navy);font-variant-numeric:lining-nums tabular-nums;
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  letter-spacing:-.008em;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+button{font-family:inherit;cursor:pointer}
+ul{list-style:none;margin:0;padding:0}
+.fr{font-family:Fraunces,Georgia,serif;font-weight:900;letter-spacing:-.045em}
+
+@keyframes mpIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes mpFade{from{opacity:0}to{opacity:1}}
+.ai{animation:mpIn .55s var(--ease) both}
+.af{animation:mpFade .6s ease-out both}
+.d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.2s}
+.d4{animation-delay:.26s}.d5{animation-delay:.32s}.d6{animation-delay:.38s}
+.d7{animation-delay:.44s}.d8{animation-delay:.5s}
+@media(prefers-reduced-motion:reduce){.ai,.af{animation:none!important}}
+
+/* ── shell ── */
+.screen{display:none;flex-direction:column;min-height:100vh;min-height:100dvh;position:relative;overflow:hidden}
+.screen.on{display:flex}
+.glow{position:absolute;left:50%;transform:translateX(-50%);pointer-events:none;z-index:0}
+.glow.amber{top:-140px;width:900px;height:600px;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(245,158,11,.13),rgba(255,255,255,0) 70%)}
+.glow.blue{top:-160px;width:1000px;height:640px;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(37,99,235,.11),rgba(255,255,255,0) 70%)}
+.body{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;flex:1;
+  width:100%;max-width:1300px;margin:0 auto;padding:26px 56px 30px}
+
+/* ── masthead ── */
+.mast{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;padding:26px 56px 0}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:48px;height:48px}
+.logo-t{font-family:Fraunces,Georgia,serif;font-size:36px;font-weight:900;letter-spacing:-.035em;color:var(--ink)}
+.logo-t span{color:var(--royal)}
+.x{position:absolute;right:56px;top:26px;display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:#fff;
+  color:var(--muted2);box-shadow:0 2px 0 #f1f4fa;transition:transform .14s var(--ease),box-shadow .14s ease}
+.x:hover{transform:translateY(2px);box-shadow:0 0 0 #f1f4fa}
+
+/* ── type ── */
+h1.hd{font-family:Fraunces,Georgia,serif;font-size:clamp(26px,3.4vw,48px);font-weight:900;
+  line-height:1.05;letter-spacing:-.048em;text-align:center;margin:14px 0 0}
+h1.hd .b{color:var(--royal)}
+.sub{font-size:15.5px;line-height:1.5;color:var(--muted2);text-align:center;margin:12px 0 0;max-width:74ch}
+.sub b{font-weight:800;color:var(--navy)}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:14px}
+.eyebrow i{width:34px;height:2px;border-radius:2px;background:var(--royal);display:block}
+.eyebrow span{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--royal)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:5px 13px 5px 7px;border-radius:20px}
+.pill.green{background:rgba(16,185,129,.11)}
+.pill.blue{background:rgba(37,99,235,.09)}
+.pill-dot{display:flex;align-items:center;justify-content:center;width:17px;height:17px;
+  border-radius:50%;background:var(--green)}
+.pill-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.pill.green .pill-t{color:var(--green-d)}
+.pill.blue .pill-t{color:var(--royal)}
+
+/* ── 3D button (signature) ── */
+.btn3d{display:flex;align-items:center;justify-content:center;gap:12px;border:0;
+  padding:19px 38px;border-radius:16px;color:#fff;font-size:16px;font-weight:800;letter-spacing:-.01em;
+  background:linear-gradient(180deg,#4581f7 0%,#2f6ef0 42%,#2461e4 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 0 #2359d6,0 2px 0 #2156ce,0 3px 0 #1e51c4,
+    0 4px 0 #1c4cba,0 5px 0 #1a47b0,0 6px 1px rgba(12,38,110,.5),
+    0 11px 20px rgba(15,31,75,.22),0 20px 34px rgba(37,99,235,.22);
+  transition:transform .14s var(--ease),box-shadow .14s ease}
+.btn3d:hover{transform:translateY(5px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 0 #2359d6,0 2px 1px rgba(12,38,110,.45),
+    0 6px 12px rgba(15,31,75,.2),0 11px 20px rgba(37,99,235,.2)}
+.btn-ghost{border:1.5px solid #cbd5e1;background:#fff;color:var(--navy);padding:15px 24px;
+  border-radius:12px;font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  white-space:nowrap;box-shadow:0 4px 0 var(--line3),0 7px 13px rgba(15,31,75,.07);
+  transition:transform .14s var(--ease),box-shadow .14s ease}
+.btn-ghost:hover{transform:translateY(3px);box-shadow:0 1px 0 var(--line3),0 3px 8px rgba(15,31,75,.07)}
+
+/* ── proof screen ── */
+.stars{display:flex;align-items:center;gap:8px;color:var(--amber)}
+.stars svg{display:block;width:34px;height:34px;flex:0 0 34px}
+.rating{display:flex;align-items:center;justify-content:center;gap:24px}
+.rating-n{display:flex;align-items:baseline;gap:5px}
+.rating-n b{font-family:Fraunces,Georgia,serif;font-size:58px;font-weight:900;line-height:1;
+  letter-spacing:-.05em;color:var(--navy)}
+.rating-n i{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:700;font-style:normal;color:var(--muted5)}
+.rating-div{width:1px;height:38px;background:var(--line2)}
+.rating-t{font-size:17px;font-weight:700;color:var(--muted)}
+.logos{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.logos img{width:46px;height:46px;object-fit:contain}
+.logos span{display:flex;align-items:center;justify-content:center;width:70px;height:70px;
+  border-radius:20px;background:#fff;box-shadow:0 0 0 1px rgba(15,31,75,.07),0 4px 10px rgba(15,31,75,.11)}
+.proof-row{display:flex;align-items:stretch;gap:20px;width:100%;max-width:1030px}
+.pstat{flex:1;display:flex;flex-direction:column;align-items:center;gap:13px;padding:52px 20px;
+  border-radius:20px;background:#fff;border:1.5px solid var(--line);box-shadow:0 3px 0 #f1f4fa}
+.pstat b{font-family:Fraunces,Georgia,serif;font-size:42px;font-weight:900;line-height:1;letter-spacing:-.045em}
+.pstat i{font-size:14px;font-weight:700;font-style:normal;color:var(--muted3);text-align:center}
+.quote{flex:2.1;display:flex;gap:22px;align-items:center;padding:40px 30px;border-radius:20px;
+  background:#fff;border:1.5px solid var(--line);box-shadow:0 3px 0 #f1f4fa,0 12px 26px rgba(15,31,75,.07)}
+.qlogo{position:relative;display:flex;align-items:center;justify-content:center;width:58px;height:58px;
+  flex-shrink:0;border-radius:17px;background:#fff;
+  box-shadow:0 0 0 1px rgba(15,31,75,.07),0 3px 9px rgba(15,31,75,.12)}
+.qlogo img{width:38px;height:38px;object-fit:contain}
+.qbadge{position:absolute;right:-6px;bottom:-6px;display:flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;background:var(--green);border:3px solid #fff}
+.qtxt{display:flex;flex-direction:column;gap:10px;min-width:0}
+.qtxt q{font-family:Fraunces,Georgia,serif;font-size:18px;font-weight:700;line-height:1.5;
+  letter-spacing:-.02em;color:var(--navy);quotes:'“' '”'}
+.qmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qmeta b{font-size:13px;font-weight:800}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;
+  background:rgba(16,185,129,.13);font-size:10.5px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--green-d)}
+.qmeta i{font-size:13px;font-weight:600;font-style:normal;color:var(--muted3)}
+
+/* ── found screen ── */
+.logostrip{display:flex;align-items:center;justify-content:center;gap:18px;padding:14px 28px;
+  border-radius:18px;border:1px solid #d7e4fb;
+  background:linear-gradient(120deg,#eef4ff 0%,#f7faff 60%,#ffffff 100%);
+  box-shadow:0 1px 2px rgba(15,31,75,.05),0 8px 20px rgba(37,99,235,.07)}
+.logostrip-d{width:1px;height:30px;background:linear-gradient(#dbe6f8,#eaf0fb)}
+.logostrip-t{display:flex;align-items:center;gap:11px}
+.logostrip-t b{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.logostrip-t i{width:4px;height:4px;border-radius:50%;background:#b7c8e4}
+.logostrip-t span{font-size:15px;font-weight:600;color:#7d93b8}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:100%;max-width:1300px;
+  padding:16px;border-radius:26px;border:1px solid #dee8f8;
+  background:linear-gradient(170deg,#eef4ff 0%,#e8f0fb 60%,#f4f8ff 100%)}
+.stat{display:flex;flex-direction:column;align-items:center;gap:16px;padding:30px 22px 26px;
+  border-radius:20px;border:1px solid #dbe6fa;background:linear-gradient(165deg,#fff 0%,#eff5ff 100%);
+  box-shadow:0 3px 0 rgba(37,99,235,.07),0 10px 22px rgba(15,31,75,.05)}
+.stat-ico{display:flex;align-items:center;justify-content:center;width:46px;height:46px;
+  flex-shrink:0;border-radius:15px}
+.stat-n{display:flex;align-items:baseline;font-family:Fraunces,Georgia,serif;font-weight:900;
+  font-size:42px;line-height:1;letter-spacing:-.05em}
+.stat-n small{font-size:20px;font-weight:700;color:var(--muted5)}
+.stat-t{display:flex;flex-direction:column;align-items:center;gap:5px}
+.stat-t b{font-size:15px;font-weight:800;line-height:1.3;text-align:center}
+.stat-t i{font-size:12.5px;font-weight:600;font-style:normal;line-height:1.35;text-align:center;color:var(--muted3)}
+.locked{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:18px;
+  padding:18px 28px;border-radius:18px;border:1px solid #e3e9f3;box-shadow:inset 0 1px 0 #fff;
+  background:linear-gradient(110deg,#f7f9fd 0%,#f2f5fb 52%,#f8fafd 100%)}
+.locked::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(135deg,rgba(15,31,75,.022) 0 1px,transparent 1px 9px)}
+.locked-i{position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;
+  flex-shrink:0;border-radius:14px;background:#fff;color:#64748b;
+  box-shadow:0 0 0 1px rgba(15,31,75,.06),0 2px 6px rgba(15,31,75,.08)}
+.locked-t{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left}
+.locked-t b{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted4)}
+.locked-t span{font-size:15px;font-weight:700;line-height:1.35;color:#475569}
+.locked-d{position:relative;width:1px;height:30px;background:var(--line2);flex-shrink:0}
+.locked-n{position:relative;font-size:13px;font-weight:700;color:var(--muted3);white-space:nowrap}
+
+/* ── paywall: feature grid ── */
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;max-width:1160px}
+.feat{display:flex;align-items:center;gap:15px;padding:17px 19px;border-radius:18px;
+  box-shadow:0 2px 0 #eef3fb,0 8px 20px rgba(15,31,75,.05)}
+.feat-i{display:flex;align-items:center;justify-content:center;width:44px;height:44px;
+  flex-shrink:0;border-radius:14px}
+.feat-t{display:flex;flex-direction:column;gap:4px;min-width:0}
+.feat-t b{font-size:15.5px;font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.feat-t i{font-size:12.5px;font-weight:600;font-style:normal;line-height:1.35;color:var(--muted3)}
+.feat.f1{background:linear-gradient(160deg,#fff,#f5f9ff);border:1px solid #e2ebfa}
+.feat.f2{background:linear-gradient(160deg,#fff,#f5fdf9);border:1px solid #d8efe4}
+.feat.f3{background:linear-gradient(160deg,#fff,#faf8ff);border:1px solid #e6e0fa}
+.feat.f4{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid #f3e5cf}
+
+/* ── paywall: desktop ticket cards ── */
+.tickets{display:flex;justify-content:center;gap:32px}
+.ticket{width:520px}
+.tk-top{border-radius:18px 18px 0 0;background:#fff;border:1.5px solid var(--line2);
+  border-bottom:0;padding:22px 26px 20px}
+.tk-head{display:flex;align-items:center;gap:12px}
+.tk-ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+  border-radius:12px;background:#eef1f6;color:#475569}
+.tk-name{font-family:Fraunces,Georgia,serif;font-size:23px;font-weight:900;letter-spacing:-.035em}
+.tk-name span{color:var(--royal)}
+.tk-sub{font-size:14px;line-height:1.5;color:#64748b;margin:11px 0 0}
+.tk-hr{height:1px;background:var(--line3);margin:16px 0 15px}
+.tk-ul{display:flex;flex-direction:column;gap:9px}
+.tk-ul li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.4}
+.tk-b{display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;
+  border-radius:50%;font-size:10px;font-weight:800;margin-top:1px}
+.tk-b.c{background:rgba(16,185,129,.12);color:var(--green)}
+.tk-b.s{background:rgba(37,99,235,.12);color:var(--royal)}
+.tk-perf{position:relative;height:20px;background:#fff;border-left:1.5px solid var(--line2);
+  border-right:1.5px solid var(--line2)}
+.tk-perf i{position:absolute;top:-1px;width:20px;height:20px;border-radius:50%;background:#fff;
+  border:1.5px solid var(--line2)}
+.tk-perf i.l{left:-12px;clip-path:inset(0 0 0 50%)}
+.tk-perf i.r{right:-12px;clip-path:inset(0 50% 0 0)}
+.tk-perf span{position:absolute;left:16px;right:16px;top:9px;height:2px;
+  background:repeating-linear-gradient(90deg,#dbe2ee 0 7px,transparent 7px 14px)}
+.tk-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border-radius:0 0 18px 18px;background:#fff;border:1.5px solid var(--line2);border-top:0;
+  padding:18px 26px 22px;box-shadow:0 6px 0 #eef2f8,0 10px 14px rgba(15,31,75,.06),0 20px 32px rgba(15,31,75,.07)}
+.tk-price{display:flex;flex-direction:column;gap:4px}
+.tk-price b{font-family:Fraunces,Georgia,serif;font-size:40px;font-weight:900;line-height:1;letter-spacing:-.045em}
+.tk-price i{font-size:12px;font-weight:600;font-style:normal;color:var(--muted4)}
+/* highlighted ticket */
+.ticket.hi .tk-top{background:linear-gradient(165deg,#fff 0%,#f4f9ff 100%);border:2px solid var(--royal);
+  border-bottom:0;position:relative}
+.ticket.hi .tk-hr{background:#dbe6f7}
+.ticket.hi .tk-ico{background:var(--blue-l);color:var(--royal)}
+.ticket.hi .tk-perf{background:#f4f9ff;border-left:2px solid var(--royal);border-right:2px solid var(--royal)}
+.ticket.hi .tk-perf i{border:2px solid var(--royal)}
+.ticket.hi .tk-perf span{background:repeating-linear-gradient(90deg,#bcd4f8 0 7px,transparent 7px 14px)}
+.ticket.hi .tk-foot{background:linear-gradient(180deg,#f4f9ff,#eef5ff);border:2px solid var(--royal);
+  border-top:0;box-shadow:0 6px 0 #dbe8fb,0 12px 18px rgba(37,99,235,.12),0 24px 40px rgba(37,99,235,.16)}
+.ticket.hi .tk-price i{color:#7d93b8}
+.tk-best{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  background:linear-gradient(180deg,#2f6ef0,#2461e4);color:#fff;padding:6px 16px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 2px 0 #1e51c4,0 6px 14px rgba(37,99,235,.4)}
+.secure{display:flex;align-items:center;justify-content:center;gap:9px;font-size:13px;
+  font-weight:600;color:var(--muted3)}
+
+/* ── paywall: mobile select rows ── */
+.picks{display:none;flex-direction:column;gap:13px;width:100%}
+.pick{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:17px 16px;border-radius:16px;background:#fff;border:1.5px solid var(--line2);
+  box-shadow:0 2px 0 #f1f4fa;transition:transform .16s var(--ease),box-shadow .16s ease,border-color .16s ease}
+.pick.on{background:linear-gradient(165deg,#fff 0%,#f2f8ff 100%);border:2px solid var(--royal);
+  box-shadow:0 4px 0 #cfe0fb,0 8px 18px rgba(37,99,235,.16)}
+.pick-dot{display:flex;align-items:center;justify-content:center;width:21px;height:21px;flex-shrink:0;
+  border-radius:50%;border:2px solid #cbd5e1;background:#fff}
+.pick.on .pick-dot{border:0;background:linear-gradient(180deg,#3b82f6,#2461e4)}
+.pick-dot svg{opacity:0}
+.pick.on .pick-dot svg{opacity:1}
+.pick-t{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.pick-t b{font-family:Fraunces,Georgia,serif;font-size:17px;font-weight:900;letter-spacing:-.035em}
+.pick-t b span{color:var(--royal)}
+.pick-t i{font-size:11px;font-weight:600;font-style:normal;line-height:1.35;color:#64748b}
+.pick-p{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.pick-p b{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:900;line-height:1;letter-spacing:-.045em}
+.pick-p i{font-size:9px;font-weight:700;font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--muted4)}
+.pick-best{position:absolute;top:-9px;right:15px;padding:4px 10px;border-radius:20px;
+  background:linear-gradient(180deg,#2f6ef0,#2461e4);font-size:8.5px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;box-shadow:0 2px 0 #1e51c4,0 5px 12px rgba(37,99,235,.4)}
+
+/* ── footers ── */
+.cta-wrap{padding-top:26px;display:flex;justify-content:center}
+.sticky{display:none}
+.rows{display:none}
+
+/* ══════════ MOBILE ══════════ */
+@media(max-width:900px){
+  .mast{padding:16px 20px 0}
+  .logo svg{width:34px;height:34px}
+  .logo-t{font-size:26px}
+  .x{right:20px;top:14px;width:32px;height:32px}
+  .body{padding:16px 22px 150px}
+  h1.hd{font-size:29px;letter-spacing:-.045em;margin-top:12px}
+  .sub{font-size:13.5px;margin-top:10px}
+  .eyebrow i{width:24px}
+  .eyebrow span{font-size:10px}
+
+  /* proof */
+  .stars svg{width:25px;height:25px;flex:0 0 25px}
+  .rating{flex-direction:column;gap:6px}
+  .rating-n b{font-size:48px}
+  .rating-n i{font-size:21px}
+  .rating-div{display:none}
+  .rating-t{font-size:12.5px}
+  .logos{gap:9px}
+  .logos span{width:52px;height:52px;border-radius:15px}
+  .logos img{width:34px;height:34px}
+  .proof-row{flex-direction:column;gap:10px}
+  .pstat{flex-direction:column;padding:15px 10px;gap:5px;border-radius:16px}
+  .pstat b{font-size:24px}
+  .pstat i{font-size:10.5px}
+  .proof-2up{display:flex;gap:10px;width:100%}
+  .quote{flex-direction:row;padding:16px;gap:13px;border-radius:18px}
+  .qlogo{width:44px;height:44px;border-radius:13px;align-self:center}
+  .qlogo img{width:30px;height:30px}
+  .qbadge{width:19px;height:19px;right:-5px;bottom:-5px;border-width:2.5px}
+  .qtxt q{font-size:13.5px;line-height:1.42}
+  .qmeta b,.qmeta i{font-size:10.5px}
+  .tag{font-size:9px;padding:2px 7px}
+
+  /* found — cards become rows */
+  .logostrip{flex-direction:column;gap:14px;padding:18px 16px;border-radius:20px;width:100%}
+  .logostrip-d{display:none}
+  .logostrip-t{padding-top:13px;border-top:1px solid rgba(37,99,235,.14);width:100%;justify-content:center}
+  .logostrip-t b{font-size:12px}
+  .logostrip-t span{font-size:11.5px}
+  .stats{display:flex;flex-direction:column;gap:0;padding:0;border:0;background:none;border-radius:0}
+  .stat{flex-direction:row;align-items:center;gap:13px;padding:17px 4px;border:0;border-radius:0;
+    background:none;box-shadow:none;border-bottom:1px solid var(--line3)}
+  .stat:last-child{border-bottom:0}
+  .stat-ico{width:34px;height:34px;border-radius:11px}
+  .stat-ico svg{width:17px;height:17px}
+  .stat-t{align-items:flex-start;flex:1;gap:2px}
+  .stat-t b{font-size:12.5px;text-align:left;font-weight:700;color:#334155}
+  .stat-t i{display:none}
+  .stat-n{order:3;font-size:21px;letter-spacing:-.04em;flex-shrink:0}
+  .stat-n small{font-size:14px}
+  .locked{gap:12px;padding:15px 16px;border-radius:15px;background:#f8fafc;
+    border:1px dashed #cbd5e1;box-shadow:none;width:100%}
+  .locked::before{display:none}
+  .locked-i{width:32px;height:32px;border-radius:10px;background:#e8edf6}
+  .locked-i svg{width:16px;height:16px}
+  .locked-t b{display:none}
+  .locked-t span{font-size:11.5px;font-weight:600;line-height:1.45;color:#64748b}
+  .locked-d,.locked-n{display:none}
+
+  /* paywall */
+  .feats{grid-template-columns:1fr 1fr;gap:11px}
+  .feat{flex-direction:column;align-items:flex-start;gap:8px;padding:15px;border-radius:16px;
+    box-shadow:0 2px 0 #f1f4fa}
+  .feat-i{width:30px;height:30px;border-radius:10px}
+  .feat-i svg{width:17px;height:17px}
+  .feat-t b{font-size:12px;line-height:1.25}
+  .feat-t i{font-size:10.5px}
+  .tickets{display:none}
+  .picks{display:flex}
+  .secure{display:none}
+
+  /* sticky bottom CTA */
+  .cta-wrap{display:none}
+  .sticky{display:block;position:fixed;left:0;right:0;bottom:0;z-index:20;
+    padding:14px 22px calc(10px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(255,255,255,0) 0%,#fff 26%)}
+  .sticky .btn3d{width:100%;padding:16px 20px;border-radius:15px;font-size:14.5px}
+  .sticky-note{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;
+    font-size:10.5px;font-weight:600;color:var(--muted3)}
+  .bar{width:134px;height:5px;margin:12px auto 0;border-radius:3px;background:var(--navy);opacity:.85}
+  .cta-price{display:flex;align-items:center;gap:8px}
+  .cta-price i{width:1px;height:16px;background:rgba(255,255,255,.35);display:block}
+  .cta-price b{font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:900;letter-spacing:-.03em}
+}
+@media(min-width:901px){
+  .proof-2up{display:contents}
+  .cta-price{display:none}
+  /* the strip is one row in the mockup — stop the 10th logo wrapping to its own line */
+  .logostrip .logos{flex-wrap:nowrap;flex-shrink:0}
+  .logostrip-t b,.logostrip-t span{white-space:nowrap}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════ 01 · WHAT WE FOUND ══════════ -->
+<section class="screen on" id="s-found">
+  <div class="glow blue"></div>
+  <div class="mast">
+    <span class="logo">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#101d42"/><circle cx="20" cy="14.6" r="6.4" fill="#fff"/><path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.6 12.1h2.4v2.3" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="logo-t">Admit<span>Map</span></span>
+    </span>
+  </div>
+
+  <div class="body">
+    <span class="pill green af">
+      <span class="pill-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+      <span class="pill-t">Analysis complete</span>
+    </span>
+    <h1 class="hd ai d1">Here's what we found in <span class="b">your profile.</span></h1>
+    <p class="sub ai d2">Every school on your list, scored against this year's admitted class and modelled
+      against your family's finances.</p>
+
+    <div class="logostrip ai d3" style="margin-top:22px">
+      <span class="logos" id="logos-found"></span>
+      <span class="logostrip-d"></span>
+      <span class="logostrip-t"><b>All 10 schools scored</b><i></i><span>Dream, Match and Safety</span></span>
+    </div>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat ai d4">
+        <span class="stat-ico" style="background:var(--blue-l);color:var(--royal)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/></svg></span>
+        <span class="stat-n">7<small>/10</small></span>
+        <span class="stat-t"><b>beat the admitted average</b><i>GPA, rigor and activities</i></span>
+      </div>
+      <div class="stat ai d5">
+        <span class="stat-ico" style="background:var(--indigo-l);color:var(--indigo)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
+        <span class="stat-n">3<small>/10</small></span>
+        <span class="stat-t"><b>cost under $18,000 a year</b><i>after grants, not sticker price</i></span>
+      </div>
+      <div class="stat ai d6">
+        <span class="stat-ico" style="background:var(--purple-l);color:var(--purple)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+        <span class="stat-n">4<small>/10</small></span>
+        <span class="stat-t"><b>reward applying early</b><i>ED and EA close in 85 days</i></span>
+      </div>
+      <div class="stat ai d7">
+        <span class="stat-ico" style="background:var(--green-l);color:var(--green-d)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>
+        <span class="stat-n">$91.4k</span>
+        <span class="stat-t"><b>in grants and aid modelled</b><i>across your four years</i></span>
+      </div>
+    </div>
+
+    <div class="locked af d8" style="margin-top:18px">
+      <span class="locked-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg></span>
+      <span class="locked-t"><b>Still locked</b><span>Per-school odds, tiering and net costs are ready in your report.</span></span>
+      <span class="locked-d"></span>
+      <span class="locked-n">10 schools waiting</span>
+    </div>
+
+    <div class="cta-wrap af d8">
+      <button class="btn3d" data-go="s-proof">Continue<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+
+  <div class="sticky">
+    <button class="btn3d" data-go="s-proof">Continue<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="bar"></div>
+  </div>
+</section>
+
+<!-- ══════════ 02 · PROOF ══════════ -->
+<section class="screen" id="s-proof">
+  <div class="glow amber"></div>
+  <div class="mast">
+    <span class="logo">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#101d42"/><circle cx="20" cy="14.6" r="6.4" fill="#fff"/><path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.6 12.1h2.4v2.3" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="logo-t">Admit<span>Map</span></span>
+    </span>
+  </div>
+
+  <div class="body" style="justify-content:space-between">
+    <div class="rating ai" style="margin-top:14px">
+      <span class="stars" id="stars"></span>
+      <span class="rating-n"><b>4.9</b><i>/5</i></span>
+      <span class="rating-div"></span>
+      <span class="rating-t">from 3,200 student reviews</span>
+    </div>
+
+    <h1 class="hd ai d3" style="max-width:44ch">Trusted by <span class="b">10,000+</span> applicants building a smarter school list.</h1>
+
+    <div class="logos af d4" id="logos-proof" style="margin-top:24px"></div>
+
+    <div class="proof-row af d5" style="margin-top:22px">
+      <div class="proof-2up">
+        <div class="pstat">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 9.5 10l3.5 3.5L20 6.5"/><path d="M20 11V6.5h-4.5"/></svg>
+          <b>$9,400</b><i>saved per student, a year</i>
+        </div>
+        <div class="pstat">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
+          <b>$41M</b><i>in aid uncovered</i>
+        </div>
+      </div>
+      <div class="quote">
+        <span class="qlogo">
+          <img src="https://img.logo.dev/nyu.edu?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=256&format=png" alt="" onerror="this.style.visibility='hidden'">
+          <span class="qbadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        </span>
+        <span class="qtxt">
+          <q>The aid modelling found the schools where I'd get a real package — two came out cheaper than my state school.</q>
+          <span class="qmeta"><b>Dani R.</b><span class="tag">Admitted · NYU</span><i>$14,200/yr after aid</i></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="cta-wrap af d7">
+      <button class="btn3d" data-go="s-pay">See my report<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+
+  <div class="sticky">
+    <button class="btn3d" data-go="s-pay">See my report<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="bar"></div>
+  </div>
+</section>
+
+<!-- ══════════ 03 · PAYWALL ══════════ -->
+<section class="screen" id="s-pay">
+  <div class="glow blue"></div>
+  <div class="mast">
+    <span class="logo">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#101d42"/><circle cx="20" cy="14.6" r="6.4" fill="#fff"/><path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.6 12.1h2.4v2.3" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="logo-t">Admit<span>Map</span></span>
+    </span>
+    <button class="x" aria-label="Close" data-go="s-found"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+
+  <div class="body">
+    <div class="eyebrow af" style="margin-top:6px"><i></i><span>Almost there</span><i></i></div>
+    <h1 class="hd ai d1">Unlock your <span class="b">full report.</span></h1>
+    <p class="sub af d2">See your real odds at every school — and what each one would actually cost your
+      family. You have <b>85 days</b> until Nov 1 early deadlines.</p>
+
+    <div class="feats" style="margin-top:24px">
+      <div class="feat f1 ai d3">
+        <span class="feat-i" style="background:var(--blue-l);color:var(--royal)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
+        <span class="feat-t"><b>Odds at every school</b><i>Scored on this year's admits</i></span>
+      </div>
+      <div class="feat f2 ai d4">
+        <span class="feat-i" style="background:var(--green-l);color:var(--green-d)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>
+        <span class="feat-t"><b>Real cost after aid</b><i>Net price, not sticker price</i></span>
+      </div>
+      <div class="feat f3 ai d5">
+        <span class="feat-i" style="background:var(--purple-l);color:var(--purple)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/></svg></span>
+        <span class="feat-t"><b>Dream, Match, Safety</b><i>Your list, properly balanced</i></span>
+      </div>
+      <div class="feat f4 ai d6">
+        <span class="feat-i" style="background:var(--amber-l);color:var(--amber-d)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3.5v4M15 3.5v4"/></svg></span>
+        <span class="feat-t"><b>Every deadline</b><i>ED, EA, RD, FAFSA, CSS</i></span>
+      </div>
+    </div>
+
+    <!-- desktop tickets -->
+    <div class="tickets" style="margin-top:26px">
+      <div class="ticket ai d5" id="tk-odds">
+        <div class="tk-top">
+          <div class="tk-head">
+            <span class="tk-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5v1a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5Z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg></span>
+            <span class="tk-name">Odds Report</span>
+          </div>
+          <p class="tk-sub">A complete one-time read on exactly where you stand.</p>
+          <div class="tk-hr"></div>
+          <ul class="tk-ul">
+            <li><span class="tk-b c">✓</span>Acceptance probability for all selected universities</li>
+            <li><span class="tk-b c">✓</span>Dream, Match and Safety tiering</li>
+            <li><span class="tk-b c">✓</span>Academic strength analysis (GPA, coursework, rigor)</li>
+            <li><span class="tk-b c">✓</span>Extracurricular strength analysis</li>
+            <li><span class="tk-b c">✓</span>Comparison with admitted student profiles</li>
+            <li><span class="tk-b c">✓</span>Every ED, EA and RD deadline in one place</li>
+          </ul>
+        </div>
+        <div class="tk-perf"><i class="l"></i><i class="r"></i><span></span></div>
+        <div class="tk-foot">
+          <span class="tk-price"><b>$19</b><i>One-time purchase</i></span>
+          <button class="btn-ghost" data-buy="19">Get Odds Report</button>
+        </div>
+      </div>
+
+      <div class="ticket hi ai d6" id="tk-aid">
+        <div class="tk-top">
+          <span class="tk-best">Most popular</span>
+          <div class="tk-head">
+            <span class="tk-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"/></svg></span>
+            <span class="tk-name">Odds <span>+ Financial Aid</span></span>
+          </div>
+          <p class="tk-sub">Where you stand, and what each school would actually cost.</p>
+          <div class="tk-hr"></div>
+          <ul class="tk-ul">
+            <li><span class="tk-b c">✓</span>Everything in the Odds Report</li>
+            <li><span class="tk-b s">★</span>Financial aid modeling for each university</li>
+            <li><span class="tk-b s">★</span>Net cost per year after grants, not sticker price</li>
+            <li><span class="tk-b s">★</span>Four-year total cost for every school</li>
+            <li><span class="tk-b s">★</span>Merit scholarships you qualify for</li>
+            <li><span class="tk-b s">★</span>FAFSA and CSS Profile deadline checklist</li>
+          </ul>
+        </div>
+        <div class="tk-perf"><i class="l"></i><i class="r"></i><span></span></div>
+        <div class="tk-foot">
+          <span class="tk-price"><b>$29</b><i>One-time purchase</i></span>
+          <button class="btn3d" style="padding:16px 24px;border-radius:12px;font-size:12.5px;letter-spacing:.09em;text-transform:uppercase" data-buy="29">Unlock Full Report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile select rows -->
+    <div class="picks" style="margin-top:24px">
+      <button class="pick ai d5" data-plan="19">
+        <span class="pick-dot"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        <span class="pick-t"><b>Odds Report</b><i>Odds, tiers and deadlines</i></span>
+        <span class="pick-p"><b>$19</b><i>One time</i></span>
+      </button>
+      <button class="pick on ai d6" data-plan="29">
+        <span class="pick-best">Most popular</span>
+        <span class="pick-dot"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        <span class="pick-t"><b>Odds <span>+ Financial Aid</span></b><i>Plus aid and net cost per school</i></span>
+        <span class="pick-p"><b>$29</b><i>One time</i></span>
+      </button>
+    </div>
+
+    <div class="secure af d8" style="margin-top:auto;padding-top:22px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
+      Secured with 256-bit SSL · One payment, never a subscription
+    </div>
+  </div>
+
+  <div class="sticky">
+    <button class="btn3d" id="cta-buy">
+      <span id="cta-label">Unlock Full Report</span>
+      <span class="cta-price"><i></i><b id="cta-price">$29</b></span>
+    </button>
+    <div class="sticky-note">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
+      One payment, never a subscription
+    </div>
+    <div class="bar"></div>
+  </div>
+</section>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Converted from the two design-canvas exports into one real
+   responsive flow. Desktop keeps the ticket-style pricing cards;
+   under 900px it becomes the select-row + sticky-CTA pattern.
+   ───────────────────────────────────────────────────────────── */
+
+const LOGO_TOKEN = 'pk_X-1ZO13GSgeOoUrIuJ6GMQ';
+const SCHOOLS = ['harvard.edu','stanford.edu','columbia.edu','ucla.edu','psu.edu',
+                 'nyu.edu','umich.edu','bu.edu','northeastern.edu','dartmouth.edu'];
+const logoUrl = d => `https://img.logo.dev/${d}?token=${LOGO_TOKEN}&size=256&format=png`;
+
+/* Mobile mockups show 5 logos, desktop shows 10. */
+function paintLogos(el, n){
+  if(!el) return;
+  el.innerHTML = SCHOOLS.slice(0, n).map(d =>
+    `<span><img src="${logoUrl(d)}" alt="" onerror="this.style.visibility='hidden'"></span>`).join('');
+}
+function syncLogos(){
+  const n = window.matchMedia('(max-width:900px)').matches ? 5 : 10;
+  paintLogos(document.getElementById('logos-found'), n);
+  paintLogos(document.getElementById('logos-proof'), n);
+}
+syncLogos();
+window.addEventListener('resize', syncLogos);
+
+const STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.6 2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4L2.6 9.4l6.5-.9z"/></svg>';
+document.getElementById('stars').innerHTML = STAR.repeat(5);
+
+/* screen routing — toggling display restarts the entry animations */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+
+/* plan selection (mobile rows drive the sticky CTA) */
+let plan = 29;
+function setPlan(p){
+  plan = +p;
+  document.querySelectorAll('[data-plan]').forEach(el =>
+    el.classList.toggle('on', +el.dataset.plan === plan));
+  document.getElementById('cta-label').textContent = plan === 29 ? 'Unlock Full Report' : 'Get Odds Report';
+  document.getElementById('cta-price').textContent = '$' + plan;
+}
+document.querySelectorAll('[data-plan]').forEach(el => el.onclick = () => setPlan(el.dataset.plan));
+setPlan(29);
+
+/* checkout — no payment provider wired yet, so hand off to the report */
+function buy(tier){ window.location.href = 'report.html?tier=' + tier; }
+document.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => buy(b.dataset.buy));
+document.getElementById('cta-buy').onclick = () => buy(plan);
+</script>
+</body>
+</html>

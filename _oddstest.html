@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка модели шансов — AdmitMap</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head><body>
+<script>// Median SAT / ACT and admit rate by school domain (867 schools).
+// Source: IPEDS via data/fetch_stats.py. ad = admit rate %.
+const SCHOOL_STATS = {"aamu.edu":{"sat":938,"ad":58.0,"act":18},"uab.edu":{"sat":1258,"ad":88.2,"act":27},"uah.edu":{"sat":1319,"ad":68.6,"act":28},"alasu.edu":{"sat":976,"ad":97.5,"act":18},"ua.edu":{"sat":1285,"ad":76.6,"act":26},"aum.edu":{"sat":1093,"ad":91.6,"act":21},"auburn.edu":{"sat":1345,"ad":45.9},"faulkner.edu":{"sat":1020,"ad":73.1,"act":20},"huntingdon.edu":{"sat":1142,"ad":69.5,"act":22},"hcu.edu":{"sat":1020,"ad":90.0},"jsu.edu":{"sat":1059,"ad":77.7,"act":20},"uwa.edu":{"sat":1015,"ad":42.6,"act":19},"umobile.edu":{"sat":1220,"ad":77.9},"montevallo.edu":{"ad":53.8,"act":23},"una.edu":{"ad":87.3},"www2.oakwood.edu":{"ad":45.2},"samford.edu":{"sat":1201,"ad":82.4,"act":26},"southalabama.edu":{"sat":1147,"ad":71.0,"act":23},"shc.edu":{"sat":1120,"ad":76.6,"act":19},"stillman.edu":{"ad":62.3},"talladega.edu":{"ad":85.4},"troy.edu":{"sat":1088,"ad":96.0,"act":21},"tuskegee.edu":{"sat":1120,"ad":48.7,"act":22},"ussu.edu":{"ad":61.4},"uaf.edu":{"act":22},"asu.edu":{"ad":89.9},"arizona.edu":{"sat":1246,"ad":86.1,"act":25},"prescott.erau.edu":{"sat":1250,"ad":76.6,"act":26},"gcu.edu":{"sat":1077,"ad":78.9},"nau.edu":{"ad":89.6},"prescott.edu":{"ad":94.5},"arizonachristian.edu":{"ad":70.6,"act":20},"ualr.edu":{"sat":1049,"ad":58.8,"act":22},"lyon.edu":{"ad":62.8,"act":24},"uark.edu":{"sat":1169,"ad":74.3,"act":25},"uapb.edu":{"sat":922,"ad":41.2,"act":16},"astate.edu":{"sat":1090,"ad":82.3,"act":23},"uca.edu":{"sat":1118,"ad":89.5,"act":23},"cbc.edu":{"sat":1046,"ad":63.5,"act":21},"harding.edu":{"sat":1182,"ad":70.5,"act":24},"hsu.edu":{"act":21},"hendrix.edu":{"sat":1282,"ad":55.6,"act":28},"jbu.edu":{"sat":1195,"ad":76.1,"act":26},"obu.edu":{"sat":1211,"ad":67.5},"ozarks.edu":{"sat":1105,"ad":59.5,"act":21},"williamsbaptistuniversity.com":{"sat":980,"ad":83.4,"act":22},"saumag.edu":{"sat":1047,"ad":75.3,"act":22},"artcenter.edu":{"ad":74.5},"apu.edu":{"sat":1195,"ad":88.4,"act":22},"biola.edu":{"sat":1261,"ad":74.4,"act":26},"calbaptist.edu":{"ad":84.9},"cca.edu":{"ad":91.1},"caltech.edu":{"ad":2.6},"callutheran.edu":{"sat":1266,"ad":75.7,"act":26},"calpoly.edu":{"ad":31.3},"csub.edu":{"ad":93.8},"csustan.edu":{"ad":98.1},"csusb.edu":{"ad":93.7},"cpp.edu":{"ad":75.2},"csuchico.edu":{"ad":92.7},"csudh.edu":{"ad":93.3},"fresnostate.edu":{"ad":95.3},"fullerton.edu":{"ad":90.5},"csueastbay.edu":{"ad":97.4},"csulb.edu":{"ad":46.3},"calstatela.edu":{"ad":91.2},"csun.edu":{"ad":93.5},"csus.edu":{"ad":94.0},"berkeley.edu":{"ad":11.0},"ucdavis.edu":{"ad":41.8},"uci.edu":{"ad":28.6},"ucla.edu":{"ad":9.0},"ucr.edu":{"ad":76.4},"ucsd.edu":{"ad":26.7},"ucsb.edu":{"ad":33.0},"ucsc.edu":{"ad":65.8},"calarts.edu":{"ad":32.3},"maritime.calpoly.edu":{"ad":95.0},"chapman.edu":{"sat":1357,"ad":65.4,"act":29},"cdrewu.edu":{"ad":38.7},"cui.edu":{"ad":66.0,"act":25},"sdcc.edu":{"ad":30.8},"cmc.edu":{"sat":1527,"ad":9.6,"act":34},"usv.edu":{"ad":51.2},"disd.edu":{"ad":100},"dominican.edu":{"sat":1290,"ad":83.5,"act":23},"fresno.edu":{"ad":64.1,"act":21},"hmc.edu":{"sat":1545,"ad":12.7,"act":35},"humboldt.edu":{"ad":98.2},"lifepacific.edu":{"ad":95.8},"laverne.edu":{"sat":1083,"ad":71.2,"act":21},"lcad.edu":{"ad":94.3},"lasierra.edu":{"ad":91.5,"act":23},"masters.edu":{"ad":84.0},"lmu.edu":{"sat":1359,"ad":45.1,"act":30},"menlo.edu":{"ad":68.5},"oakland.northeastern.edu":{"sat":1472,"ad":16.7,"act":31},"msmu.edu":{"ad":73.1},"newschoolarch.edu":{"ad":100},"sfbu.edu":{"ad":95.8},"oxy.edu":{"sat":1452,"ad":44.2,"act":32},"otis.edu":{"sat":1310,"ad":81.8,"act":25},"hiu.edu":{"sat":1020,"ad":33.0},"pacificoaks.edu":{"ad":34.4},"pacific.edu":{"sat":1346,"ad":71.3,"act":28},"pepperdine.edu":{"sat":1384,"ad":62.9,"act":28},"pitzer.edu":{"ad":25.2},"pointloma.edu":{"sat":1287,"ad":83.7,"act":26},"pomona.edu":{"sat":1534,"ad":7.1,"act":34},"redlands.edu":{"sat":1241,"ad":82.7,"act":29},"sdsu.edu":{"ad":36.2},"sandiego.edu":{"ad":52.4},"sfcm.edu":{"ad":54.9},"sfsu.edu":{"ad":96.4},"usfca.edu":{"sat":1295,"ad":61.7,"act":29},"jessup.edu":{"sat":1150,"ad":93.3},"sjsu.edu":{"ad":84.6},"scu.edu":{"sat":1426,"ad":48.0,"act":32},"scrippscollege.edu":{"sat":1492,"ad":38.3,"act":33},"shasta.edu":{"ad":100},"simpsonu.edu":{"ad":86.0},"stmarys-ca.edu":{"ad":86.5},"sonoma.edu":{"ad":93.4},"vanguard.edu":{"ad":62.4,"act":22},"sciarc.edu":{"ad":76.6},"usc.edu":{"sat":1495,"ad":9.8,"act":34},"thomasaquinas.edu":{"sat":1329,"ad":83.1,"act":28},"westmont.edu":{"sat":1328,"ad":77.0,"act":29},"whittier.edu":{"ad":80.8,"act":26},"woodbury.edu":{"ad":81.7},"yoec.edu":{"ad":58.2},"adams.edu":{"act":21},"ucdenver.edu":{"sat":1116,"ad":74.7,"act":25},"uccs.edu":{"sat":1133,"ad":97.4},"colorado.edu":{"sat":1357,"ad":78.1,"act":28},"coloradocollege.edu":{"sat":1365,"ad":18.5},"mines.edu":{"sat":1412,"ad":60.7,"act":31},"colostate.edu":{"ad":88.5,"act":26},"du.edu":{"sat":1355,"ad":77.8,"act":29},"fortlewis.edu":{"sat":1111,"ad":77.3,"act":20},"msudenver.edu":{"sat":1019,"ad":98.8,"act":21},"naropa.edu":{"ad":100},"unco.edu":{"sat":1082,"ad":85.9,"act":23},"regis.edu":{"sat":1220,"ad":86.5,"act":25},"csupueblo.edu":{"sat":1120,"ad":94.9,"act":22},"usafa.edu":{"sat":1350,"ad":14.1,"act":32},"western.edu":{"sat":1230,"ad":99.7,"act":24},"albertus.edu":{"ad":59.3},"bridgeport.edu":{"ad":83.0},"ccsu.edu":{"sat":1080,"ad":73.3,"act":23},"conncoll.edu":{"sat":1432,"ad":37.0,"act":32},"uconn.edu":{"sat":1348,"ad":52.4,"act":30},"easternct.edu":{"sat":1160,"ad":83.0},"fairfield.edu":{"sat":1335,"ad":33.3,"act":29},"hartford.edu":{"sat":1219,"ad":95.8,"act":26},"mitchell.edu":{"ad":94.7},"newhaven.edu":{"sat":1160,"ad":60.4,"act":27},"qu.edu":{"sat":1242,"ad":72.2},"sacredheart.edu":{"ad":65.4},"usj.edu":{"sat":950,"ad":78.6},"southernct.edu":{"ad":91.5},"trincoll.edu":{"sat":1415,"ad":29.2,"act":31},"uscga.edu":{"sat":1339,"ad":22.4,"act":27},"wesleyan.edu":{"sat":1501,"ad":16.5,"act":33},"wcsu.edu":{"sat":1110,"ad":87.0},"yale.edu":{"sat":1534,"ad":3.9,"act":34},"desu.edu":{"sat":940,"ad":46.6},"udel.edu":{"sat":1292,"ad":70.6,"act":29},"gbc.edu":{"ad":84.5},"american.edu":{"sat":1381,"ad":62.0,"act":31},"catholic.edu":{"ad":82.8},"gallaudet.edu":{"sat":868,"ad":58.1,"act":17},"gwu.edu":{"sat":1433,"ad":47.1,"act":32},"georgetown.edu":{"sat":1487,"ad":12.9,"act":34},"howard.edu":{"sat":1213,"ad":41.3,"act":24},"www2.trinitydc.edu":{"ad":99.5},"buf.edu":{"ad":36.0,"act":20},"barry.edu":{"ad":77.2},"cookman.edu":{"sat":880,"ad":88.2,"act":17},"lynn.edu":{"sat":1134,"ad":73.5,"act":23},"albizu.edu":{"ad":75.7},"ucf.edu":{"sat":1269,"ad":40.1,"act":28},"eckerd.edu":{"sat":1250,"ad":75.8},"ew.edu":{"ad":85.0},"daytonabeach.erau.edu":{"sat":1257,"ad":64.8,"act":26},"famu.edu":{"sat":1107,"ad":20.6,"act":20},"fau.edu":{"sat":1127,"ad":66.1,"act":23},"flagler.edu":{"sat":1084,"ad":80.8,"act":23},"floridacollege.edu":{"sat":1108,"ad":69.7,"act":23},"fit.edu":{"sat":1225,"ad":57.7,"act":27},"fiu.edu":{"sat":1163,"ad":54.7,"act":24},"fmuniv.edu":{"ad":85.3},"flsouthern.edu":{"sat":1252,"ad":64.4,"act":28},"fsu.edu":{"sat":1361,"ad":24.2,"act":28},"ufl.edu":{"sat":1403,"ad":24.2,"act":31},"ju.edu":{"sat":1205,"ad":56.9,"act":23},"lutherrice.edu":{"ad":91.7},"miami.edu":{"sat":1415,"ad":18.9,"act":32},"unf.edu":{"sat":1153,"ad":53.2,"act":23},"nova.edu":{"sat":1157,"ad":73.2,"act":25},"pba.edu":{"sat":1075,"ad":82.0,"act":23},"ringling.edu":{"ad":69.7},"rollins.edu":{"sat":1271,"ad":47.5},"saintleo.edu":{"ad":78.4,"act":22},"sjvcs.edu":{"ad":92.9},"usf.edu":{"sat":1227,"ad":43.2,"act":27},"stu.edu":{"ad":97.9,"act":19},"stetson.edu":{"sat":1176,"ad":71.6,"act":26},"seu.edu":{"ad":53.0,"act":22},"ut.edu":{"ad":40.3,"act":26},"tcj.edu":{"sat":907,"ad":53.3,"act":19},"trinitycollege.edu":{"ad":91.9,"act":21},"warner.edu":{"sat":932,"ad":42.8,"act":19},"webber.edu":{"ad":69.4},"uwf.edu":{"sat":1138,"ad":58.2,"act":24},"abac.edu":{"sat":990,"ad":75.7,"act":19},"agnesscott.edu":{"sat":1260,"ad":62.2},"point.edu":{"ad":44.3,"act":19},"cau.edu":{"ad":64.2,"act":19},"berry.edu":{"sat":1220,"ad":64.0,"act":27},"brenau.edu":{"sat":1079,"ad":87.8,"act":23},"clayton.edu":{"sat":958,"ad":68.5},"columbusstate.edu":{"sat":977,"ad":99.1,"act":21},"covenant.edu":{"sat":1294,"ad":86.5,"act":26},"eu.edu":{"ad":74.0,"act":21},"emory.edu":{"sat":1520,"ad":10.7,"act":33},"fvsu.edu":{"sat":994,"ad":65.9,"act":18},"gatech.edu":{"sat":1480,"ad":14.1,"act":32},"gsw.edu":{"sat":978,"ad":75.2,"act":21},"gcsu.edu":{"sat":1163,"ad":78.2,"act":24},"georgiasouthern.edu":{"sat":1053,"ad":87.9,"act":21},"gsu.edu":{"sat":1076,"ad":55.4,"act":23},"uga.edu":{"sat":1397,"ad":37.7,"act":31},"gordonstate.edu":{"sat":1023,"ad":85.9,"act":20},"lagrange.edu":{"ad":62.1},"life.edu":{"sat":1030,"ad":93.0,"act":19},"herzing.edu":{"ad":93.8},"mercer.edu":{"sat":1271,"ad":68.9,"act":30},"morehouse.edu":{"sat":1090,"ad":44.0,"act":23},"oglethorpe.edu":{"sat":1227,"ad":88.4,"act":27},"paine.edu":{"ad":95.4},"piedmont.edu":{"sat":1129,"ad":93.3,"act":23},"reinhardt.edu":{"ad":61.5},"scad.edu":{"sat":1173,"ad":83.0},"shorter.edu":{"sat":1115,"ad":96.5,"act":21},"spelman.edu":{"sat":1220,"ad":24.9},"thomasu.edu":{"sat":1072,"ad":38.3,"act":20},"tfc.edu":{"sat":1130,"ad":66.0,"act":22},"truett.edu":{"ad":78.3,"act":21},"valdosta.edu":{"sat":1013,"ad":72.3,"act":20},"wesleyancollege.edu":{"sat":1075,"ad":59.1,"act":24},"westga.edu":{"sat":1032,"ad":51.6,"act":21},"yhc.edu":{"ad":62.6},"chaminade.edu":{"sat":1060,"ad":91.4},"hilo.hawaii.edu":{"sat":1028,"ad":60.6,"act":19},"manoa.hawaii.edu":{"sat":1102,"ad":86.6,"act":24},"hpu.edu":{"sat":1111,"ad":85.9,"act":25},"westoahu.hawaii.edu":{"sat":985,"ad":95.3,"act":19},"boisebible.edu":{"sat":1040,"ad":90.5,"act":21},"boisestate.edu":{"ad":87.2},"uidaho.edu":{"sat":1116,"ad":75.5,"act":24},"collegeofidaho.edu":{"sat":1180,"ad":49.1,"act":26},"lcsc.edu":{"ad":87.7},"nnu.edu":{"sat":1130,"ad":64.7,"act":23},"aicusa.edu":{"ad":100},"saic.edu":{"ad":77.5},"augustana.edu":{"sat":1165,"ad":62.7},"aurora.edu":{"sat":1076,"ad":80.8,"act":22},"blackburn.edu":{"ad":63.2,"act":20},"bradley.edu":{"ad":76.8,"act":27},"thechicagoschool.edu":{"ad":34.5},"csu.edu":{"ad":43.3},"uchicago.edu":{"sat":1554,"ad":4.5,"act":34},"colum.edu":{"ad":89.5},"cuchicago.edu":{"ad":92.8},"depaul.edu":{"sat":1262,"ad":75.9},"eiu.edu":{"sat":1000,"ad":65.3,"act":20},"elmhurst.edu":{"sat":1151,"ad":73.6,"act":26},"eureka.edu":{"ad":85.0,"act":20},"govst.edu":{"ad":48.3,"act":19},"greenville.edu":{"sat":1038,"ad":97.5,"act":18},"htc.edu":{"ad":57.1},"uic.edu":{"sat":1250,"ad":77.3,"act":27},"ben.edu":{"ad":95.2,"act":24},"illinois.edu":{"sat":1440,"ad":42.4,"act":32},"iwu.edu":{"sat":1275,"ad":39.3,"act":27},"ic.edu":{"sat":1064,"ad":78.2,"act":21},"iit.edu":{"sat":1311,"ad":54.9,"act":29},"illinoisstate.edu":{"sat":1113,"ad":88.1,"act":24},"judsonu.edu":{"sat":1039,"ad":47.6,"act":22},"knox.edu":{"sat":1326,"ad":70.8,"act":28},"lakeforest.edu":{"sat":1343,"ad":56.8,"act":29},"lewisu.edu":{"sat":1096,"ad":71.3,"act":23},"luc.edu":{"sat":1297,"ad":81.6,"act":30},"mckendree.edu":{"ad":71.7},"methodistcol.edu":{"ad":38.9},"millikin.edu":{"sat":1034,"ad":66.7,"act":23},"monmouthcollege.edu":{"sat":1128,"ad":90.9,"act":26},"moody.edu":{"ad":82.7},"nl.edu":{"ad":95.0},"northcentralcollege.edu":{"sat":1213,"ad":77.3,"act":25},"northpark.edu":{"ad":68.5,"act":23},"niu.edu":{"ad":69.8},"northwestern.edu":{"sat":1533,"ad":7.7,"act":35},"neiu.edu":{"ad":74.6},"olivet.edu":{"sat":1117,"ad":55.9,"act":23},"principiacollege.edu":{"act":25},"quincy.edu":{"sat":1098,"ad":50.9,"act":24},"rockford.edu":{"sat":956,"ad":92.9,"act":21},"roosevelt.edu":{"sat":1011,"ad":97.2,"act":24},"dom.edu":{"sat":1002,"ad":90.3,"act":25},"stfrancis.edu":{"sat":1141,"ad":65.3,"act":23},"sxu.edu":{"ad":84.3},"uis.edu":{"sat":1102,"ad":85.9,"act":24},"siu.edu":{"sat":1055,"ad":86.9,"act":24},"siue.edu":{"sat":1100,"ad":97.5,"act":23},"telsheyeshivachicago.com":{"ad":100},"trnty.edu":{"sat":1157,"ad":84.9,"act":24},"tiu.edu":{"ad":100,"act":18},"vandercook.edu":{"ad":89.5},"wiu.edu":{"ad":71.2},"wheaton.edu":{"sat":1380,"ad":87.4,"act":30},"anderson.edu":{"sat":1035,"ad":79.3,"act":22},"bsu.edu":{"sat":1160,"ad":85.5,"act":24},"betheluniversity.edu":{"sat":1014,"ad":97.7},"butler.edu":{"sat":1274,"ad":85.1,"act":28},"depauw.edu":{"sat":1340,"ad":57.2,"act":28},"earlham.edu":{"sat":1219,"ad":73.1,"act":28},"evansville.edu":{"ad":77.6,"act":26},"franklincollege.edu":{"sat":1145,"ad":69.8,"act":23},"goshen.edu":{"sat":950,"ad":84.1,"act":27},"grace.edu":{"sat":1119,"ad":82.2,"act":23},"hanover.edu":{"sat":1201,"ad":83.7,"act":28},"hcc-nd.edu":{"ad":75.2,"act":31},"huntington.edu":{"sat":1052,"ad":75.6,"act":22},"pfw.edu":{"sat":1100,"ad":83.9,"act":23},"indianapolis.iu.edu":{"sat":1139,"ad":76.4,"act":25},"uindy.edu":{"ad":66.5},"indianatech.edu":{"ad":70.4},"indianastate.edu":{"ad":80.8},"kokomo.iu.edu":{"sat":1065,"ad":86.5,"act":23},"southbend.iu.edu":{"sat":1081,"ad":83.8,"act":21},"bloomington.iu.edu":{"sat":1313,"ad":78.2,"act":29},"northwest.iu.edu":{"sat":1055,"ad":73.4,"act":22},"southeast.iu.edu":{"sat":1072,"ad":84.5,"act":23},"east.iu.edu":{"sat":1061,"ad":67.2,"act":22},"manchester.edu":{"ad":71.1},"marian.edu":{"ad":95.5},"indwes.edu":{"sat":1082,"ad":88.9,"act":23},"nd.edu":{"sat":1520,"ad":11.3,"act":34},"oak.edu":{"ad":82.5,"act":19},"rose-hulman.edu":{"sat":1427,"ad":76.9,"act":31},"sf.edu":{"sat":981,"ad":96.0,"act":22},"smwc.edu":{"ad":72.4,"act":20},"saintmarys.edu":{"sat":1246,"ad":76.0,"act":26},"taylor.edu":{"sat":1220,"ad":73.5},"trine.edu":{"ad":85.5,"act":25},"valpo.edu":{"sat":1178,"ad":89.4},"wabash.edu":{"sat":1180,"ad":63.3,"act":26},"bvu.edu":{"sat":1120,"ad":77.6,"act":22},"central.edu":{"sat":1147,"ad":86.2,"act":22},"clarke.edu":{"sat":1054,"ad":71.8,"act":21},"coe.edu":{"sat":1223,"ad":64.0},"cornellcollege.edu":{"sat":1234,"ad":79.9,"act":27},"dordt.edu":{"sat":1221,"ad":68.5,"act":25},"drake.edu":{"sat":1292,"ad":63.8,"act":28},"dbq.edu":{"sat":1110,"ad":88.6},"faith.edu":{"sat":1109,"ad":67.5,"act":24},"graceland.edu":{"ad":80.8,"act":20},"grandview.edu":{"ad":99.1,"act":20},"grinnell.edu":{"sat":1486,"ad":14.5,"act":32},"iastate.edu":{"sat":1204,"ad":88.7,"act":25},"uiowa.edu":{"sat":1200,"ad":83.6,"act":26},"loras.edu":{"ad":99.9},"luther.edu":{"sat":1218,"ad":71.5,"act":26},"miu.edu":{"ad":95.7},"mchs.edu":{"sat":980,"ad":99.7,"act":20},"morningside.edu":{"ad":71.0},"mtmercy.edu":{"ad":82.5},"uni.edu":{"sat":1122,"ad":92.7,"act":23},"nwciowa.edu":{"ad":80.4,"act":24},"sau.edu":{"sat":1093,"ad":77.3,"act":24},"simpson.edu":{"sat":1440,"ad":86.2,"act":24},"uiu.edu":{"sat":1090,"ad":96.5,"act":21},"waldorf.edu":{"ad":77.0},"wartburg.edu":{"sat":1136,"ad":75.8,"act":23},"wmpenn.edu":{"sat":984,"ad":51.9,"act":19},"bakeru.edu":{"ad":94.2,"act":21},"benedictine.edu":{"sat":1252,"ad":98.1,"act":26},"bethanylb.edu":{"ad":56.0,"act":20},"bethelks.edu":{"ad":93.5,"act":22},"centralchristian.edu":{"ad":52.7},"emporia.edu":{"sat":1120,"ad":97.7},"fhsu.edu":{"sat":1089,"ad":90.3},"barclaycollege.edu":{"ad":51.0},"friends.edu":{"sat":1080,"ad":55.2,"act":21},"ku.edu":{"sat":1190,"ad":93.5,"act":25},"newmanu.edu":{"ad":74.0,"act":21},"k-state.edu":{"sat":1151,"ad":81.7},"kwu.edu":{"ad":71.9},"mccks.edu":{"sat":1020,"ad":100,"act":22},"mcpherson.edu":{"sat":1058,"ad":76.8},"mnu.edu":{"sat":1048,"ad":78.8,"act":20},"ottawa.edu":{"sat":1000,"ad":83.0,"act":18},"pittstate.edu":{"sat":1050,"ad":89.4,"act":21},"stmary.edu":{"sat":1029,"ad":86.6},"sckans.edu":{"ad":75.5,"act":19},"sterling.edu":{"ad":48.2,"act":22},"tabor.edu":{"ad":64.6},"wichita.edu":{"sat":1092,"ad":94.0,"act":23},"alc.edu":{"sat":1015,"ad":75.2,"act":20},"asbury.edu":{"ad":63.4},"bellarmine.edu":{"sat":1210,"ad":86.1,"act":24},"berea.edu":{"sat":1249,"ad":19.3,"act":26},"brescia.edu":{"ad":35.2,"act":22},"campbellsville.edu":{"ad":79.7},"centre.edu":{"sat":1352,"ad":54.4,"act":30},"ucumberlands.edu":{"ad":98.8,"act":21},"eku.edu":{"sat":1149,"ad":77.6,"act":21},"georgetowncollege.edu":{"sat":1138,"ad":91.1},"kmbc.edu":{"sat":1080,"ad":100,"act":23},"kysu.edu":{"sat":870,"ad":96.1},"kwc.edu":{"sat":1044,"ad":71.6,"act":22},"uky.edu":{"sat":1215,"ad":92.9,"act":26},"kcu.edu":{"sat":1090,"ad":60.9,"act":19},"louisville.edu":{"sat":1150,"ad":79.4,"act":24},"midway.edu":{"sat":1122,"ad":95.1,"act":22},"moreheadstate.edu":{"ad":77.2},"murraystate.edu":{"sat":1133,"ad":85.7,"act":24},"nku.edu":{"sat":1087,"ad":67.7,"act":23},"sbts.edu":{"sat":1120,"ad":55.9,"act":23},"spalding.edu":{"sat":977,"ad":99.5,"act":20},"thomasmore.edu":{"sat":1180,"ad":90.3},"transy.edu":{"sat":1287,"ad":86.6,"act":27},"unionky.edu":{"sat":980,"ad":63.1,"act":19},"wku.edu":{"sat":971,"ad":93.9},"centenary.edu":{"sat":1144,"ad":55.7,"act":25},"dillard.edu":{"sat":1050,"ad":41.9,"act":21},"gram.edu":{"sat":943,"ad":44.9,"act":17},"lsua.edu":{"sat":1022,"ad":92.1,"act":20},"lsu.edu":{"sat":1285,"ad":73.3,"act":26},"lsus.edu":{"sat":1090,"ad":50.5,"act":23},"lcuniversity.edu":{"ad":77.2,"act":21},"latech.edu":{"sat":1191,"ad":86.4,"act":25},"loyno.edu":{"ad":93.0},"mcneese.edu":{"sat":1087,"ad":78.3,"act":22},"new.uno.edu":{"sat":1052,"ad":74.3,"act":21},"nicholls.edu":{"sat":1090,"ad":90.8,"act":23},"ulm.edu":{"sat":1116,"ad":84.8,"act":22},"nsula.edu":{"sat":1088,"ad":92.5,"act":19},"uhcno.edu":{"ad":73.7,"act":19},"franu.edu":{"ad":98.7,"act":21},"southeastern.edu":{"sat":1090,"ad":99.3},"subr.edu":{"sat":942,"ad":35.1,"act":17},"suno.edu":{"sat":944,"ad":78.9},"louisiana.edu":{"sat":1219,"ad":87.0,"act":22},"tulane.edu":{"sat":1448,"ad":14.0,"act":32},"xula.edu":{"sat":1080,"ad":69.0,"act":23},"coa.edu":{"sat":1370,"ad":70.2},"bates.edu":{"sat":1468,"ad":13.3},"bowdoin.edu":{"sat":1520,"ad":7.1},"colby.edu":{"sat":1501,"ad":7.1,"act":33},"umf.maine.edu":{"sat":1130,"ad":96.7},"umfk.maine.edu":{"ad":97.9},"umaine.edu":{"ad":96.6,"act":26},"mainemaritime.edu":{"sat":1166,"ad":54.1},"umpi.edu":{"ad":99.9},"une.edu":{"ad":91.6},"meca.edu":{"ad":76.1},"sjcme.edu":{"sat":1040,"ad":83.5},"usm.maine.edu":{"sat":1116,"ad":79.2,"act":22},"thomas.edu":{"ad":96.3},"ubalt.edu":{"sat":940,"ad":78.7,"act":19},"bowiestate.edu":{"ad":72.4,"act":19},"captechu.edu":{"ad":74.4},"wau.edu":{"sat":980,"ad":46.2},"coppin.edu":{"sat":975,"ad":45.8},"frostburg.edu":{"ad":89.2,"act":21},"goucher.edu":{"sat":1248,"ad":77.7,"act":28},"hood.edu":{"ad":77.8},"jhu.edu":{"sat":1553,"ad":6.4},"loyola.edu":{"sat":1290,"ad":75.5},"umbc.edu":{"sat":1323,"ad":72.4,"act":28},"umd.edu":{"sat":1473,"ad":44.8,"act":32},"mica.edu":{"sat":1258,"ad":76.8},"wwwcp.umes.edu":{"ad":96.4},"morgan.edu":{"sat":971,"ad":82.2,"act":18},"msmary.edu":{"sat":1176,"ad":73.8},"nirc.edu":{"ad":65.7},"ndm.edu":{"ad":82.2},"salisbury.edu":{"sat":1252,"ad":87.5},"smcm.edu":{"sat":1261,"ad":68.6,"act":29},"sjc.edu":{"sat":1372,"ad":55.2,"act":29},"towson.edu":{"sat":1095,"ad":82.0,"act":24},"usna.edu":{"sat":1307,"ad":9.3,"act":29},"stevenson.edu":{"ad":78.9},"washcoll.edu":{"sat":1280,"ad":56.9},"mcdaniel.edu":{"ad":77.9},"hult.edu":{"ad":60.5},"aic.edu":{"ad":99.6},"amherst.edu":{"sat":1533,"ad":9.0,"act":33},"annamaria.edu":{"ad":50.3},"assumption.edu":{"ad":83.0},"babson.edu":{"sat":1457,"ad":17.1,"act":32},"boston.edu":{"ad":90.9},"baypath.edu":{"sat":1120,"ad":85.2},"bentley.edu":{"sat":1352,"ad":45.1,"act":30},"berklee.edu":{"ad":43.5},"bc.edu":{"sat":1507,"ad":16.4,"act":34},"bu.edu":{"sat":1480,"ad":11.1,"act":33},"brandeis.edu":{"sat":1462,"ad":40.5,"act":33},"bridgew.edu":{"sat":1180,"ad":87.8,"act":24},"clarku.edu":{"sat":1370,"ad":39.5,"act":29},"curry.edu":{"sat":1125,"ad":87.6},"dean.edu":{"ad":73.7},"emerson.edu":{"sat":1358,"ad":51.3,"act":30},"emmanuel.edu":{"sat":1250,"ad":75.6,"act":29},"endicott.edu":{"sat":1274,"ad":71.2},"fisher.edu":{"ad":70.7,"act":20},"fitchburgstate.edu":{"sat":1150,"ad":86.9,"act":22},"framingham.edu":{"sat":1180,"ad":83.6,"act":29},"gordon.edu":{"sat":1265,"ad":69.2,"act":27},"hampshire.edu":{"ad":75.3},"harvard.edu":{"sat":1553,"ad":3.6,"act":35},"hchc.edu":{"ad":79.6},"holycross.edu":{"sat":1353,"ad":17.6,"act":30},"lasell.edu":{"sat":1100,"ad":81.2,"act":27},"lesley.edu":{"ad":96.9},"uml.edu":{"sat":1285,"ad":83.0,"act":29},"umass.edu":{"sat":1423,"ad":59.7,"act":31},"umb.edu":{"sat":1194,"ad":83.8,"act":27},"mcphs.edu":{"sat":1269,"ad":85.2,"act":27},"massart.edu":{"ad":76.3},"web.mit.edu":{"sat":1560,"ad":4.5},"maritime.edu":{"ad":94.7},"merrimack.edu":{"ad":70.0},"mtholyoke.edu":{"sat":1463,"ad":36.0,"act":33},"necmusic.edu":{"ad":41.1},"nichols.edu":{"sat":1140,"ad":80.8,"act":23},"mcla.edu":{"ad":89.7},"northeastern.edu":{"sat":1497,"ad":5.2,"act":34},"elms.edu":{"ad":85.3},"regiscollege.edu":{"ad":69.8},"salemstate.edu":{"ad":95.9},"simmons.edu":{"sat":1316,"ad":70.0,"act":29},"smith.edu":{"sat":1500,"ad":21.0,"act":33},"springfield.edu":{"sat":1275,"ad":71.9,"act":27},"umassd.edu":{"sat":1182,"ad":90.6,"act":23},"stonehill.edu":{"ad":66.3},"suffolk.edu":{"sat":1216,"ad":82.3,"act":26},"tufts.edu":{"sat":1513,"ad":11.5,"act":34},"wellesley.edu":{"sat":1520,"ad":14.1,"act":33},"wit.edu":{"sat":1229,"ad":91.2,"act":28},"wne.edu":{"sat":1192,"ad":83.5,"act":28},"westfield.ma.edu":{"ad":81.4,"act":20},"wheatoncollege.edu":{"sat":1308,"ad":67.7,"act":30},"williams.edu":{"sat":1533,"ad":8.2},"wpi.edu":{"ad":60.2},"worcester.edu":{"sat":1150,"ad":88.0,"act":24},"adrian.edu":{"sat":1034,"ad":72.5,"act":22},"albion.edu":{"ad":80.7},"alma.edu":{"ad":57.0},"andrews.edu":{"sat":1150,"ad":81.8,"act":24},"aquinas.edu":{"sat":1025,"ad":89.9,"act":23},"baker.edu":{"sat":1080,"ad":81.9},"calvin.edu":{"sat":1233,"ad":70.9,"act":27},"cmich.edu":{"sat":1091,"ad":89.8,"act":23},"cleary.edu":{"ad":67.5,"act":19},"cuaa.edu":{"ad":69.2,"act":21},"ccsdetroit.edu":{"ad":91.9},"davenport.edu":{"ad":97.8},"udmercy.edu":{"sat":1134,"ad":75.4,"act":26},"emich.edu":{"sat":1066,"ad":79.6,"act":22},"ferris.edu":{"sat":1012,"ad":91.4,"act":23},"kettering.edu":{"sat":1251,"ad":78.7,"act":28},"gracechristian.edu":{"ad":99.2},"cornerstone.edu":{"ad":77.8,"act":23},"gvsu.edu":{"sat":1074,"ad":83.0},"hillsdale.edu":{"sat":1415,"ad":20.7,"act":32},"hope.edu":{"sat":1249,"ad":79.2,"act":28},"kzoo.edu":{"sat":1280,"ad":75.3,"act":27},"lssu.edu":{"act":23},"ltu.edu":{"ad":55.9},"madonna.edu":{"sat":980,"ad":63.4,"act":23},"rcu.edu":{"ad":97.7},"umich.edu":{"sat":1465,"ad":15.6},"msu.edu":{"sat":1269,"ad":84.8,"act":26},"mtu.edu":{"sat":1258,"ad":92.4,"act":28},"umdearborn.edu":{"sat":1115,"ad":55.6,"act":25},"umflint.edu":{"sat":1102,"ad":70.5,"act":25},"nmu.edu":{"ad":84.0},"northwood.edu":{"ad":64.5},"oakland.edu":{"sat":1120,"ad":87.8,"act":25},"uolivet.edu":{"ad":83.2,"act":21},"kuyper.edu":{"ad":69.1},"svsu.edu":{"sat":1052,"ad":72.1,"act":22},"sienaheights.edu":{"sat":954,"ad":68.9},"springarbor.edu":{"sat":1170,"ad":51.5},"wayne.edu":{"sat":1156,"ad":81.2,"act":25},"wmich.edu":{"ad":84.6,"act":24},"augsburg.edu":{"ad":82.0,"act":21},"bemidjistate.edu":{"sat":1090,"ad":56.0,"act":22},"blc.edu":{"sat":1150,"ad":39.0},"bethel.edu":{"sat":1249,"ad":87.8,"act":24},"carleton.edu":{"sat":1517,"ad":20.4,"act":33},"concordiacollege.edu":{"sat":1190,"ad":62.6,"act":23},"csp.edu":{"ad":78.9},"mlc-wels.edu":{"sat":1090,"ad":87.2,"act":24},"gustavus.edu":{"sat":1290,"ad":61.0,"act":29},"hamline.edu":{"sat":1160,"ad":87.6,"act":23},"macalester.edu":{"sat":1440,"ad":28.5,"act":31},"mnsu.edu":{"sat":1150,"ad":88.4,"act":22},"metrostate.edu":{"sat":1020,"ad":98.7},"twin-cities.umn.edu":{"sat":1362,"ad":79.8,"act":30},"crk.umn.edu":{"ad":87.9},"mcad.edu":{"sat":1161,"ad":48.5},"d.umn.edu":{"sat":1251,"ad":88.8,"act":25},"morris.umn.edu":{"sat":1150,"ad":74.9},"mnstate.edu":{"sat":1090,"ad":58.8,"act":22},"northcentral.edu":{"ad":99.0},"unwsp.edu":{"sat":1173,"ad":93.5},"csbsju.edu":{"sat":1183,"ad":90.6,"act":25},"stcloudstate.edu":{"sat":1092,"ad":94.8,"act":21},"smumn.edu":{"ad":92.8},"wp.stolaf.edu":{"sat":1380,"ad":48.3,"act":31},"crown.edu":{"ad":22.8},"css.edu":{"sat":1120,"ad":93.0,"act":25},"stthomas.edu":{"sat":1296,"ad":85.4,"act":25},"stkate.edu":{"sat":1147,"ad":91.8,"act":23},"smsu.edu":{"sat":1050,"ad":62.2},"winona.edu":{"ad":75.5,"act":22},"alcorn.edu":{"sat":904,"ad":45.3,"act":22},"belhaven.edu":{"sat":1124,"ad":49.8,"act":22},"bmc.edu":{"sat":1090,"ad":88.9,"act":21},"deltastate.edu":{"sat":1050,"ad":100,"act":19},"jsums.edu":{"sat":965,"ad":93.2,"act":18},"millsaps.edu":{"sat":1181,"ad":43.1,"act":25},"olemiss.edu":{"sat":1184,"ad":96.6,"act":25},"muw.edu":{"sat":1090,"ad":90.3,"act":21},"mvsu.edu":{"sat":870,"ad":92.4,"act":16},"mc.edu":{"sat":1090,"ad":29.1,"act":24},"msstate.edu":{"sat":1219,"ad":77.6,"act":26},"rustcollege.edu":{"ad":48.7},"usm.edu":{"sat":1190,"ad":99.1,"act":23},"tougaloo.edu":{"ad":59.9,"act":19},"wmcarey.edu":{"sat":1122,"ad":60.3,"act":25},"avila.edu":{"sat":972,"ad":87.8,"act":20},"calvary.edu":{"sat":1050,"ad":71.7,"act":20},"centralmethodist.edu":{"sat":1048,"ad":56.9,"act":21},"ucmo.edu":{"sat":1050,"ad":63.8},"cleveland.edu":{"ad":69.2},"conception.edu":{"ad":31.8,"act":21},"cottey.edu":{"ad":69.2,"act":22},"culver.edu":{"ad":99.1,"act":22},"drury.edu":{"sat":1218,"ad":57.6,"act":27},"evangel.edu":{"sat":1188,"ad":71.6},"hlg.edu":{"sat":1090,"ad":72.6,"act":22},"kcai.edu":{"ad":54.8},"lindenwood.edu":{"sat":1190,"ad":56.8,"act":24},"logan.edu":{"ad":64.3},"maryville.edu":{"ad":95.1,"act":23},"mbts.edu":{"ad":96.4},"mobap.edu":{"sat":910,"ad":68.6,"act":23},"mssu.edu":{"sat":1065,"ad":97.0,"act":21},"moval.edu":{"sat":974,"ad":69.2,"act":19},"missouri.edu":{"sat":1247,"ad":78.5,"act":27},"umkc.edu":{"sat":1204,"ad":72.2,"act":26},"mst.edu":{"sat":1317,"ad":72.5,"act":29},"umsl.edu":{"sat":1199,"ad":62.7,"act":26},"truman.edu":{"sat":1320,"ad":83.8,"act":27},"nwmissouri.edu":{"sat":1119,"ad":86.1,"act":22},"occ.edu":{"ad":93.6},"cofo.edu":{"sat":1118,"ad":12.0,"act":23},"siba.edu":{"ad":100},"rockhurst.edu":{"sat":1120,"ad":69.6,"act":23},"slu.edu":{"sat":1317,"ad":75.0,"act":30},"uhsp.edu":{"sat":1131,"ad":89.8,"act":24},"sbuniv.edu":{"sat":1088,"ad":68.4,"act":22},"stephens.edu":{"ad":77.2,"act":21},"semo.edu":{"sat":950,"ad":73.5},"missouristate.edu":{"sat":1122,"ad":90.5,"act":23},"washu.edu":{"sat":1530,"ad":12.1,"act":34},"webster.edu":{"sat":1102,"ad":86.2,"act":24},"wcmo.edu":{"sat":1118,"ad":79.2,"act":21},"jewell.edu":{"sat":1095,"ad":38.4,"act":24},"williamwoods.edu":{"ad":71.0},"carroll.edu":{"sat":1200,"ad":70.9,"act":25},"uprovidence.edu":{"sat":980,"ad":50.3,"act":20},"mtech.edu":{"sat":1126,"ad":91.0,"act":24},"montana.edu":{"sat":1183,"ad":82.1,"act":24},"umt.edu":{"sat":1190,"ad":95.9,"act":22},"rocky.edu":{"sat":1083,"ad":69.6,"act":22},"umwestern.edu":{"ad":99.8},"clarksoncollege.edu":{"ad":78.2},"bryanhealthcollege.edu":{"ad":67.4},"cune.edu":{"ad":85.7,"act":23},"creighton.edu":{"sat":1321,"ad":79.8,"act":28},"doane.edu":{"ad":98.0},"hastings.edu":{"sat":1320,"ad":71.7},"unk.edu":{"sat":1118,"ad":89.5,"act":22},"methodistcollege.edu":{"ad":73.4},"midlandu.edu":{"sat":1086,"ad":66.1,"act":21},"unomaha.edu":{"sat":1120,"ad":87.0,"act":22},"nebrwesleyan.edu":{"sat":1189,"ad":79.8,"act":26},"unl.edu":{"sat":1191,"ad":87.5,"act":25},"csm.edu":{"sat":1150,"ad":44.6},"uau.edu":{"ad":100,"act":21},"york.edu":{"sat":1022,"ad":51.9,"act":19},"unlv.edu":{"sat":1094,"ad":96.2},"unr.edu":{"sat":1132,"ad":73.7,"act":23},"colby-sawyer.edu":{"ad":80.1},"dartmouth.edu":{"sat":1534,"ad":5.4,"act":34},"franklinpierce.edu":{"sat":1175,"ad":93.5},"nec.edu":{"ad":92.1},"snhu.edu":{"ad":99.5},"unh.edu":{"sat":1218,"ad":88.2,"act":28},"keene.edu":{"ad":90.3,"act":25},"manchester.unh.edu":{"sat":1100,"ad":80.9},"plymouth.edu":{"ad":87.5},"rivier.edu":{"sat":1070,"ad":82.6},"anselm.edu":{"sat":1201,"ad":78.0,"act":27},"bloomfield.edu":{"ad":69.7},"caldwell.edu":{"sat":1260,"ad":71.3},"centenaryuniversity.edu":{"ad":83.1,"act":19},"drew.edu":{"sat":1227,"ad":67.8},"fdu.edu":{"ad":95.2},"felician.edu":{"act":20},"georgian.edu":{"ad":78.8,"act":25},"rowan.edu":{"sat":1212,"ad":77.7,"act":27},"njcu.edu":{"ad":98.4},"kean.edu":{"sat":1040,"ad":75.9,"act":20},"monmouth.edu":{"sat":1223,"ad":89.0,"act":24},"montclair.edu":{"sat":1070,"ad":87.9},"njit.edu":{"sat":1337,"ad":65.1,"act":30},"princeton.edu":{"sat":1553,"ad":4.6,"act":34},"rca.edu":{"ad":95.2},"ramapo.edu":{"sat":1211,"ad":70.6,"act":26},"rider.edu":{"sat":1227,"ad":78.6,"act":30},"camden.rutgers.edu":{"sat":1178,"ad":66.3,"act":21},"newbrunswick.rutgers.edu":{"sat":1410,"ad":58.1,"act":30},"newark.rutgers.edu":{"ad":71.4,"act":25},"saintpeters.edu":{"ad":90.3,"act":23},"shu.edu":{"sat":1322,"ad":73.3,"act":29},"steu.edu":{"ad":71.0},"stevens.edu":{"sat":1446,"ad":47.6,"act":33},"stockton.edu":{"sat":1139,"ad":88.9,"act":25},"tcnj.edu":{"sat":1246,"ad":62.3,"act":29},"wpunj.edu":{"ad":90.1},"enmu.edu":{"sat":964,"ad":91.7,"act":19},"iaia.edu":{"ad":97.5},"nmt.edu":{"sat":1207,"ad":44.5,"act":26},"unm.edu":{"sat":1038,"ad":95.2,"act":23},"nmsu.edu":{"sat":1011,"ad":89.0,"act":20},"adelphi.edu":{"sat":1219,"ad":65.9,"act":26},"acphs.edu":{"sat":1252,"ad":52.7,"act":30},"alfred.edu":{"sat":1279,"ad":73.8,"act":25},"bard.edu":{"sat":1380,"ad":52.1},"barnard.edu":{"sat":1520,"ad":8.8,"act":33},"canisius.edu":{"ad":72.4,"act":28},"cyttl.edu":{"ad":87.4},"clarkson.edu":{"sat":1304,"ad":77.4,"act":29},"colgate.edu":{"sat":1508,"ad":13.9,"act":33},"mcny.edu":{"ad":90.0},"columbia.edu":{"sat":1553,"ad":4.0,"act":35},"cooper.edu":{"sat":1410,"ad":20.7},"cornell.edu":{"sat":1535,"ad":8.8,"act":34},"baruch.cuny.edu":{"sat":1280,"ad":47.5},"brooklyn.edu":{"sat":1140,"ad":58.4},"csi.cuny.edu":{"sat":1040,"ad":92.3},"ccny.cuny.edu":{"sat":1260,"ad":60.0},"gc.cuny.edu":{"ad":68.5},"hunter.cuny.edu":{"sat":1280,"ad":53.8},"jjay.cuny.edu":{"sat":1080,"ad":57.1},"lehman.edu":{"sat":970,"ad":56.6},"mec.cuny.edu":{"sat":920,"ad":86.1},"citytech.cuny.edu":{"sat":1010,"ad":80.3},"qc.cuny.edu":{"sat":1120,"ad":64.3},"york.cuny.edu":{"sat":880,"ad":64.1},"dyu.edu":{"sat":1130,"ad":81.4,"act":24},"daemen.edu":{"ad":68.3},"yofr.org":{"ad":92.0},"duny.edu":{"ad":63.3},"elmira.edu":{"sat":1314,"ad":77.0},"ftc.edu":{"ad":53.8},"fordham.edu":{"sat":1418,"ad":59.3,"act":32},"hamilton.edu":{"sat":1506,"ad":13.6,"act":34},"hartwick.edu":{"sat":1200,"ad":69.6,"act":25},"hilbert.edu":{"ad":97.2},"hws.edu":{"sat":1319,"ad":64.0,"act":29},"hofstra.edu":{"sat":1319,"ad":68.1,"act":29},"houghton.edu":{"sat":1284,"ad":88.7,"act":26},"iona.edu":{"sat":1217,"ad":86.9,"act":26},"ithaca.edu":{"sat":1312,"ad":69.0},"jtsa.edu":{"sat":1500,"ad":48.6,"act":33},"juilliard.edu":{"ad":9.2},"keuka.edu":{"ad":68.1,"act":26},"limcollege.edu":{"sat":1035,"ad":95.9},"lemoyne.edu":{"sat":1255,"ad":83.0,"act":27},"liu.edu":{"sat":1224,"ad":86.2,"act":28},"mhrc.edu":{"ad":100},"manhattan.edu":{"sat":1270,"ad":78.9},"msmnyc.edu":{"ad":40.8},"mville.edu":{"ad":87.3,"act":27},"marist.edu":{"sat":1295,"ad":56.5,"act":28},"mmm.edu":{"sat":1214,"ad":82.6,"act":25},"mercy.edu":{"ad":85.8,"act":25},"independentrabbinicalcolleges.org":{"ad":80.0},"mtj.edu":{"ad":60.0},"molloy.edu":{"sat":1187,"ad":81.7,"act":29},"msmc.edu":{"sat":1150,"ad":88.9,"act":22},"mountsaintvincent.edu":{"sat":1090,"ad":85.1,"act":20},"www2.naz.edu":{"sat":1216,"ad":74.7},"newschool.edu":{"ad":63.5},"nyu.edu":{"sat":1520,"ad":9.2,"act":34},"niagara.edu":{"sat":1168,"ad":87.4,"act":25},"nyit.edu":{"sat":1311,"ad":81.0,"act":28},"pace.edu":{"sat":1266,"ad":75.9,"act":26},"paulsmiths.edu":{"ad":76.5},"davisny.edu":{"ad":56.2},"pratt.edu":{"sat":1290,"ad":73.2,"act":30},"rabbinicalacademyrabbichaimberlin.com":{"ad":93.6},"mkorchaim.org":{"ad":90.6},"rabbinical.org":{"ad":98.5},"rpi.edu":{"sat":1456,"ad":63.5,"act":33},"roberts.edu":{"sat":1170,"ad":70.6,"act":26},"rit.edu":{"sat":1383,"ad":66.9,"act":31},"rochester.edu":{"sat":1488,"ad":40.1,"act":33},"sage.edu":{"ad":53.3},"sbu.edu":{"sat":1197,"ad":81.7,"act":24},"sfc.edu":{"act":24},"stlawu.edu":{"sat":1371,"ad":54.3,"act":31},"stac.edu":{"sat":1000,"ad":93.0,"act":29},"sarahlawrence.edu":{"sat":1366,"ad":61.7,"act":31},"siena.edu":{"sat":1254,"ad":69.0},"skidmore.edu":{"sat":1405,"ad":21.1,"act":31},"sjny.edu":{"sat":1190,"ad":72.0,"act":26},"sjf.edu":{"sat":1214,"ad":66.4,"act":26},"stjohns.edu":{"sat":1244,"ad":83.4,"act":26},"canton.edu":{"ad":92.2,"act":20},"cobleskill.edu":{"ad":84.0,"act":19},"farmingdale.edu":{"sat":1147,"ad":63.3,"act":24},"albany.edu":{"ad":69.1,"act":26},"binghamton.edu":{"sat":1415,"ad":38.6,"act":32},"buffalo.edu":{"sat":1295,"ad":74.2,"act":28},"stonybrook.edu":{"sat":1419,"ad":49.0,"act":31},"esf.edu":{"ad":63.3},"sunypoly.edu":{"sat":1201,"ad":81.3,"act":27},"brockport.edu":{"sat":1193,"ad":70.7,"act":26},"suny.buffalostate.edu":{"sat":1070,"ad":73.0},"www2.cortland.edu":{"ad":59.8,"act":25},"fredonia.edu":{"sat":1250,"ad":77.7,"act":27},"geneseo.edu":{"sat":1286,"ad":66.5,"act":28},"newpaltz.edu":{"sat":1265,"ad":61.6,"act":27},"suny.oneonta.edu":{"sat":1230,"ad":69.6},"oswego.edu":{"sat":1187,"ad":80.5,"act":27},"potsdam.edu":{"ad":77.7},"purchase.edu":{"sat":1312,"ad":74.1,"act":29},"oldwestbury.edu":{"ad":83.6},"plattsburgh.edu":{"sat":1165,"ad":78.4,"act":26},"sunymaritime.edu":{"sat":1214,"ad":72.4,"act":26},"syracuse.edu":{"sat":1375,"ad":45.9,"act":30},"tsot.edu":{"ad":77.2},"tiuny.org":{"ad":100},"touro.edu":{"sat":1348,"ad":60.8},"union.edu":{"sat":1395,"ad":43.9,"act":30},"usmma.edu":{"sat":1207,"ad":34.2,"act":27},"westpoint.edu":{"sat":1355,"ad":12.4,"act":31}};
+</script>
+<script>// AdmitMap — модель шансов на поступление. Единственный источник истины:
+// платформа и отчёт считают одним и тем же кодом, чтобы числа не расходились.
+//
+// Принцип: работаем в ШАНСАХ (odds), а не в процентах. Каждый фактор умножает,
+// поэтому один и тот же сигнал сам собой весит по-разному при базе 3% и 88%.
+// Спецификация и контрольные профили — ODDS-MODEL.md
+
+(function (root) {
+  'use strict';
+
+  var P = {
+    gpaUnit: 0.30,      // 0.30 балла GPA = одна единица
+    satUnit: 100,       // 100 баллов SAT = одна единица
+    wGpa: 0.62, wSat: 0.38,
+    acadK: 0.55,        // крутизна академического коэффициента
+    profAsymp: 7.0,     // потолок профиля (асимптота затухания)
+    profK: 1.45,
+    dip: 2.4,           // провал потолка в средней полосе селективности
+    dipCenter: 11.0, dipWidth: 0.55,
+    actCeil: 1.85, actScale: 2600, breadthW: 0.35,
+    structCap: 2.6,
+    dampShift: 1.2, dampK: 1.8
+  };
+
+  // Зажимаем в [0.3, 99.5]: при rate = 100 деление на ноль давало NaN
+  // (в базе есть вузы со 100% приёма), при rate = 0 — нулевые шансы навсегда.
+  var toOdds = function (p) { var q = Math.min(99.5, Math.max(0.3, p)); return q / (100 - q); };
+  var toProb = function (o) { return 100 * o / (1 + o); };
+
+  var ACT_TO_SAT = {36:1590,35:1570,34:1540,33:1520,32:1500,31:1480,30:1460,29:1430,
+    28:1410,27:1380,26:1360,25:1330,24:1300,23:1270,22:1240,21:1210,20:1180,19:1150,
+    18:1110,17:1070};
+
+  function actToSat(act) { return ACT_TO_SAT[Math.round(act)] || null; }
+
+  // Глубина активностей: главный вклад даёт самая серьёзная, остальные — меньший.
+  function activityFactor(acts) {
+    if (!acts || !acts.length) return 1;
+    var d = acts.map(function (a) {
+      return (+a.hours || 0) * (+a.weeks || 0) * (+a.years || 0);
+    }).sort(function (a, b) { return b - a; });
+    var rest = d.slice(1).reduce(function (s, x) { return s + x; }, 0);
+    return Math.min(P.actCeil, 1 + d[0] / P.actScale + P.breadthW * rest / P.actScale);
+  }
+
+  /**
+   * @param school {rate, gpa, sat, isPublic, state}   — null в любом обязательном поле = не считаем
+   * @param st     профиль студента
+   * @returns {number|null} процент, либо null если данных не хватает
+   */
+  function odds(school, st) {
+    if (!school || !st) return null;
+    var rate = school.rate, sGpa = school.gpa, sSat = school.sat;
+    if (rate == null || sSat == null) return null;
+    if (sGpa == null) sGpa = gpaFromSat(sSat);          // оценка, если нет измеренного
+    var gpa = st.gpa;
+    if (gpa == null || !(gpa > 0)) return null;          // без GPA студента честного ответа нет
+
+    var sat = st.sat != null ? st.sat : (st.act != null ? actToSat(st.act) : null);
+    if (st.submitScores === false) sat = null;           // test-optional: не штрафуем
+
+    // ── Академика ──
+    var gpaZ = (gpa - sGpa) / P.gpaUnit;
+    var satZ = sat != null ? (sat - sSat) / P.satUnit : 0;
+    var wg = sat != null ? P.wGpa : 1, ws = sat != null ? P.wSat : 0;
+    var acad = wg * gpaZ + ws * satZ;
+    var acadLR = Math.exp(P.acadK * acad);
+
+    // ── Профиль ──
+    var prof = 1;
+    if (st.apScores && st.apScores.length) {
+      var f5 = 0, f4 = 0;
+      st.apScores.forEach(function (x) { if (x >= 5) f5++; else if (x === 4) f4++; });
+      prof *= Math.min(1.35, 1 + 0.055 * f5 + 0.03 * f4);
+    }
+    prof *= ({state: 1.10, national: 1.45, international: 1.80})[st.honorLevel] || 1;
+    prof *= activityFactor(st.activities);
+    if (st.essayScore != null) prof *= 0.85 + 0.045 * st.essayScore;
+    if (st.rankPct != null) {
+      prof *= st.rankPct <= 1 ? 1.25 : st.rankPct <= 5 ? 1.15 : st.rankPct <= 10 ? 1.08 : 1;
+    }
+    // Потолок проседает в средней полосе селективности — калибровочная поправка,
+    // подлежит проверке на реальных исходах (см. ODDS-MODEL.md).
+    var lg = Math.log(rate) - Math.log(P.dipCenter);
+    var asymp = P.profAsymp - P.dip * Math.exp(-(lg * lg) / (2 * P.dipWidth * P.dipWidth));
+    prof = 1 + asymp * (1 - Math.exp(-(prof - 1) / P.profK));
+
+    // ── Структура подачи ──
+    var struct = 1;
+    if (school.isPublic && st.inState != null) struct *= st.inState ? 1.50 : 0.70;
+    struct *= ({ED: 2.10, EA: 1.25, RD: 1.00})[st.round] || 1;
+    struct = Math.min(P.structCap, struct);
+
+    // ── Демпфер: внеучебка не вытаскивает провальную академику ──
+    var damp = 1 / (1 + Math.exp(-(acad + P.dampShift) * P.dampK));
+    var profEff = 1 + (prof - 1) * damp;
+
+    return Math.round(Math.min(96, Math.max(1, toProb(toOdds(rate) * acadLR * profEff * struct))));
+  }
+
+  function gpaFromSat(s) {
+    return Math.max(3.30, Math.min(3.97, Math.round((3.3 + (s - 1100) / 500 * 0.65) * 100) / 100));
+  }
+
+  root.AdmitOdds = {odds: odds, gpaFromSat: gpaFromSat, actToSat: actToSat, params: P};
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:lining-nums tabular-nums}
+body{font-family:'Plus Jakarta Sans',-apple-system,system-ui,sans-serif;background:#f4f7fc;color:#0f1f4b;padding:28px}
+h1{font-family:Georgia,serif;font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.sub{color:#64748b;font-size:14px;margin-bottom:22px}
+.wrap{display:grid;grid-template-columns:330px 1fr;gap:24px;max-width:1280px;margin:0 auto;align-items:start}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px}
+.fg{margin-bottom:13px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#0f1f4b}
+input,select{width:100%;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:9px;font:inherit;font-size:14px;font-weight:600;color:#0f1f4b;outline:none}
+input:focus,select:focus{border-color:#2563eb;box-shadow:0 0 0 3px #eef4ff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#2563eb;margin:18px 0 9px}
+h3:first-child{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;padding:7px 9px;border-bottom:1.5px solid #e2e8f0}
+td{padding:8px 9px;border-bottom:1px solid #f1f5f9}
+tr:hover td{background:#f8fafc}
+.pct{font-weight:800;font-size:15px;text-align:right}
+.reach{color:#c2566f}.match{color:#2563eb}.safe{color:#16803c}
+.tag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:5px}
+.t-reach{background:#fdeef2;color:#c2566f}.t-match{background:#eef4ff;color:#2563eb}.t-safe{background:#e9f7ef;color:#16803c}
+.muted{color:#94a3b8}
+.stats{display:flex;gap:18px;margin-bottom:14px;font-size:13px;color:#64748b}
+.stats b{color:#0f1f4b;font-size:17px;font-family:Georgia,serif}
+.filter{display:flex;gap:8px;margin-bottom:12px}
+.filter input{flex:1}
+</style>
+
+<h1>Проверка модели шансов</h1>
+<p class="sub">Меняйте профиль слева — таблица пересчитывается сразу. Данные: 867 вузов, IPEDS.</p>
+
+<div class="wrap">
+  <div class="card">
+    <h3>Академика</h3>
+    <div class="fg"><label>GPA (невзвешенный, 4.0)</label><input id="gpa" value="3.82"></div>
+    <div class="row">
+      <div class="fg"><label>SAT</label><input id="sat" value="1420"></div>
+      <div class="fg"><label>или ACT</label><input id="act" placeholder="—"></div>
+    </div>
+    <div class="fg"><label>Подаёт баллы?</label><select id="submit"><option value="yes">Да</option><option value="no">Test-optional</option></select></div>
+    <div class="fg"><label>Место в классе</label><select id="rank">
+      <option value="">Не указано</option><option value="1">Топ-1%</option>
+      <option value="5" selected>Топ-5%</option><option value="10">Топ-10%</option><option value="25">Топ-25%</option></select></div>
+
+    <h3>Профиль</h3>
+    <div class="fg"><label>Баллы AP через запятую</label><input id="aps" value="5,4,4,3"></div>
+    <div class="fg"><label>Высшая награда</label><select id="honor">
+      <option value="">Нет</option><option value="state" selected>Уровень штата</option>
+      <option value="national">Национальная</option><option value="international">Международная</option></select></div>
+    <div class="fg"><label>Оценка эссе (0–10)</label><input id="essay" value="7"></div>
+
+    <h3>Главная активность</h3>
+    <div class="row3">
+      <div class="fg"><label>ч/нед</label><input id="h1" value="8"></div>
+      <div class="fg"><label>нед/год</label><input id="w1" value="30"></div>
+      <div class="fg"><label>лет</label><input id="y1" value="3"></div>
+    </div>
+    <div class="fg"><label>Ещё активностей (средних)</label><input id="more" value="2"></div>
+
+    <h3>Подача</h3>
+    <div class="fg"><label>Раунд</label><select id="round">
+      <option value="RD" selected>Regular Decision</option>
+      <option value="EA">Early Action</option><option value="ED">Early Decision</option></select></div>
+  </div>
+
+  <div class="card">
+    <div class="stats" id="stats"></div>
+    <div class="filter"><input id="q" placeholder="Фильтр по названию, например harvard или .edu"></div>
+    <table><thead><tr><th>Вуз</th><th>Приём</th><th>SAT</th><th style="text-align:right">Шансы</th><th>Категория</th></tr></thead>
+    <tbody id="rows"></tbody></table>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : null; };
+
+function profile(){
+  const more = Math.max(0, parseInt($('more').value) || 0);
+  const acts = [{hours:num($('h1').value)||0, weeks:num($('w1').value)||0, years:num($('y1').value)||0}];
+  for (let i=0;i<more;i++) acts.push({hours:3, weeks:24, years:2});
+  return {
+    gpa: num($('gpa').value),
+    sat: num($('sat').value), act: num($('act').value),
+    submitScores: $('submit').value === 'yes',
+    apScores: $('aps').value.split(',').map(x=>parseInt(x.trim())).filter(x=>x>=1&&x<=5),
+    honorLevel: $('honor').value || null,
+    rankPct: $('rank').value ? +$('rank').value : null,
+    essayScore: num($('essay').value),
+    activities: acts,
+    round: $('round').value
+  };
+}
+
+function render(){
+  const st = profile(), q = $('q').value.trim().toLowerCase();
+  const out = [];
+  for (const [d, s] of Object.entries(SCHOOL_STATS)) {
+    if (s.ad == null || s.sat == null) continue;
+    if (q && d.toLowerCase().indexOf(q) < 0) continue;
+    out.push({d, rate:s.ad, sat:s.sat, pct: AdmitOdds.odds({rate:s.ad, gpa:null, sat:s.sat}, st)});
+  }
+  out.sort((a,b) => (a.pct==null) - (b.pct==null) || a.pct - b.pct);
+  const ok = out.filter(r => r.pct != null);
+  const tier = p => p < 20 ? ['reach','Reach'] : p < 60 ? ['match','Target'] : ['safe','Likely'];
+  $('stats').innerHTML = ok.length
+    ? `<span><b>${ok.length}</b> вузов</span>
+       <span>Reach <b>${ok.filter(r=>r.pct<20).length}</b></span>
+       <span>Target <b>${ok.filter(r=>r.pct>=20&&r.pct<60).length}</b></span>
+       <span>Likely <b>${ok.filter(r=>r.pct>=60).length}</b></span>`
+    : '<span class="muted">Нет данных — модель не показывает число</span>';
+  $('rows').innerHTML = out.slice(0, 400).map(r => {
+    if (r.pct == null) return `<tr><td>${r.d}</td><td colspan="4" class="muted">нет проверенных данных</td></tr>`;
+    const [c, lbl] = tier(r.pct);
+    return `<tr><td>${r.d}</td><td>${r.rate}%</td><td>${r.sat}</td>
+      <td class="pct ${c}">${r.pct}%</td><td><span class="tag t-${c}">${lbl}</span></td></tr>`;
+  }).join('');
+}
+document.querySelectorAll('input,select').forEach(e => e.addEventListener('input', render));
+render();
+</script>
+
+</body></html>

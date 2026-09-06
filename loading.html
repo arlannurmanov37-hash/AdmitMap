@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AdmitMap — Your results</title>
+<title>Building your report · AdmitMap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -290,7 +290,7 @@ h1 em{font-style:normal;color:var(--royal)}
 .sk-b.tall{height:1.375rem;background:#d3e0fa}
 .sk-chart{display:flex;align-items:flex-end;gap:.625rem;height:8rem;border:1px solid #e8eefb;
   border-radius:.75rem;padding:.875rem;margin-bottom:.875rem}
-.sk-chart i{flex:1;border-radius:.3125rem .3125rem 0 0;background:#e3ebf9}
+.sk-chart i{flex:1;border-radius:.3125rem .3125rem 0 0;background:#e3ebf9;height:var(--h)}
 .sk-chart i.mid{background:#b9d0f8}
 .sk-chart i.on{background:var(--royal)}
 .sk-line{display:flex;align-items:center;gap:.875rem;border:1px solid #e8eefb;border-radius:.75rem;
@@ -299,6 +299,47 @@ h1 em{font-style:normal;color:var(--royal)}
 .sk-b.grow{flex:1}
 .w8{width:2.75rem}.w14{width:5rem}.w32{width:11rem}.w38{width:38%}.w40{width:40%}
 .w46{width:46%}.w52{width:52%}.w54{width:54%}.w58{width:58%}.w66{width:66%}.w70{width:70%}
+
+/* Скелет отчёта живой: по нему идёт блик, столбцы поднимаются, строки
+   проявляются по очереди — видно, что отчёт прямо сейчас собирается. */
+.sk{position:relative;overflow:hidden}
+.sk::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.85) 50%,transparent 62%);
+  transform:translateX(-100%);animation:skSweep 2.4s ease-in-out infinite}
+@keyframes skSweep{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+
+.sk-b{animation:skBreathe 2.4s ease-in-out infinite}
+.sk-t:nth-child(2) .sk-b{animation-delay:.12s}
+.sk-t:nth-child(3) .sk-b{animation-delay:.24s}
+.sk-t:nth-child(4) .sk-b{animation-delay:.36s}
+@keyframes skBreathe{0%,100%{opacity:1}50%{opacity:.55}}
+
+.sk-chart i{animation:skGrow 3.2s cubic-bezier(.4,0,.2,1) infinite;transform-origin:bottom}
+.sk-chart i:nth-child(1){animation-delay:0s}    .sk-chart i:nth-child(2){animation-delay:.1s}
+.sk-chart i:nth-child(3){animation-delay:.2s}   .sk-chart i:nth-child(4){animation-delay:.3s}
+.sk-chart i:nth-child(5){animation-delay:.4s}   .sk-chart i:nth-child(6){animation-delay:.5s}
+.sk-chart i:nth-child(7){animation-delay:.6s}   .sk-chart i:nth-child(8){animation-delay:.7s}
+@keyframes skGrow{
+  0%{transform:scaleY(.34)}
+  32%{transform:scaleY(1)}
+  58%{transform:scaleY(.82)}
+  80%{transform:scaleY(.94)}
+  100%{transform:scaleY(.34)}}
+
+.sk-line{animation:skLine 3.2s ease-in-out infinite}
+.sk-line:nth-of-type(2){animation-delay:.35s}
+.sk-line:nth-of-type(3){animation-delay:.7s}
+@keyframes skLine{0%,10%{opacity:.25}35%,70%{opacity:1}100%{opacity:.25}}
+
+.sk-dot{animation:skDot 3.2s ease-in-out infinite}
+.sk-line:nth-of-type(2) .sk-dot{animation-delay:.35s}
+.sk-line:nth-of-type(3) .sk-dot{animation-delay:.7s}
+@keyframes skDot{0%,15%{background:#e3ebf9}40%,75%{background:var(--royal)}100%{background:#e3ebf9}}
+
+@media(prefers-reduced-motion:reduce){
+  .sk::after,.sk-b,.sk-chart i,.sk-line,.sk-dot{animation:none!important}
+  .sk-line{opacity:1}
+}
 
 @media(max-width:900px){
   .ldc{padding:1.5rem 1.25rem 0;border-radius:1.25rem}
@@ -314,149 +355,152 @@ h1 em{font-style:normal;color:var(--royal)}
 
 <body>
 
+<!-- ══════ 00 · LOADING ══════ -->
+<section class="screen on" id="s-load">
+  <div class="ldc">
 
-<!-- ══════ 01 · PROOF ══════ -->
-<section class="screen on" id="s-proof">
-  <div class="glow amber"></div>
-  <div class="in">
-    <span class="brand u">
-      <img src="admitmap-mark.svg" alt="" class="brand-mark">
-      <span class="brand-t">Admit<span>Map</span></span>
-    </span>
-
-    <div class="rate u d1">
-      <span class="stars" id="stars"></span>
-      <span class="rate-n"><b>4.9</b><i>/5</i></span>
-      <span class="rate-d"></span>
-      <span class="rate-t">from 3,200 student reviews</span>
+    <div class="ldc-top">
+      <span class="ldc-spacer" aria-hidden="true"></span>
+      <span class="brand">
+        <img src="admitmap-mark.svg" alt="" class="brand-mark">
+        <span class="brand-t">Admit<span>Map</span></span>
+      </span>
+      <span class="ldc-status"><i></i><span id="ld-status">Getting started</span></span>
     </div>
 
-    <h1 class="u d2">Trusted by <em>10,000+</em> applicants building a smarter school list.</h1>
-
-    <div class="logos f d3" id="logos-proof"></div>
-
-    <div class="prow f d4">
-      <div class="pstat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 9.5 10l3.5 3.5L20 6.5"/><path d="M20 11V6.5h-4.5"/></svg>
-        <b>$9,400</b><i>saved per student, a year</i>
+    <div class="ldc-head">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#e4ecf8" stroke-width="14"/>
+          <circle id="ring" cx="100" cy="100" r="88" fill="none" stroke="#2563eb" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="552.9" stroke-dashoffset="552.9"/>
+        </svg>
+        <span class="ring-c"><span class="ring-p" id="ring-p"><b id="ring-n">0</b><i>%</i></span><span class="ring-l" id="ring-l">Analyzing</span></span>
       </div>
-      <div class="pstat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
-        <b>$41M</b><i>in aid uncovered</i>
-      </div>
-      <div class="quote">
-        <span class="q-lg">
-          <img src="https://img.logo.dev/nyu.edu?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=128&format=png" alt="" onerror="this.style.visibility='hidden'">
-          <span class="q-b"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
-        </span>
-        <span class="q-t">
-          <q>The aid modelling found the schools where I'd get a real package — two came out cheaper than my state school.</q>
-          <span class="q-m"><b>Dani R.</b><span class="tag">Admitted · NYU</span><i>$14,200/yr after aid</i></span>
-        </span>
+      <div class="ldc-ht">
+        <h1>Building your report.</h1>
+        <p class="ldc-now"><span class="ldc-nowi" id="ld-nowi"><span class="ld-spin"></span></span><span id="ld-now">Reading your academic profile</span></p>
       </div>
     </div>
 
-    <button class="cta f d5" onclick="go('s-found')">See my report
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="ldc-rule"></div>
+
+    <div class="ldc-steps" id="ld-steps"></div>
+
+    <!-- Скелет отчёта: показывает форму того, что сейчас собирается -->
+    <div class="sk" aria-hidden="true">
+      <div class="sk-row"><span class="sk-b w32"></span><span class="sk-b w14"></span></div>
+      <div class="sk-tiles">
+        <div class="sk-t"><span class="sk-b w40"></span><span class="sk-b w66 tall"></span></div>
+        <div class="sk-t"><span class="sk-b w52"></span><span class="sk-b w58 tall"></span></div>
+        <div class="sk-t"><span class="sk-b w46"></span><span class="sk-b w70 tall"></span></div>
+        <div class="sk-t"><span class="sk-b w38"></span><span class="sk-b w54 tall"></span></div>
+      </div>
+      <div class="sk-chart">
+        <i style="--h:34%"></i><i style="--h:70%" class="mid"></i><i style="--h:40%"></i>
+        <i style="--h:62%" class="on"></i><i style="--h:22%"></i><i style="--h:30%" class="mid"></i>
+        <i style="--h:28%"></i><i style="--h:56%"></i>
+      </div>
+      <div class="sk-line"><span class="sk-dot"></span><span class="sk-b grow"></span><span class="sk-b w8"></span></div>
+      <div class="sk-line"><span class="sk-dot"></span><span class="sk-b grow"></span><span class="sk-b w8"></span></div>
+      <div class="sk-line"><span class="sk-dot"></span><span class="sk-b grow"></span><span class="sk-b w8"></span></div>
+    </div>
+
   </div>
 </section>
 
-<!-- ══════ 02 · WHAT WE FOUND ══════ -->
-<section class="screen" id="s-found">
-  <div class="glow blue"></div>
-  <div class="in">
-    <span class="brand u">
-      <img src="admitmap-mark.svg" alt="" class="brand-mark">
-      <span class="brand-t">Admit<span>Map</span></span>
-    </span>
-
-    <span class="pill f">
-      <i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>
-      <span>Analysis complete</span>
-    </span>
-
-    <h1 class="u d1">Here's what we found in <em>your profile.</em></h1>
-    <p class="sub f d2">Every school on your list, scored against this year's admitted class and modelled
-      against your family's finances.</p>
-
-    <div class="strip u d3">
-      <span class="logos" id="logos-found"></span>
-      <span class="strip-d"></span>
-      <span class="strip-t"><b id="n-scored">All 10 schools scored</b><i></i><span>Dream, Match and Safety</span></span>
-    </div>
-
-    <div class="stats">
-      <div class="stat u d3">
-        <span class="stat-i" style="background:var(--royal-l);color:var(--royal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/></svg></span>
-        <span class="stat-n">7<small>/10</small></span>
-        <span><span class="stat-t">beat the admitted average</span><br><span class="stat-s">GPA, rigor and activities</span></span>
-      </div>
-      <div class="stat u d4">
-        <span class="stat-i" style="background:#e0e7ff;color:#4f46e5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
-        <span class="stat-n">3<small>/10</small></span>
-        <span><span class="stat-t">cost under $18,000 a year</span><br><span class="stat-s">after grants, not sticker price</span></span>
-      </div>
-      <div class="stat u d5">
-        <span class="stat-i" style="background:var(--purple-l);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
-        <span class="stat-n">4<small>/10</small></span>
-        <span><span class="stat-t">reward applying early</span><br><span class="stat-s">ED and EA close in <b id="d-early">85</b> days</span></span>
-      </div>
-      <div class="stat u d6">
-        <span class="stat-i" style="background:var(--green-l);color:var(--green-d)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>
-        <span class="stat-n">$91.4k</span>
-        <span><span class="stat-t">in grants and aid modelled</span><br><span class="stat-s">across your four years</span></span>
-      </div>
-    </div>
-
-    <div class="locked f d7">
-      <span class="locked-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg></span>
-      <span class="locked-t"><b>Still locked</b><span>Per-school odds, tiering and net costs are ready in your report.</span></span>
-      <span class="locked-d"></span>
-      <span class="locked-n" id="n-waiting">10 schools waiting</span>
-    </div>
-
-    <button class="cta f d7" onclick="location.href='paywall.html'">Continue
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
-  </div>
-</section>
 
 <script>
-const TOKEN='pk_X-1ZO13GSgeOoUrIuJ6GMQ';
-const FALLBACK=['harvard.edu','stanford.edu','columbia.edu','ucla.edu','psu.edu',
-                'nyu.edu','umich.edu','bu.edu','northeastern.edu','dartmouth.edu'];
-const logo = d => 'https://img.logo.dev/'+encodeURIComponent(d)+'?token='+TOKEN+'&size=128&format=png';
+/* [строка под заголовком, пункт чеклиста пока идёт, пункт чеклиста когда сделан]
+   Под заголовком и в чеклисте формулировки разные — иначе один и тот же
+   текст дублируется на экране дважды. */
+const LD = [
+  ['Reading your academic profile',
+   'Reading your academic profile',            'Academic profile read'],
+  ['Rating everything outside the classroom',
+   'Scoring your activities and honors',       'Activities and honors scored'],
+  ['Testing your profile against real admit data',
+   'Comparing against admitted students',      'Compared against admitted students'],
+  ['Working through your essay line by line',
+   'Grading your essay on six criteria',       'Essay graded on six criteria'],
+  ['Estimating your aid, school by school',
+   'Modelling financial aid',                  'Financial aid modelled'],
+  ['Working out your odds at every school on your list',
+   'Calculating your acceptance odds',         'Acceptance odds calculated']
+];
+const CIRC = 2 * Math.PI * 88;
+const TICK_SVG = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
+const PULSE = '<span class="ld-pulse"></span>';
+const stepHTML = (pair,i) =>
+  `<div class="ldc-s" id="ld-${i}"><span class="ldc-i" id="ldd-${i}">${PULSE}</span>
+     <span id="ldt-${i}">${pair[1]}</span></div>`;
+document.getElementById('ld-steps').innerHTML =
+  '<div class="ldc-col">' + LD.filter((_,i)=>i%2===0).map((p,k)=>stepHTML(p,k*2)).join('') + '</div>' +
+  '<div class="ldc-col">' + LD.filter((_,i)=>i%2===1).map((p,k)=>stepHTML(p,k*2+1)).join('') + '</div>';
 
-/* use the student's own list when the funnel left one behind */
-let picked = [];
-try{
-  const p = JSON.parse(localStorage.getItem('admitmap_profile')||'{}');
-  if(Array.isArray(p.schools) && p.schools.length) picked = p.schools.map(s=>s.d).filter(Boolean);
-}catch(e){}
-const DOMAINS = picked.length ? picked.slice(0,10) : FALLBACK;
+(function runLoad(){
+  /* timer-driven rather than requestAnimationFrame: rAF stalls when the tab is
+     backgrounded (or under a headless virtual clock) and the screen never advances */
+  const DUR = 15000, TICK = 60;   /* 15 s / 6 шагов = ровно 2,5 с на шаг */
+  const ring = document.getElementById('ring'), pct = document.getElementById('ring-p'),
+        pctN = document.getElementById('ring-n');
+  const t0 = Date.now();
+  let lastActive = -1, lastFinished = null;
+  const stepState = new Array(LD.length).fill(null);
+  const id = setInterval(function(){
+    const p = Math.min(1, (Date.now()-t0)/DUR);
+    const eased = 1 - Math.pow(1-p, 1.7);
+    const v = Math.round(eased*100);
+    pctN.textContent = v;
+    pct.classList.toggle('full', v >= 100);
+    ring.setAttribute('stroke-dashoffset', String(CIRC*(1-eased)));
+    const active = Math.min(LD.length-1, Math.floor(p*LD.length));
 
-const html = DOMAINS.map(d=>`<span><img src="${logo(d)}" onerror="this.style.visibility='hidden'" alt=""></span>`).join('');
-document.getElementById('logos-proof').innerHTML = html;
-document.getElementById('logos-found').innerHTML = html;
-document.getElementById('n-scored').textContent = 'All '+DOMAINS.length+' schools scored';
-document.getElementById('n-waiting').textContent = DOMAINS.length+' schools waiting';
+    /* Подпись под заголовком следует за активным шагом. Меняем только при
+       смене шага, иначе перезапуск анимации на каждом тике таймера. */
+    const finished = p >= 1;
 
-const STAR='<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.6 2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4L2.6 9.4l6.5-.9z"/></svg>';
-document.getElementById('stars').innerHTML = STAR.repeat(5);
+    if(active !== lastActive || finished !== lastFinished){
+      lastActive = active; lastFinished = finished;
+      const now = document.getElementById('ld-now');
+      const line = now.parentElement;
+      line.style.opacity = '0';
+      setTimeout(function(){
+        /* На 100% всё закрыто: галочка вместо спиннера, зелёный, прошедшее время */
+        now.textContent = finished ? LD[LD.length-1][2] : LD[active][0];
+        document.getElementById('ld-nowi').innerHTML =
+          finished ? TICK_SVG : '<span class="ld-spin"></span>';
+        line.classList.toggle('done', finished);
+        line.style.opacity = '1';
+      }, 170);
 
-/* live countdown to the next Nov 1 */
-(function(){
-  const now=new Date(); now.setHours(0,0,0,0);
-  let t=new Date(now.getFullYear(),10,1);
-  if(t<now) t=new Date(now.getFullYear()+1,10,1);
-  document.getElementById('d-early').textContent = Math.ceil((t-now)/86400000);
+      document.getElementById('ring-l').textContent = finished ? 'Analyzed' : 'Analyzing';
+
+      const st = document.getElementById('ld-status');
+      st.textContent = finished ? 'Done' :
+        (active < 2 ? 'Getting started' : (active < 4 ? 'Working through it' : 'Almost there'));
+    }
+
+    /* Раньше innerHTML переписывался каждые 60 мс — спиннер пересоздавался
+       16 раз в секунду и его анимация стартовала заново. Теперь трогаем
+       узел только когда состояние шага действительно изменилось. */
+    for(let i=0;i<LD.length;i++){
+      const isDone = (p>=1) || i<active, isAct = (p<1) && i===active;
+      const state = isDone ? 'done' : (isAct ? 'act' : 'idle');
+      if(stepState[i] === state) continue;
+      stepState[i] = state;
+
+      const el=document.getElementById('ld-'+i), d=document.getElementById('ldd-'+i);
+      el.classList.toggle('done', isDone);
+      el.classList.toggle('act', isAct);
+      document.getElementById('ldt-'+i).textContent = isDone ? LD[i][2] : LD[i][1];
+      d.innerHTML = isDone ? TICK_SVG
+                  : (isAct ? '<span class="ld-spin"></span>' : PULSE);
+    }
+    if(p>=1){ clearInterval(id); setTimeout(function(){ window.location.href = 'signup.html'; }, 900); }
+  }, TICK);
 })();
 
-
-/* ── loading: runs once, then reveals the proof screen ── */
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id===id));
-  window.scrollTo(0,0);
-}
 </script>
 </body>
 </html>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — AdmitMap</title>
+    <meta name="description" content="The terms that govern your use of AdmitMap.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        :root {
+            --white: #ffffff;
+            --off: #f8fafc;
+            --navy: #0f1f4b;
+            --royal: #2563eb;
+            --royal-s: #eef4ff;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --amber-l: #fef3c7;
+            --amber-d: #b45309;
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        html { scroll-behavior: smooth }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--off);
+            color: var(--navy);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── NAV ── */
+        .lgl-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 18px 56px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .lgl-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .lgl-logo span { color: var(--royal) }
+
+        .lgl-back {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .lgl-back:hover { color: var(--royal) }
+
+        /* ── LAYOUT ── */
+        .lgl-wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 56px 32px 96px;
+            display: grid;
+            grid-template-columns: 232px 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .lgl-toc {
+            position: sticky;
+            top: 96px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 20px 18px;
+        }
+
+        .lgl-toc h4 {
+            font-size: 11px;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .lgl-toc a {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 5px 0;
+            line-height: 1.35;
+            transition: color .16s var(--ease-out);
+        }
+
+        .lgl-toc a:hover { color: var(--royal) }
+
+        .lgl-doc {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 48px 52px 56px;
+        }
+
+        .lgl-doc h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -.02em;
+        }
+
+        .lgl-meta {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .lgl-lede {
+            margin-top: 22px;
+            padding: 18px 20px;
+            background: var(--royal-s);
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.65;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
+        .lgl-doc h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 23px;
+            font-weight: 600;
+            margin: 44px 0 14px;
+            padding-top: 4px;
+            scroll-margin-top: 92px;
+            letter-spacing: -.01em;
+        }
+
+        .lgl-doc h2 .n {
+            color: var(--royal);
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            margin-right: 10px;
+            vertical-align: 2px;
+        }
+
+        .lgl-doc h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 24px 0 8px;
+        }
+
+        .lgl-doc p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #334155;
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        .lgl-doc ul { margin: 0 0 16px 0; padding-left: 20px }
+
+        .lgl-doc li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .lgl-doc li::marker { color: var(--royal) }
+
+        .lgl-doc strong { color: var(--navy); font-weight: 700 }
+
+        .lgl-doc a { color: var(--royal); font-weight: 600 }
+
+        .lgl-note {
+            border-left: 3px solid var(--royal);
+            background: var(--royal-s);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-note p { margin: 0; font-size: 14px; color: #1e3a8a; font-weight: 500 }
+
+        .lgl-warn {
+            border-left: 3px solid #f59e0b;
+            background: var(--amber-l);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 18px 0 20px;
+        }
+
+        .lgl-warn p { margin: 0; font-size: 14px; color: var(--amber-d); font-weight: 600 }
+
+        /* Warranty and liability disclaimers have to be "conspicuous" to be enforceable.
+           A bordered, bolded block does that job without shouting in all-caps. */
+        .lgl-consp {
+            border: 2px solid var(--navy);
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 16px 0 18px;
+            background: #fff;
+        }
+
+        .lgl-consp p {
+            margin: 0;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.65;
+        }
+
+        .lgl-consp p + p { margin-top: 10px }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 20px;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 12px 9px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        td {
+            padding: 11px 12px 11px 0;
+            border-bottom: 1px solid var(--line);
+            color: #334155;
+            line-height: 1.55;
+            vertical-align: top;
+        }
+
+        td:first-child { font-weight: 600; color: var(--navy); white-space: nowrap }
+
+        footer {
+            padding: 28px 56px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            background: #fff;
+        }
+
+        .f-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .f-logo span { color: var(--royal) }
+
+        .f-links { display: flex; gap: 26px; flex-wrap: wrap }
+
+        .f-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .18s var(--ease-out);
+        }
+
+        .f-links a:hover { color: var(--royal) }
+
+        footer p { font-size: 12px; color: var(--muted); font-weight: 500 }
+
+        @media(max-width:900px) {
+            .lgl-nav { padding: 16px 24px }
+            .lgl-wrap { grid-template-columns: 1fr; padding: 32px 20px 64px; gap: 28px }
+            .lgl-toc { position: static }
+            .lgl-doc { padding: 32px 24px 40px; border-radius: 14px }
+            .lgl-doc h1 { font-size: 30px }
+            .lgl-doc h2 { font-size: 20px; margin-top: 36px }
+            footer { padding: 24px; justify-content: center; text-align: center }
+            .f-links { justify-content: center; gap: 18px }
+            table, td:first-child { white-space: normal }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="lgl-nav">
+        <a href="landing.html" class="lgl-logo">Admit<span>Map</span></a>
+        <a href="landing.html" class="lgl-back">← Back to AdmitMap</a>
+    </nav>
+
+    <div class="lgl-wrap">
+        <aside class="lgl-toc">
+            <h4>On this page</h4>
+            <a href="#who">1. Who we are</a>
+            <a href="#eligibility">2. Who may use AdmitMap</a>
+            <a href="#what">3. What AdmitMap is</a>
+            <a href="#estimates">4. Estimates, not promises</a>
+            <a href="#accounts">5. Your account</a>
+            <a href="#payment">6. Payment and pricing</a>
+            <a href="#refunds">7. Refunds</a>
+            <a href="#acceptable">8. Acceptable use</a>
+            <a href="#content">9. Your content</a>
+            <a href="#ai">10. AI-generated feedback</a>
+            <a href="#ip">11. Our intellectual property</a>
+            <a href="#availability">12. Availability and changes</a>
+            <a href="#termination">13. Termination</a>
+            <a href="#warranty">14. Disclaimer of warranties</a>
+            <a href="#liability">15. Limitation of liability</a>
+            <a href="#indemnity">16. Indemnity</a>
+            <a href="#law">17. Governing law</a>
+            <a href="#thirdparty">18. Links to other sites</a>
+            <a href="#timelimit">19. Time limit for claims</a>
+            <a href="#general">20. General terms</a>
+            <a href="#updates">21. Changes to these Terms</a>
+            <a href="#contact">22. Contact</a>
+        </aside>
+
+        <main class="lgl-doc">
+            <h1>Terms of Service</h1>
+            <p class="lgl-meta">Last updated: 27 August 2026 &nbsp;·&nbsp; Effective: 27 August 2026</p>
+
+            <div class="lgl-lede">
+                <strong>The short version.</strong> AdmitMap gives you a statistical estimate of your admission odds
+                and college costs, built from public data. It is information, not advice, and it is not a prediction
+                of what any college will decide. You must be at least 13 to use it, and if you are under 18 a parent or
+                guardian has to agree to these Terms and be the one who buys. Reports are delivered immediately and
+                are not refundable. If something goes wrong on our end, email us and we will fix it.
+                This summary is for convenience only — the numbered sections below are the actual agreement.
+            </div>
+
+            <h2 id="who"><span class="n">1</span>Who we are</h2>
+            <p>AdmitMap ("AdmitMap", "we", "us", "our") is operated by <strong>Arlan Nurmanov</strong>, an individual
+                sole operator based in the Republic of Kazakhstan. AdmitMap is not a company, a school, a licensed
+                educational consultancy, or an agent of any college or university.</p>
+            <p>These Terms of Service ("Terms") form a binding agreement between you and us covering the AdmitMap
+                website, the onboarding funnel, the reports we generate, and any related tools (together, the
+                "Service").</p>
+            <p>By using the Service — including by starting the funnel, creating an account, or purchasing a report —
+                you agree to these Terms. If you do not agree, do not use the Service.</p>
+
+            <h2 id="eligibility"><span class="n">2</span>Who may use AdmitMap</h2>
+            <p><strong>AdmitMap is available to people aged 13 and over.</strong> By using the Service you
+                represent that you are at least 13 years old.</p>
+            <p><strong>If you are under 18, you may use AdmitMap only with the involvement of a parent or legal
+                    guardian.</strong> That parent or guardian must read and agree to these Terms, must be the
+                person who makes any purchase, and is responsible for the student's use of the Service. By making a
+                purchase for a student under 18, the parent or guardian confirms that they have read these Terms,
+                that they accept them on the student's behalf, and that they authorised the payment. Where a student
+                under 18 uses the Service, we treat the parent or guardian as the account holder for all purposes,
+                including payment and support questions.</p>
+            <p>If you are a parent or guardian and you did not authorise your child's use of AdmitMap, contact us at
+                <a href="mailto:support@admitmap.com">support@admitmap.com</a> and we will close the account and
+                delete the data.</p>
+            <p><strong>The Service is not directed to and may not be used by children under 13 under any
+                    circumstances.</strong> If we learn that we have collected information from a child under 13, we
+                will delete it.</p>
+            <p>AdmitMap covers admissions to colleges and universities in the United States. You may use it from
+                anywhere in the world, but you are responsible for complying with the laws that apply where you live.
+                We do not offer the Service where doing so would be unlawful.</p>
+
+            <h2 id="what"><span class="n">3</span>What AdmitMap is</h2>
+            <p>You give us information about your academic profile — grades, test scores, coursework, activities,
+                honors, an approximate family income band, the schools on your list, and optionally an essay. We
+                combine that with public data, primarily the U.S. Department of Education College Scorecard and
+                institutional Common Data Sets, to produce:</p>
+            <ul>
+                <li>an estimated acceptance probability for each school on your list;</li>
+                <li>a breakdown of the factors that drive that estimate;</li>
+                <li>an estimated net price by income band for each school, where such data exists;</li>
+                <li>a comparison of your profile against the profiles of admitted students;</li>
+                <li>deadline information for each application round;</li>
+                <li>and, where you request it, automated feedback on an essay.</li>
+            </ul>
+            <p>AdmitMap does not submit applications, contact colleges on your behalf, guarantee admission, guarantee
+                financial aid, or provide counseling by a human being.</p>
+
+            <h2 id="estimates"><span class="n">4</span>Estimates, not promises</h2>
+            <div class="lgl-warn">
+                <p>This is the most important section of these Terms. Read it carefully.</p>
+            </div>
+            <p><strong>Every number AdmitMap shows you is a statistical estimate, not a prediction and not a
+                    promise.</strong> Specifically:</p>
+            <ul>
+                <li><strong>Acceptance probabilities are estimates.</strong> They are calculated from historical,
+                    publicly reported admissions data for classes that have already been admitted. They do not
+                    account for factors we cannot see and colleges do not publish — institutional priorities in a
+                    given year, the strength of that year's applicant pool, recommendation letters, interviews,
+                    demonstrated interest, legacy or donor relationships, athletic recruitment, departmental needs,
+                    or the judgment of the individual reading your file.</li>
+                <li><strong>Admissions decisions are made solely by colleges.</strong> We have no relationship with,
+                    influence over, or advance knowledge of any admissions office. A high estimate is not an offer
+                    and does not make admission likely for you personally. A low estimate does not mean you should
+                    not apply.</li>
+                <li><strong>Financial aid figures are estimates.</strong> Net price figures are modelled from
+                    published averages by income band. Your actual aid award depends on a full financial review by
+                    each school. <strong>Always confirm cost using each school's own Net Price Calculator and
+                        financial aid office before making any financial decision.</strong></li>
+                <li><strong>Essay and activity scores are automated opinions.</strong> They are produced by software
+                    against our own rubric. They are not the judgment of an admissions officer and no college uses
+                    or recognises our scores.</li>
+                <li><strong>Data can be wrong or out of date.</strong> We source from public datasets that are
+                    published on a lag and sometimes contain errors. Where we do not have verified data for a
+                    school, we show "—" rather than a guess, but we cannot guarantee that every figure shown is
+                    current or accurate.</li>
+            </ul>
+            <p><strong>AdmitMap is information, not professional advice.</strong> Nothing in the Service is
+                educational counseling, financial advice, tax advice, or legal advice. Decisions about where to
+                apply, where to enrol, and how to pay for college are yours. You should treat AdmitMap as one input
+                among several, alongside your school counselor, the colleges themselves, and your family.</p>
+            <p>You agree that you will not rely on AdmitMap as the sole basis for any application, enrolment, or
+                financial decision.</p>
+
+            <h2 id="accounts"><span class="n">5</span>Your account</h2>
+            <p>Some parts of the Service require an account. You agree to provide accurate information, to keep your
+                password confidential, and to be responsible for everything that happens under your account. Tell us
+                promptly at <a href="mailto:support@admitmap.com">support@admitmap.com</a> if you believe your
+                account has been used without your permission.</p>
+            <p>One account is for one student. You may not share, sell, or transfer your account or your report
+                access to anyone else.</p>
+            <p>How we handle the information in your account is described in our <a href="privacy.html">Privacy
+                    Policy</a>, which forms part of these Terms.</p>
+
+            <h2 id="payment"><span class="n">6</span>Payment and pricing</h2>
+            <p>AdmitMap is sold as a <strong>one-time purchase</strong>, not a subscription. Nothing auto-renews and
+                nothing recurring is charged to you.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>What it includes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Odds Report</td>
+                        <td>$19 USD</td>
+                        <td>Acceptance probability for every school on your list, academic and extracurricular
+                            strength analysis, comparison with admitted-student profiles, Reach / Target / Likely
+                            tiering, and every ED, EA and RD deadline.</td>
+                    </tr>
+                    <tr>
+                        <td>Odds + Financial Aid</td>
+                        <td>$29 USD</td>
+                        <td>Everything in the Odds Report, plus estimated aid for every school, net cost per year
+                            after scholarships and aid, affordability comparison across your list, and average
+                            salary after graduation.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Prices are in US dollars and exclude any tax that applies where you live. Applicable sales tax, VAT or
+                GST is calculated and shown at checkout.</p>
+            <p>Payments are processed by <strong>Lemon Squeezy</strong>, which acts as the Merchant of Record for
+                every AdmitMap purchase. That means Lemon Squeezy is the seller on the transaction, handles your
+                payment details and any tax, and appears on your bank or card statement. Their terms and privacy
+                policy apply to the payment itself. <strong>We never see or store your card number.</strong></p>
+            <p>Access to a purchased report is granted through a licence key issued at checkout. Keep it — it is how
+                you get back into your report.</p>
+            <p>We may change prices at any time. A price change never affects a purchase you have already made.</p>
+
+            <h2 id="refunds"><span class="n">7</span>Refunds</h2>
+            <p>AdmitMap is digital content that is generated and delivered to you immediately on purchase. Once your
+                report has been generated, it cannot be returned.</p>
+            <p><strong>All sales are final and purchases are non-refundable</strong>, with two exceptions:</p>
+            <ul>
+                <li><strong>We failed to deliver.</strong> If a technical fault on our side means you were charged
+                    but never received your report, and we cannot fix it, we will refund you in full. Email <a
+                        href="mailto:support@admitmap.com">support@admitmap.com</a> and we will sort it out.</li>
+                <li><strong>The law requires it.</strong> Where mandatory consumer law where you live gives you a
+                    refund or withdrawal right that cannot be waived, that law applies regardless of this section.
+                </li>
+            </ul>
+            <p>By purchasing, you acknowledge that you are buying digital content delivered immediately, and — to the
+                extent the law where you live allows you to do so — you agree to begin receiving it right away.</p>
+            <p>Because Lemon Squeezy is the Merchant of Record, they may in their own discretion issue a refund under
+                their policies. Nothing here limits that.</p>
+            <p>Dissatisfaction with the <em>content</em> of a report — for example, an estimate lower than you hoped
+                for — is not a defect and is not grounds for a refund. Please read <a href="#estimates">section 4</a>
+                before you buy.</p>
+
+            <h2 id="acceptable"><span class="n">8</span>Acceptable use</h2>
+            <p>You agree not to:</p>
+            <ul>
+                <li>scrape, crawl, harvest, or bulk-extract data, school records, or report content from the
+                    Service;</li>
+                <li>resell, redistribute, republish, or make our reports or underlying data available to others,
+                    commercially or otherwise;</li>
+                <li>share, resell, or publish a licence key, or attempt to unlock paid content without paying;</li>
+                <li>reverse engineer, decompile, or attempt to derive our scoring models or source code;</li>
+                <li>submit false information in order to probe or manipulate our models;</li>
+                <li>use the Service to build or train a competing product or dataset;</li>
+                <li>attack, overload, or interfere with the Service or our providers, including by automated
+                    request flooding;</li>
+                <li>submit content that is unlawful, that infringes someone else's rights, or that is not yours to
+                    submit;</li>
+                <li>use the Service for any purpose that is unlawful where you are.</li>
+            </ul>
+            <p>We may suspend or terminate access that breaches this section, without refund.</p>
+
+            <h2 id="content"><span class="n">9</span>Your content</h2>
+            <p>Everything you enter — your profile, your school list, and any essay you submit — remains
+                <strong>yours</strong>. We claim no ownership of it.</p>
+            <p>You grant us a limited, non-exclusive, royalty-free licence to process your content solely in order to
+                operate the Service for you: to calculate your estimates, to generate your report, and, where you
+                ask for it, to produce essay feedback. That licence ends when you delete the content or your
+                account.</p>
+            <p><strong>We do not use your essays to train any model, and we do not sell your data.</strong> We do not
+                publish your content or share it with colleges. See the <a href="privacy.html">Privacy Policy</a> for
+                the details, including how long we keep things and how to have them deleted.</p>
+            <p>You confirm that any essay you submit is your own original work and that submitting it to us does not
+                breach anyone else's rights or any rule of your school.</p>
+
+            <h2 id="ai"><span class="n">10</span>AI-generated feedback</h2>
+            <p>Our essay grader and parts of our analysis use artificial intelligence, provided through
+                <strong>Anthropic's API</strong>. When you request essay feedback, your essay text is sent to
+                Anthropic to be scored and the result is returned to you. Anthropic does not use API inputs to train
+                its models, and we do not retain your essay text on our servers after grading.</p>
+            <p>AI output can be wrong, inconsistent between runs, and confidently mistaken. Treat essay and activity
+                scores as a second opinion to think about, never as a verdict. Do not submit anything to a college
+                on the strength of an AI score alone.</p>
+            <p><strong>You are solely responsible for anything the AI produces for you</strong>, including checking
+                it for accuracy before you act on it. We have no control over the underlying model and accept no
+                liability arising from the feedback it generates.</p>
+            <p>AdmitMap does not write essays for you and is not intended to be used to produce work you present as
+                your own where that would breach a college's rules on application integrity. You confirm that any
+                material you submit is your own, that you are permitted to submit it, and that you will not
+                misrepresent the role AdmitMap played in producing anything you send to a college. Doing otherwise is
+                your responsibility, not ours.</p>
+
+            <h2 id="ip"><span class="n">11</span>Our intellectual property</h2>
+            <p>The Service — including the AdmitMap name and marks, the interface, the report design, our scoring
+                models, our rubrics, our compiled datasets, and all text and graphics — is owned by us or our
+                licensors and is protected by intellectual property law.</p>
+            <p>Your purchase gives you a personal, non-transferable, non-commercial licence to view and use your own
+                report for your own college application process. It gives you no other rights.</p>
+            <p>Underlying public data, such as the U.S. Department of Education College Scorecard, belongs to its
+                original sources. College names and logos belong to those institutions, are used for identification
+                only, and imply no affiliation with or endorsement by them.</p>
+
+            <h2 id="availability"><span class="n">12</span>Availability and changes</h2>
+            <p>We are a small operation. We do not promise that the Service will be uninterrupted, error-free, or
+                available at any particular time. We may modify, suspend, add, or remove features at any time.</p>
+            <p>If we discontinue a product you have already paid for, and you have not yet received it, we will
+                refund you.</p>
+
+            <h2 id="termination"><span class="n">13</span>Termination</h2>
+            <p>You may stop using AdmitMap at any time and may ask us to delete your account as described in the <a
+                    href="privacy.html">Privacy Policy</a>.</p>
+            <p>We may suspend or terminate your access if you breach these Terms, if we are required to by law, or if
+                we reasonably believe your use puts the Service or other users at risk. Where the breach is minor and
+                fixable we will normally warn you first. Sections 4, 9, 11, and 14 through 20 survive termination.
+            </p>
+
+            <h2 id="warranty"><span class="n">14</span>Disclaimer of warranties</h2>
+            <div class="lgl-consp">
+                <p>To the fullest extent permitted by law, the Service is provided "AS IS" and "AS AVAILABLE",
+                    without warranty of any kind, whether express, implied, or statutory. We specifically disclaim
+                    any implied warranties of merchantability, fitness for a particular purpose, accuracy, and
+                    non-infringement.</p>
+                <p>Without limiting that, we do not warrant that any estimate, probability, score, cost figure,
+                    deadline, or piece of school data is accurate, complete, current, or suitable for your
+                    circumstances, and we do not warrant any outcome — admission, rejection, waitlist, scholarship,
+                    or aid award. You use the Service at your own risk.</p>
+            </div>
+            <p>Some jurisdictions do not allow the exclusion of certain warranties. Where that is the case, the
+                exclusions above apply only to the extent permitted, and you may have rights that these Terms cannot
+                remove.</p>
+
+            <h2 id="liability"><span class="n">15</span>Limitation of liability</h2>
+            <div class="lgl-consp">
+                <p>To the fullest extent permitted by law, we are not liable for any indirect, incidental, special,
+                    consequential, or punitive damages, or for any loss of opportunity, loss of a place at a
+                    college, loss of scholarship or aid, tuition or application fees paid, lost data, or lost
+                    profits, arising from or connected with your use of the Service — even if we were told such
+                    damages were possible, and even if a remedy in these Terms is found to have failed its
+                    essential purpose.</p>
+                <p>Our total liability to you for all claims combined is limited to the greater of (a) the amount
+                    you actually paid us in the twelve months before the claim arose, or (b) one hundred US dollars
+                    (US$100).</p>
+            </div>
+            <p>Nothing in these Terms excludes or limits liability that cannot lawfully be excluded, including
+                liability for fraud, or for death or personal injury caused by negligence.</p>
+
+            <h2 id="indemnity"><span class="n">16</span>Indemnity</h2>
+            <p>You agree to indemnify and hold us harmless from any claim, loss, or expense (including reasonable
+                legal fees) arising out of your breach of these Terms, your misuse of the Service, or content you
+                submitted that you did not have the right to submit.</p>
+
+            <h2 id="law"><span class="n">17</span>Governing law and disputes</h2>
+            <p>These Terms are governed by the laws of the <strong>Republic of Kazakhstan</strong>, without regard to
+                conflict-of-laws rules. Any dispute that cannot be resolved informally will be brought before the
+                competent courts of the Republic of Kazakhstan at our place of residence.</p>
+            <p><strong>This does not take away rights you cannot lose.</strong> If the consumer law of the country or
+                state where you live gives you mandatory protections, or the right to bring a claim in your local
+                courts, those rights still apply and nothing in this section removes them.</p>
+            <p>Before starting any formal proceeding, please email <a
+                    href="mailto:support@admitmap.com">support@admitmap.com</a>. Almost everything can be resolved
+                that way, faster and at no cost to either of us.</p>
+
+            <h2 id="thirdparty"><span class="n">18</span>Links to other sites and services</h2>
+            <p>AdmitMap links out to places we do not control — college websites, admissions offices, each school's
+                own Net Price Calculator, and third-party services that supply things like institution logos. We
+                provide those links as a convenience.</p>
+            <p>We do not review, monitor, or endorse third-party sites, and we are not responsible for their
+                content, accuracy, availability, or privacy practices. Once you leave AdmitMap, these Terms and our
+                <a href="privacy.html">Privacy Policy</a> no longer apply — the other site's do. Follow those links
+                at your own risk, and read their terms before giving them anything.</p>
+            <p>College and university names, logos and marks belong to those institutions. They appear on AdmitMap
+                for identification only and do not imply any affiliation with, sponsorship by, or endorsement from
+                the institution.</p>
+
+            <h2 id="timelimit"><span class="n">19</span>Time limit for claims</h2>
+            <p>Any claim arising out of or relating to these Terms or your use of the Service must be brought
+                <strong>within one year</strong> of the date the claim arose. After that, it is permanently barred,
+                except where the law where you live does not allow such a limit.</p>
+
+            <h2 id="general"><span class="n">20</span>General terms</h2>
+            <h3>Severability</h3>
+            <p>If any part of these Terms is held to be invalid or unenforceable, that part is read as narrowly as
+                needed to make it enforceable, or removed if it cannot be. The rest of the Terms stay in full force.
+            </p>
+            <h3>No waiver</h3>
+            <p>If we do not enforce a provision of these Terms on some occasion, that is not a waiver of our right
+                to enforce it later.</p>
+            <h3>Assignment</h3>
+            <p>We may transfer or assign these Terms, in whole or in part, to another person or entity — for
+                example, if AdmitMap is sold or reorganised into a company. You may not transfer or assign your
+                rights or obligations under these Terms to anyone, and any attempt to do so is void.</p>
+            <h3>No agency</h3>
+            <p>Nothing in these Terms creates a partnership, employment, agency, or joint-venture relationship
+                between you and us.</p>
+            <h3>Entire agreement</h3>
+            <p>These Terms, together with the <a href="privacy.html">Privacy Policy</a>, are the complete agreement
+                between you and us about the Service, and replace any earlier understanding or communication on the
+                same subject.</p>
+
+            <h2 id="updates"><span class="n">21</span>Changes to these Terms</h2>
+            <p>We may update these Terms as the Service develops. When we do, we will change the "Last updated" date
+                at the top. If a change materially reduces your rights, we will make a reasonable effort to tell you
+                — by email if we have your address, or by a notice on the site — before it takes effect.</p>
+            <p>Continuing to use the Service after a change takes effect means you accept the updated Terms.
+                Purchases you already made are governed by the Terms in force when you made them.</p>
+
+            <h2 id="contact"><span class="n">22</span>Contact</h2>
+            <p>Questions about these Terms, or anything else:</p>
+            <ul>
+                <li>Email: <a href="mailto:support@admitmap.com">support@admitmap.com</a></li>
+                <li>Operator: Arlan Nurmanov, sole operator, Republic of Kazakhstan</li>
+            </ul>
+            <p>We answer everything that comes in, usually within a few days.</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="f-logo">Admit<span>Map</span></div>
+        <nav class="f-links">
+            <a href="paywall.html">Pricing</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="refunds.html">Refunds</a>
+        </nav>
+        <p>© 2026 AdmitMap. Built for students who mean it.</p>
+    </footer>
+</body>
+
+</html>

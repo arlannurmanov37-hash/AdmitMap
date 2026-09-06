@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build your AdmitMap report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900&family=Syne:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:lining-nums tabular-nums}
+
+    :root{
+      --white:#fff; --off:#f8fafc; --navy:#0f1f4b; --royal:#2563eb; --royal-mid:#3b82f6;
+      --royal-s:#eef4ff; --royal-light:#dbeafe; --muted:#64748b; --muted-2:#94a3b8;
+      --line:#e2e8f0; --line-soft:#e6ebf4; --ok:#10b981; --err:#ef4444; --amber:#f59e0b;
+      --purple:#7c3aed;
+      --ease:cubic-bezier(.23,1,.32,1);
+      --card-w:940px;
+      --btn-w:240px;          /* Back and Continue share this exactly */
+    }
+
+    html,body{height:100%}
+    body{
+      font-family:'Syne',system-ui,sans-serif; color:var(--navy);
+      background:
+        radial-gradient(1100px 700px at 88% 0%, rgba(37,99,235,.13) 0%, transparent 62%),
+        radial-gradient(800px 620px at 2% 100%, rgba(37,99,235,.10) 0%, transparent 60%),
+        linear-gradient(168deg,#fdfeff 0%,#f4f8ff 46%,#eaf1fe 100%);
+      display:flex; flex-direction:column; min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ── PROGRESS ── */
+    .prog{position:sticky;top:0;z-index:30;background:var(--white);border-bottom:1px solid var(--line-soft);
+      padding:14px 28px}
+    .prog-track{height:7px;border-radius:99px;background:#e2e8f0;overflow:hidden;max-width:1760px;margin:0 auto}
+    .prog-fill{height:100%;border-radius:99px;background:var(--royal);width:0%;
+      transition:width .45s var(--ease)}
+
+    /* ── STAGE ── */
+    .stage{flex:1;display:flex;align-items:center;justify-content:center;padding:44px 24px}
+
+    .card{
+      width:100%;max-width:var(--card-w);background:var(--white);border-radius:22px;
+      padding:56px 64px 60px;box-shadow:0 1px 2px rgba(15,31,75,.04),0 18px 44px -12px rgba(15,31,75,.13);
+      animation:cardIn .42s var(--ease) both;
+    }
+    @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.995)}to{opacity:1;transform:none}}
+    .card.back{animation:cardBack .42s var(--ease) both}
+    @keyframes cardBack{from{opacity:0;transform:translateY(-10px) scale(.995)}to{opacity:1;transform:none}}
+
+    h1.q{font-family:'Fraunces',serif;font-size:clamp(28px,3.4vw,44px);font-weight:700;line-height:1.1;
+      letter-spacing:-.015em;text-align:center;color:var(--navy)}
+    h1.q em{font-style:italic;color:var(--royal)}
+    p.sub{margin-top:14px;text-align:center;font-size:16px;font-weight:500;color:var(--muted);line-height:1.55}
+
+    .body{margin-top:38px}
+
+    /* ── FIELDS ── */
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .fi{width:100%;padding:17px 20px;border:1.5px solid var(--line);border-radius:13px;background:var(--white);
+      font-family:'Syne',sans-serif;font-size:16px;font-weight:600;color:var(--navy);outline:none;
+      transition:border-color .18s var(--ease),box-shadow .18s var(--ease)}
+    .fi::placeholder{color:var(--muted-2);font-weight:500}
+    .fi:focus{border-color:var(--royal);box-shadow:0 0 0 4px var(--royal-s)}
+    .fi.bad{border-color:var(--err)}
+    select.fi{appearance:none;cursor:pointer;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%2364748b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+      background-repeat:no-repeat;background-position:right 20px center;padding-right:48px}
+    textarea.fi{min-height:230px;resize:vertical;line-height:1.65;font-weight:500}
+    .fl{display:block;margin-bottom:9px;font-size:13px;font-weight:700;color:var(--navy);letter-spacing:.01em}
+    .fh{margin-top:8px;font-size:13px;color:var(--muted);font-weight:500}
+    .err{margin-top:12px;font-size:14px;font-weight:600;color:var(--err);text-align:center;display:none}
+    .err.on{display:block}
+
+    /* ── CHOICES (one-tap) ── */
+    .choices{display:flex;flex-direction:column;gap:12px;max-width:660px;margin:0 auto}
+    .choice{display:flex;align-items:center;gap:15px;width:100%;text-align:left;cursor:pointer;
+      padding:19px 22px;border:1.5px solid var(--line);border-radius:14px;background:var(--white);
+      font-family:'Syne',sans-serif;font-size:15.5px;font-weight:600;color:var(--navy);
+      transition:border-color .16s var(--ease),background .16s var(--ease),transform .16s var(--ease)}
+    .choice:hover{border-color:var(--royal-mid);background:#fbfdff;transform:translateY(-1px)}
+    .choice.on{border-color:var(--royal);background:var(--royal-s);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
+    .choice .dot{flex:0 0 21px;height:21px;border-radius:50%;border:2px solid var(--line);
+      display:grid;place-items:center;transition:border-color .16s var(--ease)}
+    .choice.on .dot{border-color:var(--royal)}
+    .choice.on .dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--royal)}
+    .choice.sq .dot{border-radius:6px}
+    .choice.sq.on .dot::after{border-radius:2px;width:9px;height:9px}
+
+    /* ── CHIPS ── */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{padding:10px 17px;border:1.5px solid var(--line);border-radius:99px;background:var(--white);
+      font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;
+      transition:all .16s var(--ease)}
+    .chip:hover{border-color:var(--royal-mid)}
+    .chip.on{background:var(--royal);border-color:var(--royal);color:#fff}
+
+    /* ── SLIDER ── */
+    .sl-val{text-align:center;font-family:'Fraunces',serif;font-size:46px;font-weight:700;color:var(--royal);
+      line-height:1.05}
+    .sl-cap{text-align:center;font-size:14px;color:var(--muted);font-weight:500;margin-top:6px}
+    input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:99px;
+      background:var(--line);outline:none;margin:30px 0 0}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+      background:var(--royal);cursor:pointer;border:4px solid #fff;box-shadow:0 2px 8px rgba(37,99,235,.4)}
+    input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--royal);
+      cursor:pointer;border:4px solid #fff;box-shadow:0 2px 8px rgba(37,99,235,.4)}
+    .sl-ends{display:flex;justify-content:space-between;margin-top:14px;font-size:12.5px;
+      color:var(--muted-2);font-weight:600}
+
+    /* ── SEARCH ── */
+    .search-wrap{position:relative;max-width:660px;margin:0 auto}
+    .results{margin-top:8px;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
+      max-height:290px;overflow-y:auto}
+    .res{display:flex;align-items:center;gap:13px;padding:13px 18px;cursor:pointer;border-bottom:1px solid var(--line-soft);
+      font-size:15px;font-weight:600;transition:background .14s var(--ease)}
+    .res:last-child{border-bottom:0}
+    .res:hover{background:var(--royal-s)}
+    .res img{width:28px;height:28px;border-radius:6px;object-fit:contain;flex:0 0 28px;background:#f1f5f9}
+    .picked{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;justify-content:center}
+    .pchip{display:flex;align-items:center;gap:9px;padding:9px 13px 9px 10px;background:var(--royal-s);
+      border:1.5px solid var(--royal-light);border-radius:11px;font-size:14px;font-weight:700;color:var(--navy)}
+    .pchip img{width:20px;height:20px;border-radius:4px;object-fit:contain}
+    .pchip button{border:0;background:none;cursor:pointer;color:var(--muted);font-size:17px;line-height:1;padding:0 2px}
+    .pchip button:hover{color:var(--err)}
+
+    /* ── REPEATABLE BLOCKS ── */
+    .blk{border:1.5px solid var(--line);border-radius:16px;padding:24px;margin-bottom:16px;background:#fdfeff}
+    .blk-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .blk-n{font-family:'Fraunces',serif;font-size:17px;font-weight:700}
+    .blk-x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:700}
+    .blk-x:hover{color:var(--err)}
+    .fg{margin-bottom:16px}
+    .add{width:100%;padding:15px;border:1.5px dashed var(--line);border-radius:13px;background:none;
+      font-family:'Syne',sans-serif;font-size:14.5px;font-weight:700;color:var(--royal);cursor:pointer;
+      transition:all .16s var(--ease)}
+    .add:hover{border-color:var(--royal);background:var(--royal-s)}
+    .add:disabled{opacity:.4;cursor:not-allowed}
+
+    /* ── INTERSTITIAL ── */
+    .inter-ic{width:64px;height:64px;border-radius:18px;background:var(--royal-s);display:grid;place-items:center;
+      margin:0 auto 26px}
+    .inter-ic svg{width:30px;height:30px;stroke:var(--royal);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .facts{display:flex;flex-direction:column;gap:14px;max-width:620px;margin:36px auto 0}
+    .fact{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:var(--royal-s);
+      border-radius:14px;font-size:15px;font-weight:600;line-height:1.5;text-align:left}
+    .fact svg{flex:0 0 21px;height:21px;stroke:var(--ok);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+
+    /* ── FOOTER: Back and Continue are exactly the same size ── */
+    .foot{position:sticky;bottom:0;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);
+      border-top:1px solid var(--line-soft);padding:18px 24px;display:flex;justify-content:center;gap:16px}
+    .btn{
+      width:var(--btn-w); flex:0 0 var(--btn-w);       /* identical footprint */
+      height:56px; border-radius:13px; cursor:pointer;
+      font-family:'Syne',sans-serif; font-size:16px; font-weight:700; letter-spacing:.01em;
+      display:inline-flex; align-items:center; justify-content:center;
+      transition:background .18s var(--ease),border-color .18s var(--ease),transform .18s var(--ease),opacity .18s var(--ease);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-back{background:var(--white);border:1.5px solid var(--line);color:var(--muted)}
+    .btn-back:hover:not(:disabled){border-color:var(--muted-2);color:var(--navy)}
+    .btn-back:disabled{opacity:.42;cursor:not-allowed}
+    .btn-next{background:var(--royal);border:1.5px solid var(--royal);color:#fff}
+    .btn-next:hover{background:var(--royal-mid);border-color:var(--royal-mid)}
+
+    .skip{display:block;margin:20px auto 0;border:0;background:none;font-family:'Syne',sans-serif;
+      font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:underline;
+      text-underline-offset:3px}
+    .skip:hover{color:var(--royal)}
+
+    .fine{margin-top:18px;font-size:12.5px;line-height:1.55;color:var(--muted);font-weight:500;text-align:center}
+    .fine a{color:var(--muted);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+    .fine a:hover{color:var(--royal)}
+
+    .wc{margin-top:10px;font-size:13px;color:var(--muted);font-weight:600;text-align:right}
+    .wc b{color:var(--navy)}
+
+    @media(max-width:820px){
+      .card{padding:38px 24px 42px;border-radius:18px}
+      .stage{padding:26px 14px}
+      .row{grid-template-columns:1fr}
+      .foot{padding:14px 16px;gap:12px}
+      .btn{flex:1 1 0;width:auto;min-width:0}   /* still equal to each other */
+      h1.q{font-size:26px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="prog"><div class="prog-track"><div class="prog-fill" id="pfill"></div></div></div>
+  <div class="stage"><div class="card" id="card"></div></div>
+  <div class="foot">
+    <button class="btn btn-back" id="back" onclick="prev()">Back</button>
+    <button class="btn btn-next" id="next" onclick="next()">Continue</button>
+  </div>
+
+<script>
+const AP_COURSES = [
+            'AP Art History','AP Biology','AP Calculus AB','AP Calculus BC','AP Chemistry',
+            'AP Chinese Language and Culture','AP Comparative Government and Politics',
+            'AP Computer Science A','AP Computer Science Principles',
+            'AP English Language and Composition','AP English Literature and Composition',
+            'AP Environmental Science','AP European History','AP French Language and Culture',
+            'AP German Language and Culture','AP Human Geography','AP Italian Language and Culture',
+            'AP Japanese Language and Culture','AP Latin','AP Macroeconomics','AP Microeconomics',
+            'AP Music Theory','AP Physics 1: Algebra-Based','AP Physics 2: Algebra-Based',
+            'AP Physics C: Electricity and Magnetism','AP Physics C: Mechanics','AP Precalculus',
+            'AP Psychology','AP Research','AP Seminar','AP Spanish Language and Culture',
+            'AP Spanish Literature and Culture','AP Statistics','AP Studio Art: 2-D Design',
+            'AP Studio Art: 3-D Design','AP Studio Art: Drawing',
+            'AP United States Government and Politics','AP United States History','AP World History: Modern'
+        ];
+
+const PROMPTS = ["Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story.", "The lessons we take from obstacles we encounter can be fundamental to later success. Recount a time when you faced a challenge, setback, or failure. How did it affect you, and what did you learn from the experience?", "Reflect on a time when you questioned or challenged a belief or idea. What prompted your thinking? What was the outcome?", "Reflect on something that someone has done for you that has made you happy or thankful in a surprising way. How has this gratitude affected or motivated you?", "Discuss an accomplishment, event, or realization that sparked a period of personal growth and a new understanding of yourself or others.", "Describe a topic, idea, or concept you find so engaging that it makes you lose all track of time. Why does it captivate you? What or who do you turn to when you want to learn more?", "Share an essay on any topic of your choice. It can be one you've already written, one that responds to a different prompt, or one of your own design."];
+
+const MAJORS = [
+  ['Engineering & CS',['Computer Science','Electrical Engineering','Mechanical Engineering','Civil Engineering','Chemical Engineering','Biomedical Engineering','Aerospace Engineering','Software Engineering','Data Science']],
+  ['Natural Sciences',['Biology','Chemistry','Physics','Neuroscience','Environmental Science','Biochemistry']],
+  ['Math & Statistics',['Mathematics','Applied Mathematics','Statistics']],
+  ['Business & Economics',['Business Administration','Finance','Accounting','Marketing','Economics','Entrepreneurship']],
+  ['Social Sciences',['Psychology','Political Science','Sociology','Anthropology','International Relations','Public Policy']],
+  ['Humanities',['English','History','Philosophy','Classics','Linguistics']],
+  ['Arts & Design',['Fine Arts','Graphic Design','Architecture','Music','Theatre','Film & Media','Creative Writing']],
+  ['Health & Pre-Professional',['Nursing','Public Health','Pre-Med','Pre-Law','Kinesiology']],
+  ['Education & Communication',['Education','Communications','Journalism','Media Studies']],
+  ['Other',['Undecided','Other']]
+];
+
+const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','Outside the U.S.'];
+
+const SCHOOL_ALIASES = {mit:'Massachusetts Institute of Technology',caltech:'California Institute of Technology',
+ ucla:'University of California, Los Angeles',ucb:'University of California, Berkeley',cal:'University of California, Berkeley',
+ berkeley:'University of California, Berkeley',ucsd:'University of California, San Diego',ucsb:'University of California, Santa Barbara',
+ uci:'University of California, Irvine',ucd:'University of California, Davis',nyu:'New York University',
+ usc:'University of Southern California',unc:'University of North Carolina at Chapel Hill',uva:'University of Virginia',
+ vt:'Virginia Tech',bc:'Boston College',bu:'Boston University',rpi:'Rensselaer Polytechnic Institute',
+ washu:'Washington University in St. Louis',wustl:'Washington University in St. Louis',ut:'University of Texas at Austin',
+ gatech:'Georgia Institute of Technology',upenn:'University of Pennsylvania',penn:'University of Pennsylvania',
+ jhu:'Johns Hopkins University',hopkins:'Johns Hopkins University',fsu:'Florida State University',uf:'University of Florida',
+ uga:'University of Georgia',osu:'Ohio State University',psu:'Penn State University',asu:'Arizona State University',
+ umich:'University of Michigan',uw:'University of Washington',uiuc:'University of Illinois Urbana-Champaign',
+ vandy:'Vanderbilt University',cmu:'Carnegie Mellon University',uchicago:'University of Chicago',tamu:'Texas A&M University'};
+
+const ACT_TYPES = ['Academic','Art','Athletics: Club','Athletics: JV/Varsity','Career Oriented',
+  'Community Service (Volunteer)','Computer/Technology','Cultural','Dance','Debate/Speech',
+  'Environmental','Family Responsibilities','Foreign Exchange','Foreign Language','Internship',
+  'Journalism/Publication','Junior R.O.T.C.','Music: Instrumental','Music: Vocal','Religious',
+  'Research','Robotics','School Spirit','Science/Math','Social Justice','Student Govt./Politics',
+  'Theater/Drama','Work (Paid)','Other Club/Activity','Other'];
+
+const GRADES = ['9','10','11','12','After high school'];
+
+const HON_GRADES = ['9','10','11','12','Post-graduate'];
+
+const REC_LEVELS = ['School','State/Regional','National','International'];
+
+const universities = [
+            // Ivy League
+            { name: 'Harvard University', domain: 'harvard.edu' },
+            { name: 'Yale University', domain: 'yale.edu' },
+            { name: 'Princeton University', domain: 'princeton.edu' },
+            { name: 'Columbia University', domain: 'columbia.edu' },
+            { name: 'University of Pennsylvania', domain: 'upenn.edu' },
+            { name: 'Cornell University', domain: 'cornell.edu' },
+            { name: 'Dartmouth College', domain: 'dartmouth.edu' },
+            { name: 'Brown University', domain: 'brown.edu' },
+            // Additional Alabama
+            { name: 'Jacksonville State University', domain: 'jsu.edu' },
+            { name: 'University of Alabama at Birmingham', domain: 'uab.edu' },
+            { name: 'University of Alabama in Huntsville', domain: 'uah.edu' },
+            { name: 'University of South Alabama', domain: 'southalabama.edu' },
+            { name: 'Troy University', domain: 'troy.edu' },
+            { name: 'Faulkner University', domain: 'faulkner.edu' },
+            // Alaska
+            { name: 'University of Alaska Anchorage', domain: 'uaa.alaska.edu' },
+            { name: 'University of Alaska Southeast', domain: 'uas.alaska.edu' },
+            // Arizona
+            { name: 'Grand Canyon University', domain: 'gcu.edu' },
+            { name: 'Northern Arizona University', domain: 'nau.edu' },
+            // Arkansas
+            { name: 'University of Central Arkansas', domain: 'uca.edu' },
+            { name: 'Harding University', domain: 'harding.edu' },
+            { name: 'John Brown University', domain: 'jbu.edu' },
+            { name: 'Ouachita Baptist University', domain: 'obu.edu' },
+            // California
+            { name: 'California Polytechnic State University, San Luis Obispo', domain: 'calpoly.edu' },
+            { name: 'California State University, Long Beach', domain: 'csulb.edu' },
+            { name: 'California State University, Fullerton', domain: 'fullerton.edu' },
+            { name: 'California State University, Northridge', domain: 'csun.edu' },
+            { name: 'California State University, Los Angeles', domain: 'calstatela.edu' },
+            { name: 'California State University, Sacramento', domain: 'csus.edu' },
+            { name: 'California State University, San Bernardino', domain: 'csusb.edu' },
+            { name: 'California State University, Fresno', domain: 'csufresno.edu' },
+            { name: 'California State University, East Bay', domain: 'csueastbay.edu' },
+            { name: 'California State University, Dominguez Hills', domain: 'csudh.edu' },
+            { name: 'California State University, San Marcos', domain: 'csusm.edu' },
+            { name: 'Cal Poly Pomona', domain: 'cpp.edu' },
+            { name: 'San Diego State University', domain: 'sdsu.edu' },
+            { name: 'San Jose State University', domain: 'sjsu.edu' },
+            { name: 'San Francisco State University', domain: 'sfsu.edu' },
+            { name: 'Humboldt State University', domain: 'humboldt.edu' },
+            { name: 'Sonoma State University', domain: 'sonoma.edu' },
+            { name: 'Chico State University', domain: 'csuchico.edu' },
+            { name: 'Biola University', domain: 'biola.edu' },
+            { name: 'Azusa Pacific University', domain: 'apu.edu' },
+            { name: 'Point Loma Nazarene University', domain: 'pointloma.edu' },
+            { name: 'Westmont College', domain: 'westmont.edu' },
+            { name: 'Whittier College', domain: 'whittier.edu' },
+            { name: 'Mills College', domain: 'mills.edu' },
+            { name: 'Dominican University of California', domain: 'dominican.edu' },
+            { name: 'Holy Names University', domain: 'hnu.edu' },
+            // Colorado
+            { name: 'University of Colorado Colorado Springs', domain: 'uccs.edu' },
+            { name: 'Western Colorado University', domain: 'western.edu' },
+            { name: 'Fort Lewis College', domain: 'fortlewis.edu' },
+            { name: 'Adams State University', domain: 'adams.edu' },
+            { name: 'Regis University', domain: 'regis.edu' },
+            // Connecticut
+            { name: 'Central Connecticut State University', domain: 'ccsu.edu' },
+            { name: 'Southern Connecticut State University', domain: 'southernct.edu' },
+            { name: 'Western Connecticut State University', domain: 'wcsu.edu' },
+            { name: 'Eastern Connecticut State University', domain: 'easternct.edu' },
+            { name: 'University of Hartford', domain: 'hartford.edu' },
+            { name: 'University of New Haven', domain: 'newhaven.edu' },
+            { name: 'Connecticut College', domain: 'conncoll.edu' },
+            { name: 'Trinity College (CT)', domain: 'trincoll.edu' },
+            // Delaware
+            { name: 'Goldey-Beacom College', domain: 'gbc.edu' },
+            { name: 'Wesley College', domain: 'wesley.edu' },
+            // Florida
+            { name: 'University of West Florida', domain: 'uwf.edu' },
+            { name: 'Florida Atlantic University', domain: 'fau.edu' },
+            { name: 'Florida Gulf Coast University', domain: 'fgcu.edu' },
+            { name: 'Jacksonville University', domain: 'ju.edu' },
+            { name: 'Florida Southern College', domain: 'flsouthern.edu' },
+            { name: 'Eckerd College', domain: 'eckerd.edu' },
+            { name: 'Florida Polytechnic University', domain: 'floridapoly.edu' },
+            { name: 'Palm Beach Atlantic University', domain: 'pba.edu' },
+            { name: 'Lynn University', domain: 'lynn.edu' },
+            { name: 'Warner University', domain: 'warner.edu' },
+            { name: 'Embry-Riddle (Daytona)', domain: 'erau.edu' },
+            // Georgia
+            { name: 'Kennesaw State University', domain: 'kennesaw.edu' },
+            { name: 'Georgia Southern University', domain: 'georgiasouthern.edu' },
+            { name: 'Georgia College & State University', domain: 'gcsu.edu' },
+            { name: 'Valdosta State University', domain: 'valdosta.edu' },
+            { name: 'Armstrong State University', domain: 'armstrong.edu' },
+            { name: 'Columbus State University', domain: 'columbusstate.edu' },
+            { name: 'LaGrange College', domain: 'lagrange.edu' },
+            { name: 'Covenant College', domain: 'covenant.edu' },
+            { name: 'Shorter University', domain: 'shorter.edu' },
+            { name: 'Wesleyan College (GA)', domain: 'wesleyancollege.edu' },
+            // Hawaii
+            { name: 'Hawaii Pacific University', domain: 'hpu.edu' },
+            { name: 'Chaminade University of Honolulu', domain: 'chaminade.edu' },
+            // Idaho
+            { name: 'Idaho State University', domain: 'isu.edu' },
+            { name: 'Northwest Nazarene University', domain: 'nnu.edu' },
+            { name: 'College of Idaho', domain: 'collegeofidaho.edu' },
+            // Illinois
+            { name: 'Loyola University Chicago', domain: 'luc.edu' },
+            { name: 'Northern Illinois University', domain: 'niu.edu' },
+            { name: 'Southern Illinois University Carbondale', domain: 'siu.edu' },
+            { name: 'Southern Illinois University Edwardsville', domain: 'siue.edu' },
+            { name: 'Western Illinois University', domain: 'wiu.edu' },
+            { name: 'Eastern Illinois University', domain: 'eiu.edu' },
+            { name: 'Illinois State University', domain: 'illinoisstate.edu' },
+            { name: 'Northeastern Illinois University', domain: 'neiu.edu' },
+            { name: 'Chicago State University', domain: 'csu.edu' },
+            { name: 'North Central College', domain: 'northcentralcollege.edu' },
+            { name: 'Elmhurst University', domain: 'elmhurst.edu' },
+            { name: 'Millikin University', domain: 'millikin.edu' },
+            { name: 'Bradley University', domain: 'bradley.edu' },
+            { name: 'Benedictine University', domain: 'ben.edu' },
+            { name: 'Olivet Nazarene University', domain: 'olivet.edu' },
+            { name: 'Trinity International University', domain: 'tiu.edu' },
+            // Indiana
+            { name: 'Indiana State University', domain: 'indstate.edu' },
+            { name: 'Indiana University-Purdue University Indianapolis', domain: 'iupui.edu' },
+            { name: 'University of Indianapolis', domain: 'uindy.edu' },
+            { name: 'Taylor University', domain: 'taylor.edu' },
+            { name: 'Manchester University', domain: 'manchester.edu' },
+            { name: 'Franklin College', domain: 'franklincollege.edu' },
+            // Iowa
+            { name: 'University of Dubuque', domain: 'dbq.edu' },
+            { name: 'Wartburg College', domain: 'wartburg.edu' },
+            { name: 'Central College (IA)', domain: 'central.edu' },
+            { name: 'Loras College', domain: 'loras.edu' },
+            { name: 'Buena Vista University', domain: 'bvu.edu' },
+            // Kansas
+            { name: 'Emporia State University', domain: 'emporia.edu' },
+            { name: 'Fort Hays State University', domain: 'fhsu.edu' },
+            { name: 'Pittsburg State University', domain: 'pittstate.edu' },
+            { name: 'Washburn University', domain: 'washburn.edu' },
+            { name: 'Benedictine College', domain: 'benedictine.edu' },
+            { name: 'Friends University', domain: 'friends.edu' },
+            // Kentucky
+            { name: 'Western Kentucky University', domain: 'wku.edu' },
+            { name: 'Eastern Kentucky University', domain: 'eku.edu' },
+            { name: 'Northern Kentucky University', domain: 'nku.edu' },
+            { name: 'Morehead State University', domain: 'moreheadstate.edu' },
+            { name: 'Murray State University', domain: 'murraystate.edu' },
+            { name: 'Bellarmine University', domain: 'bellarmine.edu' },
+            { name: 'Transylvania University', domain: 'transy.edu' },
+            // Louisiana
+            { name: 'Loyola University New Orleans', domain: 'loyno.edu' },
+            { name: 'University of Louisiana at Lafayette', domain: 'louisiana.edu' },
+            { name: 'University of Louisiana at Monroe', domain: 'ulm.edu' },
+            { name: 'McNeese State University', domain: 'mcneese.edu' },
+            { name: 'Nicholls State University', domain: 'nicholls.edu' },
+            { name: 'Southeastern Louisiana University', domain: 'southeastern.edu' },
+            // Maine
+            { name: 'University of Maine at Farmington', domain: 'umf.maine.edu' },
+            { name: 'University of New England', domain: 'une.edu' },
+            { name: 'Colby College', domain: 'colby.edu' },
+            { name: 'Bates College', domain: 'bates.edu' },
+            { name: 'Bowdoin College', domain: 'bowdoin.edu' },
+            // Maryland
+            { name: 'Salisbury University', domain: 'salisbury.edu' },
+            { name: 'Frostburg State University', domain: 'frostburg.edu' },
+            { name: 'Goucher College', domain: 'goucher.edu' },
+            { name: 'Hood College', domain: 'hood.edu' },
+            { name: 'McDaniel College', domain: 'mcdaniel.edu' },
+            { name: 'St. Mary\'s College of Maryland', domain: 'smcm.edu' },
+            { name: 'Washington College', domain: 'washcoll.edu' },
+            { name: 'Stevenson University', domain: 'stevenson.edu' },
+            // Massachusetts
+            { name: 'Assumption University', domain: 'assumption.edu' },
+            { name: 'Babson College', domain: 'babson.edu' },
+            { name: 'Bentley University', domain: 'bentley.edu' },
+            { name: 'Clark University', domain: 'clarku.edu' },
+            { name: 'College of the Holy Cross', domain: 'holycross.edu' },
+            { name: 'Endicott College', domain: 'endicott.edu' },
+            { name: 'Gordon College', domain: 'gordon.edu' },
+            { name: 'Massachusetts College of Pharmacy', domain: 'mcphs.edu' },
+            { name: 'Merrimack College', domain: 'merrimack.edu' },
+            { name: 'Mount Holyoke College', domain: 'mtholyoke.edu' },
+            { name: 'Simmons University', domain: 'simmons.edu' },
+            { name: 'Smith College', domain: 'smith.edu' },
+            { name: 'Springfield College', domain: 'springfieldcollege.edu' },
+            { name: 'Stonehill College', domain: 'stonehill.edu' },
+            { name: 'Suffolk University', domain: 'suffolk.edu' },
+            { name: 'Western New England University', domain: 'wne.edu' },
+            { name: 'Wheaton College (MA)', domain: 'wheatoncollege.edu' },
+            { name: 'Wentworth Institute of Technology', domain: 'wit.edu' },
+            // Michigan
+            { name: 'Central Michigan University', domain: 'cmich.edu' },
+            { name: 'Eastern Michigan University', domain: 'emich.edu' },
+            { name: 'Western Michigan University', domain: 'wmich.edu' },
+            { name: 'Northern Michigan University', domain: 'nmu.edu' },
+            { name: 'Ferris State University', domain: 'ferris.edu' },
+            { name: 'Grand Valley State University', domain: 'gvsu.edu' },
+            { name: 'Lake Superior State University', domain: 'lssu.edu' },
+            { name: 'Saginaw Valley State University', domain: 'svsu.edu' },
+            { name: 'Oakland University', domain: 'oakland.edu' },
+            { name: 'Wayne State University', domain: 'wayne.edu' },
+            { name: 'Andrews University', domain: 'andrews.edu' },
+            { name: 'Calvin University', domain: 'calvin.edu' },
+            { name: 'Hope College', domain: 'hope.edu' },
+            { name: 'Kalamazoo College', domain: 'kzoo.edu' },
+            { name: 'Albion College', domain: 'albion.edu' },
+            { name: 'Alma College', domain: 'alma.edu' },
+            // Minnesota
+            { name: 'Bemidji State University', domain: 'bemidjistate.edu' },
+            { name: 'Minnesota State University Mankato', domain: 'mnsu.edu' },
+            { name: 'Minnesota State University Moorhead', domain: 'mnstate.edu' },
+            { name: 'St. Cloud State University', domain: 'stcloudstate.edu' },
+            { name: 'Winona State University', domain: 'winona.edu' },
+            { name: 'Augsburg University', domain: 'augsburg.edu' },
+            { name: 'Concordia College (MN)', domain: 'concordiacollege.edu' },
+            { name: 'Hamline University', domain: 'hamline.edu' },
+            { name: 'Saint John\'s University', domain: 'csbsju.edu' },
+            { name: 'University of St. Thomas (MN)', domain: 'stthomas.edu' },
+            // Mississippi
+            { name: 'Delta State University', domain: 'deltastate.edu' },
+            { name: 'University of Southern Mississippi', domain: 'usm.edu' },
+            { name: 'Millsaps College', domain: 'millsaps.edu' },
+            { name: 'Mississippi College', domain: 'mc.edu' },
+            { name: 'Belhaven University', domain: 'belhaven.edu' },
+            // Missouri
+            { name: 'Missouri State University', domain: 'missouristate.edu' },
+            { name: 'Southeast Missouri State University', domain: 'semo.edu' },
+            { name: 'Northwest Missouri State University', domain: 'nwmissouri.edu' },
+            { name: 'Missouri Western State University', domain: 'missouriwestern.edu' },
+            { name: 'Missouri Southern State University', domain: 'mssu.edu' },
+            { name: 'Lindenwood University', domain: 'lindenwood.edu' },
+            { name: 'Webster University', domain: 'webster.edu' },
+            { name: 'Maryville University', domain: 'maryville.edu' },
+            // Montana
+            { name: 'University of Great Falls', domain: 'ugf.edu' },
+            { name: 'Rocky Mountain College', domain: 'rocky.edu' },
+            // Nebraska
+            { name: 'University of Nebraska at Omaha', domain: 'unomaha.edu' },
+            { name: 'University of Nebraska at Kearney', domain: 'unk.edu' },
+            { name: 'Creighton University', domain: 'creighton.edu' },
+            { name: 'Doane University', domain: 'doane.edu' },
+            { name: 'Hastings College', domain: 'hastings.edu' },
+            { name: 'Nebraska Wesleyan University', domain: 'nebrwesleyan.edu' },
+            // Nevada
+            { name: 'Nevada State College', domain: 'nsc.edu' },
+            // New Hampshire
+            { name: 'Plymouth State University', domain: 'plymouth.edu' },
+            { name: 'Keene State College', domain: 'keene.edu' },
+            { name: 'Saint Anselm College', domain: 'anselm.edu' },
+            { name: 'Colby-Sawyer College', domain: 'colby-sawyer.edu' },
+            // New Jersey
+            { name: 'Kean University', domain: 'kean.edu' },
+            { name: 'William Paterson University', domain: 'wpunj.edu' },
+            { name: 'Ramapo College of New Jersey', domain: 'ramapo.edu' },
+            { name: 'Stockton University', domain: 'stockton.edu' },
+            { name: 'New Jersey City University', domain: 'njcu.edu' },
+            { name: 'Caldwell University', domain: 'caldwell.edu' },
+            { name: 'Monmouth University', domain: 'monmouth.edu' },
+            { name: 'Georgian Court University', domain: 'georgian.edu' },
+            { name: 'Bloomfield College', domain: 'bloomfield.edu' },
+            // New Mexico
+            { name: 'Eastern New Mexico University', domain: 'enmu.edu' },
+            { name: 'Western New Mexico University', domain: 'wnmu.edu' },
+            { name: 'New Mexico Highlands University', domain: 'nmhu.edu' },
+            // New York
+            { name: 'Adelphi University', domain: 'adelphi.edu' },
+            { name: 'Clarkson University', domain: 'clarkson.edu' },
+            { name: 'College of Saint Rose', domain: 'strose.edu' },
+            { name: 'CUNY Baruch College', domain: 'baruch.cuny.edu' },
+            { name: 'CUNY Brooklyn College', domain: 'brooklyn.cuny.edu' },
+            { name: 'CUNY City College', domain: 'ccny.cuny.edu' },
+            { name: 'CUNY Hunter College', domain: 'hunter.cuny.edu' },
+            { name: 'CUNY Queens College', domain: 'qc.cuny.edu' },
+            { name: 'CUNY Lehman College', domain: 'lehman.cuny.edu' },
+            { name: 'CUNY John Jay College', domain: 'jjay.cuny.edu' },
+            { name: 'Dominican College', domain: 'dc.edu' },
+            { name: 'Dowling College', domain: 'dowling.edu' },
+            { name: 'LeMoyne College', domain: 'lemoyne.edu' },
+            { name: 'Manhattan College', domain: 'manhattan.edu' },
+            { name: 'Manhattanville College', domain: 'mville.edu' },
+            { name: 'Marist College', domain: 'marist.edu' },
+            { name: 'Molloy University', domain: 'molloy.edu' },
+            { name: 'Mount Saint Mary College', domain: 'msmc.edu' },
+            { name: 'Nazareth College', domain: 'naz.edu' },
+            { name: 'Niagara University', domain: 'niagara.edu' },
+            { name: 'SUNY Cortland', domain: 'cortland.edu' },
+            { name: 'SUNY Fredonia', domain: 'fredonia.edu' },
+            { name: 'SUNY Geneseo', domain: 'geneseo.edu' },
+            { name: 'SUNY New Paltz', domain: 'newpaltz.edu' },
+            { name: 'SUNY Oneonta', domain: 'oneonta.edu' },
+            { name: 'SUNY Oswego', domain: 'oswego.edu' },
+            { name: 'SUNY Plattsburgh', domain: 'plattsburgh.edu' },
+            { name: 'SUNY Potsdam', domain: 'potsdam.edu' },
+            { name: 'SUNY Purchase', domain: 'purchase.edu' },
+            { name: 'St. Bonaventure University', domain: 'sbu.edu' },
+            { name: 'St. Francis College (NY)', domain: 'sfc.edu' },
+            { name: 'St. Joseph\'s University New York', domain: 'sjny.edu' },
+            { name: 'Touro University', domain: 'touro.edu' },
+            { name: 'Union College (NY)', domain: 'union.edu' },
+            { name: 'Wagner College', domain: 'wagner.edu' },
+            // North Carolina
+            { name: 'University of North Carolina at Charlotte', domain: 'uncc.edu' },
+            { name: 'University of North Carolina at Greensboro', domain: 'uncg.edu' },
+            { name: 'University of North Carolina at Wilmington', domain: 'uncw.edu' },
+            { name: 'University of North Carolina at Asheville', domain: 'unca.edu' },
+            { name: 'Western Carolina University', domain: 'wcu.edu' },
+            { name: 'Elizabeth City State University', domain: 'ecsu.edu' },
+            { name: 'Barton College', domain: 'barton.edu' },
+            { name: 'Campbell University', domain: 'campbell.edu' },
+            { name: 'Catawba College', domain: 'catawba.edu' },
+            { name: 'Gardner-Webb University', domain: 'gardner-webb.edu' },
+            { name: 'Lenoir-Rhyne University', domain: 'lr.edu' },
+            { name: 'Meredith College', domain: 'meredith.edu' },
+            { name: 'Pfeiffer University', domain: 'pfeiffer.edu' },
+            { name: 'Queens University of Charlotte', domain: 'queens.edu' },
+            { name: 'St. Andrews University', domain: 'sa.edu' },
+            // North Dakota
+            { name: 'Minot State University', domain: 'minotstateu.edu' },
+            { name: 'Valley City State University', domain: 'vcsu.edu' },
+            { name: 'Dickinson State University', domain: 'dickinsonstate.edu' },
+            { name: 'University of Jamestown', domain: 'uj.edu' },
+            { name: 'Mayville State University', domain: 'mayvillestate.edu' },
+            // Ohio
+            { name: 'Cleveland State University', domain: 'csuohio.edu' },
+            { name: 'Wright State University', domain: 'wright.edu' },
+            { name: 'Youngstown State University', domain: 'ysu.edu' },
+            { name: 'Shawnee State University', domain: 'shawnee.edu' },
+            { name: 'Heidelberg University', domain: 'heidelberg.edu' },
+            { name: 'Hiram College', domain: 'hiram.edu' },
+            { name: 'John Carroll University', domain: 'jcu.edu' },
+            { name: 'Malone University', domain: 'malone.edu' },
+            { name: 'Mount Union', domain: 'mountunion.edu' },
+            { name: 'Ohio Northern University', domain: 'onu.edu' },
+            { name: 'Ohio Wesleyan University', domain: 'owu.edu' },
+            { name: 'Otterbein University', domain: 'otterbein.edu' },
+            { name: 'Ursuline College', domain: 'ursuline.edu' },
+            { name: 'Wilberforce University', domain: 'wilberforce.edu' },
+            { name: 'Wittenberg University', domain: 'wittenberg.edu' },
+            // Oklahoma
+            { name: 'University of Central Oklahoma', domain: 'uco.edu' },
+            { name: 'East Central University', domain: 'ecok.edu' },
+            { name: 'Northeastern State University', domain: 'nsuok.edu' },
+            { name: 'Northwestern Oklahoma State University', domain: 'nwosu.edu' },
+            { name: 'Southeastern Oklahoma State University', domain: 'sosu.edu' },
+            { name: 'Southwestern Oklahoma State University', domain: 'swosu.edu' },
+            { name: 'Oral Roberts University', domain: 'oru.edu' },
+            // Oregon
+            { name: 'Eastern Oregon University', domain: 'eou.edu' },
+            { name: 'Southern Oregon University', domain: 'sou.edu' },
+            { name: 'Western Oregon University', domain: 'wou.edu' },
+            { name: 'Linfield University', domain: 'linfield.edu' },
+            { name: 'Pacific University', domain: 'pacificu.edu' },
+            { name: 'George Fox University', domain: 'georgefox.edu' },
+            { name: 'Corban University', domain: 'corban.edu' },
+            // Pennsylvania
+            { name: 'Bloomsburg University', domain: 'bloomu.edu' },
+            { name: 'California University of Pennsylvania', domain: 'calu.edu' },
+            { name: 'Clarion University', domain: 'clarion.edu' },
+            { name: 'East Stroudsburg University', domain: 'esu.edu' },
+            { name: 'Edinboro University', domain: 'edinboro.edu' },
+            { name: 'Indiana University of Pennsylvania', domain: 'iup.edu' },
+            { name: 'Lock Haven University', domain: 'lockhaven.edu' },
+            { name: 'Mansfield University', domain: 'mansfield.edu' },
+            { name: 'Millersville University', domain: 'millersville.edu' },
+            { name: 'Shippensburg University', domain: 'ship.edu' },
+            { name: 'Slippery Rock University', domain: 'sru.edu' },
+            { name: 'West Chester University', domain: 'wcupa.edu' },
+            { name: 'Arcadia University', domain: 'arcadia.edu' },
+            { name: 'Cabrini University', domain: 'cabrini.edu' },
+            { name: 'Chestnut Hill College', domain: 'chc.edu' },
+            { name: 'Elizabethtown College', domain: 'etown.edu' },
+            { name: 'Gannon University', domain: 'gannon.edu' },
+            { name: 'Gettysburg College', domain: 'gettysburg.edu' },
+            { name: 'Grove City College', domain: 'gcc.edu' },
+            { name: 'King\'s College (PA)', domain: 'kings.edu' },
+            { name: 'Lincoln University (PA)', domain: 'lincoln.edu' },
+            { name: 'Lycoming College', domain: 'lycoming.edu' },
+            { name: 'Marywood University', domain: 'marywood.edu' },
+            { name: 'Mercyhurst University', domain: 'mercyhurst.edu' },
+            { name: 'Messiah University', domain: 'messiah.edu' },
+            { name: 'Misericordia University', domain: 'misericordia.edu' },
+            { name: 'Mount Aloysius College', domain: 'mtaloy.edu' },
+            { name: 'Neumann University', domain: 'neumann.edu' },
+            { name: 'Rosemont College', domain: 'rosemont.edu' },
+            { name: 'Saint Francis University', domain: 'francis.edu' },
+            { name: 'Saint Joseph\'s University', domain: 'sju.edu' },
+            { name: 'Susquehanna University', domain: 'susqu.edu' },
+            { name: 'Thiel College', domain: 'thiel.edu' },
+            { name: 'University of Scranton', domain: 'scranton.edu' },
+            { name: 'Ursinus College', domain: 'ursinus.edu' },
+            { name: 'Westminster College (PA)', domain: 'westminster.edu' },
+            { name: 'Widener University', domain: 'widener.edu' },
+            { name: 'Wilson College', domain: 'wilson.edu' },
+            { name: 'York College of Pennsylvania', domain: 'ycp.edu' },
+            // Rhode Island
+            { name: 'Bryant University', domain: 'bryant.edu' },
+            { name: 'Johnson & Wales University', domain: 'jwu.edu' },
+            { name: 'Salve Regina University', domain: 'salve.edu' },
+            { name: 'Roger Williams University', domain: 'rwu.edu' },
+            // South Carolina
+            { name: 'College of Charleston', domain: 'cofc.edu' },
+            { name: 'Coastal Carolina University', domain: 'coastal.edu' },
+            { name: 'Francis Marion University', domain: 'fmarion.edu' },
+            { name: 'Lander University', domain: 'lander.edu' },
+            { name: 'University of South Carolina Upstate', domain: 'uscupstate.edu' },
+            { name: 'Erskine College', domain: 'erskine.edu' },
+            { name: 'Limestone University', domain: 'limestone.edu' },
+            { name: 'Presbyterian College', domain: 'presby.edu' },
+            { name: 'Converse University', domain: 'converse.edu' },
+            // South Dakota
+            { name: 'Black Hills State University', domain: 'bhsu.edu' },
+            { name: 'Dakota State University', domain: 'dsu.edu' },
+            { name: 'Dakota Wesleyan University', domain: 'dwu.edu' },
+            { name: 'Northern State University', domain: 'northern.edu' },
+            { name: 'Augustana University (SD)', domain: 'augie.edu' },
+            // Tennessee
+            { name: 'Austin Peay State University', domain: 'apsu.edu' },
+            { name: 'East Tennessee State University', domain: 'etsu.edu' },
+            { name: 'Middle Tennessee State University', domain: 'mtsu.edu' },
+            { name: 'Tennessee Tech University', domain: 'tntech.edu' },
+            { name: 'University of Tennessee at Chattanooga', domain: 'utc.edu' },
+            { name: 'University of Tennessee at Martin', domain: 'utm.edu' },
+            { name: 'Tennessee Wesleyan University', domain: 'tnwesleyan.edu' },
+            { name: 'Union University', domain: 'uu.edu' },
+            { name: 'Lee University', domain: 'leeuniversity.edu' },
+            { name: 'Lipscomb University', domain: 'lipscomb.edu' },
+            { name: 'Maryville College (TN)', domain: 'maryvillecollege.edu' },
+            { name: 'Rhodes College', domain: 'rhodes.edu' },
+            { name: 'Christian Brothers University', domain: 'cbu.edu' },
+            // Texas
+            { name: 'Abilene Christian University', domain: 'acu.edu' },
+            { name: 'Lamar University', domain: 'lamar.edu' },
+            { name: 'Prairie View A&M University', domain: 'pvamu.edu' },
+            { name: 'Sam Houston State University', domain: 'shsu.edu' },
+            { name: 'Stephen F. Austin State University', domain: 'sfasu.edu' },
+            { name: 'Sul Ross State University', domain: 'sulross.edu' },
+            { name: 'Tarleton State University', domain: 'tarleton.edu' },
+            { name: 'Texas A&M University-Commerce', domain: 'tamuc.edu' },
+            { name: 'Texas A&M University-Corpus Christi', domain: 'tamucc.edu' },
+            { name: 'Texas A&M University-Kingsville', domain: 'tamuk.edu' },
+            { name: 'Texas A&M International University', domain: 'tamiu.edu' },
+            { name: 'Texas Southern University', domain: 'tsu.edu' },
+            { name: 'University of Houston-Clear Lake', domain: 'uhcl.edu' },
+            { name: 'University of Houston-Downtown', domain: 'uhd.edu' },
+            { name: 'University of Houston-Victoria', domain: 'uhv.edu' },
+            { name: 'University of Texas at El Paso', domain: 'utep.edu' },
+            { name: 'University of Texas at Tyler', domain: 'uttyler.edu' },
+            { name: 'West Texas A&M University', domain: 'wtamu.edu' },
+            { name: 'Hardin-Simmons University', domain: 'hsutx.edu' },
+            { name: 'Howard Payne University', domain: 'hputx.edu' },
+            { name: 'LeTourneau University', domain: 'letu.edu' },
+            { name: 'Lubbock Christian University', domain: 'lcu.edu' },
+            { name: 'McMurry University', domain: 'mcm.edu' },
+            { name: 'Midwestern State University', domain: 'mwsu.edu' },
+            { name: 'Our Lady of the Lake University', domain: 'ollusa.edu' },
+            { name: 'Schreiner University', domain: 'schreiner.edu' },
+            { name: 'Southwestern University', domain: 'southwestern.edu' },
+            { name: 'St. Edward\'s University', domain: 'stedwards.edu' },
+            { name: 'St. Mary\'s University (TX)', domain: 'stmarytx.edu' },
+            { name: 'Texas Lutheran University', domain: 'tlu.edu' },
+            { name: 'Trinity University (TX)', domain: 'trinity.edu' },
+            { name: 'University of the Incarnate Word', domain: 'uiw.edu' },
+            { name: 'Wayland Baptist University', domain: 'wbu.edu' },
+            // Utah
+            { name: 'Dixie State University', domain: 'dixie.edu' },
+            { name: 'Southern Utah University', domain: 'suu.edu' },
+            { name: 'Utah Valley University', domain: 'uvu.edu' },
+            { name: 'Westminster College (UT)', domain: 'westminstercollege.edu' },
+            // Vermont
+            { name: 'Castleton University', domain: 'castleton.edu' },
+            { name: 'Johnson State College', domain: 'jsc.edu' },
+            { name: 'Lyndon State College', domain: 'lyndonstate.edu' },
+            { name: 'Norwich University', domain: 'norwich.edu' },
+            { name: 'Saint Michael\'s College', domain: 'smcvt.edu' },
+            { name: 'Middlebury College', domain: 'middlebury.edu' },
+            // Virginia
+            { name: 'George Mason University', domain: 'gmu.edu' },
+            { name: 'Longwood University', domain: 'longwood.edu' },
+            { name: 'Norfolk State University', domain: 'nsu.edu' },
+            { name: 'Radford University', domain: 'radford.edu' },
+            { name: 'University of Mary Washington', domain: 'umw.edu' },
+            { name: 'Virginia Commonwealth University', domain: 'vcu.edu' },
+            { name: 'Bridgewater College', domain: 'bridgewater.edu' },
+            { name: 'Eastern Mennonite University', domain: 'emu.edu' },
+            { name: 'Emory & Henry College', domain: 'ehc.edu' },
+            { name: 'Ferrum College', domain: 'ferrum.edu' },
+            { name: 'Hampden-Sydney College', domain: 'hsc.edu' },
+            { name: 'Hollins University', domain: 'hollins.edu' },
+            { name: 'Lynchburg University', domain: 'lynchburg.edu' },
+            { name: 'Mary Baldwin University', domain: 'marybaldwin.edu' },
+            { name: 'Randolph College', domain: 'randolphcollege.edu' },
+            { name: 'Randolph-Macon College', domain: 'rmc.edu' },
+            { name: 'Regent University', domain: 'regent.edu' },
+            { name: 'Roanoke College', domain: 'roanoke.edu' },
+            { name: 'Shenandoah University', domain: 'su.edu' },
+            { name: 'Sweet Briar College', domain: 'sbc.edu' },
+            // Washington
+            { name: 'Central Washington University', domain: 'cwu.edu' },
+            { name: 'Eastern Washington University', domain: 'ewu.edu' },
+            { name: 'Washington State University', domain: 'wsu.edu' },
+            { name: 'Pacific Lutheran University', domain: 'plu.edu' },
+            { name: 'Saint Martin\'s University', domain: 'stmartin.edu' },
+            { name: 'Whitworth University', domain: 'whitworth.edu' },
+            // West Virginia
+            { name: 'Fairmont State University', domain: 'fairmontstate.edu' },
+            { name: 'Marshall University', domain: 'marshall.edu' },
+            { name: 'Shepherd University', domain: 'shepherd.edu' },
+            { name: 'West Liberty University', domain: 'westliberty.edu' },
+            { name: 'West Virginia University', domain: 'wvu.edu' },
+            { name: 'Bethany College (WV)', domain: 'bethanywv.edu' },
+            { name: 'Davis & Elkins College', domain: 'dewv.edu' },
+            // Wisconsin
+            { name: 'University of Wisconsin-Eau Claire', domain: 'uwec.edu' },
+            { name: 'University of Wisconsin-Green Bay', domain: 'uwgb.edu' },
+            { name: 'University of Wisconsin-La Crosse', domain: 'uwlax.edu' },
+            { name: 'University of Wisconsin-Milwaukee', domain: 'uwm.edu' },
+            { name: 'University of Wisconsin-Oshkosh', domain: 'uwosh.edu' },
+            { name: 'University of Wisconsin-Platteville', domain: 'uwplatt.edu' },
+            { name: 'University of Wisconsin-River Falls', domain: 'uwrf.edu' },
+            { name: 'University of Wisconsin-Stevens Point', domain: 'uwsp.edu' },
+            { name: 'University of Wisconsin-Stout', domain: 'uwstout.edu' },
+            { name: 'University of Wisconsin-Superior', domain: 'uwsuper.edu' },
+            { name: 'University of Wisconsin-Whitewater', domain: 'uww.edu' },
+            { name: 'Alverno College', domain: 'alverno.edu' },
+            { name: 'Cardinal Stritch University', domain: 'stritch.edu' },
+            { name: 'Carroll University', domain: 'carrollu.edu' },
+            { name: 'Carthage College', domain: 'carthage.edu' },
+            { name: 'Concordia University Wisconsin', domain: 'cuw.edu' },
+            { name: 'Edgewood College', domain: 'edgewood.edu' },
+            { name: 'Lakeland University', domain: 'lakeland.edu' },
+            { name: 'Lawrence University', domain: 'lawrence.edu' },
+            { name: 'Marian University (WI)', domain: 'marianuniversity.edu' },
+            { name: 'Mount Mary University', domain: 'mtmary.edu' },
+            { name: 'Ripon College', domain: 'ripon.edu' },
+            { name: 'St. Norbert College', domain: 'snc.edu' },
+            { name: 'Viterbo University', domain: 'viterbo.edu' },
+            // Wyoming
+            { name: 'Laramie County Community College', domain: 'lccc.wy.edu' },
+            // Elite Non-Ivy
+            { name: 'Massachusetts Institute of Technology', domain: 'mit.edu' },
+            { name: 'Stanford University', domain: 'stanford.edu' },
+            { name: 'California Institute of Technology', domain: 'caltech.edu' },
+            { name: 'Duke University', domain: 'duke.edu' },
+            { name: 'Northwestern University', domain: 'northwestern.edu' },
+            { name: 'University of Chicago', domain: 'uchicago.edu' },
+            { name: 'Johns Hopkins University', domain: 'jhu.edu' },
+            { name: 'Rice University', domain: 'rice.edu' },
+            { name: 'Vanderbilt University', domain: 'vanderbilt.edu' },
+            { name: 'Washington University in St. Louis', domain: 'wustl.edu' },
+            { name: 'Emory University', domain: 'emory.edu' },
+            { name: 'Georgetown University', domain: 'georgetown.edu' },
+            { name: 'University of Notre Dame', domain: 'nd.edu' },
+            { name: 'Carnegie Mellon University', domain: 'cmu.edu' },
+            { name: 'Tufts University', domain: 'tufts.edu' },
+            { name: 'Boston College', domain: 'bc.edu' },
+            { name: 'Brandeis University', domain: 'brandeis.edu' },
+            { name: 'Wake Forest University', domain: 'wfu.edu' },
+            { name: 'Tulane University', domain: 'tulane.edu' },
+            { name: 'Case Western Reserve University', domain: 'case.edu' },
+            { name: 'Northeastern University', domain: 'northeastern.edu' },
+            { name: 'Boston University', domain: 'bu.edu' },
+            { name: 'New York University', domain: 'nyu.edu' },
+            { name: 'University of Southern California', domain: 'usc.edu' },
+            { name: 'George Washington University', domain: 'gwu.edu' },
+            { name: 'American University', domain: 'american.edu' },
+            { name: 'Syracuse University', domain: 'syr.edu' },
+            { name: 'University of Rochester', domain: 'rochester.edu' },
+            { name: 'Fordham University', domain: 'fordham.edu' },
+            { name: 'Villanova University', domain: 'villanova.edu' },
+            { name: 'Southern Methodist University', domain: 'smu.edu' },
+            { name: 'University of Denver', domain: 'du.edu' },
+            { name: 'Brigham Young University', domain: 'byu.edu' },
+            { name: 'University of Richmond', domain: 'richmond.edu' },
+            { name: 'Santa Clara University', domain: 'scu.edu' },
+            { name: 'Gonzaga University', domain: 'gonzaga.edu' },
+            { name: 'Baylor University', domain: 'baylor.edu' },
+            { name: 'Marquette University', domain: 'marquette.edu' },
+            { name: 'Loyola University Chicago', domain: 'luc.edu' },
+            { name: 'DePaul University', domain: 'depaul.edu' },
+            { name: 'Saint Louis University', domain: 'slu.edu' },
+            { name: 'Creighton University', domain: 'creighton.edu' },
+            { name: 'Xavier University', domain: 'xavier.edu' },
+            { name: 'University of Miami', domain: 'miami.edu' },
+            { name: 'Drexel University', domain: 'drexel.edu' },
+            { name: 'Temple University', domain: 'temple.edu' },
+            { name: 'Texas Christian University', domain: 'tcu.edu' },
+            // Top Liberal Arts Colleges
+            { name: 'Williams College', domain: 'williams.edu' },
+            { name: 'Amherst College', domain: 'amherst.edu' },
+            { name: 'Swarthmore College', domain: 'swarthmore.edu' },
+            { name: 'Wellesley College', domain: 'wellesley.edu' },
+            { name: 'Middlebury College', domain: 'middlebury.edu' },
+            { name: 'Pomona College', domain: 'pomona.edu' },
+            { name: 'Claremont McKenna College', domain: 'cmc.edu' },
+            { name: 'Harvey Mudd College', domain: 'hmc.edu' },
+            { name: 'Scripps College', domain: 'scrippscollege.edu' },
+            { name: 'Pitzer College', domain: 'pitzer.edu' },
+            { name: 'Colby College', domain: 'colby.edu' },
+            { name: 'Bowdoin College', domain: 'bowdoin.edu' },
+            { name: 'Carleton College', domain: 'carleton.edu' },
+            { name: 'Grinnell College', domain: 'grinnell.edu' },
+            { name: 'Hamilton College', domain: 'hamilton.edu' },
+            { name: 'Haverford College', domain: 'haverford.edu' },
+            { name: 'Vassar College', domain: 'vassar.edu' },
+            { name: 'Oberlin College', domain: 'oberlin.edu' },
+            { name: 'Wesleyan University', domain: 'wesleyan.edu' },
+            { name: 'Colgate University', domain: 'colgate.edu' },
+            { name: 'Davidson College', domain: 'davidson.edu' },
+            { name: 'Lafayette College', domain: 'lafayette.edu' },
+            { name: 'Lehigh University', domain: 'lehigh.edu' },
+            { name: 'Bucknell University', domain: 'bucknell.edu' },
+            { name: 'Dickinson College', domain: 'dickinson.edu' },
+            { name: 'Franklin & Marshall College', domain: 'fandm.edu' },
+            { name: 'Gettysburg College', domain: 'gettysburg.edu' },
+            { name: 'Kenyon College', domain: 'kenyon.edu' },
+            { name: 'Macalester College', domain: 'macalester.edu' },
+            { name: 'Colorado College', domain: 'coloradocollege.edu' },
+            { name: 'Denison University', domain: 'denison.edu' },
+            { name: 'Furman University', domain: 'furman.edu' },
+            { name: 'College of the Holy Cross', domain: 'holycross.edu' },
+            { name: 'Muhlenberg College', domain: 'muhlenberg.edu' },
+            { name: 'Smith College', domain: 'smith.edu' },
+            { name: 'Mount Holyoke College', domain: 'mtholyoke.edu' },
+            { name: 'Bryn Mawr College', domain: 'brynmawr.edu' },
+            { name: 'Barnard College', domain: 'barnard.edu' },
+            { name: 'Trinity College', domain: 'trincoll.edu' },
+            { name: 'Whitman College', domain: 'whitman.edu' },
+            { name: 'Wofford College', domain: 'wofford.edu' },
+            { name: 'Lawrence University', domain: 'lawrence.edu' },
+            { name: 'St. Olaf College', domain: 'stolaf.edu' },
+            { name: 'Bates College', domain: 'bates.edu' },
+            { name: 'Reed College', domain: 'reed.edu' },
+            { name: 'Lewis & Clark College', domain: 'lclark.edu' },
+            { name: 'Washington and Lee University', domain: 'wlu.edu' },
+            // UC System
+            { name: 'University of California, Los Angeles', domain: 'ucla.edu' },
+            { name: 'University of California, Berkeley', domain: 'berkeley.edu' },
+            { name: 'University of California, San Diego', domain: 'ucsd.edu' },
+            { name: 'University of California, Davis', domain: 'ucdavis.edu' },
+            { name: 'University of California, Santa Barbara', domain: 'ucsb.edu' },
+            { name: 'University of California, Irvine', domain: 'uci.edu' },
+            { name: 'University of California, Santa Cruz', domain: 'ucsc.edu' },
+            { name: 'University of California, Riverside', domain: 'ucr.edu' },
+            { name: 'University of California, Merced', domain: 'ucmerced.edu' },
+            // Major Public Research Universities
+            { name: 'University of Michigan', domain: 'umich.edu' },
+            { name: 'University of Virginia', domain: 'virginia.edu' },
+            { name: 'University of North Carolina at Chapel Hill', domain: 'unc.edu' },
+            { name: 'University of Wisconsin-Madison', domain: 'wisc.edu' },
+            { name: 'University of Florida', domain: 'ufl.edu' },
+            { name: 'University of Texas at Austin', domain: 'utexas.edu' },
+            { name: 'Georgia Institute of Technology', domain: 'gatech.edu' },
+            { name: 'Ohio State University', domain: 'osu.edu' },
+            { name: 'Penn State University', domain: 'psu.edu' },
+            { name: 'University of Illinois Urbana-Champaign', domain: 'illinois.edu' },
+            { name: 'University of Washington', domain: 'washington.edu' },
+            { name: 'Purdue University', domain: 'purdue.edu' },
+            { name: 'University of Maryland, College Park', domain: 'umd.edu' },
+            { name: 'Virginia Tech', domain: 'vt.edu' },
+            { name: 'University of Minnesota Twin Cities', domain: 'umn.edu' },
+            { name: 'University of Georgia', domain: 'uga.edu' },
+            { name: 'Texas A&M University', domain: 'tamu.edu' },
+            { name: 'University of Pittsburgh', domain: 'pitt.edu' },
+            { name: 'Rutgers University', domain: 'rutgers.edu' },
+            { name: 'Indiana University Bloomington', domain: 'iu.edu' },
+            { name: 'University of Iowa', domain: 'uiowa.edu' },
+            { name: 'Iowa State University', domain: 'iastate.edu' },
+            { name: 'Michigan State University', domain: 'msu.edu' },
+            { name: 'University of Connecticut', domain: 'uconn.edu' },
+            { name: 'University of Massachusetts Amherst', domain: 'umass.edu' },
+            { name: 'University of Colorado Boulder', domain: 'colorado.edu' },
+            { name: 'University of Oregon', domain: 'uoregon.edu' },
+            { name: 'Oregon State University', domain: 'oregonstate.edu' },
+            { name: 'University of Arizona', domain: 'arizona.edu' },
+            { name: 'Arizona State University', domain: 'asu.edu' },
+            { name: 'University of Utah', domain: 'utah.edu' },
+            { name: 'University of South Carolina', domain: 'sc.edu' },
+            { name: 'Clemson University', domain: 'clemson.edu' },
+            { name: 'University of Alabama', domain: 'ua.edu' },
+            { name: 'Auburn University', domain: 'auburn.edu' },
+            { name: 'University of Tennessee', domain: 'utk.edu' },
+            { name: 'University of Kentucky', domain: 'uky.edu' },
+            { name: 'University of Louisville', domain: 'louisville.edu' },
+            { name: 'University of Mississippi', domain: 'olemiss.edu' },
+            { name: 'Mississippi State University', domain: 'msstate.edu' },
+            { name: 'Louisiana State University', domain: 'lsu.edu' },
+            { name: 'University of Arkansas', domain: 'uark.edu' },
+            { name: 'University of Oklahoma', domain: 'ou.edu' },
+            { name: 'Oklahoma State University', domain: 'okstate.edu' },
+            { name: 'University of Kansas', domain: 'ku.edu' },
+            { name: 'Kansas State University', domain: 'kstate.edu' },
+            { name: 'University of Missouri', domain: 'missouri.edu' },
+            { name: 'University of Nebraska-Lincoln', domain: 'unl.edu' },
+            { name: 'University of Delaware', domain: 'udel.edu' },
+            { name: 'College of William & Mary', domain: 'wm.edu' },
+            { name: 'University of New Hampshire', domain: 'unh.edu' },
+            { name: 'University of Vermont', domain: 'uvm.edu' },
+            { name: 'University of Rhode Island', domain: 'uri.edu' },
+            { name: 'University of Maine', domain: 'umaine.edu' },
+            { name: 'University of Nevada, Las Vegas', domain: 'unlv.edu' },
+            { name: 'University of Nevada, Reno', domain: 'unr.edu' },
+            { name: 'University of Hawaii at Manoa', domain: 'hawaii.edu' },
+            { name: 'University of New Mexico', domain: 'unm.edu' },
+            { name: 'University of Wyoming', domain: 'uwyo.edu' },
+            { name: 'Montana State University', domain: 'montana.edu' },
+            { name: 'University of Montana', domain: 'umt.edu' },
+            { name: 'University of Idaho', domain: 'uidaho.edu' },
+            { name: 'Boise State University', domain: 'boisestate.edu' },
+            { name: 'University of North Dakota', domain: 'und.edu' },
+            { name: 'North Dakota State University', domain: 'ndsu.edu' },
+            { name: 'South Dakota State University', domain: 'sdstate.edu' },
+            { name: 'University of South Dakota', domain: 'usd.edu' },
+            { name: 'University of Alaska Fairbanks', domain: 'uaf.edu' },
+            { name: 'Colorado State University', domain: 'colostate.edu' },
+            { name: 'Florida State University', domain: 'fsu.edu' },
+            { name: 'Florida International University', domain: 'fiu.edu' },
+            { name: 'University of Central Florida', domain: 'ucf.edu' },
+            { name: 'University of South Florida', domain: 'usf.edu' },
+            { name: 'North Carolina State University', domain: 'ncsu.edu' },
+            { name: 'James Madison University', domain: 'jmu.edu' },
+            { name: 'Georgia State University', domain: 'gsu.edu' },
+            { name: 'University of Houston', domain: 'uh.edu' },
+            { name: 'Texas Tech University', domain: 'ttu.edu' },
+            { name: 'University of Texas at Dallas', domain: 'utdallas.edu' },
+            { name: 'University of Texas at San Antonio', domain: 'utsa.edu' },
+            { name: 'Texas State University', domain: 'txstate.edu' },
+            { name: 'University of North Texas', domain: 'unt.edu' },
+            { name: 'New Mexico State University', domain: 'nmsu.edu' },
+            { name: 'University of Colorado Denver', domain: 'ucdenver.edu' },
+            { name: 'University of Northern Colorado', domain: 'unco.edu' },
+            { name: 'Appalachian State University', domain: 'appstate.edu' },
+            { name: 'East Carolina University', domain: 'ecu.edu' },
+            { name: 'George Mason University', domain: 'gmu.edu' },
+            { name: 'Old Dominion University', domain: 'odu.edu' },
+            { name: 'Stony Brook University', domain: 'stonybrook.edu' },
+            { name: 'SUNY Buffalo', domain: 'buffalo.edu' },
+            { name: 'SUNY Binghamton', domain: 'binghamton.edu' },
+            { name: 'SUNY Albany', domain: 'albany.edu' },
+            { name: 'Towson University', domain: 'towson.edu' },
+            { name: 'University of Cincinnati', domain: 'uc.edu' },
+            { name: 'Miami University', domain: 'miamioh.edu' },
+            { name: 'Ohio University', domain: 'ohio.edu' },
+            { name: 'Bowling Green State University', domain: 'bgsu.edu' },
+            { name: 'Kent State University', domain: 'kent.edu' },
+            { name: 'Ball State University', domain: 'bsu.edu' },
+            { name: 'University of Illinois Chicago', domain: 'uic.edu' },
+            { name: 'University of Missouri-Kansas City', domain: 'umkc.edu' },
+            { name: 'Wichita State University', domain: 'wichita.edu' },
+            { name: 'University of Northern Iowa', domain: 'uni.edu' },
+            { name: 'Utah State University', domain: 'usu.edu' },
+            { name: 'Weber State University', domain: 'weber.edu' },
+            { name: 'Louisiana Tech University', domain: 'latech.edu' },
+            { name: 'University of New Orleans', domain: 'uno.edu' },
+            { name: 'Arkansas State University', domain: 'astate.edu' },
+            { name: 'University of Texas at Arlington', domain: 'uta.edu' },
+            // Technology Institutes
+            { name: 'Rensselaer Polytechnic Institute', domain: 'rpi.edu' },
+            { name: 'Worcester Polytechnic Institute', domain: 'wpi.edu' },
+            { name: 'Stevens Institute of Technology', domain: 'stevens.edu' },
+            { name: 'Illinois Institute of Technology', domain: 'iit.edu' },
+            { name: 'Rochester Institute of Technology', domain: 'rit.edu' },
+            { name: 'New Jersey Institute of Technology', domain: 'njit.edu' },
+            { name: 'Colorado School of Mines', domain: 'mines.edu' },
+            { name: 'Embry-Riddle Aeronautical University', domain: 'erau.edu' },
+            { name: 'Florida Institute of Technology', domain: 'fit.edu' },
+            { name: 'Missouri University of Science and Technology', domain: 'mst.edu' },
+            { name: 'Rose-Hulman Institute of Technology', domain: 'rose-hulman.edu' },
+            // Military Academies
+            { name: 'United States Military Academy (West Point)', domain: 'westpoint.edu' },
+            { name: 'United States Naval Academy', domain: 'usna.edu' },
+            { name: 'United States Air Force Academy', domain: 'usafa.edu' },
+            { name: 'United States Coast Guard Academy', domain: 'uscga.edu' },
+            { name: 'United States Merchant Marine Academy', domain: 'usmma.edu' },
+            { name: 'The Citadel', domain: 'citadel.edu' },
+            { name: 'Virginia Military Institute', domain: 'vmi.edu' },
+            // HBCUs
+            { name: 'Howard University', domain: 'howard.edu' },
+            { name: 'Spelman College', domain: 'spelman.edu' },
+            { name: 'Morehouse College', domain: 'morehouse.edu' },
+            { name: 'Hampton University', domain: 'hamptonu.edu' },
+            { name: 'Florida A&M University', domain: 'famu.edu' },
+            { name: 'Clark Atlanta University', domain: 'cau.edu' },
+            { name: 'North Carolina A&T State University', domain: 'ncat.edu' },
+            { name: 'North Carolina Central University', domain: 'nccu.edu' },
+            { name: 'Prairie View A&M University', domain: 'pvamu.edu' },
+            { name: 'Tennessee State University', domain: 'tnstate.edu' },
+            { name: 'Xavier University of Louisiana', domain: 'xula.edu' },
+            { name: 'Tuskegee University', domain: 'tuskegee.edu' },
+            { name: 'Morgan State University', domain: 'morgan.edu' },
+            { name: 'Delaware State University', domain: 'desu.edu' },
+            { name: 'Bowie State University', domain: 'bowiestate.edu' },
+            { name: 'Coppin State University', domain: 'coppin.edu' },
+            { name: 'Lincoln University', domain: 'lincoln.edu' },
+            { name: 'Grambling State University', domain: 'gram.edu' },
+            { name: 'Southern University', domain: 'subr.edu' },
+            { name: 'Fisk University', domain: 'fisk.edu' },
+            { name: 'Dillard University', domain: 'dillard.edu' },
+            { name: 'Jackson State University', domain: 'jsums.edu' },
+            { name: 'Alcorn State University', domain: 'alcorn.edu' },
+            { name: 'Virginia State University', domain: 'vsu.edu' },
+            { name: 'Norfolk State University', domain: 'nsu.edu' },
+            { name: 'Winston-Salem State University', domain: 'wssu.edu' },
+            { name: 'Fayetteville State University', domain: 'uncfsu.edu' },
+            { name: 'Johnson C. Smith University', domain: 'jcsu.edu' },
+            { name: 'Benedict College', domain: 'benedict.edu' },
+            { name: 'Claflin University', domain: 'claflin.edu' },
+            { name: 'South Carolina State University', domain: 'scsu.edu' },
+            { name: 'Fort Valley State University', domain: 'fvsu.edu' },
+            { name: 'Bethune-Cookman University', domain: 'cookman.edu' },
+            { name: 'Alabama A&M University', domain: 'aamu.edu' },
+            { name: 'Alabama State University', domain: 'alasu.edu' },
+            { name: 'Kentucky State University', domain: 'kysu.edu' },
+            { name: 'West Virginia State University', domain: 'wvstateu.edu' },
+            // Art, Design & Performing Arts
+            { name: 'Rhode Island School of Design', domain: 'risd.edu' },
+            { name: 'Pratt Institute', domain: 'pratt.edu' },
+            { name: 'Parsons School of Design', domain: 'parsons.edu' },
+            { name: 'School of Visual Arts', domain: 'sva.edu' },
+            { name: 'Savannah College of Art and Design', domain: 'scad.edu' },
+            { name: 'California College of the Arts', domain: 'cca.edu' },
+            { name: 'Art Center College of Design', domain: 'artcenter.edu' },
+            { name: 'California Institute of the Arts', domain: 'calarts.edu' },
+            { name: 'Cooper Union', domain: 'cooper.edu' },
+            { name: 'Berklee College of Music', domain: 'berklee.edu' },
+            { name: 'Juilliard School', domain: 'juilliard.edu' },
+            { name: 'New England Conservatory', domain: 'necmusic.edu' },
+            { name: 'Manhattan School of Music', domain: 'msmnyc.edu' },
+            { name: 'Curtis Institute of Music', domain: 'curtis.edu' },
+            // Additional Private & Regional
+            { name: 'Hofstra University', domain: 'hofstra.edu' },
+            { name: 'Ithaca College', domain: 'ithaca.edu' },
+            { name: 'Marist College', domain: 'marist.edu' },
+            { name: 'Pace University', domain: 'pace.edu' },
+            { name: "St. John's University", domain: 'stjohns.edu' },
+            { name: 'Yeshiva University', domain: 'yu.edu' },
+            { name: 'The New School', domain: 'newschool.edu' },
+            { name: 'Quinnipiac University', domain: 'qu.edu' },
+            { name: 'Sacred Heart University', domain: 'sacredheart.edu' },
+            { name: 'Fairfield University', domain: 'fairfield.edu' },
+            { name: 'Providence College', domain: 'providence.edu' },
+            { name: 'Seton Hall University', domain: 'shu.edu' },
+            { name: 'Rider University', domain: 'rider.edu' },
+            { name: 'Rowan University', domain: 'rowan.edu' },
+            { name: 'Montclair State University', domain: 'montclair.edu' },
+            { name: 'College of New Jersey', domain: 'tcnj.edu' },
+            { name: 'Drew University', domain: 'drew.edu' },
+            { name: 'Duquesne University', domain: 'duq.edu' },
+            { name: 'La Salle University', domain: 'lasalle.edu' },
+            { name: 'Allegheny College', domain: 'allegheny.edu' },
+            { name: 'Juniata College', domain: 'juniata.edu' },
+            { name: 'Loyola University Maryland', domain: 'loyola.edu' },
+            { name: 'Catholic University of America', domain: 'cua.edu' },
+            { name: 'Christopher Newport University', domain: 'cnu.edu' },
+            { name: 'University of Mary Washington', domain: 'umw.edu' },
+            { name: 'Radford University', domain: 'radford.edu' },
+            { name: 'Liberty University', domain: 'liberty.edu' },
+            { name: 'Mercer University', domain: 'mercer.edu' },
+            { name: 'Berry College', domain: 'berry.edu' },
+            { name: 'Agnes Scott College', domain: 'agnesscott.edu' },
+            { name: 'Rhodes College', domain: 'rhodes.edu' },
+            { name: 'Belmont University', domain: 'belmont.edu' },
+            { name: 'Samford University', domain: 'samford.edu' },
+            { name: 'Stetson University', domain: 'stetson.edu' },
+            { name: 'Rollins College', domain: 'rollins.edu' },
+            { name: 'University of Tampa', domain: 'ut.edu' },
+            { name: 'Nova Southeastern University', domain: 'nova.edu' },
+            { name: 'Elon University', domain: 'elon.edu' },
+            { name: 'High Point University', domain: 'highpoint.edu' },
+            { name: 'Butler University', domain: 'butler.edu' },
+            { name: 'DePauw University', domain: 'depauw.edu' },
+            { name: 'Valparaiso University', domain: 'valpo.edu' },
+            { name: 'Drake University', domain: 'drake.edu' },
+            { name: 'Truman State University', domain: 'truman.edu' },
+            { name: 'Gustavus Adolphus College', domain: 'gustavus.edu' },
+            { name: 'St. Catherine University', domain: 'stkate.edu' },
+            { name: 'Luther College', domain: 'luther.edu' },
+            { name: 'Coe College', domain: 'coe.edu' },
+            { name: 'Knox College', domain: 'knox.edu' },
+            { name: 'Augustana College', domain: 'augustana.edu' },
+            { name: 'Wheaton College', domain: 'wheaton.edu' },
+            { name: 'University of Evansville', domain: 'evansville.edu' },
+            { name: 'Wabash College', domain: 'wabash.edu' },
+            { name: 'Pacific Lutheran University', domain: 'plu.edu' },
+            { name: 'Seattle University', domain: 'seattleu.edu' },
+            { name: 'Western Washington University', domain: 'wwu.edu' },
+            { name: 'Willamette University', domain: 'willamette.edu' },
+            { name: 'University of Portland', domain: 'up.edu' },
+            { name: 'University of Tulsa', domain: 'utulsa.edu' },
+            { name: 'University of the Pacific', domain: 'pacific.edu' },
+            { name: 'Loyola Marymount University', domain: 'lmu.edu' },
+            { name: 'Pepperdine University', domain: 'pepperdine.edu' },
+            { name: 'University of San Diego', domain: 'sandiego.edu' },
+            { name: 'University of San Francisco', domain: 'usfca.edu' },
+            { name: 'Chapman University', domain: 'chapman.edu' },
+            { name: 'Occidental College', domain: 'occidental.edu' },
+            { name: 'University of Redlands', domain: 'redlands.edu' },
+        ];
+/* ═══════════════════════════════════════════════════════════════════
+   AdmitMap funnel — one question per screen.
+
+   Structure follows the Collegize onboarding pattern: a short
+   motivation block first (cheap to answer, builds investment), a
+   "why you fit" moment built from those answers, then the academic
+   data the report actually needs.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const MAX_SCHOOLS = 10, MAX_ACTS = 10;
+
+const RANKS = ['Valedictorian','Salutatorian','Top 1%','Top 5%','Top 10%','Top 25%','Top 50%',
+  'Bottom 50%','My school does not rank'];
+
+const WHY = [
+  'To open doors to the best career opportunities',
+  'To explore my interests and challenge myself academically',
+  'To network and surround myself with ambitious peers',
+  'To maximise scholarships and graduate without debt'
+];
+const WORRY = [
+  "My test scores or GPA aren't strong enough",
+  "My extracurriculars don't feel impressive or unique",
+  "I don't think my essays tell a powerful story",
+  "I don't know what schools to apply to"
+];
+const CONFIDENCE = [
+  'Extremely confident — I know my story is unique',
+  "Somewhat confident — I think I'll stand out, but not sure",
+  "Neutral — I'm just hoping for the best",
+  'Not very confident — my profile feels average',
+  "Not confident at all — I don't know what makes me stand out"
+];
+
+/* The "you're a fit" card reads back what they just told us. */
+const WHY_FACT = {
+  0:'Your report ranks every school by outcome, not prestige — so you can see which ones actually open the doors you want.',
+  1:'You get admit-rate data by programme, because the odds for your major are rarely the odds the school advertises.',
+  2:'You see the real admitted-student profile at each school — who gets in, not just how many.',
+  3:'Every school on your list gets an estimated net price, so you can see where you graduate without debt.'
+};
+const WORRY_FACT = {
+  0:'We show exactly how much your GPA and scores move your odds at each school — and where they matter least.',
+  1:'Your activities get scored on depth, leadership and impact, so you can see what is actually carrying your profile.',
+  2:'Your personal statement is graded on six dimensions with specific feedback, free with every report.',
+  3:'Every school is sorted into Reach, Target and Likely against your real profile — no guessing.'
+};
+
+const GRAD_YEARS = (()=>{ const y=new Date().getFullYear(); return [y,y+1,y+2,y+3,y+4].map(String); })();
+const SAT_RANGE = '400–1600', ACT_RANGE = '1–36';
+
+const BLANK_ACT = () => ({type:'',desc:'',grades:[],hrs:'',weeks:''});
+const BLANK_HON = () => ({title:'',grades:[],levels:[]});
+
+const BLANK = {
+  first:'', why:null, worry:null, confidence:null,
+  gradYear:'', state:'', major:'',
+  gpa:'', rank:'', sat:'', act:'', apExams:[],
+  activities:[BLANK_ACT()], honors:[], schools:[],
+  wantsAid:null, income:'', householdSize:'', studentIncome:'', parentCash:'', parentInvest:'', budget:'',
+  essayPrompt:null, essay:''
+};
+
+/* ── Screens. `req` returns an error string, or null when it can pass. ── */
+const SCREENS = [
+
+  /* ── Motivation ── */
+  {id:'name', type:'name',
+   q:"What's your name?",
+   sub:'So we can address the report to you.',
+   req:()=> S.first.trim() ? null : 'Enter your first name.'},
+
+  {id:'why', type:'choice', field:'why', opts:WHY,
+   q:()=> `Why do you want to get into a great college, <em>${esc(S.first||'friend')}</em>?`,
+   sub:'There is no wrong answer — it tells us which part of the report to lead with.',
+   req:()=> S.why===null ? 'Pick the one that fits best.' : null},
+
+  {id:'worry', type:'choice', field:'worry', opts:WORRY,
+   q:'What part of your application keeps you up at night?',
+   sub:'Whatever you pick, your report goes deepest there.',
+   req:()=> S.worry===null ? 'Pick one.' : null},
+
+  {id:'confidence', type:'choice', field:'confidence', opts:CONFIDENCE,
+   q:'How confident are you that your application will stand out?',
+   sub:'Be honest. Most students are somewhere in the middle.',
+   req:()=> S.confidence===null ? 'Pick one.' : null},
+
+  {id:'fit', type:'fit'},
+
+  {id:'personalise', type:'inter',
+   icon:'<path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/>',
+   q:'To personalise your report',
+   sub:'A few short questions about your academics and your list. Most are one tap, and every one of them changes a number in the report.'},
+
+  /* ── Basics ── */
+  {id:'grad', type:'select', field:'gradYear', opts:GRAD_YEARS,
+   q:'When do you graduate high school?',
+   sub:'Every number is scored against the right admissions cycle.',
+   ph:'Select graduation year',
+   req:()=> S.gradYear ? null : 'Pick your graduation year.'},
+
+  {id:'state', type:'select', field:'state', opts:()=>STATES,
+   q:'Where do you live?',
+   sub:'State residency changes admit rates and price at every public university.',
+   ph:'Select state',
+   req:()=> S.state ? null : 'Pick where you live.'},
+
+  {id:'major', type:'groupselect', field:'major', opts:()=>MAJORS,
+   q:'What do you want to study?',
+   sub:'Admit rates differ a lot by programme — often more than by school.',
+   ph:'Select a major',
+   req:()=> S.major ? null : 'Pick a major.'},
+
+  /* ── Academics ── */
+  {id:'gpa', type:'gpa',
+   q:"What's your unweighted GPA?",
+   sub:'On a 4.0 scale. If your school only reports weighted, use your best estimate of the unweighted figure.',
+   req:()=> { const v=parseFloat(S.gpa); return (v>0&&v<=4.0) ? null : 'Enter a GPA between 0 and 4.0.'; }},
+
+  {id:'rank', type:'select', field:'rank', opts:()=>RANKS,
+   q:'What is your class rank (if your school ranks)?',
+   sub:'Most schools no longer rank. If yours does not, say so — it is not a gap in your profile.',
+   ph:'Select an option',
+   opt:true, req:()=>null},
+
+  {id:'tests', type:'tests',
+   q:'SAT or ACT?',
+   sub:'Optional. Leave both blank if you are applying test-optional.',
+   opt:true,
+   req:()=>{
+     if(S.sat && !(+S.sat>=400 && +S.sat<=1600)) return 'SAT composite is '+SAT_RANGE+'.';
+     if(S.act && !(+S.act>=1 && +S.act<=36)) return 'ACT composite is '+ACT_RANGE+'.';
+     return null; }},
+
+
+  {id:'aps', type:'aps',
+   q:'Which AP exams have you taken?',
+   sub:'Optional. Add a score if you have one — it is fine to leave scores blank.',
+   opt:true, req:()=>null},
+
+  /* ── Activities ── */
+  {id:'spike', type:'inter',
+   icon:'<path d="M3 20h18"/><path d="M7 20V13m5 7V5m5 15v-9"/>',
+   q:'One deep commitment beats ten memberships.',
+   sub:'Admissions officers forget applicants with a long list of average activities. They remember the one who went deep on something. List what you actually do — in the order that matters most to you.'},
+
+  {id:'activities', type:'activities',
+   q:'Describe your activities',
+   sub:'Depth beats length. List them most important first — you can add up to '+MAX_ACTS+'.',
+   req:()=> S.activities.some(a=>(a.desc||'').trim()) ? null : 'Describe at least one activity.'},
+
+  /* ── Honors ── */
+  {id:'honors', type:'honors',
+   q:'Any honors or awards?',
+   sub:'Recognition level matters far more than the count. It is completely fine to have none.',
+   opt:true, req:()=>null},
+
+  /* ── Schools ── */
+  {id:'schools', type:'schools',
+   q:'Which schools are on your list?',
+   sub:'Add up to '+MAX_SCHOOLS+'. Include reaches and safeties — a list of only reaches tells you nothing.',
+   req:()=> S.schools.length>=3 ? null : 'Add at least three schools.'},
+
+  /* ── Financial ── */
+  {id:'aidgate', type:'aidgate',
+   q:'Do you want to know what each school would actually cost you?',
+   sub:'The price on a college website is almost never what a family pays. Answer six short questions and every school on your list gets a real number instead of a sticker one.',
+   req:()=> S.wantsAid===null ? 'Pick one to continue.' : null},
+
+  {id:'income', type:'slider', field:'income', max:400000, step:2500, aid:true,
+   q:'What is your household income before tax?',
+   sub:'Both parents combined, from the last filed return. Income carries the most weight in every aid formula.',
+   req:()=> +S.income>0 ? null : 'Set your household income.'},
+
+  {id:'household', type:'number', field:'householdSize', ph:'4', max:20, aid:true,
+   q:'How many people do your parents support?',
+   sub:'Including you.',
+   req:()=> +S.householdSize>0 ? null : 'Enter a number.'},
+
+  {id:'studentIncome', type:'slider', field:'studentIncome', max:30000, step:500, aid:true,
+   q:'What did you earn last year?',
+   sub:'Jobs, internships, anything taxable. Student income is assessed harder than your parents’.',
+   opt:true, req:()=>null},
+
+  {id:'parentCash', type:'slider', field:'parentCash', max:200000, step:2500, aid:true,
+   q:'Parent savings and checking?',
+   sub:'A rough figure is fine. Savings are counted far more gently than income — under 6%.',
+   opt:true, req:()=>null},
+
+  {id:'parentInvest', type:'slider', field:'parentInvest', max:500000, step:5000, aid:true,
+   q:'Parent investments?',
+   sub:'Brokerage accounts, 529 plans, property other than the family home.',
+   opt:true, req:()=>null},
+
+  {id:'budget', type:'slider', field:'budget', max:100000, step:1000, aid:true,
+   q:'What can your family actually pay per year?',
+   sub:'Your ceiling, not what you hope for. This is what we measure every net price against.',
+   req:()=> +S.budget>0 ? null : 'Set what your family can pay.'},
+
+  /* ── Essay ── */
+  {id:'prompt', type:'prompt',
+   q:'Which Common App prompt?',
+   sub:'Optional, but the essay moves your odds at selective schools. Pick the prompt you are answering.',
+   opt:true, req:()=>null},
+
+  {id:'essay', type:'essay',
+   q:'Paste your draft',
+   sub:'A rough draft is enough. Graded free with every report, on six dimensions.',
+   opt:true, req:()=>null},
+
+];
+
+/* ═══ STATE ═══ */
+let S = load(), i = 0, goingBack = false;
+
+function load(){
+  try{ const r = localStorage.getItem('admitmap_profile');
+    if(r) return Object.assign(JSON.parse(JSON.stringify(BLANK)), JSON.parse(r)); }catch(e){}
+  return JSON.parse(JSON.stringify(BLANK));
+}
+function save(){ try{ localStorage.setItem('admitmap_profile', JSON.stringify(S)); }catch(e){} }
+
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const logo = d => 'https://img.logo.dev/'+encodeURIComponent(d)+'?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=128&format=png';
+const words = t => t.trim() ? t.trim().split(/\s+/).length : 0;
+const usd = n => '$'+(+n||0).toLocaleString('en-US');
+const val = v => typeof v==='function' ? v() : v;
+
+/* Financial screens disappear entirely when the student skipped the gate. */
+const live = () => SCREENS.filter(s => !s.aid || S.wantsAid === true);
+
+const TICK = '<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+
+/* ═══ RENDER ═══ */
+function render(){
+  const L = live(), sc = L[i];
+  const card = document.getElementById('card');
+  card.className = 'card' + (goingBack ? ' back' : '');
+  goingBack = false;
+
+  let h = '';
+  if(sc.type !== 'fit'){
+    h += `<h1 class="q">${val(sc.q)}</h1>`;
+    if(sc.sub) h += `<p class="sub">${val(sc.sub)}</p>`;
+  }
+  h += `<div class="body">${VIEW[sc.type](sc)}</div>`;
+  h += `<div class="err" id="err"></div>`;
+  if(sc.opt) h += `<button class="skip" onclick="next(true)">Skip this — I'll add it later</button>`;
+  card.innerHTML = h;
+
+  document.getElementById('back').disabled = (i === 0);
+  document.getElementById('next').textContent = (i === L.length-1) ? 'Build my report' : 'Continue';
+  document.getElementById('pfill').style.width = Math.round(i/(L.length-1)*100) + '%';
+
+  const f = card.querySelector('input:not([type=range]),textarea,select');
+  if(f && window.innerWidth > 820) f.focus();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ═══ NAVIGATION ═══ */
+function next(skip){
+  const L = live(), sc = L[i];
+  if(!skip && sc.req){
+    const e = sc.req();
+    if(e){ const el = document.getElementById('err'); el.textContent = e; el.classList.add('on'); return; }
+  }
+  save();
+  if(i === L.length-1){ window.location.href = 'paywall.html'; return; }
+  i++; render();
+}
+function prev(){ if(i === 0) return; goingBack = true; i--; render(); }
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && e.target.tagName !== 'TEXTAREA'){ e.preventDefault(); next(); }
+});
+
+/* ═══ SHARED HELPERS ═══ */
+function set(field, v){ S[field] = v; save(); }
+function pick(field, idx){ S[field] = idx; save(); render(); }
+function togg(arr, v){ const k = arr.indexOf(v); k<0 ? arr.push(v) : arr.splice(k,1); save(); render(); }
+function optionList(opts, sel, ph){
+  return `<option value="">${ph||'Select'}</option>` + val(opts).map(o =>
+    `<option value="${esc(o)}"${o===sel?' selected':''}>${esc(o)}</option>`).join('');
+}
+
+/* ═══ VIEWS ═══ */
+const VIEW = {
+
+name: () => `<div style="max-width:420px;margin:0 auto">
+  <input class="fi" id="f-first" style="text-align:center;font-size:19px;padding:20px"
+    placeholder="First name" value="${esc(S.first)}"
+    oninput="set('first',this.value)" autocomplete="given-name">
+</div>`,
+
+choice: sc => `<div class="choices">${sc.opts.map((o,k)=>
+  `<button type="button" class="choice ${S[sc.field]===k?'on':''}" onclick="pick('${sc.field}',${k})">
+     <span class="dot"></span><span>${esc(o)}</span></button>`).join('')}</div>`,
+
+fit: () => {
+  const name = esc(S.first||'you');
+  const facts = [
+    WHY_FACT[S.why] || WHY_FACT[0],
+    WORRY_FACT[S.worry] || WORRY_FACT[0],
+    (S.confidence>=3)
+      ? 'You told us your profile feels average. That is usually wrong — and the fastest thing to check with real numbers instead of a feeling.'
+      : 'You already believe your story stands out. The report shows you whether the data agrees, school by school.'
+  ];
+  return `<div class="inter-ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h1 class="q">${name}, AdmitMap was built for exactly this.</h1>
+    <p class="sub">Based on what you just told us.</p>
+    <div class="facts">${facts.map(f=>
+      `<div class="fact">${TICK}<span>${f}</span></div>`).join('')}</div>`;
+},
+
+inter: sc => `<div class="inter-ic" style="margin-top:-14px"><svg viewBox="0 0 24 24">${sc.icon}</svg></div>`,
+
+select: sc => `<div style="max-width:520px;margin:0 auto"><select class="fi" onchange="set('${sc.field}',this.value)">
+  ${optionList(sc.opts, S[sc.field], sc.ph)}</select></div>`,
+
+groupselect: sc => `<div style="max-width:520px;margin:0 auto"><select class="fi" onchange="set('${sc.field}',this.value)">
+  <option value="">${sc.ph}</option>
+  ${val(sc.opts).map(([g,items])=>`<optgroup label="${esc(g)}">${items.map(m=>
+    `<option value="${esc(m)}"${m===S.major?' selected':''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}
+</select></div>`,
+
+gpa: () => `<div style="max-width:340px;margin:0 auto">
+  <input class="fi" style="text-align:center;font-size:30px;font-family:'Fraunces',serif;padding:20px"
+    id="f-gpa" inputmode="decimal" placeholder="3.85" value="${esc(S.gpa)}"
+    oninput="set('gpa',this.value.replace(/[^0-9.]/g,''))">
+  <p class="fh" style="text-align:center">Unweighted, 4.0 scale</p></div>`,
+
+
+tests: () => `<div class="row" style="max-width:520px;margin:0 auto">
+  <div><label class="fl">SAT composite</label>
+    <input class="fi" inputmode="numeric" placeholder="1480" value="${esc(S.sat)}"
+      oninput="set('sat',this.value.replace(/[^0-9]/g,''))">
+    <p class="fh">${SAT_RANGE}</p></div>
+  <div><label class="fl">ACT composite</label>
+    <input class="fi" inputmode="numeric" placeholder="33" value="${esc(S.act)}"
+      oninput="set('act',this.value.replace(/[^0-9]/g,''))">
+    <p class="fh">${ACT_RANGE}</p></div>
+</div>`,
+
+number: sc => `<div style="max-width:260px;margin:0 auto">
+  <input class="fi" style="text-align:center;font-size:26px;padding:19px" inputmode="numeric"
+    placeholder="${sc.ph}" value="${esc(S[sc.field])}"
+    oninput="set('${sc.field}',this.value.replace(/[^0-9]/g,''))"></div>`,
+
+aps: () => {
+  const picked = S.apExams.map(a=>a.name);
+  return `<div style="max-width:660px;margin:0 auto">
+    <select class="fi" onchange="addAp(this.value);this.value=''">
+      <option value="">Add an AP exam…</option>
+      ${AP_COURSES.filter(c=>picked.indexOf(c)<0).map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}
+    </select>
+    <div style="margin-top:16px">${S.apExams.map((a,k)=>`
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+        <span style="flex:1;font-size:14.5px;font-weight:600">${esc(a.name)}</span>
+        <input class="fi" style="width:96px;padding:11px;text-align:center" inputmode="numeric"
+          placeholder="Score" value="${esc(a.score||'')}"
+          oninput="S.apExams[${k}].score=this.value.replace(/[^1-5]/g,'').slice(0,1);save()">
+        <button class="blk-x" onclick="S.apExams.splice(${k},1);save();render()">Remove</button>
+      </div>`).join('')}</div></div>`;
+},
+
+activities: () => S.activities.map((a,k)=>`
+  <div class="blk">
+    <div class="blk-h"><span class="blk-n">Activity ${k+1}</span>
+      ${S.activities.length>1?`<button class="blk-x" onclick="S.activities.splice(${k},1);save();render()">Remove</button>`:''}</div>
+    <div class="fg"><label class="fl">Activity or experience type</label>
+      <select class="fi" onchange="S.activities[${k}].type=this.value;save()">
+        ${optionList(ACT_TYPES, a.type, 'Select a type')}</select></div>
+    <div class="fg"><label class="fl">Describe it</label>
+      <input class="fi" maxlength="100" placeholder="e.g. Led a 14-person team to the state final"
+        value="${esc(a.desc)}" oninput="S.activities[${k}].desc=this.value;save();
+          this.nextElementSibling.textContent=this.value.length+' / 100'">
+      <div class="wc">${(a.desc||'').length} / 100</div></div>
+    <div class="fg"><label class="fl">Grade levels</label>
+      <div class="chips">${GRADES.map(g=>
+        `<button class="chip ${(a.grades||[]).indexOf(g)>-1?'on':''}"
+          onclick="togg(S.activities[${k}].grades,'${g}')">${g}</button>`).join('')}</div></div>
+    <div class="row">
+      <div><label class="fl">Hours per week</label>
+        <input class="fi" inputmode="numeric" placeholder="10" value="${esc(a.hrs)}"
+          oninput="S.activities[${k}].hrs=this.value.replace(/[^0-9]/g,'');save()"></div>
+      <div><label class="fl">Weeks per year</label>
+        <input class="fi" inputmode="numeric" placeholder="30" value="${esc(a.weeks)}"
+          oninput="S.activities[${k}].weeks=this.value.replace(/[^0-9]/g,'');save()"></div></div>
+  </div>`).join('') +
+  `<button class="add" ${S.activities.length>=MAX_ACTS?'disabled':''}
+     onclick="S.activities.push(BLANK_ACT());save();render()">+ Add another activity</button>`,
+
+honors: () => (S.honors.length ? S.honors.map((h,k)=>`
+  <div class="blk">
+    <div class="blk-h"><span class="blk-n">Honor ${k+1}</span>
+      <button class="blk-x" onclick="S.honors.splice(${k},1);save();render()">Remove</button></div>
+    <div class="fg"><label class="fl">Title</label>
+      <input class="fi" placeholder="e.g. National Merit Semifinalist" value="${esc(h.title)}"
+        oninput="S.honors[${k}].title=this.value;save()"></div>
+    <div class="fg"><label class="fl">Grade levels</label>
+      <div class="chips">${HON_GRADES.map(g=>
+        `<button class="chip ${(h.grades||[]).indexOf(g)>-1?'on':''}"
+          onclick="togg(S.honors[${k}].grades,'${g}')">${g}</button>`).join('')}</div></div>
+    <div class="fg" style="margin-bottom:0"><label class="fl">Level of recognition</label>
+      <div class="chips">${REC_LEVELS.map(l=>
+        `<button class="chip ${(h.levels||[]).indexOf(l)>-1?'on':''}"
+          onclick="togg(S.honors[${k}].levels,'${l}')">${l}</button>`).join('')}</div></div>
+  </div>`).join('') : '') +
+  `<button class="add" onclick="S.honors.push(BLANK_HON());save();render()">+ Add an honor</button>`,
+
+schools: () => `<div class="search-wrap">
+  <input class="fi" id="sch" placeholder="Start typing a college name…" autocomplete="off"
+    oninput="searchSchools(this.value)" ${S.schools.length>=MAX_SCHOOLS?'disabled':''}>
+  <div id="results"></div>
+  <div class="picked" id="picked">${schChips()}</div>
+  <p class="fh" style="text-align:center;margin-top:16px">${S.schools.length} of ${MAX_SCHOOLS} added</p>
+</div>`,
+
+aidgate: () => `<div class="choices">
+  <button type="button" class="choice ${S.wantsAid===true?'on':''}" onclick="S.wantsAid=true;save();render()">
+    <span class="dot"></span><span><b>Yes, price my list</b><br>
+      <span style="font-weight:500;color:var(--muted);font-size:14px">
+        Six questions. Every school gets a real number instead of a sticker one.</span></span></button>
+  <button type="button" class="choice ${S.wantsAid===false?'on':''}" onclick="S.wantsAid=false;save();render()">
+    <span class="dot"></span><span><b>Skip it</b><br>
+      <span style="font-weight:500;color:var(--muted);font-size:14px">
+        Your odds and your school list still work exactly the same.</span></span></button>
+</div>`,
+
+slider: sc => `<div style="max-width:600px;margin:0 auto">
+  <div class="sl-val" id="slv">${usd(S[sc.field])}${(+S[sc.field]>=sc.max)?'+':''}</div>
+  <input type="range" min="0" max="${sc.max}" step="${sc.step}" value="${+S[sc.field]||0}"
+    oninput="set('${sc.field}',this.value);
+      document.getElementById('slv').textContent='$'+(+this.value).toLocaleString('en-US')+(+this.value>=${sc.max}?'+':'')">
+  <div class="sl-ends"><span>$0</span><span>${usd(sc.max)}+</span></div></div>`,
+
+prompt: () => `<div class="choices" style="max-width:760px">${PROMPTS.map((p,k)=>
+  `<button type="button" class="choice ${S.essayPrompt===k?'on':''}"
+     style="align-items:flex-start;font-weight:500;line-height:1.5;font-size:14.5px"
+     onclick="pick('essayPrompt',${k})"><span class="dot" style="margin-top:2px"></span>
+     <span>${esc(p)}</span></button>`).join('')}</div>`,
+
+essay: () => `<textarea class="fi" placeholder="Paste your essay here…"
+  oninput="set('essay',this.value);document.getElementById('wc').innerHTML='<b>'+
+    (this.value.trim()?this.value.trim().split(/\\s+/).length:0)+'</b> / 650 words'">${esc(S.essay)}</textarea>
+  <div class="wc" id="wc"><b>${words(S.essay)}</b> / 650 words</div>`,
+
+
+};
+
+/* ═══ SCHOOL SEARCH ═══ */
+function schChips(){
+  return S.schools.map((s,k)=>`<span class="pchip">
+    <img src="${logo(s.d)}" alt="" onerror="this.remove()">${esc(s.n)}
+    <button onclick="S.schools.splice(${k},1);save();render()" aria-label="Remove">&times;</button></span>`).join('');
+}
+function searchSchools(q){
+  const box = document.getElementById('results');
+  q = q.trim().toLowerCase();
+  if(q.length < 2){ box.innerHTML=''; return; }
+  const alias = SCHOOL_ALIASES[q];                 // "mit" -> full name
+  const taken = S.schools.map(s=>s.n);
+  const hits = [];
+  for(const u of universities){
+    if(!u || !u.name || taken.indexOf(u.name)>-1) continue;
+    const n = u.name.toLowerCase();
+    if(n.indexOf(q)>-1 || (alias && u.name===alias)) hits.push(u);
+    if(hits.length===7) break;
+  }
+  box.innerHTML = hits.length ? `<div class="results">${hits.map(u=>
+    `<div class="res" onclick="addSchool(${JSON.stringify(u.name).replace(/"/g,'&quot;')},&quot;${u.domain}&quot;)">
+      <img src="${logo(u.domain)}" alt="" onerror="this.style.visibility='hidden'">${esc(u.name)}</div>`).join('')}</div>` : '';
+}
+function addSchool(n, d){
+  if(S.schools.length >= MAX_SCHOOLS) return;
+  S.schools.push({n,d}); save();
+  document.getElementById('sch').value=''; document.getElementById('results').innerHTML='';
+  document.getElementById('picked').innerHTML = schChips();
+  render();
+}
+function addAp(name){ if(!name) return; S.apExams.push({name,score:''}); save(); render(); }
+
+render();
+</script>
+</body>
+
+</html>
