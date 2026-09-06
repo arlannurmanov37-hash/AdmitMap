@@ -431,6 +431,38 @@ document.addEventListener('DOMContentLoaded', async function() {
   new MutationObserver(inject).observe(document.documentElement, {childList: true, subtree: true});
   document.addEventListener('DOMContentLoaded', inject);
   window.addEventListener('load', inject);
+
+  /* ── личный отчёт ────────────────────────────────────────────────
+     Бандл разворачивает макет сам и переписывает документ, поэтому
+     подставлять данные можно только ПОСЛЕ него. Ждём #dc-root, грузим
+     справочники и модель, затем заполняем готовые узлы настоящими
+     числами. Профиля нет — на экране остаётся образец Майи. */
+  var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'report-personalize.js'];
+  var V = '20260906234126';
+
+  function loadNext(i, done) {
+    if (i >= SCRIPTS.length) return done();
+    var el = document.createElement('script');
+    el.src = SCRIPTS[i] + '?v=' + V;
+    el.onload = function () { loadNext(i + 1, done); };
+    el.onerror = function () { console.error('AdmitMap: не загрузился', SCRIPTS[i]); };
+    (document.head || document.documentElement).appendChild(el);
+  }
+
+  var started = false, tries = 0;
+  function ready() {
+    if (started) return;
+    var root = document.getElementById('dc-root');
+    if (!root || !root.querySelector('[data-count]')) {
+      if (++tries < 200) return setTimeout(ready, 60);   // максимум ~12 с
+      return;
+    }
+    started = true;
+    loadNext(0, function () {
+      if (window.AdmitMapPersonalize) window.AdmitMapPersonalize();
+    });
+  }
+  ready();
 })();
 </script>
 </body>
