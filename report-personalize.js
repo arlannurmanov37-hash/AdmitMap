@@ -327,19 +327,97 @@ function fillEarly(D) {
 }
 
 /* Активности и эссе пока не оцениваются — показывать чужие числа нельзя. */
-function hideUnscored() {
-  [/What your activities are worth/i, /How your essay reads/i].forEach(function (re) {
-    var h = byText(re, 'h1,h2,h3,span,div')[0];
-    var sec = h && (h.closest('section') || h.parentElement.parentElement);
-    if (sec) sec.style.display = 'none';
+/* Секции «активности» и «эссе» заполняются, если оценка уже есть в кэше
+   (её кладут api/activities.js и api/essay.js). Оценки нет — секцию прячем:
+   показывать чужие числа в личном отчёте нельзя. */
+function cached(key) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; }
+}
+
+function fillScoreSection(re, data, subLabels, itemNoun) {
+  var head = byText(re, 'h1,h2,h3,span,div')[0];
+  var sec = head && (head.closest('section') || head.parentElement.parentElement);
+  if (!sec) return;
+  if (!data || !(data.overall > 0)) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+
+  /* Строка списка — это span, у которого ровно два дочерних span:
+     название и балл вида «94/100». Ищем именно их, иначе крупное число
+     раздела и цифры осей попадают в ту же выборку. */
+  var rows = $$('span', sec).filter(function (e) {
+    if (e.children.length !== 2) return false;
+    var first = e.children[0], last = e.children[1];
+    // название — текстовый span без детей; балл — «94/100» из двух узлов
+    return first.tagName === 'SPAN' && first.children.length === 0 &&
+           (first.textContent || '').trim().length > 1 &&
+           /\d+\s*\/\s*100/.test(last.textContent || '');
   });
+  var rowNums = [];
+  rows.forEach(function (r) {
+    $$('span', r).forEach(function (x) { rowNums.push(x); });
+  });
+
+  var items = data.items || [];
+  rows.forEach(function (r, i) {
+    var it = items[i];
+    if (!it) { r.style.display = 'none'; return; }
+    r.style.display = '';
+    var nameEl = r.children[0];
+    if (nameEl) nameEl.textContent = it.name;
+    var scoreEl = r.children[1];
+    if (scoreEl) {
+      // «94» и «/100» лежат отдельными узлами — правим только число
+      var numNode = $$('span', scoreEl).filter(function (x) {
+        return /^\d{1,3}$/.test((x.textContent || '').trim());
+      })[0];
+      if (numNode) numNode.textContent = String(it.score);
+      else scoreEl.textContent = it.score + '/100';
+    }
+  });
+
+  // общий балл — самое крупное число раздела, не входящее в строки
+  var big = $$('span,div', sec).filter(function (e) {
+    return e.children.length === 0 && rowNums.indexOf(e) < 0 &&
+           /^\d{1,3}$/.test((e.textContent || '').trim()) &&
+           parseFloat(getComputedStyle(e).fontSize) > 34;
+  })[0];
+  if (big) setText(big, String(data.overall));
+
+  // три оси: число рядом с подписью, тоже не из строк
+  subLabels.forEach(function (pair) {
+    var lab = byText(new RegExp('^' + pair[1] + '$', 'i'))[0];
+    if (!lab || !sec.contains(lab)) return;
+    var box = lab.parentElement;
+    var num = $$('span,div', box).filter(function (e) {
+      return e.children.length === 0 && rowNums.indexOf(e) < 0 &&
+             /^\d{1,3}$/.test((e.textContent || '').trim());
+    })[0];
+    var v = data.subs && data.subs[pair[0]];
+    if (num && v != null) setText(num, String(v));
+  });
+
+  // подзаголовок макета говорит «Ten activities» — ставим реальное число
+  if (itemNoun) {
+    var sub = $$('span,p,div', sec).filter(function (e) {
+      return e.children.length === 0 && /scored|criteria|words/i.test(e.textContent || '');
+    })[0];
+    if (sub) setText(sub, items.length + ' ' + itemNoun +
+      (items.length === 1 ? '' : 's') + ', scored against the students admitted to your list');
+  }
+}
+
+function hideUnscored(D) {
+  fillScoreSection(/What your activities are worth/i, cached('admitmap_activity_scores'),
+    [['leadership', 'Leadership'], ['depth', 'Depth and commitment'], ['impact', 'Impact']], 'activitie');
+  fillScoreSection(/How your essay reads/i, cached('admitmap_essay_scores'),
+    [['craft', 'Craft'], ['substance', 'Substance'], ['distinct', 'Distinctiveness']]);
 }
 
 function personalize() {
   var D = build();
   if (!D) return false;                    // нет профиля — остаётся образец
   try {
-    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); hideUnscored();
+    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); hideUnscored(D);
     document.documentElement.setAttribute('data-am-personal', '1');
     if (D.skipped.length) console.info('AdmitMap: без данных, пропущены —', D.skipped.join(', '));
   } catch (e) { console.error('AdmitMap personalize:', e); return false; }
