@@ -7346,47 +7346,86 @@
             document.getElementById('why-modal')?.classList.add('open');
         }
 
+        /* Разбор числа. Считаем НЕ отдельной формулой, а той же моделью:
+           берём полный профиль, затем поочерёдно обнуляем один фактор и
+           смотрим, на сколько пунктов упали шансы. Это честная атрибуция —
+           цифры в разборе не могут разойтись с итоговым процентом, потому
+           что получены из него же.
+
+           Раньше здесь жила старая аддитивная формула (rate * gpaGap * 0.55
+           и т.п.), удалённая вместе с прежним калькулятором: панель объясняла
+           результат арифметикой, которая его не производила. */
         function whyChance(name) {
             const s = SCHOOLS.find(x => x.name === name); if (!s) return;
             const pct = calcChance(name);
-            if (pct == null) { alert('We don\u2019t have verified admissions data for this school yet, so we won\u2019t guess at your odds.'); return; }
-            const gpa = parseFloat(document.getElementById('plt-gpa')?.value) || USER.gpa || 3.5;
-            const testType = document.getElementById('plt-test-type')?.value || USER.testType;
-            let sat = USER.testScore || 0;
-            if (testType === 'sat') sat = parseFloat(document.getElementById('plt-test-score')?.value) || USER.testScore || 1200;
-            else if (testType === 'act') {
-                const act = parseFloat(document.getElementById('plt-test-score')?.value) || USER.testScore || 26;
-                const m = { 36:1590,35:1570,34:1540,33:1520,32:1500,31:1480,30:1460,29:1430,28:1410,27:1380,26:1360,25:1330,24:1300,23:1270,22:1240,21:1210,20:1180,19:1150,18:1110,17:1070 };
-                sat = m[Math.round(act)] || 1200;
+            if (pct == null) {
+                alert('We don\u2019t have verified admissions data for this school yet, so we won\u2019t guess at your odds.');
+                return;
             }
-            const gpaGap = gpa - s.gpa, satGap = sat - s.sat;
-            const gpaPts = s.rate * (gpaGap * 0.55);
-            const satPts = s.rate * (satGap * 0.00055);
-            const aps = (USER.apExams || []).filter(e => e.name && e.score);
-            let apBonus = aps.reduce((t, e) => t + (e.score >= 5 ? 2.5 : e.score >= 4 ? 1.5 : e.score >= 3 ? 0.5 : -0.3), 0);
-            apBonus = Math.min(8, Math.max(-3, apBonus));
-            const words = (USER.essay || '').trim().split(/\s+/).filter(w => w).length;
-            const essayBonus = words > 400 ? 4 : words > 200 ? 2 : words > 50 ? 1 : 0;
-            const hBonus = USER.honorLevel === 'international' ? 7 : USER.honorLevel === 'national' ? 4.5 : USER.honorLevel === 'state' ? 1.5 : 0;
-            const actCount = (USER.activities || []).length;
-            const actBonus = actCount >= 5 ? 2 : actCount >= 3 ? 1 : 0;
-            let aidEffect = 0;
-            const inc = parseInt(USER.income) || 125000;
-            if (s.need_aware && !isNaN(inc)) { if (inc < 60000) aidEffect = 1; else if (inc > 200000) aidEffect = -1.5; }
 
-            const fmt = v => (v > 0 ? '+' : v < 0 ? '\u2212' : '') + Math.abs(v).toFixed(1) + ' pts';
-            const cls = v => v > 0.05 ? 'up' : v < -0.05 ? 'down' : 'flat';
-            const rows = [
-                { t: 'Your GPA', s: `${gpa.toFixed(2)} vs their ${s.gpa.toFixed(2)} average`, v: gpaPts },
-                (testType === 'none'
-                    ? { t: 'Test scores', s: 'Applying test-optional — no effect either way', v: 0 }
-                    : { t: 'Your test score', s: `${Math.round(sat)} SAT vs their ${s.sat} average`, v: satPts }),
-                { t: 'AP exams', s: aps.length ? `${aps.length} exam${aps.length !== 1 ? 's' : ''} reported` : 'None reported yet', v: apBonus },
-                { t: 'Honors & awards', s: USER.honorLevel ? `${USER.honorLevel} level recognition` : 'None reported yet', v: hBonus },
-                { t: 'Personal statement', s: words ? `${words} words drafted` : 'Not written yet', v: essayBonus },
-                { t: 'Activities', s: actCount ? `${actCount} listed` : 'None listed yet', v: actBonus }
-            ];
-            if (s.need_aware) rows.push({ t: 'Financial aid need', s: 'This school considers ability to pay', v: aidEffect });
+            const col = (typeof COLLEGES !== 'undefined' && s.domain) ? COLLEGES[s.domain] : null;
+            const rate = s.rate != null ? s.rate : (col ? col.rate : null);
+            const sc = {
+                rate: rate,
+                sat: s.sat != null ? s.sat : (col ? col.sat : null),
+                act: s.act != null ? s.act : (col ? col.act : null),
+                gpa: s.gpa != null ? s.gpa : (col ? col.gpa : null),
+                isPublic: col ? col.pub === true : false,
+                state: s.state || (col ? col.state : null)
+            };
+            const base = oddsProfile();
+            if (sc.isPublic && sc.state && base.homeState) base.inState = sc.state === base.homeState;
+
+            const run = over => window.AdmitOdds.odds(sc, Object.assign({}, base, over));
+            const full = run({});
+
+            // «Средний» абитуриент этой школы: по её же медианам, без внеучебки
+            const par = { gpa: sc.gpa || 3.6, sat: sc.sat, act: null, apScores: [],
+                          honorLevel: null, activities: [], rankPct: null, essayScore: null };
+
+            const factors = [];
+            const add = (t, sub, over) => {
+                const without = run(over);
+                if (without == null) return;
+                factors.push({ t: t, s: sub, v: full - without });
+            };
+
+            const gpaTxt = base.gpa ? base.gpa.toFixed(2) : '\u2014';
+            const satTxt = base.sat ? Math.round(base.sat) + ' SAT'
+                         : base.act ? base.act + ' ACT' : 'test-optional';
+            add('Grades and scores', gpaTxt + ' \u00b7 ' + satTxt +
+                (sc.gpa ? ' vs their ' + sc.gpa.toFixed(2) + ' / ' + (sc.sat || '\u2014') : ''),
+                { gpa: par.gpa, sat: par.sat, act: null });
+
+            const aps = (base.apScores || []).length;
+            add('AP exams', aps ? aps + ' exam' + (aps !== 1 ? 's' : '') + ' reported' : 'None reported yet',
+                { apScores: [] });
+
+            add('Honors and awards',
+                base.honorLevel ? base.honorLevel + '-level recognition' : 'None reported yet',
+                { honorLevel: null });
+
+            const na = (base.activities || []).length;
+            add('Activities', na ? na + ' listed, weighted by hours and years' : 'None listed yet',
+                { activities: [] });
+
+            if (base.rankPct != null)
+                add('Class rank', 'Top ' + base.rankPct + '% of your class', { rankPct: null });
+
+            if (base.essayScore != null)
+                add('Personal statement', 'Graded ' + Math.round(base.essayScore * 10) + ' / 100',
+                    { essayScore: null });
+
+            if (sc.isPublic && base.inState != null)
+                add(base.inState ? 'In-state applicant' : 'Out-of-state applicant',
+                    base.inState ? 'Public university in your state'
+                                 : 'Public university outside your state \u2014 a real penalty',
+                    { inState: null });
+
+            factors.sort((a, b) => Math.abs(b.v) - Math.abs(a.v));
+
+            const fmt = v => (v > 0 ? '+' : v < 0 ? '\u2212' : '') + Math.abs(Math.round(v)) + ' pts';
+            const cls = v => v > 0.5 ? 'up' : v < -0.5 ? 'down' : 'flat';
 
             document.getElementById('why-inner').innerHTML = `
                 <div class="wm-head">
@@ -7396,20 +7435,23 @@
                 </div>
                 <div class="wm-body">
                     <div class="wm-base">
-                        <div><div class="wm-row-t">Starting point</div>
-                             <div class="wm-row-s">${s.rate}% of all applicants are admitted</div></div>
-                        <div class="wm-val flat">${s.rate}%</div>
+                        <div><div class="wm-row-t">Everyone who applies</div>
+                             <div class="wm-row-s">${rate}% of all applicants are admitted \u2014 including
+                                 those well below the bar</div></div>
+                        <div class="wm-val flat">${rate}%</div>
                     </div>
-                    <div class="wm-lbl">How your profile moves it</div>
-                    ${rows.map(r => `<div class="wm-row"><div class="wm-row-txt">
+                    <div class="wm-lbl">What your profile is worth</div>
+                    ${factors.map(r => `<div class="wm-row"><div class="wm-row-txt">
                         <div class="wm-row-t">${r.t}</div><div class="wm-row-s">${r.s}</div></div>
                         <div class="wm-val ${cls(r.v)}">${fmt(r.v)}</div></div>`).join('')}
-                    <div class="wm-note">This is an estimate, not a prediction. It reflects the measurable parts of your
-                        profile — it can\u2019t see your recommendations, interview, or how your story reads to a
-                        specific officer. Use it to compare schools, not to rule one out.</div>
+                    <div class="wm-note">Each line shows what you would lose if that one thing disappeared,
+                        measured by re-running the model without it. They will not sum to the total: the
+                        factors multiply rather than add, so strong grades make strong activities worth more
+                        than either is alone. It is an estimate, not a prediction \u2014 it cannot see your
+                        recommendations, your interview, or how your story reads to one particular officer.
+                        Use it to compare schools, not to rule one out.</div>
                 </div>`;
-            const back = document.getElementById('why-modal');
-            back.classList.add('open');
+            document.getElementById('why-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
         function closeWhy() {
