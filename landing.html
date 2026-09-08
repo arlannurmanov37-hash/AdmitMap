@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdmitMap — Get Into Your Dream School</title>
+  <script src="/analytics.js" defer></script>
   <meta name="description" content="See your real acceptance odds at 1,499 US colleges and what each one would actually cost your family after aid. Built from federal admissions and financial-aid data.">
   <link rel="canonical" href="https://admitmap.app/">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
@@ -3815,6 +3816,31 @@
         })();
     </script>
 
+
+<script id="am-landing-events">
+/* Какая именно кнопка ведёт в воронку — это разница между «герой работает»
+   и «работает нижний блок». Без разметки такие вещи не видны. */
+(function(){
+  function ready(fn){ document.readyState!=='loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    if(window.amTrack) window.amTrack('landing_view');
+    document.querySelectorAll('a[href="funnel.html"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        var sec = a.closest('section');
+        if(window.amTrack) window.amTrack('cta_click', {
+          section: sec ? (sec.id || 'hero') : 'nav',
+          label: (a.textContent||'').trim().slice(0,40)
+        });
+      });
+    });
+    document.querySelectorAll('a[href="report.html"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        if(window.amTrack) window.amTrack('sample_report_click');
+      });
+    });
+  });
+})();
+</script>
 </body>
 
 </html>

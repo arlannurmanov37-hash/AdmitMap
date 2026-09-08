@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AdmitMap — Build your profile</title>
+  <script src="/analytics.js" defer></script>
   <meta name="description" content="Five minutes to your odds and real cost at every school on your list.">
   <link rel="canonical" href="https://admitmap.app/funnel">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
@@ -2579,11 +2580,16 @@ function render(){
 function goto(i){ if(i<=step || valid(step)){ step=i; render(); } }
 function prev(){ if(step>0){ step--; render(); } }
 function next(){
-  if(!valid(step)) return;
+  /* Событие на неудачную валидацию тоже важно: если люди упираются в один
+     и тот же шаг, это видно только так. */
+  if(!valid(step)){ track('funnel_blocked', {step:step+1, name:STEPS[step].k}); return; }
+  track('funnel_step_done', {step:step+1, name:STEPS[step].k});
   if(step<STEPS.length-1){ step++; render(); return; }
   S.completedAt=new Date().toISOString(); save();
+  track('funnel_complete', {schools:S.schools.length, activities:S.activities.filter(a=>(a.desc||'').trim()).length});
   window.location.href='loading.html';
 }
+function track(n,p){ if(window.amTrack) window.amTrack(n,p); }
 function bad(id,is){ const e=document.getElementById(id); if(e) e.classList.toggle('on',is); return !is; }
 function valid(i){
   if(i===0){ let ok=bad('e-name',!S.name.trim()); ok=bad('e-year',!S.gradYear)&&ok;
