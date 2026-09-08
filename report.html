@@ -540,7 +540,7 @@ document.addEventListener('DOMContentLoaded', async function() {
      справочники и модель, затем заполняем готовые узлы настоящими
      числами. Профиля нет — на экране остаётся образец Майи. */
   var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'report-personalize.js'];
-  var V = '20260909023241';
+  var V = '20260909023717';
 
   function loadNext(i, done) {
     if (i >= SCRIPTS.length) return done();
@@ -571,7 +571,11 @@ document.addEventListener('DOMContentLoaded', async function() {
       try {
         var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
         var nm = P && (P.name || '').trim();
-        if (nm) document.title = nm + '\u2019s SnapScore Report \u00b7 AdmitMap';
+        // только если отчёт действительно личный: иначе во вкладке стояло имя
+        // студента над образцом Майи
+        if (nm && document.documentElement.getAttribute('data-am-personal') === '1') {
+          document.title = nm + '\u2019s SnapScore Report \u00b7 AdmitMap';
+        }
       } catch (e) {}
     });
   }

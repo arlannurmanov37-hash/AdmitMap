@@ -14,4 +14,8 @@ Disallow: /loading
 Disallow: /loading.html
 Disallow: /api/
 
+# Устаревший прайс подписочной модели — цены не совпадают с paywall
+Disallow: /pricing
+Disallow: /pricing.html
+
 Sitemap: https://admitmap.app/sitemap.xml

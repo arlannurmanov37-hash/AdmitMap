@@ -413,9 +413,55 @@ function hideUnscored(D) {
     [['craft', 'Craft'], ['substance', 'Substance'], ['distinct', 'Distinctiveness']]);
 }
 
+/* Если профиль есть, но отчёт по нему не строится (школ нет в базе, не
+   заполнен GPA), показывать образец Майи НЕЛЬЗЯ: покупатель получит чужой
+   отчёт со своим именем во вкладке. Вместо этого — честное объяснение. */
+function showCannotBuild(reason) {
+  var host = document.querySelector('#dc-root .sc-host') || document.getElementById('dc-root');
+  if (!host) return;
+  host.innerHTML =
+    '<div style="max-width:620px;margin:0 auto;padding:64px 28px;font-family:Inter,' +
+    "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" + ';color:#0f1f4b">' +
+      '<div style="font-family:Fraunces,Georgia,serif;font-size:34px;font-weight:900;' +
+      'line-height:1.1;letter-spacing:-.02em;margin-bottom:16px">' +
+        'We could not build your report yet.</div>' +
+      '<p style="font-size:16px;line-height:1.65;color:#5b7098;margin:0 0 22px">' + reason + '</p>' +
+      '<a href="funnel.html" style="display:inline-flex;align-items:center;gap:8px;' +
+      'background:#2563eb;color:#fff;text-decoration:none;font-weight:700;font-size:14px;' +
+      'padding:13px 22px;border-radius:11px">Back to my profile →</a>' +
+      '<p style="font-size:13px;line-height:1.6;color:#8296b5;margin:26px 0 0">' +
+        'If this keeps happening, email support@admitmap.app and we will sort it out. ' +
+        'You have not been charged for a report we could not produce.</p>' +
+    '</div>';
+  document.title = 'Report unavailable · AdmitMap';
+}
+
+function whyCannotBuild() {
+  var P;
+  try { P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) { return null; }
+  if (!P) return null;                                  // профиля нет — законный образец
+  if (!P.schools || !P.schools.length)
+    return 'There are no schools on your list yet. Add at least two and we will score them.';
+  if (!(parseFloat(P.gpa) > 0))
+    return 'Your GPA is missing, and without it we will not guess at your odds.';
+
+  var named = (P.schools || []).map(function (x) { return x.n; });
+  return 'We do not have verified admissions and cost data for ' +
+    (named.length === 1 ? 'the school on your list'
+                        : 'enough of the schools on your list') +
+    ' — ' + named.slice(0, 4).join(', ') +
+    (named.length > 4 ? ' and others' : '') +
+    '. We only publish odds we can stand behind, so we would rather show you nothing ' +
+    'than a number we made up. Add a few more schools and it should build.';
+}
+
 function personalize() {
   var D = build();
-  if (!D) return false;                    // нет профиля — остаётся образец
+  if (!D) {
+    var why = whyCannotBuild();
+    if (why) { showCannotBuild(why); return true; }   // профиль есть, но отчёт не выходит
+    return false;                                      // профиля нет — остаётся образец
+  }
   try {
     fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); hideUnscored(D);
     document.documentElement.setAttribute('data-am-personal', '1');
