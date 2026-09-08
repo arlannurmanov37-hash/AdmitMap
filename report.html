@@ -408,8 +408,51 @@ document.addEventListener('DOMContentLoaded', async function() {
     '             0 34px 70px rgba(15,31,75,.16);',
     '}',
     '@media(max-width:820px){#dc-root{padding:16px 10px 32px}',
-    '  #dc-root>.sc-host>div{border-radius:14px}}'
+    '  #dc-root>.sc-host>div{border-radius:14px}}',
+    '@media(max-width:560px){#dc-root{padding:10px 6px 20px}',
+    '  #dc-root>.sc-host>div{border-radius:10px;box-shadow:0 2px 8px rgba(15,31,75,.12)}}',
+
+    /* ── Телефон: макет перестраивается, а не уменьшается ───────────────
+       Сжимать 1080px до 375px бессмысленно — 13px текста превращаются
+       в 4px. Поэтому на узком экране артборд отпускаем на всю ширину,
+       а все сетки схлопываем в одну колонку. */
+    '@media(max-width:700px){',
+    '  #dc-root{zoom:1!important;padding:8px 8px 24px!important}',
+    '  #dc-root>.sc-host>div{width:100%!important;min-width:0!important;height:auto!important}',
+    '  #dc-root [style*="grid-template-columns"]{grid-template-columns:1fr!important}',
+    '  #dc-root [style*="grid-template-rows"]{grid-template-rows:auto!important}',
+    /* Элементы grid и flex по умолчанию имеют min-width:auto и отказываются
+       сжиматься уже своего содержимого — из-за этого блоки вылезали за
+       правый край. Обнуляем и разрешаем переносы. */
+    '  #dc-root *{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}',
+    '  #dc-root header{display:flex!important;flex-direction:column!important;align-items:flex-start!important}',
+    '  #dc-root img{max-width:100%!important;height:auto!important}',
+    '  #dc-root section{padding-left:16px!important;padding-right:16px!important;',
+    '                   min-height:0!important;height:auto!important}',
+    '  #dc-root header{padding-left:16px!important;padding-right:16px!important;',
+    '                  height:auto!important;flex-wrap:wrap!important;gap:14px!important}',
+    /* Абсолютные декоративные пятна на узком экране только мешают. */
+    '  #dc-root span[style*="position:absolute"][style*="border-radius:50%"]{display:none!important}',
+    '}'
   ].join('');
+
+  /* Макет жёстко шириной 1080px. На телефоне width=device-width заставляет
+     браузер сжимать всю страницу примерно втрое — 13px текста превращаются
+     в 4px. Поэтому масштабируем сами: zoom подбирается под ширину окна,
+     и на любом экране лист занимает его целиком, оставаясь читаемым. */
+  var ART_W = 1080;
+  function fit() {
+    var root = document.getElementById('dc-root');
+    if (!root) return;
+    if (window.innerWidth <= 700) {                      // одноколоночная вёрстка
+      root.style.zoom = '';
+      relaxFixedHeights(root);
+      return;
+    }
+    var pad = window.innerWidth <= 820 ? 20 : 48;
+    var z = Math.min(0.85, Math.max(0.42, (window.innerWidth - pad) / ART_W));
+    root.style.zoom = z.toFixed(4);
+  }
 
   function inject() {
     var head = document.head || document.documentElement;
@@ -425,7 +468,51 @@ document.addEventListener('DOMContentLoaded', async function() {
     var d = document.documentElement, b = document.body;
     if (d) d.style.setProperty('background', '#c9dcf5', 'important');
     if (b) b.style.setProperty('background', '#c9dcf5', 'important');
+    fit();
   }
+
+  /* Макет держит высоты в пикселях (плитки 148px, карточки 209px и т.д.).
+     На узком экране содержимое переносится и перестаёт помещаться — блоки
+     наезжают друг на друга. Снимаем только КРУПНЫЕ высоты: полоски прогресса
+     и разделители по 1-11px должны остаться как есть. */
+  function relaxFixedHeights(root) {
+    /* Раньше здесь стоял флаг на всём #dc-root. Он выставлялся при первом
+       вызове — когда бандл ещё не отрисовал содержимое, — и все последующие
+       вызовы выходили сразу. Поэтому помечаем КАЖДЫЙ элемент отдельно:
+       новые узлы обрабатываются, уже обработанные не трогаются повторно. */
+    var all = root.querySelectorAll('*:not([data-am-m])');
+    if (!all.length) return;
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i], st = el.style;
+
+      // крупные фиксированные высоты мешают переносу; тонкие полоски не трогаем
+      ['height', 'minHeight', 'maxHeight'].forEach(function (prop) {
+        var v = st[prop];
+        if (v && v.indexOf('px') > -1 && parseFloat(v) > 40) st[prop] = 'auto';
+      });
+
+      // строки flex должны переноситься, иначе название школы налезает на процент
+      var d = getComputedStyle(el).display;
+      if (d === 'flex' || d === 'inline-flex') {
+        st.flexWrap = 'wrap';
+        if (!st.rowGap) st.rowGap = '8px';
+      }
+
+      // display: flex в бандле записан с пробелом, поэтому CSS-селектор
+      // [style*="display:flex"] его не находил — правим здесь, по факту.
+      if (getComputedStyle(el).whiteSpace === 'nowrap') st.whiteSpace = 'normal';
+
+      // крупная типографика макета рассчитана на 1080px
+      var fs = parseFloat(getComputedStyle(el).fontSize);
+      if (fs >= 40)      st.fontSize = '30px';
+      else if (fs >= 28) st.fontSize = '21px';
+
+      el.setAttribute('data-am-m', '1');
+    }
+  }
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
 
   inject();
   new MutationObserver(inject).observe(document.documentElement, {childList: true, subtree: true});
@@ -458,8 +545,13 @@ document.addEventListener('DOMContentLoaded', async function() {
       return;
     }
     started = true;
+    /* Здесь содержимое уже отрисовано. MutationObserver к этому моменту
+       обычно замолкает, поэтому подгонку под экран запускаем именно тут,
+       а не только из inject(). */
+    fit();
     loadNext(0, function () {
       if (window.AdmitMapPersonalize) window.AdmitMapPersonalize();
+      fit();                       // персонализация меняет разметку — пересчитываем
     });
   }
   ready();
