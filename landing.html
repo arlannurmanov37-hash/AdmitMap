@@ -2461,45 +2461,6 @@
             #reviews [style*="amDrift"] { animation: none !important; }
         }
 
-        /* ── Фон страницы: одна непрерывная плоскость ───────────────────────
-           Раньше каждая секция красила себя сама, и при прокрутке белый цвет
-           возвращался трижды (hero, features, how), а дальше шли четыре
-           одинаково синие секции. Получались рубцы на стыках.
-           Теперь градиент один на весь документ, а секции прозрачные:
-           цвет меняется медленно и непрерывно, стыков не видно. */
-        body {
-            background:
-                radial-gradient(1250px 820px at 86% 1%,  rgba(37, 99, 235, .20) 0%, transparent 62%),
-                radial-gradient(1000px 760px at 4% 34%,  rgba(37, 99, 235, .10) 0%, transparent 58%),
-                radial-gradient(1100px 800px at 96% 68%, rgba(37, 99, 235, .12) 0%, transparent 60%),
-                linear-gradient(180deg,
-                    #ffffff  0%,
-                    #f7faff  9%,
-                    #eef4ff 26%,
-                    #e9f0ff 45%,
-                    #eef4ff 64%,
-                    #e9f0ff 82%,
-                    #f4f8ff 96%,
-                    #ffffff 100%) !important;
-            background-attachment: scroll !important;
-        }
-
-        /* Секции больше не красят себя — иначе они бы перекрыли общий фон.
-           Собственные радиальные блики внутри секций остаются: они дают
-           локальный акцент поверх общей плоскости. */
-        .hero,
-        .features-section,
-        .how-section,
-        #problems, #compare, #reviews, #waitlist {
-            background: transparent !important;
-        }
-
-        /* Подвал отделяем не цветом, а тонкой линией — так переход мягче. */
-        footer {
-            background: transparent !important;
-            border-top: 1px solid rgba(15, 31, 75, .10);
-        }
-
         /* Цена под кнопками героя. Раньше её не было нигде на лендинге —
            посетитель узнавал о платеже только после семи шагов воронки. */
         .hero-price {
@@ -2533,6 +2494,61 @@
             #reviews { padding-top: clamp(8px, 1.2vh, 40px) !important;
                        padding-bottom: clamp(8px, 1.2vh, 40px) !important; }
             #reviews > div > div { row-gap: clamp(8px, 1.2vh, 18px) !important; }
+        }
+
+        /* ── Фон: непрерывная плоскость с живым синим ──────────────────────
+           Первая попытка растянула радиальные блики на всю высоту документа —
+           синий размазался и герой побледнел. Здесь иначе:
+
+           1. Тонировка страницы — линейный градиент по всей высоте, он даёт
+              медленный общий переход и не имеет швов, потому что один на всех.
+           2. Свечения — background-attachment: fixed. Они привязаны к окну,
+              а не к документу, поэтому держат насыщенность на любой прокрутке
+              и не растягиваются.
+           3. У секций свои радиальные акценты, но БЕЗ сплошной заливки:
+              радиус уходит в transparent, поэтому стык двух секций physically
+              не может дать линию. */
+        body {
+            background:
+                radial-gradient(1700px 1200px at 86% -6%, rgba(37, 99, 235, .22) 0%,
+                                                           rgba(37, 99, 235, .08) 40%,
+                                                           rgba(37, 99, 235, .02) 66%, transparent 88%),
+                radial-gradient(1400px 1100px at -6% 96%,  rgba(37, 99, 235, .18) 0%,
+                                                           rgba(37, 99, 235, .05) 46%, transparent 84%),
+                linear-gradient(180deg,
+                    #ffffff  0%,
+                    #f4f9ff  7%,
+                    #e6efff 24%,
+                    #dde9ff 46%,
+                    #e4edff 68%,
+                    #dde9ff 86%,
+                    #eef4ff 96%,
+                    #ffffff 100%) !important;
+            background-attachment: fixed, fixed, scroll !important;
+            background-repeat: no-repeat !important;
+        }
+
+        /* Секции прозрачные — общий фон должен просвечивать насквозь. */
+        .features-section, .how-section,
+        #problems, #compare, #reviews, #waitlist {
+            background: transparent !important;
+        }
+
+        /* Герой держит своё синее свечение сам. Ставим его фоном секции,
+           а не на ::before — этот псевдоэлемент уже занят декоративным
+           кругом с border-radius:50%, и градиент обрезался в дугу. */
+        .hero {
+            background:
+                radial-gradient(1800px 1250px at 82% -12%, rgba(37, 99, 235, .30) 0%,
+                                                           rgba(37, 99, 235, .13) 34%,
+                                                           rgba(37, 99, 235, .04) 62%, transparent 88%),
+                radial-gradient(1300px 1000px at -8% 108%, rgba(37, 99, 235, .16) 0%,
+                                                           rgba(37, 99, 235, .04) 48%, transparent 82%) !important;
+        }
+
+        footer {
+            background: transparent !important;
+            border-top: 1px solid rgba(15, 31, 75, .10);
         }
 </style>
 </head>
