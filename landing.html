@@ -2452,6 +2452,27 @@
             .hero-cta2:hover .cta2-arrow { transform: none }
         }
         @media(max-width:560px){ .hero-cta2 { width: 100%; justify-content: center } }
+
+        /* Отзывы: на низких экранах (13" ноутбук) две бегущие строки карточек
+           не помещаются. Цитату режем до трёх строк вместо четырёх — секция
+           встаёт ровно в экран, а карточки остаются одинаковой высоты. */
+        @media (max-height: 880px) {
+            #reviews p {
+                -webkit-line-clamp: 3 !important;
+                height: clamp(48px, 7.6vh, 78px) !important;
+            }
+        }
+        @media (max-height: 720px) {
+            #reviews p { -webkit-line-clamp: 2 !important; height: clamp(34px, 5.4vh, 54px) !important; }
+        }
+
+        /* Бегущие строки отзывов. Ключевые кадры лежали в <helmet> бандла,
+           который в landing.html не переносится, — без них обе ленты стояли. */
+        @keyframes amDriftA { 0% { transform: translateX(0) }      100% { transform: translateX(-50%) } }
+        @keyframes amDriftB { 0% { transform: translateX(-50%) }   100% { transform: translateX(0) } }
+        @media (prefers-reduced-motion: reduce) {
+            #reviews [style*="amDrift"] { animation: none !important; }
+        }
 </style>
 </head>
 
@@ -2725,48 +2746,103 @@
             </div>
         </section>
 
-        <section id="problems" class="problems-section">
-            <div class="problems-inner">
-                <div class="prob-left">
-                    <div class="problems-eyebrow">Who this is for</div>
-                    <h2>Sound familiar?</h2>
-                    <p class="problems-subhead">If any of this sounds like you, your application is in more danger than
-                        you think — and deadlines don't care how hard you've worked.</p>
-                </div>
-                <ol class="prob-list">
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">01</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Perfect stats aren't enough.</div>
-                            <div class="prob-body">You think your 1500+ SAT and perfect GPA make you a top candidate. In
-                                top-tier admissions, those numbers don't make you stand out.</div>
-                        </div>
-                    </li>
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">02</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Your profile is a mess.</div>
-                            <div class="prob-body">You have great individual pieces, but they don't connect. To an
-                                admissions committee, you look scattered and unfocused.</div>
-                        </div>
-                    </li>
-                    <li class="prob-row">
-                        <span class="prob-mark">
-                            <span class="prob-num">03</span>
-                        </span>
-                        <div class="prob-text">
-                            <div class="prob-title">Your essay is putting them to sleep.</div>
-                            <div class="prob-body">Your parents might love it, but to an admissions officer reading 50
-                                files a day, it's a cliché they've seen a thousand times.</div>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-        </section>
+        <section id="problems" class="problems-section" data-screen-label="Sound familiar" style="min-height:calc(100vh - 78px);display:flex;align-items:center;padding:clamp(14px,2.2vh,56px) clamp(24px,4vw,64px);position:relative;overflow:hidden;background:#eef4ff;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.008em;-webkit-font-smoothing:antialiased;text-wrap:pretty">
+
+  <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;top:-380px;left:-460px;width:1500px;height:1100px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(150,182,248,.4),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;bottom:-620px;left:-760px;width:1700px;height:1180px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.34),rgba(238,244,255,0) 76%);pointer-events:none"></span>
+  <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px),repeating-linear-gradient(90deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
+
+  <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr));gap:clamp(28px,3.2vw,48px);align-items:center;width:100%;max-width:1300px;margin:0 auto">
+
+    <div style="display:flex;flex-direction:column;gap:clamp(18px,1.9vw,26px);max-width:520px">
+      <span style="display:flex;align-items:center;gap:13px;font-family:Syne,sans-serif;font-size:14.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#2563eb">
+        <img src="admitmap-mark.svg" alt="" style="width:38px;height:38px;object-fit:contain">Who this is for?
+      </span>
+      <h2 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:clamp(34px,3.6vw,56px);font-weight:900;line-height:1;letter-spacing:-.045em;color:#0f1f4b">Sound familiar?</h2>
+      <p style="margin:0;max-width:36ch;font-size:clamp(15px,1.15vw,16.5px);line-height:1.7;color:#43536b">If any of this sounds like you, your application is in more danger than you think — and deadlines don’t care how hard you’ve worked.</p>
+
+<div style="margin-top:4px;position:relative;display:flex;flex-direction:column;gap:clamp(11px,2vh,22px);padding:clamp(14px,2.5vh,28px) 28px clamp(12px,2.1vh,24px);border-radius:18px;background:#ffffff;border:1px solid #cfdff5;box-shadow:0 1px 2px rgba(15,31,75,.05),0 24px 52px -26px rgba(23,62,140,.34)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span style="display:flex;align-items:center;gap:9px">
+            <img src="https://img.logo.dev/stanford.edu?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&amp;size=256&amp;format=png" alt="" style="width:32px;height:32px;border-radius:7px">
+            <span style="font-size:19px;font-weight:800;letter-spacing:-.016em;color:#0f1f4b">Stanford</span>
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;background:#eef4ff;border:1px solid #d9e6fa;font-size:11.5px;font-weight:600;color:#1d4ed8"><span style="width:4px;height:4px;border-radius:50%;background:#2563eb"></span>Sample</span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:clamp(11px,2vh,22px)">
+          <span style="position:relative;display:flex;align-items:center;justify-content:center;width:158px;height:158px;flex-shrink:0">
+            <svg width="158" height="158" viewBox="0 0 158 158" style="position:absolute;inset:0;transform:rotate(-90deg)">
+              <circle cx="79" cy="79" r="67" fill="none" stroke="#e4ecf9" stroke-width="13"></circle>
+              <circle cx="79" cy="79" r="67" fill="none" stroke="#2563eb" stroke-width="13" stroke-linecap="round" stroke-dasharray="59 421"></circle>
+            </svg>
+            <span style="position:relative;display:flex;flex-direction:column;align-items:center;gap:5px">
+              <span style="font-family:Fraunces,Georgia,serif;font-size:42px;font-weight:900;line-height:.86;letter-spacing:-.04em;color:#0f1f4b">14%</span>
+              <span style="font-size:13.5px;font-weight:600;letter-spacing:-.004em;color:#5f7292">Your odds</span>
+            </span>
+          </span>
+          <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:0">
+            <span style="display:flex;flex-direction:column;gap:2px;padding:11px 17px;border-radius:12px;background:#f5f8fd;border:1px solid #e0e8f5">
+              <span style="font-size:12.5px;font-weight:600;letter-spacing:-.008em;white-space:nowrap;color:#5f7292">Acceptance rate</span>
+              <span style="font-family:Fraunces,Georgia,serif;font-size:clamp(20px,2.8vh,27px);font-weight:900;letter-spacing:-.03em;white-space:nowrap;color:#43536b">3.9%</span>
+            </span>
+            <span style="display:flex;flex-direction:column;gap:2px;padding:11px 17px;border-radius:12px;background:#e9fbf1;border:1px solid #b9edd1">
+              <span style="font-size:12.5px;font-weight:600;letter-spacing:-.008em;white-space:nowrap;color:#0a9e64">Net cost / year</span>
+              <span style="font-family:Fraunces,Georgia,serif;font-size:clamp(20px,2.8vh,27px);font-weight:900;letter-spacing:-.03em;white-space:nowrap;color:#088f5a">$11,700</span>
+            </span>
+          </div>
+        </div>
+
+        <a href="funnel.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;height:56px;border-radius:12px;background:#2563eb;font-family:Syne,sans-serif;font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ffffff;box-shadow:0 12px 28px -10px rgba(37,99,235,.8)" style-hover="background:#1d4ed8">Check my chances</a>
+        <span style="text-align:center;font-size:12px;font-weight:600;color:#5f7292">Free · no card needed · 5 minutes</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div style="position:relative;overflow:hidden;padding:clamp(14px,2.5vh,28px) 32px;border-radius:18px;background:#ffffff;border:1px solid #cfdff5;box-shadow:0 1px 2px rgba(15,31,75,.05),0 20px 44px -26px rgba(23,62,140,.3);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease" style-hover="transform:translateY(-2px);border-color:#a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 26px 54px -24px rgba(23,62,140,.4)">
+        <svg width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="#d7e5fb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;top:50%;right:-12px;transform:translateY(-50%);pointer-events:none"><path d="M4 19.5h16"></path><rect x="4.6" y="12" width="3.2" height="5"></rect><rect x="10.4" y="5.5" width="3.2" height="11.5"></rect><rect x="16.2" y="9" width="3.2" height="8"></rect></svg>
+        <span style="position:absolute;top:0;bottom:0;left:0;width:3px;background:linear-gradient(180deg,#60a5fa,#2563eb);pointer-events:none"></span>
+        <div style="position:relative;display:flex;flex-direction:column;gap:11px;padding-right:180px">
+          <span style="display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:6px 15px 6px 7px;border-radius:20px;background:#2563eb;box-shadow:0 8px 20px -10px rgba(37,99,235,.85)">
+            <span style="display:flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:#ffffff;font-size:11px;font-weight:800;color:#2563eb">1</span>
+            <span style="font-size:12.5px;font-weight:700;letter-spacing:.004em;color:#ffffff">The numbers trap</span>
+          </span>
+          <span style="font-family:Fraunces,Georgia,serif;font-size:clamp(24px,3.4vh,34px);font-weight:600;line-height:1.06;letter-spacing:-.036em;font-optical-sizing:auto;color:#0f1f4b">Perfect stats aren’t enough.</span>
+          <p style="margin:0;font-size:15.5px;line-height:1.55;color:#43536b">In top-tier admissions, a 1500+ SAT and a perfect GPA don’t make you stand out.</p>
+        </div>
+      </div>
+
+      <div style="position:relative;overflow:hidden;padding:clamp(14px,2.5vh,28px) 32px;border-radius:18px;background:#ffffff;border:1px solid #cfdff5;box-shadow:0 1px 2px rgba(15,31,75,.05),0 20px 44px -26px rgba(23,62,140,.3);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease" style-hover="transform:translateY(-2px);border-color:#a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 26px 54px -24px rgba(23,62,140,.4)">
+        <svg width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="#d7e5fb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;top:50%;right:-12px;transform:translateY(-50%);pointer-events:none"><path d="M4.5 7.5h15"></path><path d="M4.5 12h15"></path><path d="M4.5 16.5h15"></path><path d="M8.2 4.5L6 19.5"></path><path d="M16.4 4.5l2.2 15"></path></svg>
+        <span style="position:absolute;top:0;bottom:0;left:0;width:3px;background:linear-gradient(180deg,#60a5fa,#2563eb);pointer-events:none"></span>
+        <div style="position:relative;display:flex;flex-direction:column;gap:11px;padding-right:180px">
+          <span style="display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:6px 15px 6px 7px;border-radius:20px;background:#2563eb;box-shadow:0 8px 20px -10px rgba(37,99,235,.85)">
+            <span style="display:flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:#ffffff;font-size:11px;font-weight:800;color:#2563eb">2</span>
+            <span style="font-size:12.5px;font-weight:700;letter-spacing:.004em;color:#ffffff">No through-line</span>
+          </span>
+          <span style="font-family:Fraunces,Georgia,serif;font-size:clamp(24px,3.4vh,34px);font-weight:600;line-height:1.06;letter-spacing:-.036em;font-optical-sizing:auto;color:#0f1f4b">Your profile is a mess.</span>
+          <p style="margin:0;font-size:15.5px;line-height:1.55;color:#43536b">Great pieces that don’t connect. To a committee, you look scattered.</p>
+        </div>
+      </div>
+
+      <div style="position:relative;overflow:hidden;padding:clamp(14px,2.5vh,28px) 32px;border-radius:18px;background:#ffffff;border:1px solid #cfdff5;box-shadow:0 1px 2px rgba(15,31,75,.05),0 20px 44px -26px rgba(23,62,140,.3);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease" style-hover="transform:translateY(-2px);border-color:#a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 26px 54px -24px rgba(23,62,140,.4)">
+        <svg width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="#d7e5fb" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;top:50%;right:-12px;transform:translateY(-50%);pointer-events:none"><path d="M5 4.5h9.5L19 9v10.5H5z"></path><path d="M8.5 12.5h7"></path><path d="M8.5 16h4.5"></path></svg>
+        <span style="position:absolute;top:0;bottom:0;left:0;width:3px;background:linear-gradient(180deg,#60a5fa,#2563eb);pointer-events:none"></span>
+        <div style="position:relative;display:flex;flex-direction:column;gap:11px;padding-right:180px">
+          <span style="display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:6px 15px 6px 7px;border-radius:20px;background:#2563eb;box-shadow:0 8px 20px -10px rgba(37,99,235,.85)">
+            <span style="display:flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:#ffffff;font-size:11px;font-weight:800;color:#2563eb">3</span>
+            <span style="font-size:12.5px;font-weight:700;letter-spacing:.004em;color:#ffffff">Seen it before</span>
+          </span>
+          <span style="font-family:Fraunces,Georgia,serif;font-size:clamp(24px,3.4vh,34px);font-weight:600;line-height:1.06;letter-spacing:-.036em;font-optical-sizing:auto;color:#0f1f4b">Your essay is putting them to sleep.</span>
+          <p style="margin:0;font-size:15.5px;line-height:1.55;color:#43536b">To an officer reading 50 files a day, it’s a cliché they’ve seen a thousand times.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
         <section id="how" class="how-section">
             <div class="how-inner">
@@ -2813,160 +2889,426 @@
             </div>
         </section>
 
-        <section id="compare" class="compare-section">
-            <div class="compare-inner">
-                <div class="compare-header">
-                    <div class="cmp-eyebrow">The difference</div>
-                    <h2>Two ways to apply.<br><em>One that works.</em></h2>
-                    <p>Same profile, same schools, same deadlines. The difference is whether you're guessing.</p>
-                </div>
+        <section id="compare" class="compare-section" data-screen-label="Two ways to apply" style="min-height:calc(100vh - 78px);display:flex;align-items:center;padding:clamp(12px,1.9vh,56px) clamp(24px,4vw,64px);position:relative;overflow:hidden;background:#eef4ff;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.006em;-webkit-font-smoothing:antialiased;text-wrap:pretty">
 
-                <div class="cx-grid">
-                    <div class="cx-cols">
-                        <span class="cx-col-h left">On your own</span>
-                        <span></span>
-                        <span class="cx-col-h right"><img src="admitmap-mark-dark.svg" alt="" class="cx-mark">With AdmitMap</span>
-                    </div>
+  <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;bottom:-620px;left:-760px;width:1700px;height:1180px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.34),rgba(238,244,255,0) 76%);pointer-events:none"></span>
+  <span style="position:absolute;top:-380px;left:-460px;width:1500px;height:1100px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(150,182,248,.4),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px),repeating-linear-gradient(90deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
 
-                    <div class="cx-row">
-                        <div class="cx-bad">You read the acceptance posts from people with your scores and scroll past the rejections.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your odds</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Your real percentage for every school on your list — the first straight answer you&rsquo;ve ever had about your own chances.</div>
-                    </div>
+  <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2vh,44px);max-width:1280px;margin:0 auto">
 
-                    <div class="cx-row">
-                        <div class="cx-bad">You cut four schools for money reasons, using a number that was never meant for you.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Real Cost</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Net cost per school after grants, from federal data — the number that was actually meant for you.</div>
-                    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.4vh,16px);text-align:center">
+      <span style="display:flex;align-items:center;gap:clamp(7px,1.1vh,12px);font-family:Syne,sans-serif;font-size:12.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#2563eb">The difference<span style="width:30px;height:2px;border-radius:2px;background:#2563eb"></span></span>
+      <h2 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:clamp(40px,min(5vw,6.8vh),82px);font-weight:900;line-height:.96;letter-spacing:-.045em;color:#0f1f4b">Two ways to apply. <span style="display:block;font-style:italic;font-weight:700;color:#2563eb">One that works.</span></h2>
+      <p style="margin:0;max-width:44ch;font-size:clamp(14px,1.75vh,17.5px);line-height:1.5;color:#43536b">Same profile, same schools, same deadlines. The difference is whether you’re guessing.</p>
+    </div>
 
-                    <div class="cx-row">
-                        <div class="cx-bad">You&rsquo;ve never known whether you&rsquo;re a strong applicant or just a busy one.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your profile</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>One number for how strong your profile actually is, before any school is involved.</div>
-                    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 172px minmax(0,1fr);gap:clamp(8px,1.3vh,14px) 18px;align-items:center;width:100%">
 
-                    <div class="cx-row">
-                        <div class="cx-bad">Ask yourself why any one of these schools would take you. You don&rsquo;t have an answer — you have a feeling.<span class="cx-ic x">&#10005;</span></div>
-                        <div class="cx-key">Your list</div>
-                        <div class="cx-good"><span class="cx-ic v">&#10003;</span>Your list, measured against the profile you actually have — which schools fit it, and which never did.</div>
-                    </div>
-                </div>
+      <span style="display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-size:15px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#5f7292">On your own</span>
+      <span></span>
+      <span style="display:flex;align-items:center;justify-content:center;gap:11px;font-family:Syne,sans-serif;font-size:15px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#1d4ed8">
+        <img src="admitmap-mark.svg" alt="" style="width:30px;height:30px;object-fit:contain">With AdmitMap
+      </span>
 
-                <div class="cmp-cta-wrap">
-                    <a href="funnel.html" class="cmp-cta">Check my chances →</a>
-                </div>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:rgba(255,255,255,.5);border:1px solid #e0e7f2">
+        <span style="font-size:clamp(13px,1.55vh,15.5px);line-height:1.5;text-align:right;color:#4f5f79">You read the acceptance posts from people with your scores and scroll past the rejections.</span>
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.75);border:1.5px solid #aab8cc;font-size:13px;font-weight:700;color:#6b7a93">✕</span>
+      </div>
+      <span style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:11px;background:rgba(255,255,255,.86);border:1px solid #c2d7f0;font-family:Syne,sans-serif;font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#1d4ed8">Your odds</span>
+      <div style="display:flex;align-items:center;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:#ffffff;border:1.5px solid #a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 40px -20px rgba(37,99,235,.4)">
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;box-shadow:0 6px 16px -6px rgba(37,99,235,.8)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+        <span style="font-size:clamp(14px,1.7vh,16px);font-weight:600;line-height:1.5;color:#0f1f4b">Your real percentage for every school on your list — the first straight answer you’ve ever had about your own chances.</span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:rgba(255,255,255,.5);border:1px solid #e0e7f2">
+        <span style="font-size:clamp(13px,1.55vh,15.5px);line-height:1.5;text-align:right;color:#4f5f79">You cut four schools for money reasons, using a number that was never meant for you.</span>
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.75);border:1.5px solid #aab8cc;font-size:13px;font-weight:700;color:#6b7a93">✕</span>
+      </div>
+      <span style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:11px;background:rgba(255,255,255,.86);border:1px solid #c2d7f0;font-family:Syne,sans-serif;font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#1d4ed8">Real cost</span>
+      <div style="display:flex;align-items:center;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:#ffffff;border:1.5px solid #a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 40px -20px rgba(37,99,235,.4)">
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;box-shadow:0 6px 16px -6px rgba(37,99,235,.8)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+        <span style="font-size:clamp(14px,1.7vh,16px);font-weight:600;line-height:1.5;color:#0f1f4b">Net cost per school after grants, from federal data — the number that was actually meant for you.</span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:rgba(255,255,255,.5);border:1px solid #e0e7f2">
+        <span style="font-size:clamp(13px,1.55vh,15.5px);line-height:1.5;text-align:right;color:#4f5f79">You’ve never known whether you’re a strong applicant or just a busy one.</span>
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.75);border:1.5px solid #aab8cc;font-size:13px;font-weight:700;color:#6b7a93">✕</span>
+      </div>
+      <span style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:11px;background:rgba(255,255,255,.86);border:1px solid #c2d7f0;font-family:Syne,sans-serif;font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#1d4ed8">Your profile</span>
+      <div style="display:flex;align-items:center;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:#ffffff;border:1.5px solid #a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 40px -20px rgba(37,99,235,.4)">
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;box-shadow:0 6px 16px -6px rgba(37,99,235,.8)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+        <span style="font-size:clamp(14px,1.7vh,16px);font-weight:600;line-height:1.5;color:#0f1f4b">One number for how strong your profile actually is, before any school is involved.</span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:rgba(255,255,255,.5);border:1px solid #e0e7f2">
+        <span style="font-size:clamp(13px,1.55vh,15.5px);line-height:1.5;text-align:right;color:#4f5f79">Ask yourself why any one of these schools would take you. You don’t have an answer — you have a feeling.</span>
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.75);border:1.5px solid #aab8cc;font-size:13px;font-weight:700;color:#6b7a93">✕</span>
+      </div>
+      <span style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:11px;background:rgba(255,255,255,.86);border:1px solid #c2d7f0;font-family:Syne,sans-serif;font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#1d4ed8">Your list</span>
+      <div style="display:flex;align-items:center;gap:clamp(8px,1.4vh,16px);padding:clamp(9px,1.8vh,24px) 26px;border-radius:16px;background:#ffffff;border:1.5px solid #a9c4f2;box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 40px -20px rgba(37,99,235,.4)">
+        <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;box-shadow:0 6px 16px -6px rgba(37,99,235,.8)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+        <span style="font-size:clamp(14px,1.7vh,16px);font-weight:600;line-height:1.5;color:#0f1f4b">Your list, measured against the profile you actually have — which schools fit it, and which never did.</span>
+      </div>
+    </div>
+
+    <a href="funnel.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:11px;height:66px;padding:0 52px;border-radius:14px;background:#2563eb;font-family:Syne,sans-serif;font-size:clamp(13px,1.55vh,15.5px);font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#ffffff;box-shadow:0 16px 38px -12px rgba(37,99,235,.8)" style-hover="background:#1d4ed8">Check my chances →</a>
+  </div>
+</section>
+
+        <section id="reviews" class="reviews-section" data-screen-label="Reviews" style="position:relative;overflow:hidden;display:flex;align-items:center;min-height:calc(100vh - 78px);padding:clamp(10px,1.6vh,44px) 0;background:#eef4ff;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.008em;-webkit-font-smoothing:antialiased;text-wrap:pretty">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="amStar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbbf24"></stop><stop offset="1" stop-color="#ef8f16"></stop></linearGradient></defs></svg>
+
+  <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;top:-380px;left:-460px;width:1500px;height:1100px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(150,182,248,.4),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+  <span style="position:absolute;bottom:-620px;left:-760px;width:1700px;height:1180px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.34),rgba(238,244,255,0) 76%);pointer-events:none"></span>
+  <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px),repeating-linear-gradient(90deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
+
+  <div style="position:relative;display:flex;flex-direction:column;gap:clamp(22px,2.4vw,32px);width:100%">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(14px,2.4vh,32px);width:100%;max-width:1280px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-direction:column;gap:13px;min-width:0">
+        <span style="display:flex;align-items:center;gap:13px;font-family:Syne,sans-serif;font-size:14.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#2563eb">
+          <img src="admitmap-mark.svg" alt="" style="width:38px;height:38px;object-fit:contain">Is AdmitMap right for you?
+        </span>
+        <h2 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:clamp(30px,3.1vw,50px);font-weight:900;line-height:1.02;letter-spacing:-.045em;white-space:nowrap;color:#0f1f4b">Built for students <span style="font-style:italic;font-weight:700;color:#2563eb">exactly like you.</span></h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:clamp(9px,1.4vh,15px);flex-shrink:0;padding:clamp(9px,1.4vh,14px) 22px;border-radius:14px;background:#ffffff;border:1px solid #cfdff5;box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 40px -22px rgba(23,62,140,.3)">
+        <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+        <span style="font-family:Fraunces,Georgia,serif;font-size:21px;font-weight:900;letter-spacing:-.03em;color:#0f1f4b">4.9</span>
+        <span style="width:1px;height:17px;background:#dbe7f7"></span>
+        <span style="font-size:clamp(12.5px,1.45vh,13.5px);font-weight:700;color:#43536b">148 early users</span>
+      </div>
+    </div>
+
+        <div style="overflow:hidden;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)">
+          <div style="display:flex;align-items:stretch;gap:clamp(10px,1.6vh,18px);width:max-content;animation:amDriftA 56s linear infinite">
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef0ff;border:1px solid #dcdffb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#4f46e5;white-space:nowrap">Profile Alignment</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I’d crossed off three schools over the price on their website. The report showed what we’d actually pay — two came out cheaper than my state school.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#6366f1,#8b5cf6);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">CH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Claire H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
             </div>
-        </section>
-
-        <section id="reviews" class="reviews-section">
-            <div class="reviews-header">
-                <div class="reviews-eyebrow">Is AdmitMap right for you?</div>
-                <h2>If any of these sound <em>familiar…</em></h2>
-                <p>AdmitMap was built for students exactly like you.</p>
-                <p class="rev-note">Real feedback from early users. Names and initials have been changed at their
-                    request &mdash; college admissions is personal, and they asked to stay anonymous.</p>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef4ff;border:1px solid #d3e2fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1d4ed8;white-space:nowrap">Essay Feedback</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">Since junior year I’d assumed I wasn’t good enough for the top of my list. Turns out I was wrong about half of them. I wish I’d known a year ago.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#2563eb,#60a5fa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">RM</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Ryan M.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
             </div>
-            <div class="rev-carousel">
-                <button class="rev-arrow" aria-label="Previous" onclick="revGo(-1, true)">←</button>
-                <div class="rev-viewport">
-                    <div class="rev-track" id="rev-track">
-
-                        <div class="rev-slide">
-                            <div class="rev-qbox">
-                                <div class="rev-qmark">&ldquo;</div>
-                                <div class="rev-card-top"><span class="rev-topic">Profile Alignment</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I&rsquo;d already crossed off three schools because of the price on their website. The report showed what my family would actually pay at each one &mdash; two of them came out cheaper than my state school. I put both back on the list.</div>
-                                <div class="rev-author">
-                                    <div class="rev-avatar">CH</div>
-                                    <div><div class="rev-name">Claire H.</div><div class="rev-role">High school senior, Class of 2027</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rev-slide">
-                            <div class="rev-qbox">
-                                <div class="rev-qmark">&ldquo;</div>
-                                <div class="rev-card-top"><span class="rev-topic">Essay Feedback</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I never said it out loud, but since junior year I&rsquo;d assumed that I probably wasn&rsquo;t good enough for the top of my list. Turns out I was wrong about half of them. I wish I&rsquo;d known that a year ago.</div>
-                                <div class="rev-author">
-                                    <div class="rev-avatar">RM</div>
-                                    <div><div class="rev-name">Ryan M.</div><div class="rev-role">High school senior, Class of 2027</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rev-slide">
-                            <div class="rev-qbox">
-                                <div class="rev-qmark">&ldquo;</div>
-                                <div class="rev-card-top"><span class="rev-topic">Milestone Tracking</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I&rsquo;d told my daughter not to bother with two of her schools because I&rsquo;d seen the price on their websites. The report showed what we&rsquo;d actually pay. She&rsquo;s applying to both now.</div>
-                                <div class="rev-author">
-                                    <div class="rev-avatar">DH</div>
-                                    <div><div class="rev-name">David H.</div><div class="rev-role">Parent of a Class of 2027 applicant</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rev-slide">
-                            <div class="rev-qbox">
-                                <div class="rev-qmark">&ldquo;</div>
-                                <div class="rev-card-top"><span class="rev-topic">Narrative Cohesion</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was actually right for me.</div>
-                                <div class="rev-author">
-                                    <div class="rev-avatar">OK</div>
-                                    <div><div class="rev-name">Owen K.</div><div class="rev-role">High school senior, Class of 2027</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rev-slide">
-                            <div class="rev-qbox">
-                                <div class="rev-qmark">&ldquo;</div>
-                                <div class="rev-card-top"><span class="rev-topic">Financial Aid Match</span><span class="rev-stars">★★★★★</span></div>
-                                <div class="rev-quote">I was terrified to finalize my list. The report took my exact details and instantly surfaced the schools where I had the highest chance of massive aid packages.</div>
-                                <div class="rev-author">
-                                    <div class="rev-avatar">DR</div>
-                                    <div><div class="rev-name">Dani R.</div><div class="rev-role">High school senior, Class of 2027</div></div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <button class="rev-arrow" aria-label="Next" onclick="revGo(1, true)">→</button>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e8f8fb;border:1px solid #c9edf5;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0e7490;white-space:nowrap">Milestone Tracking</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I told my daughter not to bother with two of her schools — I’d seen the prices online. The report showed what we’d really pay. She’s applying to both.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0891b2,#22d3ee);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">David H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Parent, Class of 2027</span>
+                </span>
+              </div>
             </div>
-            <div class="rev-dots" id="rev-dots"></div>
-            <div class="rev-studyat">
-                <div class="rev-studyat-label">Our students now study at</div>
-                <div class="rev-studyat-logos">
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=harvard.edu&sz=128">Harvard</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=stanford.edu&sz=128">Stanford</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=yale.edu&sz=128">Yale</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=mit.edu&sz=128">MIT</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=princeton.edu&sz=128">Princeton</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=columbia.edu&sz=128">Columbia</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=upenn.edu&sz=128">UPenn</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=cornell.edu&sz=128">Cornell</span>
-                    <span class="rev-uni"><img src="https://www.google.com/s2/favicons?domain=duke.edu&sz=128">Duke</span>
-                </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#f3eeff;border:1px solid #e4d9fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6d28d9;white-space:nowrap">Narrative Cohesion</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was right for me.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#7c3aed,#a78bfa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">OK</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Owen K.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
             </div>
-        </section>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e6f8f5;border:1px solid #c6efe8;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0f766e;white-space:nowrap">Financial Aid Match</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I was terrified to finalize my list. The report used my exact details and surfaced the schools where I had the best chance of a big aid package.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0d9488,#2dd4bf);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DR</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Dani R.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef0ff;border:1px solid #dcdffb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#4f46e5;white-space:nowrap">Profile Alignment</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I’d crossed off three schools over the price on their website. The report showed what we’d actually pay — two came out cheaper than my state school.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#6366f1,#8b5cf6);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">CH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Claire H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef4ff;border:1px solid #d3e2fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1d4ed8;white-space:nowrap">Essay Feedback</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">Since junior year I’d assumed I wasn’t good enough for the top of my list. Turns out I was wrong about half of them. I wish I’d known a year ago.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#2563eb,#60a5fa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">RM</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Ryan M.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e8f8fb;border:1px solid #c9edf5;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0e7490;white-space:nowrap">Milestone Tracking</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I told my daughter not to bother with two of her schools — I’d seen the prices online. The report showed what we’d really pay. She’s applying to both.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0891b2,#22d3ee);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">David H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Parent, Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#f3eeff;border:1px solid #e4d9fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6d28d9;white-space:nowrap">Narrative Cohesion</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was right for me.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#7c3aed,#a78bfa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">OK</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Owen K.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e6f8f5;border:1px solid #c6efe8;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0f766e;white-space:nowrap">Financial Aid Match</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I was terrified to finalize my list. The report used my exact details and surfaced the schools where I had the best chance of a big aid package.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0d9488,#2dd4bf);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DR</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Dani R.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="overflow:hidden;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)">
+          <div style="display:flex;align-items:stretch;gap:clamp(10px,1.6vh,18px);width:max-content;animation:amDriftB 56s linear infinite">
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#f3eeff;border:1px solid #e4d9fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6d28d9;white-space:nowrap">Narrative Cohesion</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was right for me.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#7c3aed,#a78bfa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">OK</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Owen K.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e6f8f5;border:1px solid #c6efe8;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0f766e;white-space:nowrap">Financial Aid Match</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I was terrified to finalize my list. The report used my exact details and surfaced the schools where I had the best chance of a big aid package.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0d9488,#2dd4bf);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DR</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Dani R.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef0ff;border:1px solid #dcdffb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#4f46e5;white-space:nowrap">Profile Alignment</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I’d crossed off three schools over the price on their website. The report showed what we’d actually pay — two came out cheaper than my state school.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#6366f1,#8b5cf6);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">CH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Claire H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e8f8fb;border:1px solid #c9edf5;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0e7490;white-space:nowrap">Milestone Tracking</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I told my daughter not to bother with two of her schools — I’d seen the prices online. The report showed what we’d really pay. She’s applying to both.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0891b2,#22d3ee);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">David H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Parent, Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef4ff;border:1px solid #d3e2fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1d4ed8;white-space:nowrap">Essay Feedback</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">Since junior year I’d assumed I wasn’t good enough for the top of my list. Turns out I was wrong about half of them. I wish I’d known a year ago.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#2563eb,#60a5fa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">RM</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Ryan M.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#f3eeff;border:1px solid #e4d9fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6d28d9;white-space:nowrap">Narrative Cohesion</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I had two schools I loved and one Early Decision to spend. Seeing my odds and the real cost side by side showed me which one was right for me.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#7c3aed,#a78bfa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">OK</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Owen K.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e6f8f5;border:1px solid #c6efe8;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0f766e;white-space:nowrap">Financial Aid Match</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I was terrified to finalize my list. The report used my exact details and surfaced the schools where I had the best chance of a big aid package.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0d9488,#2dd4bf);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DR</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Dani R.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef0ff;border:1px solid #dcdffb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#4f46e5;white-space:nowrap">Profile Alignment</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I’d crossed off three schools over the price on their website. The report showed what we’d actually pay — two came out cheaper than my state school.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#6366f1,#8b5cf6);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">CH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Claire H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#e8f8fb;border:1px solid #c9edf5;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0e7490;white-space:nowrap">Milestone Tracking</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">I told my daughter not to bother with two of her schools — I’d seen the prices online. The report showed what we’d really pay. She’s applying to both.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#0891b2,#22d3ee);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">DH</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">David H.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Parent, Class of 2027</span>
+                </span>
+              </div>
+            </div>
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(9px,1.4vh,15px);flex-shrink:0;width:532px;padding:clamp(13px,1.9vh,22px) 28px clamp(14px,2vh,24px);border-radius:20px;background:linear-gradient(168deg,#ffffff 0%,#fbfdff 62%,#f4f8ff 100%);border:1px solid #dbe6f8;box-shadow:inset 0 1px 0 #ffffff,0 2px 5px rgba(15,31,75,.04),0 26px 56px -28px rgba(23,62,140,.34)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.15vh,12px)">
+                <span style="display:flex;gap:4px;filter:drop-shadow(0 2px 5px rgba(245,165,36,.4))"><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg><svg width="21" height="21" viewBox="0 0 24 24" fill="url(#amStar)"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45L2.6 9.45l6.5-.95z"></path></svg></span>
+                <span style="padding:6px 12px;border-radius:20px;background:#eef4ff;border:1px solid #d3e2fb;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1d4ed8;white-space:nowrap">Essay Feedback</span>
+              </div>
+              <p style="margin:0;height:clamp(66px,10.4vh,105px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-family:Fraunces,Georgia,serif;font-size:clamp(13px,1.72vh,17.5px);font-weight:600;line-height:1.42;letter-spacing:-.02em;color:#132a55">Since junior year I’d assumed I wasn’t good enough for the top of my list. Turns out I was wrong about half of them. I wish I’d known a year ago.</p>
+              <div style="display:flex;align-items:center;gap:clamp(8px,1.15vh,12px);padding-top:14px;border-top:1px solid #edf2fa">
+                <span style="display:flex;align-items:center;justify-content:center;width:clamp(30px,3.9vh,40px);height:clamp(30px,3.9vh,40px);flex-shrink:0;border-radius:50%;background:linear-gradient(150deg,#2563eb,#60a5fa);font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;color:#ffffff;box-shadow:0 0 0 3px #ffffff,0 0 0 4.5px #dbe6f8">RM</span>
+                <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:clamp(13.5px,1.6vh,15px);font-weight:800;letter-spacing:-.014em;color:#0f1f4b">Ryan M.</span>
+                  <span style="font-size:12.5px;font-weight:600;color:#5f7292">Class of 2027</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <section id="waitlist" class="cta-section">
-            <div class="cta-inner">
-                <div class="cta-left">
-                    <div class="cta-logo"><img src="admitmap-mark-dark.svg" alt=""><span class="cta-word">Admit<span>Map</span></span></div>
-                    <h2>Your future is waiting.<br><em>Go get it.</em></h2>
-                    <p>You've already done the hard part — the years of work, the grades, the late nights. Now it's time
-                        to turn that hard work into an application they can't ignore.</p>
-                </div>
-                <div class="cta-card">
-                    <a href="funnel.html" class="cta-btn">Find out your chances →</a>
-                    <ul class="cta-list">
-                        <li><span class="cta-tick">&#10003;</span>Free to start</li>
-                        <li><span class="cta-tick">&#10003;</span>No credit card required</li>
-                        <li><span class="cta-tick">&#10003;</span>Takes 5 minutes</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:11px;width:100%;max-width:1280px;margin:0 auto;padding:6px clamp(24px,4vw,64px) 0">
+      <a href="funnel.html" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;height:60px;padding:0 46px;border-radius:13px;background:#2563eb;font-family:Syne,sans-serif;font-size:clamp(12.5px,1.45vh,13.5px);font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffffff;box-shadow:0 14px 34px -12px rgba(37,99,235,.8)" style-hover="background:#1d4ed8">Check my chances</a>
+      <span style="font-size:12.5px;font-weight:600;color:#5f7292">Free · no card needed · 5 minutes</span>
+    </div>
+  </div>
+</section>
+
+        <section id="waitlist" class="cta-section" style="min-height:calc(100vh - 78px - 84px);display:flex;align-items:center;padding:clamp(14px,2.2vh,52px) clamp(24px,4vw,64px);position:relative;overflow:hidden;background:#eef4ff">
+
+    <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+
+    <span style="position:absolute;bottom:-460px;left:-540px;width:1800px;height:1250px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.5),rgba(238,244,255,0) 74%);pointer-events:none"></span>
+
+    <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95px,rgba(37,99,235,.3) 95px,rgba(37,99,235,.3) 96px),repeating-linear-gradient(90deg,transparent,transparent 95px,rgba(37,99,235,.3) 95px,rgba(37,99,235,.3) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
+
+    <div style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);align-items:center;gap:64px">
+
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <span style="display:flex;align-items:center;gap:14px">
+          <img src="admitmap-mark.svg" alt="AdmitMap" style="width:58px;height:58px;object-fit:contain">
+          <span style="font-family:Fraunces,Georgia,serif;font-size:52px;font-weight:900;letter-spacing:-.034em;color:#101d42">Admit<span style="color:#2563eb">Map</span></span>
+        </span>
+        <h2 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:94px;font-weight:900;line-height:.9;letter-spacing:-.048em;color:#0f1f4b">Your future is waiting.<br><em style="font-style:italic;font-weight:700;color:#2563eb">Go get it.</em></h2>
+        <p style="margin:0;max-width:50ch;font-size:19px;line-height:1.68;font-weight:500;color:#43536b">You’ve already done the hard part — the years of work, the grades, the late nights. Now it’s time to turn that hard work into an application they can’t ignore.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:22px;padding:42px 38px;border-radius:26px;background:rgba(255,255,255,.72);border:1px solid #c9d9f2;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 34px 74px -28px rgba(23,62,140,.4)">
+        <a href="funnel.html" type="button" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:13px;width:100%;border:0;padding:27px 32px;border-radius:17px;background:#2563eb;color:#ffffff;white-space:nowrap;font-size:16px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;box-shadow:0 16px 40px -12px rgba(37,99,235,.75);transition:background .18s ease,transform .18s ease" style-hover="background:#1d4ed8;transform:translateY(-2px)">Find out your chances<span style="font-size:18px;line-height:1">→</span></a>
+        <div style="display:flex;flex-direction:column;gap:16px;padding-top:22px;border-top:1px solid #dbe4f2">
+          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>Free to start</span>
+          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>No credit card required</span>
+          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>Takes 5 minutes</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
         <footer>
             <div class="f-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></div>
             <nav class="f-links">
