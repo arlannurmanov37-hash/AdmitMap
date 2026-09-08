@@ -2,7 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Bundled Page</title>
+  <title>Your SnapScore Report · AdmitMap</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
+  <meta name="theme-color" content="#c9dcf5">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0f1f4b; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -552,6 +556,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     loadNext(0, function () {
       if (window.AdmitMapPersonalize) window.AdmitMapPersonalize();
       fit();                       // персонализация меняет разметку — пересчитываем
+      /* Вкладка — это то, что покупатель сохранит себе. Пусть в ней стоит имя. */
+      try {
+        var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
+        var nm = P && (P.name || '').trim();
+        if (nm) document.title = nm + '\u2019s SnapScore Report \u00b7 AdmitMap';
+      } catch (e) {}
     });
   }
   ready();

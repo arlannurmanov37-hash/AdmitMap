@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Личные страницы и служебное — не индексируем
+Disallow: /report
+Disallow: /report.html
+Disallow: /platform
+Disallow: /platform.html
+Disallow: /onboarding
+Disallow: /onboarding.html
+Disallow: /signup
+Disallow: /signup.html
+Disallow: /loading
+Disallow: /loading.html
+Disallow: /api/
+
+Sitemap: https://admitmap.app/sitemap.xml
