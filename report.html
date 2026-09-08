@@ -472,6 +472,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     var d = document.documentElement, b = document.body;
     if (d) d.style.setProperty('background', '#c9dcf5', 'important');
     if (b) b.style.setProperty('background', '#c9dcf5', 'important');
+
+    /* Бандл переписывает документ целиком и заголовок из <head> теряется —
+       вкладка оставалась пустой. Ставим его здесь, при каждом проходе. */
+    if (!document.title || document.title === 'Bundled Page') {
+      document.title = 'Your SnapScore Report \u00b7 AdmitMap';
+    }
+    if (!document.querySelector('link[rel="icon"]')) {
+      var ic = document.createElement('link');
+      ic.rel = 'icon'; ic.type = 'image/png'; ic.href = '/assets/icon-32.png';
+      (document.head || document.documentElement).appendChild(ic);
+    }
     fit();
   }
 

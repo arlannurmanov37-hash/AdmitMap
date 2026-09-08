@@ -17,6 +17,11 @@
     profK: 1.45,
     dip: 2.4,           // провал потолка в средней полосе селективности
     dipCenter: 11.0, dipWidth: 0.55,
+    // Чем выше процент приёма, тем меньше профиль может добавить: при приёме
+    // 50% почти все подходящие уже проходят, и отличная внеучебка почти
+    // ничего не решает. Без этого сильный абитуриент упирался в 94-96%
+    // начиная уже с 35% приёма.
+    hiRef: 46, hiPow: 1.15,
     actCeil: 1.85, actScale: 2600, breadthW: 0.35,
     structCap: 2.6,
     dampShift: 1.2, dampK: 1.8,
@@ -89,6 +94,7 @@
     // подлежит проверке на реальных исходах (см. ODDS-MODEL.md).
     var lg = Math.log(rate) - Math.log(P.dipCenter);
     var asymp = P.profAsymp - P.dip * Math.exp(-(lg * lg) / (2 * P.dipWidth * P.dipWidth));
+    asymp /= 1 + Math.pow(rate / P.hiRef, P.hiPow);     // затухание в верхних полосах
     prof = 1 + asymp * (1 - Math.exp(-(prof - 1) / P.profK));
 
     // ── Эссе ──
