@@ -20,3 +20,4 @@ _design/
 # Резервные копии отчёта перед правками — по 1 МБ каждая, в репозитории не нужны
 .backup-calculator/*.bak
 _new/
+_old-version.html
