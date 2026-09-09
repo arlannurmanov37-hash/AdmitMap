@@ -2518,6 +2518,18 @@
         footer, body {
             background: var(--bg-soft) !important;
         }
+
+        /* Секции из макетов Claude Design несут собственные декоративные пятна —
+           большие absolute-span'ы с градиентом. Они рисовались поверх сплошного
+           #eef4ff и полностью закрывали фон секции, поэтому общий --bg-soft был
+           виден только в первых трёх блоках. Гасим только эти подложки:
+           у них нет содержимого, они существуют ради цвета. */
+        #problems > span[style*="position:absolute"],
+        #compare  > span[style*="position:absolute"],
+        #reviews  > span[style*="position:absolute"],
+        #waitlist > span[style*="position:absolute"] {
+            display: none !important;
+        }
 </style>
 </head>
 
