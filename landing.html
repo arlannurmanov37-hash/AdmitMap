@@ -2516,42 +2516,6 @@
         }
 
 
-        /* ── Фон: белый, как и просили ─────────────────────────────────────
-           Синие градиенты по всей странице делали её мутной. Здесь белая
-           основа; цвет живёт только там, где он несёт смысл — за первым
-           экраном и за финальным призывом. Между секциями нет швов, потому
-           что все они прозрачны, а свечения гаснут в transparent. */
-        html, body { background: #ffffff !important; }
-
-        .hero, .features-section, .how-section,
-        #problems, #compare, #reviews, #waitlist {
-            background: transparent !important;
-        }
-
-        /* Первый экран: мягкое синее свечение справа, за карточкой. */
-        .hero {
-            background:
-                radial-gradient(1500px 1000px at 88% 8%, rgba(37, 99, 235, .16) 0%,
-                                                         rgba(37, 99, 235, .05) 45%, transparent 78%) !important;
-        }
-
-        /* Финальный призыв — единственная секция с заметным тоном,
-           чтобы конец страницы читался как завершение. */
-        #waitlist {
-            background:
-                radial-gradient(1400px 900px at 50% 120%, rgba(37, 99, 235, .13) 0%,
-                                                          rgba(37, 99, 235, .04) 50%, transparent 82%) !important;
-        }
-
-        /* Чередование задаём почти незаметным оттенком, а не заливкой:
-           достаточно, чтобы глаз видел ритм, и мало, чтобы читалось «серо». */
-        #problems, #compare { background: #fafbfe !important; }
-
-        footer {
-            background: #ffffff !important;
-            border-top: 1px solid rgba(15, 31, 75, .09);
-        }
-
         /* Шапка зафиксирована и лежит поверх страницы, а герой начинается с
            самого верха — поэтому первые 78px героя (надпись «Applying to top
            US colleges?») оказывались под шапкой. Отводим ей место сверху и
@@ -2563,6 +2527,75 @@
         }
         @media (max-height: 820px) {
             .hero { padding-top: calc(78px + 8px) !important; }
+        }
+
+        /* ── Фон: белая основа, синее свечение идёт по странице ────────────
+           Одинаковое пятно в каждой секции читалось бы как повтор, а общий
+           градиент на весь документ — как муть. Поэтому пятна КРУПНЫЕ и
+           каждое стоит в своём месте: справа сверху, слева, снова справа —
+           змейкой вниз. Радиусы больше самих секций и гаснут в transparent,
+           поэтому соседние пятна перекрываются на стыках: глаз видит одно
+           непрерывное движение цвета, а не семь отдельных блоков. */
+        html, body { background: #ffffff !important; }
+
+        .hero, .features-section, .how-section,
+        #problems, #compare, #reviews, #waitlist {
+            background: transparent !important;
+        }
+
+        /* 1. Первый экран — справа сверху, за карточкой */
+        .hero {
+            background:
+                radial-gradient(1600px 1100px at 92% 4%,  rgba(37, 99, 235, .20) 0%,
+                                                          rgba(37, 99, 235, .06) 44%, transparent 76%),
+                radial-gradient(900px 700px at 6% 96%,    rgba(37, 99, 235, .07) 0%, transparent 68%) !important;
+        }
+        /* 2. What's inside — уходит влево и вверх, подхватывая низ героя */
+        .features-section {
+            background:
+                radial-gradient(1500px 1050px at 4% -8%,  rgba(37, 99, 235, .15) 0%,
+                                                          rgba(37, 99, 235, .05) 46%, transparent 78%),
+                radial-gradient(1100px 800px at 96% 88%,  rgba(37, 99, 235, .08) 0%, transparent 70%) !important;
+        }
+        /* 3. Sound familiar — вправо, ниже */
+        #problems {
+            background:
+                radial-gradient(1600px 1100px at 98% 42%, rgba(37, 99, 235, .16) 0%,
+                                                          rgba(37, 99, 235, .05) 46%, transparent 78%),
+                radial-gradient(1000px 760px at -6% -6%,  rgba(37, 99, 235, .07) 0%, transparent 68%) !important;
+        }
+        /* 4. The process — влево, вверх */
+        .how-section {
+            background:
+                radial-gradient(1500px 1000px at 2% 18%,  rgba(37, 99, 235, .14) 0%,
+                                                          rgba(37, 99, 235, .05) 46%, transparent 78%),
+                radial-gradient(1200px 900px at 100% 100%, rgba(37, 99, 235, .09) 0%, transparent 72%) !important;
+        }
+        /* 5. Two ways to apply — вправо, выше */
+        #compare {
+            background:
+                radial-gradient(1700px 1150px at 100% 6%, rgba(37, 99, 235, .17) 0%,
+                                                          rgba(37, 99, 235, .05) 46%, transparent 78%),
+                radial-gradient(900px 700px at 0% 92%,    rgba(37, 99, 235, .07) 0%, transparent 68%) !important;
+        }
+        /* 6. Отзывы — влево, по центру */
+        #reviews {
+            background:
+                radial-gradient(1500px 1050px at -4% 52%, rgba(37, 99, 235, .15) 0%,
+                                                          rgba(37, 99, 235, .05) 46%, transparent 78%),
+                radial-gradient(1100px 800px at 98% -4%,  rgba(37, 99, 235, .08) 0%, transparent 70%) !important;
+        }
+        /* 7. Финал — снизу по центру, страница «садится» */
+        #waitlist {
+            background:
+                radial-gradient(1800px 1200px at 50% 118%, rgba(37, 99, 235, .20) 0%,
+                                                           rgba(37, 99, 235, .06) 48%, transparent 82%),
+                radial-gradient(1200px 900px at 88% -10%,  rgba(37, 99, 235, .09) 0%, transparent 70%) !important;
+        }
+
+        footer {
+            background: #ffffff !important;
+            border-top: 1px solid rgba(15, 31, 75, .09);
         }
 </style>
 </head>
