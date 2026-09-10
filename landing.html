@@ -2551,12 +2551,12 @@
            он доходит до 83px), поэтому одинаковый padding давал бы разный
            зазор до текста. Компенсируем: padding = 110 − внутренний отступ.
            Итог — ровно 110px от границы секции до первой строки везде. */
-        .features-section { padding-top:  90px !important; }
-        #problems         { padding-top: 110px !important; }
-        .how-section      { padding-top: 110px !important; }
-        #compare          { padding-top:  27px !important; }
-        #reviews          { padding-top: 110px !important; }
-        #waitlist         { padding-top: 110px !important; }
+        .features-section { padding-top:  35px !important; margin-top: -79px !important; }
+        #problems         { padding-top:  57px !important; }
+        .how-section      { padding-top:  74px !important; }
+        #compare          { padding-top:  60px !important; }
+        #reviews          { padding-top:  55px !important; }
+        #waitlist         { padding-top:  55px !important; }
 
         @media (max-height: 820px) {
             .features-section { padding-top: 58px !important; }
@@ -2581,17 +2581,25 @@
            (87px у «The process», 129px у «Sound familiar»). Компенсируем,
            чтобы от последней строки до края секции везде было 110px.
            Итог: между текстом соседних секций ровно 220px. */
-        .features-section { padding-bottom: 108px !important; }
-        #problems         { padding-bottom:  91px !important; }
-        .how-section      { padding-bottom: 133px !important; }
-        #compare          { padding-bottom: 110px !important; }
-        #reviews          { padding-bottom: 110px !important; }
-        #waitlist         { padding-bottom: 110px !important; }
+        .features-section { padding-bottom: 53px !important; }
+        #problems         { padding-bottom: 36px !important; }
+        .how-section      { padding-bottom: 78px !important; }
+        #compare          { padding-bottom: 55px !important; }
+        #reviews          { padding-bottom: 55px !important; }
+        #waitlist         { padding-bottom: 55px !important; }
 
         /* У героя свой нижний отступ из оригинального макета — из-за него
            первый стык был 256px против 220px у всех остальных. Правим только
            padding-bottom, остальное в герое не трогаем. */
-        .hero { padding-bottom: 33px !important; }
+
+
+        /* У «Two ways to apply» содержимое отстоит от края секции на 83px
+           изнутри — обнулением padding его до 55px не довести. Подтягиваем
+           внутреннюю обёртку отрицательным полем. */
+        #compare > div { margin-top: -28px !important; }
+
+        /* Синяя полоса внизу шла на 84px после последней строки — общий ритм 110. */
+        footer { padding-top: 54px !important; }
 </style>
 </head>
 
