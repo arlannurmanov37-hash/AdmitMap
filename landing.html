@@ -2551,28 +2551,57 @@
         #compare > *, #reviews > *, #waitlist > * { position: relative; z-index: 1; }
 
         .features-section::after {
-            background: radial-gradient(1250px 900px at 10% 12%,
-                        rgba(37, 99, 235, .24) 0%, rgba(37, 99, 235, .08) 40%, transparent 72%);
+            background: radial-gradient(1150px 620px at 12% 48%,
+                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
         }
         #problems::after {
-            background: radial-gradient(1250px 900px at 92% 78%,
-                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+            background: radial-gradient(1150px 620px at 88% 52%,
+                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
         }
         .how-section::after {
-            background: radial-gradient(1250px 900px at 6% 70%,
-                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+            background: radial-gradient(1150px 620px at 14% 50%,
+                        rgba(37, 99, 235, .36) 0%, rgba(37, 99, 235, .11) 42%, transparent 70%);
         }
         #compare::after {
-            background: radial-gradient(1300px 950px at 94% 18%,
-                        rgba(37, 99, 235, .24) 0%, rgba(37, 99, 235, .08) 40%, transparent 72%);
+            background: radial-gradient(1150px 620px at 86% 46%,
+                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
         }
         #reviews::after {
-            background: radial-gradient(1250px 900px at 8% 42%,
-                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+            background: radial-gradient(1150px 620px at 16% 52%,
+                        rgba(37, 99, 235, .36) 0%, rgba(37, 99, 235, .11) 42%, transparent 70%);
         }
         #waitlist::after {
-            background: radial-gradient(1400px 1000px at 55% 92%,
-                        rgba(37, 99, 235, .26) 0%, rgba(37, 99, 235, .09) 42%, transparent 74%);
+            background: radial-gradient(1250px 640px at 52% 50%,
+                        rgba(37, 99, 235, .40) 0%, rgba(37, 99, 235, .13) 42%, transparent 70%);
+        }
+
+        /* ── Одинаковый отступ до первого текста ───────────────────────────
+           Секции центрировали содержимое по вертикали, поэтому зазор сверху
+           зависел от высоты контента: 63px в отзывах против 133px в
+           «Two ways to apply». Прижимаем содержимое к верху и задаём общий
+           отступ — расстояние от границы секции до текста теперь одинаково. */
+        .features-section, #problems, .how-section,
+        #compare, #reviews, #waitlist {
+            align-items: flex-start !important;
+        }
+        /* У каждой секции свой внутренний отступ сверху (у «Two ways to apply»
+           он доходит до 83px), поэтому одинаковый padding давал бы разный
+           зазор до текста. Компенсируем: padding = 110 − внутренний отступ.
+           Итог — ровно 110px от границы секции до первой строки везде. */
+        .features-section { padding-top: 90px !important; }
+        #problems         { padding-top: 76px !important; }
+        .how-section      { padding-top: 110px !important; }
+        #compare          { padding-top: 27px !important; }
+        #reviews          { padding-top: 64px !important; }
+        #waitlist         { padding-top: 110px !important; }
+
+        @media (max-height: 820px) {
+            .features-section { padding-top: 58px !important; }
+            #problems         { padding-top: 46px !important; }
+            .how-section      { padding-top: 70px !important; }
+            #compare          { padding-top: 16px !important; }
+            #reviews          { padding-top: 38px !important; }
+            #waitlist         { padding-top: 70px !important; }
         }
 </style>
 </head>
