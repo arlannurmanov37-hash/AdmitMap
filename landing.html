@@ -2525,6 +2525,55 @@
         #waitlist > span[style*="position:absolute"] {
             display: none !important;
         }
+
+        /* ── Яркие акценты поверх общего фона ──────────────────────────────
+           База (--bg-soft, привязана к окну) остаётся бесшовной — её не
+           трогаем. Сверху у каждой секции своё яркое пятно, как в герое,
+           но в своём месте: слева, справа, снова слева — по диагонали вниз.
+
+           Почему ::after, а не background: если переопределить фон секции,
+           вернутся швы. Псевдоэлемент кладётся слоем выше и ничего не ломает.
+           Радиус заметно больше секции и гаснет в transparent, поэтому пятно
+           не имеет видимого края. */
+        .features-section, #problems, .how-section,
+        #compare, #reviews, #waitlist { position: relative; }
+
+        .features-section::after, #problems::after, .how-section::after,
+        #compare::after, #reviews::after, #waitlist::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* содержимое всегда поверх пятна */
+        .features-section > *, #problems > *, .how-section > *,
+        #compare > *, #reviews > *, #waitlist > * { position: relative; z-index: 1; }
+
+        .features-section::after {
+            background: radial-gradient(1250px 900px at 10% 12%,
+                        rgba(37, 99, 235, .24) 0%, rgba(37, 99, 235, .08) 40%, transparent 72%);
+        }
+        #problems::after {
+            background: radial-gradient(1250px 900px at 92% 78%,
+                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+        }
+        .how-section::after {
+            background: radial-gradient(1250px 900px at 6% 70%,
+                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+        }
+        #compare::after {
+            background: radial-gradient(1300px 950px at 94% 18%,
+                        rgba(37, 99, 235, .24) 0%, rgba(37, 99, 235, .08) 40%, transparent 72%);
+        }
+        #reviews::after {
+            background: radial-gradient(1250px 900px at 8% 42%,
+                        rgba(37, 99, 235, .22) 0%, rgba(37, 99, 235, .07) 40%, transparent 72%);
+        }
+        #waitlist::after {
+            background: radial-gradient(1400px 1000px at 55% 92%,
+                        rgba(37, 99, 235, .26) 0%, rgba(37, 99, 235, .09) 42%, transparent 74%);
+        }
 </style>
 </head>
 
