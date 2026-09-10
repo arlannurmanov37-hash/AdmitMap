@@ -2502,16 +2502,29 @@
            свечения по разным углам тоже не подошла. Здесь у всех секций
            буквально одна и та же заливка — страница читается как единое
            полотно. */
+        /* ── Один закреплённый слой света на всю страницу ──────────────────
+           Раньше свечения жили в каждой секции отдельно и ехали вместе с ней.
+           Отсюда и стыки: яркое пятно одной секции упиралось в тёмный край
+           другой. Теперь свет один на весь сайт и привязан к окну: при
+           прокрутке он стоит на месте, контент едет сквозь него.
+
+           Швов не может быть в принципе — границ у этого слоя нет, он не
+           знает, где кончается одна секция и начинается следующая. */
         .hero, .features-section, .how-section,
         #problems, #compare, #reviews, #waitlist,
         footer, body {
-            background: var(--bg-soft) !important;
-            /* Ключевое: градиент привязан к ОКНУ, а не к самой секции.
-               Иначе каждая секция начинала его заново — низ одной (тёмный)
-               встречался с верхом следующей (белым), и стык было видно.
-               С fixed все секции рисуют из одной точки: цвет не прерывается
-               ни на одной границе. */
+            background:
+                radial-gradient(1100px 780px at 84% 6%,   rgba(37, 99, 235, .34) 0%,
+                                                          rgba(37, 99, 235, .12) 40%, transparent 70%),
+                radial-gradient(950px 700px at 10% 34%,   rgba(37, 99, 235, .26) 0%,
+                                                          rgba(37, 99, 235, .08) 44%, transparent 72%),
+                radial-gradient(1000px 720px at 92% 68%,  rgba(37, 99, 235, .28) 0%,
+                                                          rgba(37, 99, 235, .09) 44%, transparent 72%),
+                radial-gradient(900px 680px at 6% 96%,    rgba(37, 99, 235, .24) 0%, transparent 68%),
+                linear-gradient(166deg, #ffffff 0%, #fbfdff 30%, #eef3ff 68%, #dfe9fd 100%)
+                !important;
             background-attachment: fixed !important;
+            background-repeat: no-repeat !important;
         }
 
         /* Секции из макетов Claude Design несут собственные декоративные пятна —
@@ -2524,55 +2537,6 @@
         #reviews  > span[style*="position:absolute"],
         #waitlist > span[style*="position:absolute"] {
             display: none !important;
-        }
-
-        /* ── Яркие акценты поверх общего фона ──────────────────────────────
-           База (--bg-soft, привязана к окну) остаётся бесшовной — её не
-           трогаем. Сверху у каждой секции своё яркое пятно, как в герое,
-           но в своём месте: слева, справа, снова слева — по диагонали вниз.
-
-           Почему ::after, а не background: если переопределить фон секции,
-           вернутся швы. Псевдоэлемент кладётся слоем выше и ничего не ломает.
-           Радиус заметно больше секции и гаснет в transparent, поэтому пятно
-           не имеет видимого края. */
-        .features-section, #problems, .how-section,
-        #compare, #reviews, #waitlist { position: relative; }
-
-        .features-section::after, #problems::after, .how-section::after,
-        #compare::after, #reviews::after, #waitlist::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-        /* содержимое всегда поверх пятна */
-        .features-section > *, #problems > *, .how-section > *,
-        #compare > *, #reviews > *, #waitlist > * { position: relative; z-index: 1; }
-
-        .features-section::after {
-            background: radial-gradient(1150px 620px at 12% 48%,
-                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
-        }
-        #problems::after {
-            background: radial-gradient(1150px 620px at 88% 52%,
-                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
-        }
-        .how-section::after {
-            background: radial-gradient(1150px 620px at 14% 50%,
-                        rgba(37, 99, 235, .36) 0%, rgba(37, 99, 235, .11) 42%, transparent 70%);
-        }
-        #compare::after {
-            background: radial-gradient(1150px 620px at 86% 46%,
-                        rgba(37, 99, 235, .38) 0%, rgba(37, 99, 235, .12) 42%, transparent 70%);
-        }
-        #reviews::after {
-            background: radial-gradient(1150px 620px at 16% 52%,
-                        rgba(37, 99, 235, .36) 0%, rgba(37, 99, 235, .11) 42%, transparent 70%);
-        }
-        #waitlist::after {
-            background: radial-gradient(1250px 640px at 52% 50%,
-                        rgba(37, 99, 235, .40) 0%, rgba(37, 99, 235, .13) 42%, transparent 70%);
         }
 
         /* ── Одинаковый отступ до первого текста ───────────────────────────
