@@ -2551,21 +2551,16 @@
            он доходит до 83px), поэтому одинаковый padding давал бы разный
            зазор до текста. Компенсируем: padding = 110 − внутренний отступ.
            Итог — ровно 110px от границы секции до первой строки везде. */
-        .features-section { padding-top:  35px !important; margin-top: -79px !important; }
+        .features-section { padding-top:  80px !important; }   /* лента логотипов: 80px воздуха сверху и снизу */
         #problems         { padding-top:  57px !important; }
         .how-section      { padding-top:  74px !important; }
         #compare          { padding-top:  60px !important; }
         #reviews          { padding-top:  55px !important; }
         #waitlist         { padding-top:  55px !important; }
 
-        @media (max-height: 820px) {
-            .features-section { padding-top: 58px !important; }
-            #problems         { padding-top: 46px !important; }
-            .how-section      { padding-top: 70px !important; }
-            #compare          { padding-top: 16px !important; }
-            #reviews          { padding-top: 38px !important; }
-            #waitlist         { padding-top: 70px !important; }
-        }
+        /* Отдельный набор отступов для невысоких экранов сбивал общий ритм
+           (99, 106, 66, 93, 125 вместо 110) — секции больше не тянутся на
+           высоту экрана, так что отдельные значения не нужны. */
 
         /* ── Одинаковый ритм между секциями ────────────────────────────────
            Секции держали min-height в целый экран, а содержимого в них от 466
