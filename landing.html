@@ -2481,18 +2481,7 @@
         }
 
 
-        /* Герой на невысоких экранах: заголовок и вертикальные отступы
-           привязаны к высоте окна, иначе первый экран не помещается целиком. */
-        @media (max-height: 900px) {
-            .hero h1        { font-size: clamp(40px, min(5.2vw, 8.2vh), 80px) !important;
-                              margin-bottom: clamp(12px, 2.4vh, 28px) !important; }
-            .hero-eyebrow   { margin-bottom: clamp(10px, 2.2vh, 28px) !important; }
-            .hero-sub       { margin-bottom: clamp(14px, 2.8vh, 36px) !important;
-                              line-height: 1.6 !important; }
-            .hero-badges    { margin-top: clamp(14px, 2.6vh, 36px) !important;
-                              gap: clamp(16px, 2.6vh, 32px) !important; }
-            .hero-price     { margin-top: clamp(8px, 1.4vh, 14px) !important; }
-        }
+
 
         /* Отзывы: на низком экране уменьшаем кегль цитаты — карточки
            становятся ниже, текст по-прежнему виден целиком. */
