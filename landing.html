@@ -65,9 +65,9 @@
             --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
             /* Общий светлый фон: первый экран, «How it works», «Reviews» */
             --bg-soft:
-                radial-gradient(1150px 760px at 86% 2%, rgba(37, 99, 235, .26) 0%, rgba(37, 99, 235, .10) 40%, transparent 70%),
-                radial-gradient(820px 680px at 0% 98%, rgba(37, 99, 235, .18) 0%, transparent 64%),
-                linear-gradient(166deg, #ffffff 0%, #fbfdff 30%, #eef3ff 68%, #dfe9fd 100%);
+                radial-gradient(1150px 760px at 86% 2%, rgba(37, 99, 235, .40) 0%, rgba(37, 99, 235, .17) 40%, transparent 70%),
+                radial-gradient(820px 680px at 0% 98%, rgba(37, 99, 235, .30) 0%, transparent 64%),
+                linear-gradient(166deg, #ffffff 0%, #f7fbff 30%, #e6eeff 68%, #cfdefb 100%);
         }
 
         /* ── Motion (Emil pass) ── */
@@ -2527,10 +2527,9 @@
         }
 
         /* Секции из макетов Claude Design несут собственные декоративные пятна —
-           большие absolute-span'ы с градиентом. Они рисовались поверх сплошного
-           #eef4ff и полностью закрывали фон секции, поэтому общий --bg-soft был
-           виден только в первых трёх блоках. Гасим только эти подложки:
-           у них нет содержимого, они существуют ради цвета. */
+           большие absolute-span'ы с градиентом. Они обрезаются границами своей
+           секции (overflow:hidden), поэтому на каждом стыке появлялся видимый
+           шов. Синеву даёт общий закреплённый слой ниже, а эти подложки гасим. */
         #problems > span[style*="position:absolute"],
         #compare  > span[style*="position:absolute"],
         #reviews  > span[style*="position:absolute"],
