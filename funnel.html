@@ -335,12 +335,14 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   .brand-t{font-size:20px;font-weight:700;letter-spacing:-.03em}
   .prog{order:2;margin-left:auto;display:flex;align-items:baseline;gap:7px;
         padding:5px 11px;border-radius:12px;background:#e8f0ff;border:0;box-shadow:none}
-  .prog-n{font-family:Fraunces,Georgia,serif;font-size:15px;font-weight:900;color:#1d4ed8}
+  .prog-n{font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:900;
+          line-height:1;letter-spacing:-.04em;color:#2563eb}
   /* в макете рядом с процентом стоит слово complete */
-  .prog-l{display:inline;margin:0;font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:-.01em}
+  .prog-l{display:inline;margin:0;font-size:11.5px;font-weight:800;letter-spacing:-.01em;color:#0f1f4b}
   .prog-l-w{display:none}
   .prog-r{position:absolute;left:20px;right:20px;bottom:8px;height:6px;min-width:0;flex:none}
-  .prog-bar{height:6px;border-radius:99px;background:#dbe6fb}
+  .prog-bar{display:block;height:6px;border-radius:99px;background:#dbe6f7;overflow:hidden}
+  .prog-fill{display:block;height:100%}
   .prog-fill{background:linear-gradient(90deg,#3b82f6,#1d4ed8);
              transition:width .34s cubic-bezier(.4,0,.2,1)}
 
@@ -396,10 +398,17 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
        background:rgba(247,251,255,.94);
        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
        border-top:1px solid #e2eaf7}
-  .btn-next{flex:1;height:60px;padding:0 16px;border-radius:999px;
+  /* кнопка — значения макета, стрелка в круглой плашке справа */
+  .nx-rest{display:none}
+  .btn-next{position:relative;flex:1;height:60px;padding:0 54px 0 16px;border:0;border-radius:999px;
             background:linear-gradient(180deg,#3b82f6,#1d4ed8);
             font-size:14.5px;font-weight:800;letter-spacing:.055em;text-transform:uppercase;
-            white-space:nowrap}
+            color:#fff;white-space:nowrap;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 1px 2px rgba(15,31,75,.16),
+                       0 16px 30px -14px rgba(29,78,216,.9)}
+  .btn-next svg{position:absolute;right:9px;width:40px;height:40px;padding:12px;
+                border-radius:50%;background:rgba(255,255,255,.18);box-sizing:border-box;
+                stroke-width:2.6}
   /* В макете «назад» — стрелка в шапке слева, а внизу одна кнопка.
      Саму кнопку переносит в шапку скрипт ниже: .bar с backdrop-filter
      образует containing block, и position:fixed внутри неё считается
@@ -408,6 +417,8 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
             border:0;border-radius:11px;background:transparent;box-shadow:none;
             color:#0f1f4b;font-size:0}
   .side .btn-back svg{width:20px;height:20px}
+  /* на первом шаге макет показывает стрелку приглушённой, а не прячет её */
+  .side .btn-back[style*="hidden"]{visibility:visible!important;opacity:.35;pointer-events:none}
 }
 
 /* Consent + legal notice at the point the email is actually collected. */
@@ -2687,7 +2698,8 @@ function render(){
        <span class="m-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${Math.max(1, STEPS.length-step)} min left</span>
      </div>` + VIEWS[step]();
   document.getElementById('back').style.visibility = step===0 ? 'hidden' : 'visible';
-  document.getElementById('next').innerHTML = (step===STEPS.length-1 ? 'See my results' : 'Continue to '+STEPS[step+1].n.toLowerCase())
+  document.getElementById('next').innerHTML = (step===STEPS.length-1 ? 'See my results'
+      : 'Continue<span class="nx-rest"> to '+STEPS[step+1].n.toLowerCase()+'</span>')
     + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
   markSeen(step);
   paintSteps(); paintProgress();
