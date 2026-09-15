@@ -455,7 +455,17 @@ function whyCannotBuild() {
     'than a number we made up. Add a few more schools and it should build.';
 }
 
+/* Лендинг ведёт на тот же report.html, поэтому у посетителя со случайным
+   недозаполненным профилем вместо образца появлялся экран «не смогли собрать».
+   ?sample=1 — явная просьба показать именно образец: ничего не подставляем. */
+function sampleRequested() {
+  try {
+    return /[?&]sample=1\b/.test(location.search) || location.hash === '#sample';
+  } catch (e) { return false; }
+}
+
 function personalize() {
+  if (sampleRequested()) return false;                 // образец Майи, как просили
   var D = build();
   if (!D) {
     var why = whyCannotBuild();

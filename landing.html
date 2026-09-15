@@ -2655,7 +2655,7 @@
                     cost your family — built from published admissions and federal aid data.</p>
                 <div class="hero-cta-row">
                     <a href="funnel.html" class="hero-cta" style="text-decoration: none;">Find out your chances →</a>
-                    <a href="report.html" class="hero-cta2" style="text-decoration:none">See a sample report <span class="cta2-arrow" aria-hidden="true">→</span></a>
+                    <a href="report.html?sample=1" class="hero-cta2" style="text-decoration:none">See a sample report <span class="cta2-arrow" aria-hidden="true">→</span></a>
                 </div>
 
                 <div class="hero-badges">
@@ -3111,7 +3111,7 @@
       </div>
     </div>
 
-    <span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap"><a href="funnel.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:11px;height:66px;padding:0 52px;border-radius:14px;background:#2563eb;font-family:Syne,sans-serif;font-size:clamp(13px,1.55vh,15.5px);font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#ffffff;box-shadow:0 16px 38px -12px rgba(37,99,235,.8)" style-hover="background:#1d4ed8">Check my chances →</a><a href="report.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:9px;height:66px;padding:0 34px;border-radius:14px;background:transparent;border:1.5px solid rgba(15,31,75,.18);font-family:Syne,sans-serif;font-size:clamp(12px,1.4vh,14px);font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#0f1f4b">See a sample report</a></span>
+    <span style="display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap"><a href="funnel.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:11px;height:66px;padding:0 52px;border-radius:14px;background:#2563eb;font-family:Syne,sans-serif;font-size:clamp(13px,1.55vh,15.5px);font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#ffffff;box-shadow:0 16px 38px -12px rgba(37,99,235,.8)" style-hover="background:#1d4ed8">Check my chances →</a><a href="report.html?sample=1" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:9px;height:66px;padding:0 34px;border-radius:14px;background:transparent;border:1.5px solid rgba(15,31,75,.18);font-family:Syne,sans-serif;font-size:clamp(12px,1.4vh,14px);font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#0f1f4b">See a sample report</a></span>
   </div>
 </section>
 
@@ -3892,7 +3892,7 @@
         });
       });
     });
-    document.querySelectorAll('a[href="report.html"]').forEach(function(a){
+    document.querySelectorAll('a[href^="report.html"]').forEach(function(a){
       a.addEventListener('click', function(){
         if(window.amTrack) window.amTrack('sample_report_click');
       });
@@ -3990,7 +3990,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg>
     </span>
         </a>
-        <a href="report.html" style="display:flex;align-items:center;justify-content:center;position:relative;height:60px;padding:0 54px 0 16px;border-radius:999px;white-space:nowrap;background:linear-gradient(180deg,#e4edff,#d7e5ff);border:1px solid #b9cdf5;font-size:14.5px;font-weight:800;letter-spacing:.055em;text-transform:uppercase;color:#1d4ed8;transition:transform .15s ease,background-color .2s ease" style-active="transform:translateY(1px);background:#cddffc">See a sample report<span style="position:absolute;right:8px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;border-radius:50%;background:rgba(29,78,216,.14)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg></span></a>
+        <a href="report.html?sample=1" style="display:flex;align-items:center;justify-content:center;position:relative;height:60px;padding:0 54px 0 16px;border-radius:999px;white-space:nowrap;background:linear-gradient(180deg,#e4edff,#d7e5ff);border:1px solid #b9cdf5;font-size:14.5px;font-weight:800;letter-spacing:.055em;text-transform:uppercase;color:#1d4ed8;transition:transform .15s ease,background-color .2s ease" style-active="transform:translateY(1px);background:#cddffc">See a sample report<span style="position:absolute;right:8px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;border-radius:50%;background:rgba(29,78,216,.14)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg></span></a>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin-top:6px">
         <span style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 6px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid #dbe6f8">
