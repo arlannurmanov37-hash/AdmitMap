@@ -2684,6 +2684,58 @@ function vFinancial(){
 const VIEWS = [vBasics,vAcademics,vActivities,vFinancial,vHonors,vSchools,vEssay];
 
 /* ── shell ── */
+
+/* ══════════════════════════════════════════════════════════════════
+   МОБИЛЬНЫЕ ЭКРАНЫ — разметка взята из «AdmitMap Mobile Funnel» как есть.
+   Отличается только тем, чем обязана: id, обработчики и .err — те же, что
+   в десктопных видах, поэтому S, save() и валидация работают без изменений.
+   ══════════════════════════════════════════════════════════════════ */
+const M_LBL  = 'font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:#5f7292';
+const M_FLD  = 'width:100%;padding:16px 18px;border-radius:14px;border:1.5px solid #dde6f4;' +
+               'background:#ffffff;font-size:16px;font-weight:500;color:#0f1f4b';
+const M_SEL  = M_FLD + ';appearance:none;-webkit-appearance:none;padding-right:44px';
+const M_CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5f7292" ' +
+               'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" ' +
+               'style="position:absolute;right:17px;bottom:19px;pointer-events:none">' +
+               '<path d="M6 9.5l6 6 6-6"></path></svg>';
+
+function mField(label, inner, errId, errText){
+  return `<label style="position:relative;display:flex;flex-direction:column;gap:8px">
+    <span style="${M_LBL}">${label}</span>${inner}
+    <div class="err" id="${errId}">${errText}</div></label>`;
+}
+
+function mvBasics(){
+  const y0=new Date().getFullYear(), years=[]; for(let y=y0;y<=y0+4;y++) years.push(y);
+  return `<div style="display:flex;flex-direction:column;gap:14px">
+    ${mField('First name',
+      `<input id="f-name" type="text" placeholder="Arlan" autocomplete="given-name" style="${M_FLD}"
+              value="${esc(S.name)}" oninput="S.name=this.value;save()">`,
+      'e-name','Enter your first name.')}
+    ${mField('Graduation year',
+      `<select id="f-year" style="${M_SEL}" onchange="S.gradYear=this.value;save()">
+         <option value="">Select year</option>
+         ${years.map(y=>`<option ${S.gradYear==y?'selected':''}>${y}</option>`).join('')}
+       </select>${M_CHEV}`,
+      'e-year','Pick your graduation year.')}
+    ${mField('State of residence',
+      `<select id="f-state" style="${M_SEL}" onchange="S.state=this.value;save()">
+         <option value="">Select state</option>
+         ${STATES.map(x=>`<option ${S.state===x?'selected':''}>${esc(x)}</option>`).join('')}
+       </select>${M_CHEV}`,
+      'e-state','Pick where you live.')}
+    ${mField('Intended major',
+      `<select id="f-major" style="${M_SEL}" onchange="S.major=this.value;save()">
+         <option value="">Select major</option>
+         ${MAJORS.map(g=>`<optgroup label="${esc(g[0])}">${g[1].map(m=>`<option ${S.major===m?'selected':''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}
+       </select>${M_CHEV}`,
+      'e-major','Pick a major.')}
+  </div>`;
+}
+
+const MVIEWS = [mvBasics];
+const isPhone = () => window.matchMedia('(max-width:760px)').matches;
+
 function render(){
   const st=STEPS[step];
   /* Разметка та же, что была: десктоп ничего не теряет. Префикс «Step N · »
@@ -2696,7 +2748,7 @@ function render(){
        <div><div class="m-eyebrow"><span class="m-step">Step ${step+1} · </span>${st.eyebrow}</div>
          <h1 class="m-h1">${st.h1}</h1><p class="m-sub">${st.sub}</p></div>
        <span class="m-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${Math.max(1, STEPS.length-step)} min left</span>
-     </div>` + VIEWS[step]();
+     </div>` + ((isPhone() && MVIEWS[step]) ? MVIEWS[step]() : VIEWS[step]());
   document.getElementById('back').style.visibility = step===0 ? 'hidden' : 'visible';
   document.getElementById('next').innerHTML = (step===STEPS.length-1 ? 'See my results'
       : 'Continue<span class="nx-rest"> to '+STEPS[step+1].n.toLowerCase()+'</span>')
@@ -2767,7 +2819,8 @@ render();
     }
   }
   place();
-  mq.addEventListener ? mq.addEventListener('change', place) : mq.addListener(place);
+  function onChange(){ place(); if (window.render) render(); }
+  mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange);
   document.addEventListener('DOMContentLoaded', place);
 })();
 </script>
