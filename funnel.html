@@ -396,6 +396,13 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   #main[data-step="1"] .fg{margin-bottom:18px}
   #main[data-step="1"] .row2{grid-template-columns:1fr}
 
+  /* Шаг «Activities»: убраны вводный абзац и подсказки в подписях —
+     «list your most…», «what you did, what you achieved», «pick all that
+     apply», «at its busiest». На десктопе они остаются. */
+  #main[data-step="3"] .info{display:none}
+  #main[data-step="3"] .fl em,
+  #main[data-step="3"] .sub-q em{display:none}
+
   /* ── кнопка шага ── */
   .bar{right:0;left:0;bottom:0;border-radius:0;gap:10px;
        padding:12px 20px calc(12px + env(safe-area-inset-bottom));
@@ -2270,7 +2277,7 @@ const SCHOOL_ALIASES = {mit:'Massachusetts Institute of Technology',caltech:'Cal
 const STEPS = [
   {k:'basics',    n:'Basics',     eyebrow:'Basics',     h1:'Let’s start with you.',      sub:'A few basics so every number in your report is scored against the right class year.'},
   {k:'academics', n:'Academics',  eyebrow:'Academics',  h1:'Your academic record.',            sub:'GPA, test scores and course rigor carry the most weight in your admission probability.'},
-  {k:'activities',n:'Activities', eyebrow:'Activities', h1:'What you actually do.',            sub:'Depth beats length. Three real commitments read stronger than ten club memberships.'},
+  {k:'activities',n:'Activities', eyebrow:'Activities', h1:'What you do outside class',            sub:'Depth beats length. Three real commitments read stronger than ten club memberships.'},
   {k:'financial', n:'Financial',  eyebrow:'Financial',  h1:'Money, before it decides for you.',  sub:'Optional. Answer two questions and every school on your list gets a real price instead of a sticker one.'},
   {k:'honors',    n:'Honors',     eyebrow:'Honors',     h1:'Honors and awards.',               sub:'Recognition level matters far more than the count. It is fine to have none.'},
   {k:'schools',   n:'Schools',    eyebrow:'Schools',    h1:'Your school list.',                sub:'Add up to 10. Include reaches and safeties — a list of only reaches tells you nothing.'},
