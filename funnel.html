@@ -399,6 +399,14 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   /* Шаг «Activities»: убраны вводный абзац и подсказки в подписях —
      «list your most…», «what you did, what you achieved», «pick all that
      apply», «at its busiest». На десктопе они остаются. */
+  /* «When did you participate?» — подписью, как остальные поля, и четыре
+     класса в ряд равной ширины; «After high school» занимает всю строку. */
+  #main[data-step="3"] .sub-q{font-size:10.5px;font-weight:800;letter-spacing:.11em;
+      text-transform:uppercase;color:#0f1f4b;margin:14px 0 8px}
+  #main[data-step="3"] .opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  #main[data-step="3"] .opts .opt:nth-child(5){grid-column:1/-1}
+  #main[data-step="3"] .opt{padding:13px 8px;border:1.5px solid #e4ecf7;border-radius:13px;
+      font-size:15px;font-weight:700;color:#31456b;box-shadow:none}
   #main[data-step="3"] .info{display:none}
   #main[data-step="3"] .fl em,
   #main[data-step="3"] .sub-q em{display:none}
