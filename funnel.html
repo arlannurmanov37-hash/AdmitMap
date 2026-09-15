@@ -336,7 +336,9 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   .prog{order:2;margin-left:auto;display:flex;align-items:baseline;gap:7px;
         padding:5px 11px;border-radius:12px;background:#e8f0ff;border:0;box-shadow:none}
   .prog-n{font-family:Fraunces,Georgia,serif;font-size:15px;font-weight:900;color:#1d4ed8}
-  .prog-l{display:none}
+  /* в макете рядом с процентом стоит слово complete */
+  .prog-l{display:inline;margin:0;font-size:11px;font-weight:700;color:#1d4ed8;letter-spacing:-.01em}
+  .prog-l-w{display:none}
   .prog-r{position:absolute;left:20px;right:20px;bottom:8px;height:6px;min-width:0;flex:none}
   .prog-bar{height:6px;border-radius:99px;background:#dbe6fb}
   .prog-fill{background:linear-gradient(90deg,#3b82f6,#1d4ed8);
@@ -375,6 +377,18 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   .row2{grid-template-columns:1fr 1fr;gap:12px}
   .row3{grid-template-columns:1fr 1fr;gap:12px}
   .grid2,.addrow{grid-template-columns:1fr}
+
+  /* ── что показывает макет на каждом шаге ──
+     Шаг 1: ни надзаголовка, ни подзаголовка, и без карточек.
+     Шаги 2-5: только название раздела. Подзаголовок — лишь на 6 и 7. */
+  .m-step{display:none}
+  .m-sub{display:none}
+  #main[data-step="6"] .m-sub,#main[data-step="7"] .m-sub{display:block}
+  #main[data-step="1"] .m-eyebrow{display:none}
+  #main[data-step="1"] .card{background:transparent;border:0;box-shadow:none;padding:0;margin-bottom:0}
+  #main[data-step="1"] .c-head{display:none}
+  #main[data-step="1"] .fg{margin-bottom:18px}
+  #main[data-step="1"] .row2{grid-template-columns:1fr}
 
   /* ── кнопка шага ── */
   .bar{right:0;left:0;bottom:0;border-radius:0;gap:10px;
@@ -416,7 +430,7 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
     <div class="prog">
       <span class="prog-n" id="pct">0%</span>
       <span class="prog-r">
-        <span class="prog-l">Profile complete</span>
+        <span class="prog-l"><span class="prog-l-w">Profile </span>complete</span>
         <span class="prog-bar"><span class="prog-fill" id="pfill" style="width:0%"></span></span>
       </span>
     </div>
@@ -2661,9 +2675,14 @@ const VIEWS = [vBasics,vAcademics,vActivities,vFinancial,vHonors,vSchools,vEssay
 /* ── shell ── */
 function render(){
   const st=STEPS[step];
-  document.getElementById('main').innerHTML =
+  /* Разметка та же, что была: десктоп ничего не теряет. Префикс «Step N · »
+     вынесен в отдельный span, а data-step на контейнере позволяет телефону
+     показать ровно то, что показывает макет на этом шаге. */
+  const main = document.getElementById('main');
+  main.setAttribute('data-step', String(step + 1));
+  main.innerHTML =
     `<div class="m-head">
-       <div><div class="m-eyebrow">Step ${step+1} · ${st.eyebrow}</div>
+       <div><div class="m-eyebrow"><span class="m-step">Step ${step+1} · </span>${st.eyebrow}</div>
          <h1 class="m-h1">${st.h1}</h1><p class="m-sub">${st.sub}</p></div>
        <span class="m-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${Math.max(1, STEPS.length-step)} min left</span>
      </div>` + VIEWS[step]();
@@ -2724,6 +2743,16 @@ render();
     if (!b || !side || !bar) return;
     if (mq.matches) { if (b.parentElement !== side) side.insertBefore(b, side.firstChild); }
     else if (b.parentElement !== bar) bar.insertBefore(b, bar.firstChild);
+
+    /* «complete» в макете стоит внутри пилюли рядом с процентом, а в разметке
+       лежит в .prog-r вместе с полосой — переносим так же, узлом. */
+    var lab = document.querySelector('.prog-l'),
+        pill = document.querySelector('.prog'),
+        rail = document.querySelector('.prog-r');
+    if (lab && pill && rail) {
+      if (mq.matches) { if (lab.parentElement !== pill) pill.appendChild(lab); }
+      else if (lab.parentElement !== rail) rail.insertBefore(lab, rail.firstChild);
+    }
   }
   place();
   mq.addEventListener ? mq.addEventListener('change', place) : mq.addListener(place);
