@@ -36,9 +36,11 @@
 /* Кольцо 152px съедало сорок процентов узкого экрана, и текст справа
    ломался на три строки. На телефоне ужимаем его — строка становится шире. */
 @media(max-width:430px){
-  #ld-ringwrap{width:118px!important;height:118px!important}
-  #ld-ringwrap>svg{width:118px;height:118px}
-  #ld-pct{font-size:34px!important}
+  #ld-ringwrap{width:104px!important;height:104px!important}
+  #ld-ringwrap>svg{width:104px;height:104px}
+  #ld-pct{font-size:30px!important}
+  #ld-ana{font-size:7.5px!important}
+  #ld-row{gap:14px!important}
 }
 </style>
 </head>
@@ -56,7 +58,7 @@
       <span style="display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:12px;font-weight:700;color:#43536b"><span style="width:6px;height:6px;border-radius:50%;background:#2563eb;animation:lpBlink 1.4s ease-in-out infinite"></span><span id="ld-status">Getting started</span></span>
     </div>
 
-    <div style="display:flex;align-items:center;gap:20px">
+    <div id="ld-row" style="display:flex;align-items:center;gap:20px">
       <span id="ld-ringwrap" style="position:relative;display:flex;align-items:center;justify-content:center;width:152px;height:152px;flex-shrink:0">
         <svg width="152" height="152" viewBox="0 0 152 152" style="position:absolute;inset:0;transform:rotate(-90deg)">
           <circle cx="76" cy="76" r="68" fill="none" stroke="#e6edf8" stroke-width="9"></circle>
@@ -171,8 +173,13 @@
     if (cur && cur.outerHTML === html) return;
     if (cur) cur.outerHTML = html; else el.insertAdjacentHTML('afterbegin', html);
   }
+  /* В макете пятый пункт жирный и тёмный, шестой светлее — это его снимок
+     середины прогресса, а не правило. Вес и цвет задаём по состоянию. */
+  var LOOK = { done: ['600', '#43536b'], act: ['800', '#0f1f4b'], idle: ['600', '#8ea0bd'] };
   function setState(el, state) {
     icon(el, state === 'done' ? TICK : (state === 'act' ? SPIN : PULSE));
+    el.style.fontWeight = LOOK[state][0];
+    el.style.color      = LOOK[state][1];
   }
   function closeAll() { steps.forEach(function (el) { setState(el, 'done'); }); }
   steps.forEach(function (el) {
