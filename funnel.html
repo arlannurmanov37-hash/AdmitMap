@@ -299,6 +299,57 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   .btn-next{flex:1}
 }
 
+
+/* ══════════════════════════════════════════════════════════════════
+   ТЕЛЕФОН — вид из макета «AdmitMap Mobile Funnel».
+   Логика шагов не меняется: те же #pct, #pfill, #main, #back, #next.
+   Боковая колонка со списком из семи шагов на телефоне занимала пол-экрана,
+   поэтому она сворачивается в компактную шапку, как в макете: стрелка
+   назад, логотип, процент и тонкая полоса прогресса.
+   ══════════════════════════════════════════════════════════════════ */
+@media(max-width:760px){
+  /* Корневой размер не трогаем: вся вёрстка воронки в rem и рассчитана на
+     min(1.9vw,1.581vh) из правила выше. Переопределение ломало типографику. */
+  body{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 6%,#eef4ff 34%,#eef4ff 78%,#e7effd 100%);
+       background-attachment:fixed}
+  /* строка сетки под шапку тянулась на 214px — прижимаем её к содержимому */
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:100vh;background:transparent}
+
+  /* ── шапка ── */
+  .side{position:sticky;top:0;z-index:40;flex-direction:row;align-items:center;gap:.625rem;
+        padding:.625rem 1rem .75rem;background:rgba(247,251,255,.92);
+        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+        border-right:0;border-bottom:1px solid #e2eaf7;overflow:visible;
+        padding-bottom:1.125rem}
+  .side .steps,.side .inc,.side .side-f{display:none}
+  .brand{order:1;gap:.5rem}
+  .brand svg{width:1.625rem;height:1.625rem}
+  .brand-t{font-size:1.75rem;font-weight:700;letter-spacing:-.03em}
+
+  /* процент — пилюлей справа, как в макете */
+  .prog{order:2;margin-left:auto;display:flex;align-items:baseline;gap:.4375rem;
+        padding:.3125rem .6875rem;border-radius:.75rem;background:#e8f0ff;border:0}
+  .prog-n{font-family:Fraunces,Georgia,serif;font-size:1.25rem;font-weight:900;color:#1d4ed8}
+  .prog-l{display:none}
+  /* Полоса лежит внутри .prog, поэтому в строку шапки сама не переносится.
+     Кладём её абсолютом на всю ширину под логотипом — как в макете. */
+  .prog-r{position:absolute;left:1rem;right:1rem;bottom:.4375rem;min-width:0}
+  .prog-bar{height:.375rem;border-radius:99px;background:#dbe6fb}
+  .prog-fill{background:linear-gradient(90deg,#3b82f6,#1d4ed8);
+             transition:width .34s cubic-bezier(.4,0,.2,1)}
+
+  /* ── содержимое шага ── */
+  .main{overflow:visible;padding:1.25rem 1rem 7rem;background:transparent}
+
+  /* ── нижняя кнопка ── */
+  .bar{right:0;left:0;bottom:0;border-radius:0;
+       padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+       background:rgba(247,251,255,.94);
+       backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+       border-top:1px solid #e2eaf7}
+  .btn-next{flex:1}
+}
+
 /* Consent + legal notice at the point the email is actually collected. */
 .fine{margin-top:.625rem;font-size:.75rem;line-height:1.5;color:var(--muted-3);font-weight:500}
 .fine a{color:var(--muted-3);font-weight:600;text-decoration:underline;text-underline-offset:2px}
