@@ -2309,6 +2309,20 @@ const BLANK = {
   householdSize:'', studentIncome:'', parentCash:'', parentInvest:'',
   seen:[]
 };
+/* С лендинга приходят начинать заново: «Check my chances» ведёт на
+   funnel.html?new=1. Чистим сохранённое и сразу убираем флаг из адреса —
+   иначе обновление страницы посреди воронки стёрло бы заполненное. */
+(function(){
+  try{
+    if(/[?&]new=1\b/.test(location.search)){
+      localStorage.removeItem('admitmap_profile');
+      localStorage.removeItem('admitmap_activity_scores');
+      localStorage.removeItem('admitmap_essay_scores');
+      var clean = location.pathname + location.search.replace(/[?&]new=1\b/,'').replace(/^&/,'?') + location.hash;
+      history.replaceState(null,'',clean.replace(/\?$/,''));
+    }
+  }catch(e){}
+})();
 let S = load(), step = 0;
 
 function load(){ try{ const r=localStorage.getItem('admitmap_profile');
@@ -2745,6 +2759,10 @@ const M_CSEL = M_CFLD + ';appearance:none;-webkit-appearance:none;padding-right:
 const M_HINT = 'font-style:normal;font-weight:700;font-size:10px;letter-spacing:.04em;' +
                'text-transform:none;color:#8ea0bd';
 
+const M_BADGE = t => `<span style="flex-shrink:0;margin-left:auto;padding:5px 10px;
+    border-radius:8px;background:#f2f6fc;border:1px solid #e4ecf7;font-size:10.5px;
+    font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5f7292">${t}</span>`;
+
 function mCard(icon, title, sub, inner, badge){
   return `<div style="${M_CARD}">
     <span style="display:flex;align-items:center;gap:11px;margin-bottom:15px">
@@ -2753,7 +2771,7 @@ function mCard(icon, title, sub, inner, badge){
       <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
         <span style="font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:900;
                      line-height:1.05;letter-spacing:-.038em;color:#0f1f4b">${title}</span>
-        <span style="font-size:12px;font-weight:500;color:#5f7292">${sub}</span>
+        ${sub ? `<span style="font-size:12px;font-weight:500;color:#5f7292">${sub}</span>` : ''}
       </span>${badge||''}
     </span>
     <div style="display:flex;flex-direction:column;gap:12px">${inner}</div></div>`;
@@ -2769,7 +2787,7 @@ const M_I_DOC = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" str
 
 function mvAcademics(){
   const grades = mCField('Grade point average','',
-      `<input id="f-gpa" inputmode="decimal" placeholder="3.86" style="${M_CFLD}"
+      `<input id="f-gpa" inputmode="decimal" placeholder="3.6/4.0" style="${M_CFLD}"
               value="${esc(S.gpa)}" oninput="S.gpa=this.value;save()">`,
       'e-gpa','GPA must be between 0 and 4.00.')
     + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -2788,9 +2806,7 @@ function mvAcademics(){
       `<input id="f-act" inputmode="numeric" placeholder="33" style="${M_CFLD}"
               value="${esc(S.act)}" oninput="S.act=this.value;save()">`,
       'e-act','ACT must be between 1 and 36.');
-  const badge = `<span id="ap-badge" style="flex-shrink:0;margin-left:auto;padding:5px 10px;
-      border-radius:8px;background:#f2f6fc;border:1px solid #e4ecf7;font-size:10.5px;
-      font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5f7292">${S.apExams.length} AP</span>`;
+  const badge = M_BADGE('Optional');
   const rigor = `<label style="position:relative;display:flex;flex-direction:column;gap:7px">
       <select id="f-apx" style="${M_CSEL}"><option value="">Add an AP exam score</option>
         ${AP_COURSES.map(a=>`<option>${esc(a)}</option>`).join('')}</select>${M_CHEV}</label>
@@ -2801,8 +2817,8 @@ function mvAcademics(){
       </div>
       <div class="chips" id="apchips">${apChips()}</div>`;
   return `<div style="display:flex;flex-direction:column;gap:18px">
-    ${mCard(M_I_BARS,'Grades','unweighted, 4.0 scale',grades)}
-    ${mCard(M_I_TARGET,'Test scores','leave both blank if you\u2019re applying test-optional',tests)}
+    ${mCard(M_I_BARS,'Grades','',grades)}
+    ${mCard(M_I_TARGET,'Test scores','',tests,M_BADGE('Optional'))}
     ${mCard(M_I_DOC,'Course rigor','the AP exams you have taken',rigor,badge)}
   </div>`;
 }
@@ -2820,7 +2836,7 @@ function render(){
   main.innerHTML =
     `<div class="m-head">
        <div><div class="m-eyebrow"><span class="m-step">Step ${step+1} · </span>${st.eyebrow}</div>
-         <h1 class="m-h1">${st.h1}</h1><p class="m-sub">${st.sub}</p></div>
+         <h1 class="m-h1">${isPhone() ? st.h1.replace(/\.$/, '') : st.h1}</h1><p class="m-sub">${st.sub}</p></div>
        <span class="m-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${Math.max(1, STEPS.length-step)} min left</span>
      </div>` + ((isPhone() && MVIEWS[step]) ? MVIEWS[step]() : VIEWS[step]());
   document.getElementById('back').style.visibility = step===0 ? 'hidden' : 'visible';
