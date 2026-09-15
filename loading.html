@@ -112,7 +112,30 @@
       now    = document.getElementById('ld-now'),
       steps  = [].slice.call(document.querySelectorAll('[data-ldstep]'));
 
-  var names = steps.map(function (el) { return el.textContent.trim(); });
+  /* У каждого пункта три формы, как было на прежней странице: чем он занят
+     сейчас, как называется в ожидании и как — когда закрыт. В макете зашита
+     только часть: первые четыре в законченной форме, последние две — в
+     текущей, потому что это снимок середины прогресса. */
+  var LD = [
+    ['Reading your academic profile',
+     'Reading your academic profile',        'Academic profile read'],
+    ['Rating everything outside the classroom',
+     'Scoring your activities and honors',   'Activities and honors scored'],
+    ['Testing your profile against real admit data',
+     'Comparing against admitted students',  'Compared against admitted students'],
+    ['Working through your essay line by line',
+     'Grading your essay on six criteria',   'Essay graded on six criteria'],
+    ['Estimating your aid, school by school',
+     'Modelling financial aid',              'Financial aid modelled'],
+    ['Writing your roadmap',
+     'Writing your roadmap',                 'Roadmap written']
+  ];
+  function label(el, text) {
+    for (var i = el.childNodes.length - 1; i >= 0; i--) {
+      if (el.childNodes[i].nodeType === 3) { el.childNodes[i].nodeValue = text; return; }
+    }
+    el.appendChild(document.createTextNode(text));
+  }
   /* В макете иконки зашиты: у пятого пункта спиннер, у шестого бледная
      галочка. Берём галочку первого пункта как образец, чтобы на 100%
      все шесть выглядели одинаково закрытыми. */
@@ -139,7 +162,11 @@
     var active = Math.min(steps.length - 1, Math.floor(eased * steps.length));
     if (active !== lastActive || done !== lastDone) {
       lastActive = active; lastDone = done;
-      if (now) now.textContent = done ? names[names.length - 1] : names[active];
+      if (now) now.textContent = done ? LD[LD.length - 1][2] : (LD[active] ? LD[active][0] : '');
+      steps.forEach(function (el, i) {
+        var row = LD[i]; if (!row) return;
+        label(el, (done || i < active) ? row[2] : (i === active ? row[1] : row[1]));
+      });
       if (ana) ana.textContent = done ? 'Analysed' : 'Analysing';
       if (status) status.textContent = done ? 'Done'
         : (active < 2 ? 'Getting started' : (active < 4 ? 'Working through it' : 'Almost there'));
