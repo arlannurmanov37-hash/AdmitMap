@@ -304,72 +304,80 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
 
 
 /* ══════════════════════════════════════════════════════════════════
-   ТЕЛЕФОН — вид из макета «AdmitMap Mobile Funnel».
-   Логика шагов не меняется: те же #pct, #pfill, #main, #back, #next.
-   Боковая колонка со списком из семи шагов на телефоне занимала пол-экрана,
-   поэтому она сворачивается в компактную шапку, как в макете: стрелка
-   назад, логотип, процент и тонкая полоса прогресса.
+   ТЕЛЕФОН — значения взяты из макета «AdmitMap Mobile Funnel» как есть.
+   Логика, разметка и сбор данных не тронуты: это только CSS. Макет —
+   витрина без name/id и без записи в localStorage, поэтому подменять им
+   рабочую воронку нельзя; вместо этого её собственные классы получают
+   размеры, цвета и отступы макета.
    ══════════════════════════════════════════════════════════════════ */
 @media(max-width:760px){
-  /* Воронка считает rem от min(1.9vw,1.581vh) — на телефоне это корень 7px,
-     то есть поля с текстом 7px и высотой 25px. Макет нарисован от 16px.
-     Поднимаем корень до 16px (заодно iOS перестаёт зумить поле при фокусе)
-     и вручную возвращаем на место то, что от этого стало слишком крупным. */
   html{font-size:16px}
-  .m-h1{font-size:2rem;line-height:1.04;letter-spacing:-.044em}
-  .c-t{font-size:1.125rem}
-  .c-ic{width:2rem;height:2rem;border-radius:.625rem}
-  .c-ic svg{width:1rem;height:1rem}
-  .card{padding:1rem 1.125rem 1.125rem;border-radius:1rem;margin-bottom:.875rem}
-  .fi{height:3.375rem;border-radius:.875rem;border:1.5px solid #dde6f4}
-  .fg{margin-bottom:1rem}
-  .m-sub{font-size:.9375rem;line-height:1.5}
-  .m-head{gap:.75rem;margin-bottom:1.25rem}
-  .m-eyebrow{font-size:.6875rem}
-  .m-time{padding:.375rem .625rem;font-size:.75rem}
-  .m-time svg{width:.875rem;height:.875rem}
-  /* нижняя кнопка на всю ширину и в одну строку */
-  .btn-back,.btn-next{height:3.25rem;font-size:.9375rem}
-  .btn-next{flex:1;white-space:nowrap;padding:0 1rem}
-  .btn-back{padding:0 1rem}
+
+  /* ── лист: градиент и два световых пятна, как в макете ── */
   body{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 6%,#eef4ff 34%,#eef4ff 78%,#e7effd 100%);
        background-attachment:fixed}
-  /* строка сетки под шапку тянулась на 214px — прижимаем её к содержимому */
-  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:100vh;background:transparent}
+  .app{position:relative;grid-template-columns:1fr;grid-template-rows:auto 1fr;
+       height:auto;min-height:100vh;background:transparent;overflow-x:clip}
+  .app::before,.app::after{content:"";position:absolute;pointer-events:none;z-index:0;border-radius:50%}
+  .app::before{top:-220px;right:-200px;width:700px;height:520px;
+    background:radial-gradient(50% 50% at 50% 50%,rgba(37,99,235,.24),rgba(37,99,235,0) 70%)}
+  .app::after{top:44%;left:-62%;width:700px;height:460px;
+    background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.42),rgba(131,181,255,0) 70%)}
 
   /* ── шапка ── */
-  .side{position:sticky;top:0;z-index:40;flex-direction:row;align-items:center;gap:.625rem;
-        padding:10px 16px 12px;background:rgba(247,251,255,.92);
+  .side{position:sticky;top:0;z-index:40;flex-direction:row;align-items:center;gap:10px;
+        padding:12px 20px 18px;background:rgba(247,251,255,.92);
         backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-        border-right:0;border-bottom:1px solid #e2eaf7;overflow:visible;
-        padding-bottom:18px}
+        border-right:0;border-bottom:1px solid #e2eaf7;overflow:visible}
   .side .steps,.side .inc,.side .side-f{display:none}
-  .brand{order:1;gap:.5rem}
+  .brand{order:1;gap:8px}
   .brand svg{width:26px;height:26px}
   .brand-t{font-size:20px;font-weight:700;letter-spacing:-.03em}
-
-  /* процент — пилюлей справа, как в макете */
-  .prog{order:2;margin-left:auto;display:flex;align-items:baseline;gap:.4375rem;
-        padding:5px 11px;border-radius:12px;background:#e8f0ff;border:0}
+  .prog{order:2;margin-left:auto;display:flex;align-items:baseline;gap:7px;
+        padding:5px 11px;border-radius:12px;background:#e8f0ff;border:0;box-shadow:none}
   .prog-n{font-family:Fraunces,Georgia,serif;font-size:15px;font-weight:900;color:#1d4ed8}
   .prog-l{display:none}
-  /* Полоса лежит внутри .prog, поэтому в строку шапки сама не переносится.
-     Кладём её абсолютом на всю ширину под логотипом — как в макете. */
-  .prog-r{position:absolute;left:16px;right:16px;bottom:7px;min-width:0}
+  .prog-r{position:absolute;left:20px;right:20px;bottom:8px;min-width:0}
   .prog-bar{height:6px;border-radius:99px;background:#dbe6fb}
   .prog-fill{background:linear-gradient(90deg,#3b82f6,#1d4ed8);
              transition:width .34s cubic-bezier(.4,0,.2,1)}
 
-  /* ── содержимое шага ── */
-  .main{overflow:visible;padding:20px 16px 112px;background:transparent}
+  /* ── шаг ── */
+  .main{position:relative;z-index:1;overflow:visible;padding:22px 20px 120px;background:transparent}
+  .m-head{flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:22px}
+  .m-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.11em;color:#2563eb}
+  .m-h1{font-size:32px;font-weight:900;line-height:1.04;letter-spacing:-.044em;color:#0f1f4b}
+  .m-sub{font-size:14px;line-height:1.5;color:#5f7292}
+  .m-time{order:-1;padding:5px 10px;font-size:11px;border-radius:10px}
+  .m-time svg{width:13px;height:13px}
 
-  /* ── нижняя кнопка ── */
-  .bar{right:0;left:0;bottom:0;border-radius:0;
-       padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  /* В макете поля лежат прямо на градиенте — карточка без собственного фона.
+     Заголовки секций («About you») макет не показывает, поэтому прячем их:
+     это подпись, не поле, ни одно значение профиля при этом не теряется. */
+  .card{background:transparent;border:0;box-shadow:none;padding:0;margin-bottom:26px;border-radius:0}
+  .c-head{display:none}
+
+  .fl{font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+      color:#5f7292;margin-bottom:8px}
+  .fl em{font-size:10.5px;letter-spacing:.11em}
+  .fg{margin-bottom:16px}
+  .fi{height:auto;padding:16px 18px;border:1.5px solid #dde6f4;border-radius:14px;
+      background:#fff;font-size:16px;font-weight:500;color:#0f1f4b}
+  select.fi{padding-right:44px;background-position:right 16px center}
+  textarea.fi{min-height:180px;padding:16px 18px}
+  .row2,.row3,.grid2,.addrow{grid-template-columns:1fr}
+
+  /* ── кнопка шага ── */
+  .bar{right:0;left:0;bottom:0;border-radius:0;gap:10px;
+       padding:12px 20px calc(12px + env(safe-area-inset-bottom));
        background:rgba(247,251,255,.94);
        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
        border-top:1px solid #e2eaf7}
-  .btn-next{flex:1}
+  .btn-next{flex:1;height:60px;padding:0 16px;border-radius:999px;
+            background:linear-gradient(180deg,#3b82f6,#1d4ed8);
+            font-size:14.5px;font-weight:800;letter-spacing:.055em;text-transform:uppercase;
+            white-space:nowrap}
+  .btn-back{height:60px;padding:0 18px;border-radius:999px}
 }
 
 /* Consent + legal notice at the point the email is actually collected. */
