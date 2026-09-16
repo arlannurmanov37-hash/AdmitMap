@@ -298,7 +298,12 @@ body { min-height: 100vh; min-height: 100dvh; background: #eef1f7; }
   function paint(btn, s) {
     if (!btn) return;
     btn.style.background = s.bg; btn.style.border = s.border; btn.style.boxShadow = s.shadow;
-    var dot = btn.querySelector('span');
+    /* У карточки за $29 первым идёт ярлык «MOST POPULAR», а не кружок, —
+       раньше стиль кружка красил его в белое и текст пропадал. Берём тот
+       span, внутри которого лежит галочка. */
+    var dot = [].slice.call(btn.children).find(function (c) {
+      return c.tagName === 'SPAN' && c.querySelector('svg');
+    });
     if (dot) { dot.style.border = s.dotBorder; dot.style.background = s.dotBg;
       var mark = dot.querySelector('svg'); if (mark) mark.style.opacity = s.mark; }
   }
