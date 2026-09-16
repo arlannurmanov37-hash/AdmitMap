@@ -2623,6 +2623,9 @@
 
         @media (max-width: 760px) {
             #landing-view { display: none !important; }
+            /* Десктопное правило footer{} даёт кант сверху — на телефоне он
+               резал подвал отдельной полосой от финальной секции. */
+            #am-mobile footer { border-top: 0; padding: 22px 22px 34px !important; }
             #am-mobile { display: block; }
             #am-mobile *, #am-mobile *::before, #am-mobile *::after { box-sizing: border-box; }
             html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: clip; background: #dfe6f2; color: #0f1f4b; font-variant-numeric: lining-nums tabular-nums; }
