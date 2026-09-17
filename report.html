@@ -400,6 +400,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     /* Стол под документом — чуть глубже фона самого макета, чтобы «лист»
        читался как отдельный физический объект, а не как заливка страницы. */
     'html,body{background:#c9dcf5!important}',
+    /* iPhone Safari сам увеличивает мелкий текст на «широких» страницах.
+       Уменьшенный макет он принимал за такую страницу — текст раздувался
+       и налезал друг на друга. Масштаб текста держим ровно таким, как в макете. */
+    'html,body,#dc-root{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important}',
     'body{display:block!important;margin:0;min-height:100vh;background:#c9dcf5!important}',
     '#dc-root{display:block;width:100%;zoom:.85;padding:44px 24px 64px}',
     '#dc-root>.sc-host{display:block;width:100%}',
