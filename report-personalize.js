@@ -153,6 +153,7 @@ function build() {
     activities: model.activities.length,
     honors: (P.honors || []).filter(function (h) { return (h.title || '').trim(); }).length,
     budget: parseInt(P.budget, 10) || 0,
+    major: (P.major || '').trim(),
     rows: rows, skipped: skipped
   };
 }
@@ -262,6 +263,25 @@ function freshenSample() {
   if (d) setText(d, String(daysToNov1()));
 }
 
+/* Медиана заработка выпускников этой специальности — из College Scorecard.
+   Школа-специальность без публикации (Privacy Suppressed) — показываем
+   национальную медиану и помечаем «(US)», чтобы не выдавать её за местную. */
+function fillEarn(card, dom, major) {
+  var row = card.querySelector('[data-am-earn]');
+  if (!row) return;
+  var codes = (typeof EARN !== 'undefined' && major) ? EARN.majors[major] : null;
+  if (!codes) { row.remove(); return; }             // «Undecided» и незнакомые
+  var sc = EARN.schools[dom] || {}, val = null, national = false;
+  codes.some(function (c) { if (sc[c]) { val = sc[c]; return true; } });
+  if (val == null) {
+    codes.some(function (c) { if (EARN.national[c]) { val = EARN.national[c]; national = true; return true; } });
+  }
+  if (val == null) { row.remove(); return; }        // нет и национальной — лучше пусто
+  var l = row.querySelector('[data-am-earn-l]'), v = row.querySelector('[data-am-earn-v]');
+  setText(l, 'Median pay · ' + major + (national ? ' (US)' : ''));
+  setText(v, usd(val));
+}
+
 function fillCards(D) {
   var counts = $$('[data-count]');
   var cards = counts.map(function (c) { return c.parentElement.parentElement; });
@@ -289,6 +309,7 @@ function fillCards(D) {
     if (nodes[12]) nodes[12].style.width = (100 - gPct).toFixed(1) + '%';
     setText(nodes[13], 'Grants ' + usd(grants));
     setText(nodes[14], 'Sticker ' + usd(r.coa));
+    fillEarn(card, r.d, D.major);
   });
 
   /* Лишние карточки убираем — у студента может быть меньше десяти школ. */
