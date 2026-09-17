@@ -4559,7 +4559,20 @@
     for (var fs = 14.25; fs <= 21; fs += 0.25) {
       if (maxLines(fs) <= goal) best = fs;
     }
-    cards.forEach(function (c) { var p = c.querySelector('p'); if (p) p.style.fontSize = best + 'px'; });
+    /* Карточки на 20% выше самой плотной раскладки: крупнее кегль, но
+       строк у всех отзывов по-прежнему поровну — без пустоты снизу. */
+    var all = cards.map(function (c) { return c.querySelector('p'); }).filter(Boolean);
+    var setAll = function (fs) { all.forEach(function (p) { p.style.fontSize = fs + 'px'; }); };
+    setAll(best);
+    var target = orig[0].getBoundingClientRect().height * 1.2, pick = best, miss = 1e9;
+    for (var f = best + 0.25; f <= 26; f += 0.25) {
+      setAll(f);
+      var ls = ps.map(linesOf);
+      if (Math.min.apply(null, ls) !== Math.max.apply(null, ls)) continue;
+      var d = Math.abs(orig[0].getBoundingClientRect().height - target);
+      if (d < miss) { miss = d; pick = f; }
+    }
+    setAll(pick);
     jump(leftOf(N + (((current() % N) + N) % N)));
     focus();
   }
