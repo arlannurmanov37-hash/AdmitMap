@@ -195,9 +195,7 @@ function fillKpis(D) {
   var avgCoa = Math.round(rows.reduce(function (a, r) { return a + r.coa; }, 0) / rows.length);
   var aid4   = Math.round(rows.reduce(function (a, r) { return a + (r.coa - r.net); }, 0) / rows.length) * 4;
   var cheap  = rows.reduce(function (m, r) { return r.net < m.net ? r : m; }, rows[0]);
-  var best   = rows.reduce(function (m, r) { return r.odds > m.odds ? r : m; }, rows[0]);
-  var now = new Date(), yy = now.getMonth() > 9 ? now.getFullYear() + 1 : now.getFullYear();
-  var days = Math.max(0, Math.ceil((new Date(yy, 10, 1) - now) / 86400000));
+  var days = daysToNov1();
   var earlyN = rows.filter(function (r) { return r.earlyCode; }).length;
   var under = avgCoa ? Math.round((1 - avgNet / avgCoa) * 100) : 0;
 
@@ -206,7 +204,6 @@ function fillKpis(D) {
       under > 0 ? under + '% under the ' + usd(avgCoa) + ' sticker average' : 'across your list, after aid'],
     [/TOTAL AID ON YOUR LIST/i, usd(aid4), null, 'Grants across four years, typical school'],
     [/CHEAPEST IF ADMITTED/i, usd(cheap.net), '/ yr', shortName(cheap.n) + ' — your lowest-cost outcome'],
-    [/YOUR BEST ODDS/i, String(best.odds), '%', shortName(best.n) + ' — and ' + usd(best.net) + ' / yr after aid'],
     [/UNTIL NOV 1/i, String(days), 'days',
       earlyN ? earlyN + ' of your schools close first' : 'early rounds close first']
   ];
@@ -222,6 +219,47 @@ function fillKpis(D) {
     var sub = spans[spans.length - 1];
     if (sub) setText(sub, k[3]);
   });
+  fillBoost(rows);
+}
+
+/* Самая большая прибавка от раннего раунда. Карточки показывают обычный
+   раунд, поэтому здесь — повод подать рано, а не ещё один процент. */
+function fillBoost(rows) {
+  var lab = byText(/BIGGEST EARLY BOOST/i)[0];
+  var tile = lab && lab.parentElement && lab.parentElement.parentElement;
+  if (!tile) return;
+  var top = null;
+  rows.forEach(function (r) {
+    if (r.oddsEarly == null) return;
+    var g = r.oddsEarly - r.odds;
+    if (!top || g > top.g) top = { r: r, g: g };
+  });
+  var big = tile.querySelector('[data-am-boost]');
+  var spans = $$('span', tile).filter(function (e) { return e.children.length === 0; });
+  var sub = spans[spans.length - 1];
+  if (!top || top.g <= 0) {
+    setText(big, '—');
+    setText(sub, 'no early-round advantage on your list');
+    return;
+  }
+  setText(big, '+' + top.g + '%');
+  setText(sub, shortName(top.r.n) + ' — ' + top.r.odds + '% to ' + top.r.oddsEarly +
+          '% if you apply ' + top.r.earlyCode);
+}
+
+function daysToNov1() {
+  var now = new Date(), yy = now.getMonth() > 9 ? now.getFullYear() + 1 : now.getFullYear();
+  return Math.max(0, Math.ceil((new Date(yy, 10, 1) - now) / 86400000));
+}
+
+/* У образца дата и счётчик дней живые: застывшие «94 дня» в сентябре
+   выглядят как ошибка. Всё остальное у Майи не меняется. */
+function freshenSample() {
+  var date = document.querySelector('[data-am-date]');
+  if (date) setText(date, new Date().toLocaleDateString('en-GB',
+    { day: 'numeric', month: 'long', year: 'numeric' }));
+  var d = document.querySelector('[data-am-days]');
+  if (d) setText(d, String(daysToNov1()));
 }
 
 function fillCards(D) {
@@ -465,11 +503,12 @@ function sampleRequested() {
 }
 
 function personalize() {
-  if (sampleRequested()) return false;                 // образец Майи, как просили
+  if (sampleRequested()) { freshenSample(); return false; }   // образец Майи, как просили
   var D = build();
   if (!D) {
     var why = whyCannotBuild();
     if (why) { showCannotBuild(why); return true; }   // профиль есть, но отчёт не выходит
+    freshenSample();
     return false;                                      // профиля нет — остаётся образец
   }
   try {
