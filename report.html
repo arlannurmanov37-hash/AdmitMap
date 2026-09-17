@@ -433,12 +433,25 @@ document.addEventListener('DOMContentLoaded', async function() {
      в 4px. Поэтому масштабируем сами: zoom подбирается под ширину окна,
      и на любом экране лист занимает его целиком, оставаясь читаемым. */
   var ART_W = 1080;
+  /* Уменьшаем готовую картинку (transform), а не раскладку (zoom): iPhone Safari
+     при zoom сжимал блоки, но не текст — всё налезало друг на друга.
+     transform одинаково работает везде; высоту контейнера задаём сами,
+     потому что transform места в потоке не освобождает. */
   function fit() {
     var root = document.getElementById('dc-root');
-    if (!root) return;
-    var pad = window.innerWidth <= 820 ? 20 : 48;
-    var z = Math.min(0.85, Math.max(0.2, (window.innerWidth - pad) / ART_W));
-    root.style.zoom = z.toFixed(4);
+    var host = root && root.querySelector('.sc-host');
+    var art = host && host.firstElementChild;
+    if (!art) return;
+    root.style.zoom = '1';
+    host.style.overflow = 'hidden';
+    var avail = host.clientWidth;
+    if (!avail) return;
+    var z = Math.min(0.85, avail / ART_W);
+    art.style.setProperty('transform-origin', 'top left', 'important');
+    art.style.setProperty('transform', 'scale(' + z.toFixed(4) + ')', 'important');
+    art.style.setProperty('margin-left', Math.max(0, (avail - ART_W * z) / 2) + 'px', 'important');
+    art.style.setProperty('margin-right', '0', 'important');
+    host.style.height = Math.ceil(art.offsetHeight * z) + 'px';
   }
 
   function inject() {
