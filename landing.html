@@ -4557,30 +4557,38 @@
     return n;
   }
   function fitText() {
-    var ps = orig.map(function (c) { return c.querySelector('p'); }).filter(Boolean);
-    if (!ps.length || !rail.clientWidth) return;
-    var maxLines = function (fs) {
-      ps.forEach(function (p) { p.style.fontSize = fs + 'px'; });
-      return Math.max.apply(null, ps.map(linesOf));
+    var ps = orig.map(function (c) { return c.querySelector('p'); });
+    if (!ps.length || !ps[0] || !rail.clientWidth) return;
+    var textH = function (p) {                 // высота самого текста, а не растянутого абзаца
+      var r = document.createRange(); r.selectNodeContents(p);
+      var b = r.getBoundingClientRect(); return b.height;
     };
-    var goal = maxLines(14), best = 14;
-    for (var fs = 14.25; fs <= 21; fs += 0.25) {
-      if (maxLines(fs) <= goal) best = fs;
-    }
-    /* Карточки на 20% выше самой плотной раскладки: крупнее кегль, но
-       строк у всех отзывов по-прежнему поровну — без пустоты снизу. */
-    var all = cards.map(function (c) { return c.querySelector('p'); }).filter(Boolean);
-    var setAll = function (fs) { all.forEach(function (p) { p.style.fontSize = fs + 'px'; }); };
-    setAll(best);
-    var target = orig[0].getBoundingClientRect().height * 1.2, pick = best, miss = 1e9;
-    for (var f = best + 0.25; f <= 26; f += 0.25) {
-      setAll(f);
-      var ls = ps.map(linesOf);
-      if (Math.min.apply(null, ls) !== Math.max.apply(null, ls)) continue;
-      var d = Math.abs(orig[0].getBoundingClientRect().height - target);
-      if (d < miss) { miss = d; pick = f; }
-    }
-    setAll(pick);
+    var setAll = function (fs) { ps.forEach(function (p) { p.style.fontSize = fs + 'px'; }); };
+    var maxLines = function (fs) { setAll(fs); return Math.max.apply(null, ps.map(linesOf)); };
+
+    /* Одна строка сверх самой плотной раскладки — карточки примерно на 20% выше.
+       Общий кегль — самый крупный, при котором ни один отзыв не длиннее этого. */
+    var T = maxLines(14) + 1, F = 14;
+    for (var fs = 14.25; fs <= 26; fs += 0.25) { if (maxLines(fs) <= T) F = fs; }
+    setAll(F);
+    var H = Math.max.apply(null, ps.map(textH));
+
+    /* Отзыв, которому при общем кегле хватило меньше строк, иначе оставил бы
+       пустоту снизу и справа: поднимаем его кегль, пока текст не займёт
+       ту же высоту. Карточки видны по одной, разница в полпункта незаметна. */
+    var size = ps.map(function (p) {
+      var f = F;
+      while (f + 0.25 <= 26) {
+        p.style.fontSize = (f + 0.25) + 'px';
+        if (linesOf(p) > T || textH(p) > H + 0.5) break;
+        f += 0.25;
+      }
+      p.style.fontSize = f + 'px';
+      return f;
+    });
+    cards.forEach(function (c, j) {
+      var p = c.querySelector('p'); if (p) p.style.fontSize = size[j % N] + 'px';
+    });
     jump(leftOf(N + (((current() % N) + N) % N)));
     focus();
   }
