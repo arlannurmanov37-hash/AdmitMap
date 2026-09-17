@@ -2703,30 +2703,88 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div style="display:flex;flex-direction:column;gap:16px;width:100%;max-width:500px;box-sizing:border-box;background:#ffffff;border:1px solid #dbe3ef;border-radius:16px;padding:26px 28px;box-shadow:0 1px 2px rgba(15,31,75,.07),0 2px 5px rgba(15,31,75,.06),0 24px 48px -30px rgba(23,62,140,.45);text-align:left">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <img src="/assets/mobile/logo-stanford.png" alt="Stanford" style="width:46px;height:46px;padding:4px;border-radius:9px;object-fit:contain;background:#ffffff;flex-shrink:0;box-shadow:0 0 0 1px rgba(15,31,75,.09),0 1px 3px rgba(15,31,75,.10)">
-                    <span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:21px;font-weight:600;letter-spacing:-.014em;color:#0f1f4b;white-space:nowrap">Stanford University</span><span style="font-size:13px;font-weight:600;color:#5f7292;white-space:nowrap">Restrictive EA · Nov 1</span></span>
-                    <span style="margin-left:auto;font-family:Fraunces,Georgia,serif;font-size:48px;font-weight:900;line-height:1;letter-spacing:-.02em;color:#0f1f4b">23%</span>
-                  </div>
-                  <div style="position:relative;height:7px;border-radius:5px;background:#eef1f7">
-                    <span style="position:absolute;left:0;top:0;bottom:0;width:23%;border-radius:5px;background:#3b82f6"></span>
-                    <span style="position:absolute;left:3.8%;top:-4px;bottom:-4px;width:2px;background:#0f1f4b;border-radius:2px"></span>
-                  </div>
-                  <div>
-                    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px">
-                      <span style="display:flex;align-items:baseline;gap:8px;white-space:nowrap"><span style="font-family:Fraunces,Georgia,serif;font-size:31px;font-weight:900;line-height:1;letter-spacing:-.015em;color:#0f1f4b">$20,900</span><span style="font-size:13.5px;font-weight:600;color:#5f7292">/ yr you pay</span></span>
-                      <span style="font-size:13.5px;font-weight:700;color:#43536b;white-space:nowrap">4-yr $83,600</span>
+                <div class="radar-card">
+                    <div class="radar-top">
+                        <span class="radar-school"><img
+                                src="https://www.google.com/s2/favicons?domain=stanford.edu&sz=128"
+                                alt="Stanford">Candidate Analysis · Stanford</span>
+                        <span class="radar-live"><span class="live-dot"></span>Live</span>
                     </div>
-                    <div style="display:flex;height:11px;border-radius:6px;overflow:hidden;background:#eef1f7">
-                      <span style="width:78.6%;background:#1ddb87"></span>
-                      <span style="width:21.4%;background:#83b5ff"></span>
+                    <div class="radar-score-row">
+                        <div>
+                            <div class="radar-prob">14%</div>
+                            <div class="radar-prob-label">Acceptance Probability</div>
+                        </div>
+                        <div style="flex:1">
+                            <div class="radar-strength"><span class="ic-inline" data-icon="bolt"></span>Spike needed</div>
+                            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Overall Strength: <strong
+                                    style="color:var(--navy)">68 / 100</strong></div>
+                        </div>
                     </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:9px;font-size:12.5px;font-weight:700;color:#5f7292">
-                      <span style="color:#08915d;font-weight:800">Grants $76,700</span>
-                      <span style="color:#0f1f4b">Sticker $97,545</span>
+                    <hr class="radar-divider">
+                    <div class="seg-control" role="tablist">
+                        <button class="seg-btn active" id="seg-radar" onclick="setHeroView('radar', true)">Radar</button>
+                        <button class="seg-btn" id="seg-breakdown" onclick="setHeroView('breakdown', true)">Breakdown</button>
                     </div>
-                  </div>
+                    <div class="view-stack">
+                        <div class="view-panel active" id="panel-radar">
+                    <div class="radar-svg-wrap">
+                        <svg width="250" height="238" viewBox="-10 -10 240 230">
+                            <defs>
+                                <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2563eb;stop-opacity:.35" />
+                                    <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:.2" />
+                                </linearGradient>
+                            </defs>
+                            <polygon points="110,10 196,60 196,150 110,200 24,150 24,60" fill="none" stroke="#e2e8f0"
+                                stroke-width="1.5" />
+                            <polygon points="110,35 178,73 178,137 110,175 42,137 42,73" fill="none" stroke="#e2e8f0"
+                                stroke-width="1" />
+                            <polygon points="110,60 161,86 161,124 110,150 59,124 59,86" fill="none" stroke="#e2e8f0"
+                                stroke-width="1" />
+                            <line x1="110" y1="10" x2="110" y2="200" stroke="#e2e8f0" stroke-width="1" />
+                            <line x1="24" y1="60" x2="196" y2="150" stroke="#e2e8f0" stroke-width="1" />
+                            <line x1="196" y1="60" x2="24" y2="150" stroke="#e2e8f0" stroke-width="1" />
+                            <polygon points="110,27 184,80 183,132 110,165 49,119 42,73" fill="url(#rg)"
+                                stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" opacity=".9" />
+                            <text x="110" y="6" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">GPA</text>
+                            <text x="210" y="58" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">Test</text>
+                            <text x="210" y="156" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">Honors</text>
+                            <text x="110" y="218" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">Essays</text>
+                            <text x="8" y="156" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">EFC</text>
+                            <text x="8" y="58" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
+                                font-family="Syne">Activities</text>
+                        </svg>
+                    </div>
+                        </div>
+                        <div class="view-panel" id="panel-breakdown">
+                            <div class="radar-strength-row">
+                                <span class="radar-strength-lbl">Overall Strength</span>
+                                <span class="radar-strength-num">68<small>/100</small></span>
+                            </div>
+                    <div class="radar-bar">
+                        <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="dim"></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="radar-cats">
+                        <div class="radar-cat">GPA &amp; Rigor<span class="radar-cat-right"><span class="radar-cat-score">92</span><span class="rc-badge rc-strong">Strong</span></span></div>
+                        <div class="radar-cat">Testing<span class="radar-cat-right"><span class="radar-cat-score">88</span><span class="rc-badge rc-strong">Strong</span></span></div>
+                        <div class="radar-cat">Honors<span class="radar-cat-right"><span class="radar-cat-score">74</span><span class="rc-badge rc-ok">OK</span></span></div>
+                        <div class="radar-cat">Essays<span class="radar-cat-right"><span class="radar-cat-score">51</span><span class="rc-badge rc-weak">Weak</span></span></div>
+                        <div class="radar-cat">Activities<span class="radar-cat-right"><span class="radar-cat-score">34</span><span class="rc-badge rc-critical">Critical</span></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radar-insights">
+                        <div class="radar-insight ri-warn"><b><span class="ic-inline" data-icon="warn"></span>Critical Gap</b>Activities score is in the bottom 40% —
+                            no defined spike.</div>
+                        <div class="radar-insight ri-tip"><b>→ Highest Leverage</b>Essays are dragging your odds. A
+                            rewritten hook can move your probability by +6%.</div>
+                    </div>
                 </div>
             </div>
         </section>
