@@ -3855,8 +3855,8 @@
       <img src="/assets/mobile/admitmap-mark.svg" alt="" style="width:34px;height:34px;object-fit:contain">
       <span style="font-family:Fraunces,Georgia,serif;font-size:24px;font-weight:700;letter-spacing:-.03em;color:#0f1f4b">Admit<span style="color:#2563eb">Map</span></span>
     </a>
-    <button type="button" onclick="openMenu()" aria-label="Open menu" style="display:flex;align-items:center;gap:9px;height:44px;padding:0 12px;border:0;background:transparent;font-family:Syne,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#0f1f4b;cursor:pointer">
-      <span style="display:flex;flex-direction:column;justify-content:center;gap:3.5px;width:18px">
+    <button type="button" onclick="openMenu()" aria-label="Open menu" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border:0;background:transparent;font-family:Syne,sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#0f1f4b;cursor:pointer">
+      <span style="display:flex;flex-direction:column;justify-content:center;gap:4px;width:20px">
         <span style="height:2px;border-radius:2px;background:#0f1f4b"></span>
         <span style="height:2px;border-radius:2px;background:#0f1f4b"></span>
         <span style="height:2px;border-radius:2px;background:#0f1f4b"></span>
@@ -3865,16 +3865,16 @@
   </header>
 
   <div data-menu="" data-open="false" id="m-amMenu" style="position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);z-index:90;opacity:0;pointer-events:none;transition:opacity .18s ease;display:flex;flex-direction:column;width:100%;max-width:430px;background:rgba(15,31,75,.42);backdrop-filter:blur(3px);">
-    <div style="display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 8px 0 18px;background:#ffffff">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 8px 0 18px;background:#ffffff;flex-shrink:0">
       <span style="display:flex;align-items:center;gap:9px">
         <img src="/assets/mobile/admitmap-mark.svg" alt="" style="width:26px;height:26px;object-fit:contain">
         <span style="font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:700;letter-spacing:-.03em;color:#0f1f4b">Admit<span style="color:#2563eb">Map</span></span>
   </span>
-      <button type="button" onclick="closeMenu()" style="display:flex;align-items:center;gap:9px;height:44px;padding:0 16px;border:0;border-radius:11px;background:#eef4ff;font-family:Syne,sans-serif;font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;cursor:pointer">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"></path></svg>Close
+      <button type="button" onclick="closeMenu()" aria-label="Close menu" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border:0;background:transparent;font-family:Syne,sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#0f1f4b;cursor:pointer">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#0f1f4b" stroke-width="2" stroke-linecap="round"><path d="M4.5 4.5l11 11M15.5 4.5l-11 11"></path></svg>Close
       </button>
     </div>
-    <div class="am-scroll" style="display:flex;flex-direction:column;gap:2px;margin-top:auto;max-height:88%;padding:14px 0 26px;overflow-y:auto;background:#f4f8ff;border-radius:22px 22px 0 0;animation:amSheet .28s cubic-bezier(.23,1,.32,1) both">
+    <div id="m-amSheet" class="am-scroll" style="display:flex;flex-direction:column;gap:2px;margin-top:auto;max-height:88%;padding:14px 0 26px;overflow-y:auto;background:#f4f8ff;border-radius:22px 22px 0 0;animation:amSheet .28s cubic-bezier(.23,1,.32,1) both">
       <span style="width:44px;height:4px;margin:0 auto 14px;border-radius:4px;background:#c9d8ef"></span>
       <a href="#m-top" onclick="closeMenu()" style="display:flex;flex-shrink:0;align-items:center;justify-content:center;padding:15px 20px;font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-.03em;color:#0f1f4b">
         <span style="position:relative">Home<span style="position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px;margin-left:10px;white-space:nowrap">
@@ -4483,8 +4483,53 @@
    потому что разметка пришла из макета с инлайновыми onclick. */
 (function () {
   var menu = document.getElementById('m-amMenu');
-  window.openMenu  = function () { if (menu) { menu.dataset.open = 'true';  document.body.style.overflow = 'hidden'; } };
+  var sheet = document.getElementById('m-amSheet');
+  window.openMenu = function () {
+    if (!menu) return;
+    if (sheet) {                           // сбросить следы свайпа и заново проиграть появление
+      sheet.style.transition = ''; sheet.style.transform = '';
+      sheet.style.animation = 'none'; sheet.offsetHeight; sheet.style.animation = '';
+    }
+    menu.style.background = '';
+    menu.dataset.open = 'true'; document.body.style.overflow = 'hidden';
+  };
   window.closeMenu = function () { if (menu) { menu.dataset.open = 'false'; document.body.style.overflow = ''; } };
+
+  /* Меню можно смахнуть вниз. Тянем, только если список прокручен к началу,
+     иначе жест — обычная прокрутка пунктов. */
+  if (menu && sheet) {
+    var y0 = 0, t0 = 0, dy = 0, dragging = false;
+    sheet.addEventListener('touchstart', function (e) {
+      if (sheet.scrollTop > 0) { dragging = false; return; }
+      dragging = true; dy = 0; y0 = e.touches[0].clientY; t0 = Date.now();
+      sheet.style.animation = 'none'; sheet.style.transition = 'none';
+    }, { passive: true });
+    sheet.addEventListener('touchmove', function (e) {
+      if (!dragging) return;
+      dy = e.touches[0].clientY - y0;
+      if (dy <= 0) { dy = 0; sheet.style.transform = ''; return; }
+      e.preventDefault();
+      sheet.style.transform = 'translateY(' + dy + 'px)';
+      var k = Math.max(0, 1 - dy / (sheet.offsetHeight || 1));
+      menu.style.background = 'rgba(15,31,75,' + (0.42 * k).toFixed(3) + ')';
+    }, { passive: false });
+    sheet.addEventListener('touchend', function () {
+      if (!dragging) return;
+      dragging = false;
+      var fast = dy / Math.max(1, Date.now() - t0) > 0.5;
+      sheet.style.transition = 'transform .24s cubic-bezier(.23,1,.32,1)';
+      if (dy > 110 || (fast && dy > 30)) {
+        sheet.style.transform = 'translateY(100%)';
+        setTimeout(function () {
+          window.closeMenu();
+          setTimeout(function () { sheet.style.transition = ''; sheet.style.transform = ''; menu.style.background = ''; }, 200);
+        }, 200);
+      } else {
+        sheet.style.transform = '';
+        menu.style.background = '';
+      }
+    });
+  }
 
   /* ── Карусель отзывов: бесконечная ─────────────────────────────────
      Отзывы повторены трижды, смотрим всегда на средний набор. Слева от
