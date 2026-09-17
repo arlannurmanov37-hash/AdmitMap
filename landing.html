@@ -4440,9 +4440,9 @@
         </div>
       </div>
       <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px">
-        <button type="button" onclick="prev()" aria-label="Previous review" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #cfe0fb;border-radius:50%;background:#ffffff;box-shadow:0 1px 2px rgba(15,31,75,.05),0 10px 22px -14px rgba(23,62,140,.5);cursor:pointer" style-hover="background:#f2f8ff;border-color:#a8c9fa" style-active="background:#e7f1ff"><svg width="15" height="17" viewBox="2.17 0 15 17" fill="#60a5fa" aria-hidden="true"><path d="M14 1L1 8.5 14 16z"></path></svg></button>
+        <button type="button" onclick="prev()" aria-label="Previous review" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #cfe0fb;border-radius:50%;background:#ffffff;box-shadow:0 1px 2px rgba(15,31,75,.05),0 10px 22px -14px rgba(23,62,140,.5);cursor:pointer" style-hover="background:#f2f8ff;border-color:#a8c9fa" style-active="background:#e7f1ff"><svg width="19" height="17" viewBox="0.17 0 19 17" fill="#60a5fa" aria-hidden="true"><path d="M14 1L1 8.5 14 16z"></path></svg></button>
         <span style="font-size:11.5px;font-weight:600;color:#5f7292">Swipe either way</span>
-        <button type="button" onclick="next()" aria-label="Next review" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #cfe0fb;border-radius:50%;background:#ffffff;box-shadow:0 1px 2px rgba(15,31,75,.05),0 10px 22px -14px rgba(23,62,140,.5);cursor:pointer" style-hover="background:#f2f8ff;border-color:#a8c9fa" style-active="background:#e7f1ff"><svg width="15" height="17" viewBox="-2.17 0 15 17" fill="#60a5fa" aria-hidden="true"><path d="M1 1l13 7.5L1 16z"></path></svg></button>
+        <button type="button" onclick="next()" aria-label="Next review" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #cfe0fb;border-radius:50%;background:#ffffff;box-shadow:0 1px 2px rgba(15,31,75,.05),0 10px 22px -14px rgba(23,62,140,.5);cursor:pointer" style-hover="background:#f2f8ff;border-color:#a8c9fa" style-active="background:#e7f1ff"><svg width="19" height="17" viewBox="-4.17 0 19 17" fill="#60a5fa" aria-hidden="true"><path d="M1 1l13 7.5L1 16z"></path></svg></button>
       </div>
     </section>
 
@@ -4477,45 +4477,102 @@
   window.openMenu  = function () { if (menu) { menu.dataset.open = 'true';  document.body.style.overflow = 'hidden'; } };
   window.closeMenu = function () { if (menu) { menu.dataset.open = 'false'; document.body.style.overflow = ''; } };
 
-  /* Стрелки ходят по кругу: вправо с последнего отзыва — первый,
-     влево с первого — последний. */
+  /* ── Карусель отзывов: бесконечная ─────────────────────────────────
+     Отзывы повторены трижды, смотрим всегда на средний набор. Слева от
+     первого сразу виден пятый, справа от пятого — первый. Когда прокрутка
+     останавливается на копии, незаметно переносимся на тот же отзыв в
+     середине — поэтому переход 5 → 1 идёт на один шаг, а не назад через
+     весь ряд. */
+  var rail = document.getElementById('m-amRail');
+  if (!rail) return;
+  var orig = [].slice.call(rail.children).filter(function (c) { return c.tagName === 'DIV'; });
+  var N = orig.length;
+  if (!N) return;
+  orig.slice().reverse().forEach(function (c) {
+    var k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); rail.insertBefore(k, rail.firstChild);
+  });
+  orig.forEach(function (c) {
+    var k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); rail.appendChild(k);
+  });
+  var cards = [].slice.call(rail.children).filter(function (c) { return c.tagName === 'DIV'; });
+
+  function pitch() { return cards[1].offsetLeft - cards[0].offsetLeft; }
+  function leftOf(i) { return cards[i].offsetLeft - cards[0].offsetLeft; }
+  function current() { return Math.round(rail.scrollLeft / pitch()); }
+  function jump(x) {                       // мгновенно, без анимации и прилипания
+    rail.style.scrollBehavior = 'auto';
+    rail.style.scrollSnapType = 'none';
+    rail.scrollLeft = x;
+    rail.offsetHeight;                     // зафиксировать положение до возврата прилипания
+    rail.style.scrollSnapType = '';
+    rail.style.scrollBehavior = '';
+  }
+
+  /* Размываем сами соседние карточки: фильтр повторяет скруглённые углы. */
+  function focus() {
+    var i = current();
+    cards.forEach(function (c, j) {
+      c.style.filter  = j === i ? '' : 'blur(1.5px)';
+      c.style.opacity = j === i ? '' : '.55';
+    });
+  }
+  function recenter() {
+    var i = current();
+    if (i < N || i >= 2 * N) jump(leftOf(((i % N) + N) % N + N));
+    focus();
+  }
+
+  var tick = false, idle = null;
+  rail.addEventListener('scroll', function () {
+    if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; focus(); }); }
+    clearTimeout(idle);
+    idle = setTimeout(recenter, 140);      // Safari не знает scrollend
+  }, { passive: true });
+
   function step(dir) {
-    var rail = document.getElementById('m-amRail');
-    if (!rail) return;
-    var card = rail.querySelector('div');
-    var w = card ? card.getBoundingClientRect().width + 10 : rail.clientWidth * 0.84;
-    var max = rail.scrollWidth - rail.clientWidth;
-    if (dir > 0 && rail.scrollLeft >= max - 4) { rail.scrollTo({ left: 0, behavior: 'smooth' }); return; }
-    if (dir < 0 && rail.scrollLeft <= 4)       { rail.scrollTo({ left: max, behavior: 'smooth' }); return; }
-    rail.scrollBy({ left: dir * w, behavior: 'smooth' });
+    recenter();
+    rail.scrollTo({ left: leftOf(current() + dir), behavior: 'smooth' });
   }
   window.prev = function () { step(-1); };
   window.next = function () { step(1); };
 
-  /* Соседние отзывы размываем сами карточки, а не полосу поверх рельса:
-     фильтр повторяет скруглённые углы и закрывает карточку по всей высоте. */
-  var rail = document.getElementById('m-amRail');
-  if (rail) {
-    var cards = [].slice.call(rail.children).filter(function (c) { return c.tagName === 'DIV'; });
-    var tick = false;
-    var focus = function () {
-      tick = false;
-      var r = rail.getBoundingClientRect(), mid = r.left + r.width / 2, best = null, bd = 1e9;
-      cards.forEach(function (c) {
-        var b = c.getBoundingClientRect(), d = Math.abs(b.left + b.width / 2 - mid);
-        if (d < bd) { bd = d; best = c; }
-      });
-      cards.forEach(function (c) {
-        c.style.filter  = c === best ? '' : 'blur(1.5px)';
-        c.style.opacity = c === best ? '' : '.55';
-      });
+  /* Кегль подбираем на самом телефоне: у Safari текст шире, чем у Chrome,
+     и заранее заданный размер переносил отзыв на лишнюю строку. Берём самый
+     крупный кегль, при котором ни один отзыв не длиннее, чем при мелком, —
+     тогда все карточки одной высоты и без пустоты снизу. */
+  function linesOf(p) {
+    var r = document.createRange(); r.selectNodeContents(p);
+    var tops = {}, n = 0;
+    [].forEach.call(r.getClientRects(), function (x) {
+      var t = Math.round(x.top); if (!tops[t]) { tops[t] = 1; n++; }
+    });
+    return n;
+  }
+  function fitText() {
+    var ps = orig.map(function (c) { return c.querySelector('p'); }).filter(Boolean);
+    if (!ps.length || !rail.clientWidth) return;
+    var maxLines = function (fs) {
+      ps.forEach(function (p) { p.style.fontSize = fs + 'px'; });
+      return Math.max.apply(null, ps.map(linesOf));
     };
-    rail.addEventListener('scroll', function () {
-      if (!tick) { tick = true; requestAnimationFrame(focus); }
-    }, { passive: true });
-    window.addEventListener('resize', focus);
+    var goal = maxLines(14), best = 14;
+    for (var fs = 14.25; fs <= 21; fs += 0.25) {
+      if (maxLines(fs) <= goal) best = fs;
+    }
+    cards.forEach(function (c) { var p = c.querySelector('p'); if (p) p.style.fontSize = best + 'px'; });
+    jump(leftOf(N + (((current() % N) + N) % N)));
     focus();
   }
+
+  jump(leftOf(N));                         // начинаем с первого отзыва среднего набора
+  focus();
+  fitText();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
+  var rw = window.innerWidth;
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === rw) return;  // на телефоне resize шлёт и прокрутка адресной строки
+    rw = window.innerWidth; fitText();
+  });
 })();
 </script>
 </body>
