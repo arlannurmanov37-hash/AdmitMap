@@ -4,10 +4,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-/* На телефоне — пошаговый поток из paywall.html. */
-if (window.innerWidth <= 700) location.replace('paywall.html' + location.search + location.hash);
-</script>
 <meta name="robots" content="noindex">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -206,6 +202,47 @@ h1 em{font-style:normal;color:var(--royal)}
   .feats{grid-template-columns:1fr 1fr}
   .tickets{grid-template-columns:1fr;gap:2.5rem}
   .x{top:1rem;right:1.25rem}
+}
+
+/* ── телефон: тот же пэйволл, собранный в одну колонку ──
+   rem здесь привязан к ширине окна (1vw на компьютере), на телефоне это
+   были бы 4px — поэтому задаём базовый размер явно. */
+@media(max-width:700px){
+  html{font-size:13px}
+  html,body{height:auto;overflow-x:hidden;overflow-y:visible}
+  .wrap{padding:1.1rem 1.15rem 2.2rem;overflow:visible}
+  .glow{top:-10rem;width:36rem;height:26rem}
+  .x{top:.9rem;right:.9rem;width:2.6rem;height:2.6rem}
+  .brand{gap:.6rem;margin-bottom:.9rem}
+  .brand svg{width:2.4rem;height:2.4rem}
+  .brand-t{font-size:2.05rem}
+  .eyebrow{margin-bottom:.7rem}
+  .eyebrow span{font-size:.78rem}
+  h1{font-size:2.45rem;line-height:1.05;margin-bottom:.6rem}
+  .sub{font-size:1.02rem;margin-bottom:1.5rem}
+  .feats{gap:.6rem;margin-bottom:2.3rem}
+  .feat{gap:.65rem;padding:.8rem .85rem;border-radius:1rem}
+  .feat-i{width:2.3rem;height:2.3rem;border-radius:.7rem}
+  .feat b{font-size:.92rem}
+  .tickets{gap:2.3rem;margin-bottom:1.8rem}
+  .tk.hi{order:-1}                        /* $29 — первым */
+  .tk-top{padding:1.5rem 1.35rem 1.25rem;border-radius:1.2rem 1.2rem 0 0}
+  .tk-h{gap:.75rem}
+  .tk-ic{width:2.7rem;height:2.7rem;border-radius:.8rem}
+  .tk-ic svg{width:1.35rem;height:1.35rem}
+  .tk-n{font-size:1.6rem}
+  .tk-s{font-size:1rem;margin-top:.75rem;min-height:0}
+  .tk-hr{margin:1rem 0}
+  .tk-ul{gap:.75rem}
+  .tk-ul li{font-size:1rem;gap:.75rem}
+  .tk-b{width:1.95rem;height:1.95rem;border-radius:.62rem}
+  .tk-b svg{width:1.05rem;height:1.05rem}
+  .tk-f{padding:1.2rem 1.35rem 1.4rem;border-radius:0 0 1.2rem 1.2rem}
+  .tk-p b{font-size:2.7rem}
+  .tk-p i{font-size:.85rem}
+  .btn-o,.btn-b{padding:1rem 1.15rem;font-size:.82rem;letter-spacing:.07em}
+  .secure{font-size:.85rem;text-align:center}
+  .legal{font-size:.8rem}
 }
 
 
