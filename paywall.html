@@ -56,7 +56,10 @@ body { min-height: 100vh; min-height: 100dvh; background: #eef1f7; }
     width: 100% !important; max-width: 100% !important;
     height: auto !important; min-height: 100vh; min-height: 100dvh;
     border-radius: 0 !important; box-shadow: none !important;
+    justify-content: flex-start !important;
   }
+  /* макетная «полоска домой» — у телефона есть своя */
+  [data-pw-screen] div[style*="width:134px;height:5px"] { display: none !important; }
 }
 </style>
 </head>
@@ -278,11 +281,53 @@ body { min-height: 100vh; min-height: 100dvh; background: #eef1f7; }
 <script>
 (function () {
   /* ── шаги ── */
+  /* ── телефон: без пустых полос ──
+     Макет рассчитан на экран 844px и раскидывал весь лишний рост поровну
+     между блоками — на телефоне получались огромные дыры. Здесь промежутки
+     остаются обычными (к каждому добавляем не больше 28px), а остаток делим
+     сверху и снизу, так что содержимое стоит по центру над кнопкой. */
+  var MAX_EXTRA = 28;
+  function fitScreen(sc) {
+    if (!sc) return;
+    var kids = [].slice.call(sc.children);
+    var flow = kids.filter(function (k) {
+      var cs = getComputedStyle(k);
+      return cs.position !== 'absolute' && cs.display !== 'none' && k.offsetHeight > 0;
+    });
+    var cta = kids.filter(function (k) {
+      return getComputedStyle(k).position === 'absolute' && k.querySelector('button');
+    })[0];
+    flow.forEach(function (k) { k.style.marginTop = ''; });
+    sc.style.minHeight = ''; sc.style.paddingBottom = '';
+    if (window.innerWidth > 700) return;
+
+    var H = window.innerHeight;
+    var ctaH = cta ? cta.offsetHeight : 0;
+    sc.style.setProperty('padding-bottom', ctaH + 'px', 'important');
+    sc.style.setProperty('min-height', H + 'px', 'important');
+    var content = flow.reduce(function (a, k) { return a + k.offsetHeight; }, 0);
+    var spare = H - ctaH - content;
+    if (spare <= 0 || flow.length < 2) return;
+    var extra = Math.min(MAX_EXTRA, spare / (flow.length + 1));
+    for (var i = 1; i < flow.length; i++) flow[i].style.marginTop = extra + 'px';
+    var rest = spare - extra * (flow.length - 1);
+    flow[0].style.marginTop = Math.floor(rest / 2) + 'px';
+  }
+  function fitActive() { fitScreen(document.querySelector('[data-pw-screen][data-active="true"]')); }
+  var lastW = window.innerWidth;
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === lastW) return;       // адресная строка Safari шлёт resize при прокрутке
+    lastW = window.innerWidth; fitActive();
+  });
+  window.addEventListener('load', fitActive);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitActive);
+
   window.pwGo = function (n) {
     document.querySelectorAll('[data-pw-screen]').forEach(function (el) {
       if (Number(el.getAttribute('data-pw-screen')) === n) el.setAttribute('data-active', 'true');
       else el.removeAttribute('data-active');
     });
+    fitActive();
     window.scrollTo(0, 0);
     if (window.amTrack) window.amTrack('paywall_step', { step: n });
   };
@@ -327,6 +372,7 @@ body { min-height: 100vh; min-height: 100dvh; background: #eef1f7; }
   };
 
   render();
+  fitActive();
   if (window.amTrack) window.amTrack('paywall_view');
   else window.addEventListener('load', function () { if (window.amTrack) window.amTrack('paywall_view'); });
 })();
