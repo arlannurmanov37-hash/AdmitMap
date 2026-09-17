@@ -418,55 +418,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     '@media(max-width:560px){#dc-root{padding:10px 6px 20px}',
     '  #dc-root>.sc-host>div{border-radius:10px;box-shadow:0 2px 8px rgba(15,31,75,.12)}}',
 
-    /* ── Телефон: макет перестраивается, а не уменьшается ───────────────
-       Сжимать 1080px до 375px бессмысленно — 13px текста превращаются
-       в 4px. Поэтому на узком экране артборд отпускаем на всю ширину,
-       а все сетки схлопываем в одну колонку. */
-    '@media(max-width:700px){',
-    '  #dc-root{zoom:1!important;padding:8px 8px 24px!important}',
-    '  #dc-root>.sc-host>div{width:100%!important;min-width:0!important;height:auto!important}',
-    '  #dc-root [style*="grid-template-columns"]{grid-template-columns:1fr!important}',
-    '  #dc-root [style*="grid-template-rows"]{grid-template-rows:auto!important}',
-    /* Элементы grid и flex по умолчанию имеют min-width:auto и отказываются
-       сжиматься уже своего содержимого — из-за этого блоки вылезали за
-       правый край. Обнуляем и разрешаем переносы. */
-    '  #dc-root *{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}',
-    '  #dc-root header{display:flex!important;flex-direction:column!important;align-items:flex-start!important}',
-    '  #dc-root img{max-width:100%!important;height:auto!important}',
-    '  #dc-root section{padding-left:16px!important;padding-right:16px!important;',
-    '                   min-height:0!important;height:auto!important}',
-    '  #dc-root header{padding-left:16px!important;padding-right:16px!important;',
-    '                  height:auto!important;flex-wrap:wrap!important;gap:14px!important}',
-    /* Абсолютные декоративные пятна на узком экране только мешают. */
-    '  #dc-root span[style*="position:absolute"][style*="border-radius:50%"]{display:none!important}',
-    /* Полоска GPA/SAT/Activities/Honors переносилась как 3 + 1 и оставляла
-       пустую клетку. На телефоне раскладываем её 2x2. */
-    /* Профиль — одна компактная строка из четырёх ячеек: это контекст,
-       а не главное. Деньги должны быть видны без прокрутки. */
-    '  #dc-root [data-am-stats]{flex-wrap:nowrap!important;width:100%}',
-    '  #dc-root [data-am-stats]>span{flex:1 1 25%!important;padding:10px 6px 11px!important;gap:5px!important;align-items:center!important;flex-wrap:nowrap!important}',
-    '  #dc-root [data-am-stats]>span:last-child{border-right:0!important}',
-    '  #dc-root [data-am-stats] svg{display:none!important}',
-    '  #dc-root [data-am-stats]>span>span:first-child>span{font-size:8.5px!important;letter-spacing:.09em!important}',
-    '  #dc-root [data-am-stats]>span>span:last-child{flex-wrap:nowrap!important;white-space:nowrap!important;gap:2px!important}',
-    '  #dc-root [data-am-stats]>span>span:last-child>span:first-child{font-size:19px!important}',
-    '  #dc-root [data-am-stats]>span>span:last-child>span+span{font-size:10px!important}',
-    /* Логотип: знак не должен быть крупнее надписи. */
-    '  #dc-root header svg[width="54"]{width:38px!important;height:38px!important}',
-    /* Имя · класс в строку, дата отдельной строкой, без висящих черточек. */
-    '  #dc-root [data-am-sep]{display:none!important}',
-    '  #dc-root header>span>span:last-child{column-gap:12px!important;row-gap:6px!important}',
-    '  #dc-root [data-am-date]{flex-basis:100%!important}',
-    /* Синяя плашка: плитки стопкой, у каждой своя высота и разделитель.
-       Высоты строк 22/30px из макета на узком экране резали текст. */
-    '  #dc-root [data-slab]>div{grid-template-rows:auto!important;align-content:start!important;row-gap:7px!important;padding:16px 20px!important;border-right:0!important;border-bottom:1px solid rgba(255,255,255,.12)!important}',
-    '  #dc-root [data-slab]>div:last-child{border-bottom:0!important}',
-    '  #dc-root [data-slab]>div>span:first-child{align-items:center!important}',
-    '  #dc-root [data-slab]>div>span:first-child>svg{margin-top:0!important}',
-    '  #dc-root [data-slab]>div>span:nth-child(2)>span:first-child{font-size:25px!important}',
-    '  #dc-root [data-am-hero]{padding:22px 20px 20px!important}',
-    '  #dc-root [data-slab]>[data-am-hero]>span:nth-child(2)>span[data-am-big]{font-size:40px!important}',
-    '}',
+    /* Телефон: тот же макет, что на компьютере, просто уменьшенный целиком —
+       две колонки карточек остаются двумя колонками. */
     /* Бейдж «Sample report» только у образца. */
     'html[data-am-personal="1"] [data-am-sample]{display:none!important}'
   ].join('');
@@ -479,13 +432,8 @@ document.addEventListener('DOMContentLoaded', async function() {
   function fit() {
     var root = document.getElementById('dc-root');
     if (!root) return;
-    if (window.innerWidth <= 700) {                      // одноколоночная вёрстка
-      root.style.zoom = '';
-      relaxFixedHeights(root);
-      return;
-    }
     var pad = window.innerWidth <= 820 ? 20 : 48;
-    var z = Math.min(0.85, Math.max(0.42, (window.innerWidth - pad) / ART_W));
+    var z = Math.min(0.85, Math.max(0.2, (window.innerWidth - pad) / ART_W));
     root.style.zoom = z.toFixed(4);
   }
 
@@ -515,50 +463,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       (document.head || document.documentElement).appendChild(ic);
     }
     fit();
-  }
-
-  /* Макет держит высоты в пикселях (плитки 148px, карточки 209px и т.д.).
-     На узком экране содержимое переносится и перестаёт помещаться — блоки
-     наезжают друг на друга. Снимаем только КРУПНЫЕ высоты: полоски прогресса
-     и разделители по 1-11px должны остаться как есть. */
-  function relaxFixedHeights(root) {
-    /* Раньше здесь стоял флаг на всём #dc-root. Он выставлялся при первом
-       вызове — когда бандл ещё не отрисовал содержимое, — и все последующие
-       вызовы выходили сразу. Поэтому помечаем КАЖДЫЙ элемент отдельно:
-       новые узлы обрабатываются, уже обработанные не трогаются повторно. */
-    var all = root.querySelectorAll('*:not([data-am-m])');
-    if (!all.length) return;
-    for (var i = 0; i < all.length; i++) {
-      var el = all[i], st = el.style;
-
-      // Диаграммы задают высоту осмысленно — их не распускаем, иначе столбики
-      // и кольца схлопываются в ноль.
-      if (el.hasAttribute('data-am-keep-h')) { el.setAttribute('data-am-m', '1'); continue; }
-
-      // крупные фиксированные высоты мешают переносу; тонкие полоски не трогаем
-      ['height', 'minHeight', 'maxHeight'].forEach(function (prop) {
-        var v = st[prop];
-        if (v && v.indexOf('px') > -1 && parseFloat(v) > 40) st[prop] = 'auto';
-      });
-
-      // строки flex должны переноситься, иначе название школы налезает на процент
-      var d = getComputedStyle(el).display;
-      if (d === 'flex' || d === 'inline-flex') {
-        st.flexWrap = 'wrap';
-        if (!st.rowGap) st.rowGap = '8px';
-      }
-
-      // display: flex в бандле записан с пробелом, поэтому CSS-селектор
-      // [style*="display:flex"] его не находил — правим здесь, по факту.
-      if (getComputedStyle(el).whiteSpace === 'nowrap') st.whiteSpace = 'normal';
-
-      // крупная типографика макета рассчитана на 1080px
-      var fs = parseFloat(getComputedStyle(el).fontSize);
-      if (fs >= 40)      st.fontSize = '30px';
-      else if (fs >= 28) st.fontSize = '21px';
-
-      el.setAttribute('data-am-m', '1');
-    }
   }
 
   window.addEventListener('resize', fit);
