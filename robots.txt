@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 
 # Личные страницы и служебное — не индексируем
+Disallow: /funnel
+Disallow: /funnel.html
 Disallow: /report
 Disallow: /report.html
 Disallow: /platform
@@ -18,4 +20,4 @@ Disallow: /api/
 Disallow: /pricing
 Disallow: /pricing.html
 
-Sitemap: https://admitmap.app/sitemap.xml
+Sitemap: https://www.admitmap.app/sitemap.xml
