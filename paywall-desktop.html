@@ -87,7 +87,7 @@ h1 em{font-style:normal;color:var(--royal)}
 .sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
 .sub b{font-weight:800;color:var(--navy)}
 
-.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:2.25rem}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:.85rem}
 .feat{display:flex;align-items:center;gap:.9375rem;padding:1.0625rem 1.1875rem;border-radius:1.125rem;
   box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
 .feat-i{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;
@@ -100,9 +100,10 @@ h1 em{font-style:normal;color:var(--royal)}
 .f4{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid #f3e5cf}
 
 /* the whole ticket block, text included, rendered 10% larger */
-.tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
-  margin-bottom:2.1175rem;}
-.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column;transform-origin:50% 100%;transition:transform .25s var(--ease)}
+.tickets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.42rem;width:100%;max-width:74rem;
+  padding:1.4rem 1.1rem;overflow:visible;
+  margin-bottom:.72rem;}
+.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column;transform-origin:center center;will-change:transform}
 /* Лёгкий разворот карточек друг от друга — как в макете. Поворот живёт
    в самой анимации появления: у неё fill both, и обычный transform она бы
    перебила на «none». */
@@ -110,6 +111,7 @@ h1 em{font-style:normal;color:var(--royal)}
 @keyframes upR{from{opacity:0;transform:translateY(.75rem) rotate(1.4deg)}to{opacity:1;transform:rotate(1.4deg)}}
 .tickets>.tk:first-child.u{animation-name:upL}
 .tickets>.tk.hi.u{animation-name:upR}
+.tickets>.tk.hi{z-index:2}
 @media(prefers-reduced-motion:reduce){
   .tickets>.tk:first-child{transform:rotate(-1.4deg)}
   .tickets>.tk.hi{transform:rotate(1.4deg)}
