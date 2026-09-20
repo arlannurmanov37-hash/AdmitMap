@@ -102,7 +102,18 @@ h1 em{font-style:normal;color:var(--royal)}
 /* the whole ticket block, text included, rendered 10% larger */
 .tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
   margin-bottom:2.1175rem;}
-.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column}
+.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column;transform-origin:50% 100%;transition:transform .25s var(--ease)}
+/* Лёгкий разворот карточек друг от друга — как в макете. Поворот живёт
+   в самой анимации появления: у неё fill both, и обычный transform она бы
+   перебила на «none». */
+@keyframes upL{from{opacity:0;transform:translateY(.75rem) rotate(-1.4deg)}to{opacity:1;transform:rotate(-1.4deg)}}
+@keyframes upR{from{opacity:0;transform:translateY(.75rem) rotate(1.4deg)}to{opacity:1;transform:rotate(1.4deg)}}
+.tickets>.tk:first-child.u{animation-name:upL}
+.tickets>.tk.hi.u{animation-name:upR}
+@media(prefers-reduced-motion:reduce){
+  .tickets>.tk:first-child{transform:rotate(-1.4deg)}
+  .tickets>.tk.hi{transform:rotate(1.4deg)}
+}
 .tk-top{flex:1;display:flex;flex-direction:column;border-radius:1.3613rem 1.3613rem 0 0;background:#fff;
   border:2px solid transparent;border-bottom:0;padding:1.815rem 2.1175rem 1.6637rem;
   box-shadow:0 0 0 2px var(--line)}
@@ -209,6 +220,8 @@ h1 em{font-style:normal;color:var(--royal)}
    были бы 4px — поэтому задаём базовый размер явно. */
 @media(max-width:700px){
   html{font-size:13px}
+  .tickets>.tk:first-child.u,.tickets>.tk.hi.u{animation-name:up}
+  .tickets>.tk:first-child,.tickets>.tk.hi{transform:none}
   html,body{height:auto;overflow-x:hidden;overflow-y:visible}
   .wrap{padding:1.1rem 1.15rem 2.2rem;overflow:visible}
   .glow{top:-10rem;width:36rem;height:26rem}
