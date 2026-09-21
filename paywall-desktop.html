@@ -87,7 +87,7 @@ h1 em{font-style:normal;color:var(--royal)}
 .sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
 .sub b{font-weight:800;color:var(--navy)}
 
-.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:.5rem}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:2.25rem}
 .feat{display:flex;align-items:center;gap:.9375rem;padding:1.0625rem 1.1875rem;border-radius:1.125rem;
   box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
 .feat-i{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;
@@ -100,19 +100,9 @@ h1 em{font-style:normal;color:var(--royal)}
 .f4{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid #f3e5cf}
 
 /* the whole ticket block, text included, rendered 10% larger */
-.tickets{position:relative;width:100%;max-width:74rem;margin-bottom:.2rem;
-  padding:.5rem 1.1rem 2.4rem;overflow:visible;perspective:1500px}
-.scene{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.42rem;
-  transform-style:preserve-3d;transform:rotateY(-17deg) rotateX(9deg)}
-.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column;transform-origin:center center;will-change:transform}
-/* Глубина — только по оси Z, внутри сцены с preserve-3d. Анимация появления
-   заканчивается на нужном translateZ, иначе её fill both сбросил бы transform. */
-@keyframes upZ0{from{opacity:0;transform:translate3d(0,.75rem,0)}to{opacity:1;transform:translateZ(0)}}
-@keyframes upZ60{from{opacity:0;transform:translate3d(0,.75rem,60px)}to{opacity:1;transform:translateZ(60px)}}
-.scene>.tk:first-child{transform:translateZ(0)}
-.scene>.tk.hi{transform:translateZ(60px)}
-.scene>.tk:first-child.u{animation-name:upZ0}
-.scene>.tk.hi.u{animation-name:upZ60}
+.tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
+  margin-bottom:2.1175rem;}
+.tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column}
 .tk-top{flex:1;display:flex;flex-direction:column;border-radius:1.3613rem 1.3613rem 0 0;background:#fff;
   border:2px solid transparent;border-bottom:0;padding:1.815rem 2.1175rem 1.6637rem;
   box-shadow:0 0 0 2px var(--line)}
@@ -147,8 +137,7 @@ h1 em{font-style:normal;color:var(--royal)}
   background:repeating-linear-gradient(90deg,#dbe2ee 0 .5294rem,transparent .5294rem 1.0587rem)}
 .tk-f{display:flex;align-items:center;justify-content:space-between;gap:1.21rem;
   border-radius:0 0 1.3613rem 1.3613rem;background:#fff;border:2px solid transparent;border-top:0;
-  padding:1.5125rem 2.1175rem 1.815rem;
-  box-shadow:0 0 0 2px var(--line),0 8px 0 #cdd7ea,0 20px 34px rgba(4,12,38,.34),0 44px 74px rgba(4,12,38,.34)}
+  padding:1.5125rem 2.1175rem 1.815rem;box-shadow:0 0 0 2px var(--line)}
 .tk-p b{display:block;font-family:Fraunces,Georgia,serif;font-size:3.1763rem;font-weight:900;
   letter-spacing:-.045em;line-height:1}
 .tk-p i{font-size:.9075rem;font-weight:600;font-style:normal;color:var(--muted-4)}
@@ -187,21 +176,20 @@ h1 em{font-style:normal;color:var(--royal)}
 .tk.hi .tk-perf span{background:repeating-linear-gradient(90deg,#bcd4f8 0 .5294rem,transparent .5294rem 1.0587rem)}
 .tk.hi .tk-f{background:linear-gradient(180deg,#f4f9ff,#eef5ff);
   border-bottom:2px solid transparent;border-left:2px solid transparent;
-  border-right:2px solid transparent;border-top:0;
-  box-shadow:0 0 0 2px #2563eb,0 8px 0 #cdd7ea,0 20px 34px rgba(4,12,38,.34),0 44px 74px rgba(4,12,38,.34)}
+  border-right:2px solid transparent;border-top:0;box-shadow:0 0 0 2px #2563eb}
 .tk.hi .tk-p i{color:#7d93b8}
 .tk-best{position:absolute;top:-.9831rem;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;
   background:linear-gradient(180deg,#2f6ef0,#2461e4);color:#fff;padding:.4537rem 1.21rem;border-radius:1.5125rem;
   font-size:.7562rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   box-shadow:0 2px 0 #1e51c4,0 .4537rem 1.0587rem rgba(37,99,235,.4)}
 
-.secure{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
+.secure{display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
   font-weight:600;color:var(--muted-3)}
 .secure svg{width:.9375rem;height:.9375rem;color:var(--green)}
 
 /* Legal links at the point of payment. A checkout page without these is the
    single most common thing a payment provider flags in review. */
-.legal{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.375rem 1.125rem;
+.legal{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.375rem 1.125rem;
   margin-top:.875rem;font-size:.75rem;font-weight:600}
 .legal a{color:var(--muted-3);text-decoration:none;transition:color .18s ease}
 .legal a:hover{color:var(--royal);text-decoration:underline}
@@ -212,7 +200,7 @@ h1 em{font-style:normal;color:var(--royal)}
   html,body{overflow:auto}
   .wrap{height:auto;min-height:100vh;padding:2rem 1.25rem 3rem}
   .feats{grid-template-columns:1fr 1fr}
-  .scene{grid-template-columns:1fr;gap:2.5rem}
+  .tickets{grid-template-columns:1fr;gap:2.5rem}
   .x{top:1rem;right:1.25rem}
 }
 
@@ -221,10 +209,6 @@ h1 em{font-style:normal;color:var(--royal)}
    были бы 4px — поэтому задаём базовый размер явно. */
 @media(max-width:700px){
   html{font-size:13px}
-  .tickets{perspective:none;padding:0}
-  .scene{display:flex;flex-direction:column;gap:2.5rem;transform:none;transform-style:flat}
-  .scene>.tk:first-child.u,.scene>.tk.hi.u{animation-name:up}
-  .scene>.tk:first-child,.scene>.tk.hi{transform:none}
   html,body{height:auto;overflow-x:hidden;overflow-y:visible}
   .wrap{padding:1.1rem 1.15rem 2.2rem;overflow:visible}
   .glow{top:-10rem;width:36rem;height:26rem}
@@ -303,7 +287,6 @@ h1 em{font-style:normal;color:var(--royal)}
     </div>
 
     <div class="tickets">
-      <div class="scene">
       <div class="tk u d4">
         <div class="tk-top">
           <div class="tk-h">
@@ -348,7 +331,6 @@ h1 em{font-style:normal;color:var(--royal)}
           <span class="tk-p"><b>$29</b><i>One-time purchase</i></span>
           <button class="btn-b" onclick="buy(29)">Get my full report</button>
         </div>
-      </div>
       </div>
     </div>
 
