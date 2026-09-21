@@ -45,7 +45,7 @@ html{font-size:min(1vw, 1.581vh)}
   --ease:cubic-bezier(.23,1,.32,1);
 }
 *,*::before,*::after{box-sizing:border-box}
-html,body{margin:0;padding:0;height:100%;overflow:hidden}
+html,body{margin:0;padding:0;min-height:100%;overflow-x:hidden}
 body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color:var(--navy);background:#fbfcfe;letter-spacing:-.008em;-webkit-font-smoothing:antialiased;
   font-variant-numeric:lining-nums tabular-nums;text-wrap:pretty}
@@ -59,7 +59,7 @@ ul{list-style:none;margin:0;padding:0}
 @media(prefers-reduced-motion:reduce){.u,.f{animation:none!important}}
 
 .wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:100vh;height:100dvh;overflow:hidden;padding:.75rem 3rem;text-align:center}
+  min-height:100vh;min-height:100dvh;padding:2.6rem 3rem 2.2rem;text-align:center}
 .glow{position:absolute;top:-14rem;left:50%;transform:translateX(-50%);width:60rem;height:38rem;
   background:radial-gradient(50% 50% at 50% 50%,rgba(37,99,235,.13),transparent 70%);pointer-events:none}
 .in{position:relative;z-index:1;width:100%;max-width:74rem;display:flex;flex-direction:column;align-items:center}
@@ -72,7 +72,7 @@ ul{list-style:none;margin:0;padding:0}
 .x svg{width:.875rem;height:.875rem}
 
 .brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:.5rem}
-.brand svg{width:3rem;height:3rem}
+.brand img{width:3rem;height:3rem;object-fit:contain}
 .brand-t{font-family:Fraunces,Georgia,serif;font-size:2.625rem;font-weight:900;
   letter-spacing:-.045em;color:var(--ink)}
 .brand-t span{color:var(--royal)}
@@ -183,7 +183,7 @@ h1 em{font-style:normal;color:var(--royal)}
   font-size:.7562rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   box-shadow:0 2px 0 #1e51c4,0 .4537rem 1.0587rem rgba(37,99,235,.4)}
 
-.secure{display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
+.secure{margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
   font-weight:600;color:var(--muted-3)}
 .secure svg{width:.9375rem;height:.9375rem;color:var(--green)}
 
@@ -258,11 +258,11 @@ h1 em{font-style:normal;color:var(--royal)}
 
   <div class="in">
     <span class="brand u">
-      <svg viewBox="0 0 40 40" fill="none"><path d="M20 3.5c-6.35 0-11.5 5.02-11.5 11.2 0 8.2 11.5 21.8 11.5 21.8s11.5-13.6 11.5-21.8c0-6.18-5.15-11.2-11.5-11.2z" fill="#101d42"/><circle cx="20" cy="14.6" r="6.4" fill="#fff"/><path d="M16.7 16.6l2.6-2.9 1.9 1.7 2.4-3.1" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.6 12.1h2.4v2.3" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <img src="/assets/mobile/admitmap-mark.svg" alt="">
       <span class="brand-t">Admit<span>Map</span></span>
     </span>
 
-    <div class="eyebrow f"><i></i><span>Your report is ready</span><i></i></div>
+    <div class="eyebrow f"><i></i><span id="eyebrow">Your report is ready</span><i></i></div>
     <h1 class="u d1">See where you <em>actually stand.</em></h1>
     <p class="sub f d2">Your odds at every school on your list, measured against the profile you actually
       have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
@@ -358,6 +358,24 @@ h1 em{font-style:normal;color:var(--royal)}
   if(t<now) t=new Date(now.getFullYear()+1,10,1);
   document.getElementById('days').textContent = Math.ceil((t-now)/86400000);
 })();
+/* Пришёл из воронки — отчёт действительно готов. Зашёл по ссылке «Pricing»
+   с сайта — обещать готовый отчёт нельзя, это просто страница тарифов. */
+(function () {
+  var done = false;
+  try {
+    var p = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
+    done = !!(p && p.schools && p.schools.length && p.gpa);
+  } catch (e) {}
+  if (!done) {
+    var eb = document.getElementById('eyebrow');
+    if (eb) eb.textContent = 'Choose your report';
+    var sub = document.querySelector('.sub');
+    if (sub) sub.innerHTML = 'Your odds at every school on your list, measured against the profile you ' +
+      'actually have. You have <b><span id="days">' + (document.getElementById('days') || {}).textContent +
+      '</span> days</b> until Nov 1 early deadlines.';
+  }
+})();
+
 /* no payment provider wired yet — hand off to the report */
 function buy(tier){
   try{ localStorage.setItem('admitmap_tier', String(tier)); }catch(e){}
