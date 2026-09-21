@@ -361,11 +361,8 @@ h1 em{font-style:normal;color:var(--royal)}
 /* Пришёл из воронки — отчёт действительно готов. Зашёл по ссылке «Pricing»
    с сайта — обещать готовый отчёт нельзя, это просто страница тарифов. */
 (function () {
-  var done = false;
-  try {
-    var p = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
-    done = !!(p && p.schools && p.schools.length && p.gpa);
-  } catch (e) {}
+  // ?ready=1 ставит только конец воронки; ссылка Pricing с сайта ведёт без него
+  var done = /[?&]ready=1\b/.test(location.search);
   if (!done) {
     var eb = document.getElementById('eyebrow');
     if (eb) eb.textContent = 'Choose your report';
