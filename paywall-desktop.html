@@ -369,10 +369,10 @@ h1 em{font-style:normal;color:var(--royal)}
   if (!done) {
     var eb = document.getElementById('eyebrow');
     if (eb) eb.textContent = 'Choose your report';
-    var sub = document.querySelector('.sub');
-    if (sub) sub.innerHTML = 'Your odds at every school on your list, measured against the profile you ' +
-      'actually have. You have <b><span id="days">' + (document.getElementById('days') || {}).textContent +
-      '</span> days</b> until Nov 1 early deadlines.';
+    var sub = document.querySelector('.sub'), d = document.getElementById('days');
+    if (sub) sub.innerHTML = 'See your odds at every school you apply to, and what each one would really ' +
+      'cost after aid. Five minutes to fill in, and you have <b><span id="days">' +
+      ((d && d.textContent) || '') + '</span> days</b> until Nov 1 early deadlines.';
   }
 })();
 
