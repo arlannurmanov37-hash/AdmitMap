@@ -208,10 +208,12 @@
         .hero {
             min-height: 100vh;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
             align-items: center;
-            gap: 48px;
-            padding: 100px 56px 80px;
+            gap: 56px;
+            /* Фон на всю ширину, а содержимое — в колонке 1240px по центру:
+               на широком экране текст и карточка не разъезжаются к краям. */
+            padding: 100px max(56px, calc((100vw - 1240px) / 2)) 80px;
             position: relative;
             overflow: hidden;
             /* Белый держится там, где текст (слева сверху); синий набирает силу
@@ -389,7 +391,7 @@
             position: relative;
             z-index: 1;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             align-items: center
         }
 
