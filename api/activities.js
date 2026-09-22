@@ -10,12 +10,12 @@
  * same judgements always give the same numbers.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, allowScoring } from './_lib.js';
+import { cors, bad, allowScoring, anthropicKey, safeDetail } from './_lib.js';
 
 // Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
+const client = new Anthropic({ apiKey: anthropicKey() }); // ключ очищен от пробелов и переносов
 
 /* Рубрика AdmitMap, заданная владельцем 22.09.2026. В сумме 100%.
    Первые четыре — по каждой активности, narrative — по списку целиком. */
@@ -113,7 +113,7 @@ export default async function handler(req, res) {
 
   const { activities } = req.body || {};
 
-  if (!process.env.ANTHROPIC_API_KEY) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
+  if (!anthropicKey()) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
 
   const gate = await allowScoring(req);
   if (!gate.ok) return bad(res, gate.status, gate.error);
@@ -198,7 +198,7 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     if (err?.status === 429) return bad(res, 429, 'The scorer is busy right now. Try again in a moment.');
-    console.error('activity scoring failed', err?.status, err?.message);
-    return bad(res, 502, 'Scoring failed. Please try again.', { detail: `${err?.status || ''} ${String(err?.message || err).slice(0, 300)}`.trim() });
+    console.error('activity scoring failed', safeDetail(err));
+    return bad(res, 502, 'Scoring failed. Please try again.', { detail: safeDetail(err) });
   }
 }

@@ -15,12 +15,12 @@
  * and the roll-up are enforced here, so the same judgements give the same numbers.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, allowScoring } from './_lib.js';
+import { cors, bad, allowScoring, anthropicKey, safeDetail } from './_lib.js';
 
 // Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
+const client = new Anthropic({ apiKey: anthropicKey() }); // ключ очищен от пробелов и переносов
 
 /* Диапазон балла (0–10) внутри каждого уровня: награда школы не может обогнать
    награду штата, какой бы громкой ни была формулировка. */
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
 
-  if (!process.env.ANTHROPIC_API_KEY) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
+  if (!anthropicKey()) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
 
   const gate = await allowScoring(req);
   if (!gate.ok) return bad(res, gate.status, gate.error);
@@ -160,7 +160,7 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     if (err?.status === 429) return bad(res, 429, 'The scorer is busy right now. Try again in a moment.');
-    console.error('honor scoring failed', err?.status, err?.message);
-    return bad(res, 502, 'Scoring failed. Please try again.', { detail: `${err?.status || ''} ${String(err?.message || err).slice(0, 300)}`.trim() });
+    console.error('honor scoring failed', safeDetail(err));
+    return bad(res, 502, 'Scoring failed. Please try again.', { detail: safeDetail(err) });
   }
 }

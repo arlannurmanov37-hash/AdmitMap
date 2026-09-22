@@ -6,12 +6,12 @@
  * UI never has to guess at free text.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, allowScoring } from './_lib.js';
+import { cors, bad, allowScoring, anthropicKey, safeDetail } from './_lib.js';
 
 // Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
+const client = new Anthropic({ apiKey: anthropicKey() }); // ключ очищен от пробелов и переносов
 
 /* Рубрика AdmitMap. Веса заданы заказчиком и складываются в 100%.
    Итоговый балл — взвешенное среднее, считается здесь, а не моделью:
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
 
   const { essay, prompt, school } = req.body || {};
 
-  if (!process.env.ANTHROPIC_API_KEY) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
+  if (!anthropicKey()) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
 
   const gate = await allowScoring(req);
   if (!gate.ok) return bad(res, gate.status, gate.error);
@@ -131,7 +131,7 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     if (err?.status === 429) return bad(res, 429, 'The grader is busy right now. Try again in a moment.');
-    console.error('essay grading failed', err?.status, err?.message);
-    return bad(res, 502, 'Grading failed. Please try again.', { detail: `${err?.status || ''} ${String(err?.message || err).slice(0, 300)}`.trim() });
+    console.error('essay grading failed', safeDetail(err));
+    return bad(res, 502, 'Grading failed. Please try again.', { detail: safeDetail(err) });
   }
 }

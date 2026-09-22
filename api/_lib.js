@@ -125,3 +125,21 @@ export async function allowScoring(req) {
   }
   return { ok: true };
 }
+
+/* Ключ Anthropic из переменной окружения. Пробелы и переносы убираем: при
+   вставке в Vercel в ключ попал перенос строки, и запрос падал с ошибкой
+   «invalid header value». */
+export function anthropicKey() {
+  return String(process.env.ANTHROPIC_API_KEY || '').replace(/\s+/g, '');
+}
+
+/* Причина ошибки для ответа клиенту — без секретов. Сообщения fetch/SDK могут
+   содержать значение заголовка, то есть сам ключ: вырезаем всё похожее на ключ
+   и не отдаём текст ошибок заголовков вообще. */
+export function safeDetail(err) {
+  const msg = String((err && err.message) || err || '');
+  if (/header/i.test(msg)) return 'request header rejected (check the API key value)';
+  return `${(err && err.status) || ''} ${msg}`
+    .replace(/(sk-ant|sk|polar_oat|ghp)[-_][A-Za-z0-9_-]{6,}/gi, '[redacted]')
+    .trim().slice(0, 300);
+}
