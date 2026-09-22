@@ -425,8 +425,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     /* Телефон: тот же макет, что на компьютере, просто уменьшенный целиком —
        две колонки карточек остаются двумя колонками. */
     /* Бейдж «Sample report» только у образца. */
-    'html[data-am-personal="1"] [data-am-sample]{display:none!important}'
+    'html[data-am-personal="1"] [data-am-sample]{display:none!important}',
+    /* Свой профиль есть — пример Майи не показываем даже на мгновение:
+       лист скрыт, пока в него не подставлены данные ученика. */
+    'html[data-am-wait="1"] #dc-root{visibility:hidden!important}'
   ].join('');
+
+  (function () {
+    try {
+      var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
+      var sample = /[?&]sample=1\b/.test(location.search) || location.hash === '#sample';
+      if (P && P.schools && P.schools.length && !sample) {
+        document.documentElement.setAttribute('data-am-wait', '1');
+        // страховка: что бы ни случилось, через 3 минуты показать страницу
+        setTimeout(function () { document.documentElement.removeAttribute('data-am-wait'); }, 180000);
+      }
+    } catch (e) {}
+  })();
 
   /* Макет жёстко шириной 1080px. На телефоне width=device-width заставляет
      браузер сжимать всю страницу примерно втрое — 13px текста превращаются
@@ -495,8 +510,8 @@ document.addEventListener('DOMContentLoaded', async function() {
      подставлять данные можно только ПОСЛЕ него. Ждём #dc-root, грузим
      справочники и модель, затем заполняем готовые узлы настоящими
      числами. Профиля нет — на экране остаётся образец Майи. */
-  var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'data/earnings.js', 'report-personalize.js'];
-  var V = '20260922210000';
+  var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'data/earnings.js', 'scoring.js', 'report-personalize.js'];
+  var V = '20260922230000';
 
   function loadNext(i, done) {
     if (i >= SCRIPTS.length) return done();
@@ -530,6 +545,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
   function afterPersonal() {
     {
+      document.documentElement.removeAttribute('data-am-wait');
       fit();                       // персонализация меняет разметку — пересчитываем
       /* Вкладка — это то, что покупатель сохранит себе. Пусть в ней стоит имя. */
       try {

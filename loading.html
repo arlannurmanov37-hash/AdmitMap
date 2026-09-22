@@ -118,12 +118,29 @@
 
   
 </div>
+<script src="scoring.js?v=20260922230000"></script>
 <script>
 /* Прогресс как на прежней странице: кольцо и процент идут с нуля, подпись
    в шапке меняется по ходу, пункты гаснут в галочки по одному. В макете всё
    это статично — там нарисованы 83% и готовые галочки. */
 (function () {
   var CIRC = 427, DUR = 20000, TICK = 60, TAIL = 900;
+
+  /* Пока крутится прогресс, сервер оценивает эссе, активности и награды —
+     отчёт потом открывается сразу, без второго ожидания. Если оценка дольше
+     20 секунд, прогресс держится на 99%, пока она не закончится (не дольше
+     двух с половиной минут: сбой оценки не должен запирать ученика). */
+  var scoreDone = true;
+  try {
+    var SP = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
+    var AS = window.AdmitScoring;
+    if (SP && AS && AS.canScore() && AS.needsScoring(SP)) {
+      scoreDone = false;
+      var cap = setTimeout(function () { scoreDone = true; }, 150000);
+      AS.scoreProfile(SP, '').then(function () { scoreDone = true; clearTimeout(cap); },
+                                   function () { scoreDone = true; clearTimeout(cap); });
+    }
+  } catch (e) { scoreDone = true; }
   var ring   = document.getElementById('ld-ring'),
       pct    = document.getElementById('ld-pct'),
       ana    = document.getElementById('ld-ana'),
@@ -194,7 +211,8 @@
     /* Кубическое затухание пролетало половину за первые три секунды, и
        двадцать секунд ощущались как три. Держим почти ровный ход. */
     var eased = p < 1 ? (0.85 * p + 0.15 * (1 - Math.pow(1 - p, 2))) : 1;
-    var done = p >= 1;
+    var done = p >= 1 && scoreDone;
+    if (!done) eased = Math.min(eased, 0.99);           // ждём оценку на 99%
 
     ring.setAttribute('stroke-dashoffset', String(CIRC * (1 - eased)));
     /* Затухающая кривая добирается до 100 задолго до конца, и счётчик

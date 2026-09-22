@@ -2283,7 +2283,7 @@ function vAcademics(){
       <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
         <span><span class="c-t">Grades</span><span class="c-s">unweighted, 4.0 scale</span></span></div>
       <div class="fg"><label class="fl" for="f-gpa">Grade point average</label>
-        <input class="fi" id="f-gpa" inputmode="decimal" placeholder="3.85" value="${esc(S.gpa)}" oninput="S.gpa=this.value;save()">
+        <input class="fi" id="f-gpa" inputmode="decimal" placeholder="3.85" value="${esc(S.gpa)}" oninput="S.gpa=this.value.replace(',','.');save()">
         <div class="err" id="e-gpa">Enter a GPA between 0 and 4.0.</div></div>
       <div class="row2">
         <div class="fg"><label class="fl" for="f-rank">Class rank <em>if reported</em></label>
@@ -2649,7 +2649,7 @@ const M_I_DOC = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" str
 function mvAcademics(){
   const grades = mCField('Grade point average','',
       `<input id="f-gpa" inputmode="decimal" placeholder="3.6/4.0" style="${M_CFLD}"
-              value="${esc(S.gpa)}" oninput="S.gpa=this.value;save()">`,
+              value="${esc(S.gpa)}" oninput="S.gpa=this.value.replace(',','.');save()">`,
       'e-gpa','GPA must be between 0 and 4.00.')
     + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         ${mCField('Class rank','if reported',
@@ -2727,7 +2727,7 @@ function bad(id,is){ const e=document.getElementById(id); if(e) e.classList.togg
 function valid(i){
   if(i===0){ let ok=bad('e-name',!S.name.trim()); ok=bad('e-year',!S.gradYear)&&ok;
     ok=bad('e-state',!S.state)&&ok; ok=bad('e-major',!S.major)&&ok; return ok; }
-  if(i===1){ const g=parseFloat(S.gpa); let ok=bad('e-gpa',!(g>=0&&g<=4));
+  if(i===1){ S.gpa=String(S.gpa).replace(',','.'); const g=parseFloat(S.gpa); let ok=bad('e-gpa',!(g>=0&&g<=4));
     const hasSat=String(S.sat).trim()!=='', hasAct=String(S.act).trim()!=='';
     if(hasSat){ const v=parseInt(S.sat); ok=bad('e-sat',!(v>=400&&v<=1600))&&ok; } else bad('e-sat',false);
     if(hasAct){ const v=parseInt(S.act); ok=bad('e-act',!(v>=1&&v<=36))&&ok; } else bad('e-act',false);
