@@ -126,7 +126,10 @@ export default async function handler(req, res) {
     }
     const block = message.content.find((b) => b.type === 'text');
     if (!block) return bad(res, 502, 'The scorer returned an empty response. Please try again.');
-    const parsed = JSON.parse(block.text);
+    const parsed = (() => {
+      try { return JSON.parse(block.text); }
+      catch (e) { throw new Error(`bad JSON (stop_reason ${message.stop_reason}): ${block.text.slice(0, 120)}`); }
+    })();
 
     const items = list.map((h, i) => {
       const got = (parsed.items || [])[i] || {};
@@ -160,6 +163,6 @@ export default async function handler(req, res) {
   } catch (err) {
     if (err?.status === 429) return bad(res, 429, 'The scorer is busy right now. Try again in a moment.');
     console.error('honor scoring failed', err?.status, err?.message);
-    return bad(res, 502, 'Scoring failed. Please try again.');
+    return bad(res, 502, 'Scoring failed. Please try again.', { detail: `${err?.status || ''} ${String(err?.message || err).slice(0, 300)}`.trim() });
   }
 }
