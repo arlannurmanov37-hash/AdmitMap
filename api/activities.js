@@ -10,7 +10,7 @@
  * same judgements always give the same numbers.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, verifyPurchase, overLimit } from './_lib.js';
+import { cors, bad, allowScoring } from './_lib.js';
 
 // Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
@@ -111,16 +111,14 @@ export default async function handler(req, res) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
 
-  const { key, checkout_id, activities } = req.body || {};
-  const purchase = checkout_id || key;
+  const { activities } = req.body || {};
 
-  const lic = await verifyPurchase(purchase);
-  if (!lic.ok) return bad(res, 402, lic.error);
-  if (overLimit('activities', purchase)) return bad(res, 429, 'Too many re-scores for one report. Try again later.');
+  const gate = await allowScoring(req);
+  if (!gate.ok) return bad(res, gate.status, gate.error);
 
   const list = Array.isArray(activities) ? activities.filter((a) => a && (a.desc || a.name)) : [];
   if (!list.length) return bad(res, 400, 'Add at least one activity with a description.');
-  if (list.length > 15) return bad(res, 400, 'That is more activities than any application accepts.');
+  if (list.length > 10) return bad(res, 400, 'The Common App accepts up to 10 activities.');
 
   const rendered = list.map((a, i) => {
     const hrs = Number(a.hours) || 0, wks = Number(a.weeks) || 0, yrs = Number(a.years) || 0;

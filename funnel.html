@@ -2335,7 +2335,8 @@ function vActivities(){
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></span>
       <span><span class="c-t">Activities</span><span class="c-s">at least three, most important first</span></span></div>
     <div id="acts">${S.activities.map((a,i)=>actRow(a,i)).join('')}</div>
-    <button class="btn-dash" style="width:100%" onclick="S.activities.push(BLANK_ACT());save();render()">+ Add another activity</button>
+    ${S.activities.length<10 ? `<button class="btn-dash" style="width:100%" onclick="S.activities.push(BLANK_ACT());save();render()">+ Add another activity</button>`
+      : `<div class="c-s" style="text-align:center;padding:6px 0">10 activities, the Common App maximum</div>`}
     <div class="err" id="e-act">Add at least one activity.</div>
   </div>`;
 }
@@ -2474,6 +2475,7 @@ function vEssay(){
     <textarea class="fi" id="f-essay" placeholder="Paste your essay here…" oninput="S.essay=this.value;save();updWc()">${esc(S.essay)}</textarea>
     <div class="wc"><span>The Common App limit is 650 words.</span>
       <span id="wc" class="${w>650?'over':''}"><b>${w}</b> words</span></div>
+    <div class="err" id="e-essay">The Common App accepts up to 650 words. Trim it to continue.</div>
   </div>
 
 `;
@@ -2738,6 +2740,7 @@ function valid(i){
     ok=bad('e-hh',!(parseInt(S.householdSize)>0))&&ok;
     ok=bad('e-bud',!(parseInt(S.budget)>0))&&ok; return ok; }
   if(i===5) return bad('e-sch',S.schools.length<3);
+  if(i===6) return bad('e-essay',words(S.essay)>650);
 
   return true;
 }

@@ -106,14 +106,22 @@ export async function verifyPurchase(checkoutId) {
   }
 }
 
-/* Грубый лимит на оценки: один оплаченный отчёт — несколько пересчётов
-   (ученик дописал эссе), но не бесконечный цикл. Память инстанса, поэтому
-   это страховка, а не учёт; потолок расходов стоит на ключе Anthropic. */
-const calls = new Map();
-export function overLimit(bucket, id, max = 8, windowMs = 60 * 60 * 1000) {
-  const k = bucket + ':' + id, now = Date.now();
-  const hits = (calls.get(k) || []).filter((t) => now - t < windowMs);
-  hits.push(now);
-  calls.set(k, hits);
-  return hits.length > max;
+/* Кто может запрашивать оценку эссе и активностей.
+   Пока оплата не включена (REQUIRE_PURCHASE не равно "1") — любая страница сайта,
+   без ограничений на число отчётов. Запросы только с admitmap.app (ALLOWED_ORIGINS),
+   чтобы чужие сайты не пользовались оценщиком за счёт ключа; потолок расходов —
+   лимит на самом ключе в Anthropic Console. С REQUIRE_PURCHASE=1 нужен
+   оплаченный чекаут Polar. */
+export async function allowScoring(req) {
+  if (process.env.REQUIRE_PURCHASE === '1') {
+    const body = req.body || {};
+    const lic = await verifyPurchase(body.checkout_id || body.key || '');
+    if (!lic.ok) return { ok: false, status: 402, error: lic.error };
+    return { ok: true };
+  }
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.length && !ALLOWED_ORIGINS.includes(origin)) {
+    return { ok: false, status: 403, error: 'Scoring is only available on admitmap.app.' };
+  }
+  return { ok: true };
 }

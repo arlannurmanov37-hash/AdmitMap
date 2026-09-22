@@ -6,7 +6,7 @@
  * UI never has to guess at free text.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, verifyPurchase, overLimit } from './_lib.js';
+import { cors, bad, allowScoring } from './_lib.js';
 
 // Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
@@ -73,16 +73,15 @@ export default async function handler(req, res) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
 
-  const { key, checkout_id, essay, prompt, school } = req.body || {};
-  const purchase = checkout_id || key;
+  const { essay, prompt, school } = req.body || {};
 
-  const lic = await verifyPurchase(purchase);
-  if (!lic.ok) return bad(res, 402, lic.error);
-  if (overLimit('essay', purchase)) return bad(res, 429, 'Too many re-grades for one report. Try again later.');
+  const gate = await allowScoring(req);
+  if (!gate.ok) return bad(res, gate.status, gate.error);
 
   const text = typeof essay === 'string' ? essay.trim() : '';
-  if (text.length < 200) return bad(res, 400, 'Paste a longer draft — at least a few paragraphs.');
-  if (text.length > 20000) return bad(res, 400, 'That essay is longer than any application allows.');
+  const words = text.split(/\s+/).filter(Boolean).length;
+  if (words < 50) return bad(res, 400, 'Paste a longer draft — at least a few paragraphs.');
+  if (words > 650) return bad(res, 400, 'The Common App accepts up to 650 words.');
 
   const context = [
     school ? `School: ${school}` : null,

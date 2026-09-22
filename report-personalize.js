@@ -172,7 +172,7 @@ var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); 
    пропускаем, чтобы test-profiles.html работал без сервера. */
 /* Оплата через Polar ещё не включена (решение владельца 22.09.2026: выкладываем
    без неё). Пока false — отчёт открывается без проверки, как раньше, тариф берётся
-   из ?tier=, оценки эссе и активностей не запрашиваются (их API требует оплату).
+   из ?tier=. Оценки эссе и активностей запрашиваются и без оплаты.
    Включить: true здесь и в paywall.html / paywall-desktop.html. */
 var PAYMENTS_ON = false;
 
@@ -247,7 +247,8 @@ function scoreProfile(P, id) {
     }));
   }
   var essay = String(P.essay || '').trim(), ek = essayKey(P);
-  if (essay.length >= 200 && !cachedFor('admitmap_essay_scores', ek)) {
+  var ew = essay.split(/\s+/).filter(Boolean).length;
+  if (ew >= 50 && ew <= 650 && !cachedFor('admitmap_essay_scores', ek)) {
     jobs.push(post('/api/essay', { checkout_id: id, essay: essay,
       prompt: P.essayPrompt != null ? 'Common App prompt #' + (P.essayPrompt + 1) : undefined
     }, 115000).then(function (r) {
@@ -1141,7 +1142,10 @@ function run() {
       return true;
     }
     PURCHASE = p;
-    return (p.id ? scoreProfile(P, p.id) : Promise.resolve()).then(personalize);
+    /* Оценка эссе и активностей идёт и без оплаты (запросы только с admitmap.app).
+       Локально сервера нет — только с имитацией. */
+    var canScore = !isLocal() || p.id;
+    return (canScore ? scoreProfile(P, p.id || '') : Promise.resolve()).then(personalize);
   });
 }
 
