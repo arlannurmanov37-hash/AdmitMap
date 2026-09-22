@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Test Profiles · AdmitMap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Локальная страница для ручной проверки отчёта. В .vercelignore — на сайт не попадает. */
+:root{--navy:#0f1f4b;--royal:#2563eb;--off:#f8fafc;--line:#e2e8f0;--mute:#5b7098;--ok:#10b981;--purple:#7c3aed}
+*{box-sizing:border-box;font-variant-numeric:lining-nums tabular-nums}
+body{margin:0;background:var(--off);color:var(--navy);font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+header{max-width:1180px;margin:0 auto;padding:44px 24px 8px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:900;font-size:40px;letter-spacing:-.03em;margin:0 0 8px}
+header p{margin:0;color:var(--mute);font-size:15px;line-height:1.6;max-width:70ch}
+.grid{max-width:1180px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 0 #f1f4fa,0 10px 24px rgba(15,31,75,.05)}
+.top{display:flex;justify-content:space-between;align-items:center}
+.n{font-family:Fraunces,Georgia,serif;font-weight:900;font-size:22px;color:#a9b6cc}
+.tier{font-size:12px;font-weight:800;padding:4px 9px;border-radius:7px}
+.t29{background:rgba(37,99,235,.1);color:var(--royal)} .t19{background:rgba(124,58,237,.1);color:var(--purple)}
+h2{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:20px;letter-spacing:-.02em;margin:0;line-height:1.2}
+.who{margin:0;font-size:13px;font-weight:600;color:var(--mute)}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.facts span{font-size:12px;font-weight:700;padding:4px 8px;border-radius:7px;background:var(--off);border:1px solid var(--line)}
+.check{margin:0;font-size:13.5px;line-height:1.55;color:#43536b;flex:1}
+.check b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-size:13px;font-weight:700;padding:10px 14px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer}
+button:hover{border-color:#c7d2e3}
+button.primary{background:var(--royal);border-color:var(--royal);color:#fff}
+button.primary:hover{background:#1d4ed8}
+@media(max-width:420px){header{padding:28px 16px 4px}h1{font-size:30px}.grid{padding:16px;grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Test profiles</h1>
+  <p>Each button loads that student into this browser (it replaces whatever profile is saved here), then opens the report, the funnel or the paywall. "Via paywall" lets you click the $19 or $29 button yourself. "With mock scoring" fakes the essay and activity grades locally, so you can see those sections filled in; the numbers are made up, the real ones come from the live site.</p>
+</header>
+<main class="grid">
+  <article class="card">
+    <div class="top"><span class="n">01</span><span class="tier t29">$29</span></div>
+    <h2>Top student, California, full profile</h2>
+    <p class="who">Sofia Ramirez · Computer Science</p>
+    <div class="facts"><span>GPA 3.97</span><span>SAT 1550</span><span>10 activities</span><span>Essay</span><span>Income $120,000</span><span>10 schools</span><span>California</span></div>
+    <p class="check"><b>What to check</b>All 10 schools; UCs priced in-state (no out-of-state tag); Harvard/Stanford/Princeton = Restrictive EA, not binding; essay counted; groups Dream/Match/Safety.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(0)">Open report</button>
+      <button onclick="openFunnel(0)">Edit in funnel</button>
+      <button onclick="openPaywall(0)">Via paywall</button>
+      <button onclick="openScored(0)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">02</span><span class="tier t29">$29</span></div>
+    <h2>Strong student, Texas, in-state flagships</h2>
+    <p class="who">Marcus Johnson · Mechanical Engineering</p>
+    <div class="facts"><span>GPA 3.85</span><span>SAT 1440</span><span>6 activities</span><span>Essay</span><span>Income $65,000</span><span>8 schools</span><span>Texas</span></div>
+    <p class="check"><b>What to check</b>UT Austin, Texas A&amp;M, UT Dallas, Houston priced in-state; Rice and Stanford private; ED/REA labels correct.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(1)">Open report</button>
+      <button onclick="openFunnel(1)">Edit in funnel</button>
+      <button onclick="openPaywall(1)">Via paywall</button>
+      <button onclick="openScored(1)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">03</span><span class="tier t29">$29</span></div>
+    <h2>Average student, Ohio, out-of-state publics</h2>
+    <p class="who">Emily Carter · Psychology</p>
+    <div class="facts"><span>GPA 3.6</span><span>SAT 1290</span><span>5 activities</span><span>Essay</span><span>Income $85,000</span><span>6 schools</span><span>Ohio</span></div>
+    <p class="check"><b>What to check</b>Michigan and Purdue marked out-of-state with higher sticker; Ohio State, Miami, Cincinnati, Ohio U in-state; Michigan should NOT be Safety.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(2)">Open report</button>
+      <button onclick="openFunnel(2)">Edit in funnel</button>
+      <button onclick="openPaywall(2)">Via paywall</button>
+      <button onclick="openScored(2)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">04</span><span class="tier t29">$29</span></div>
+    <h2>Lower grades, low income, Florida</h2>
+    <p class="who">Daniel Nguyen · Nursing</p>
+    <div class="facts"><span>GPA 3.15</span><span>SAT 1080</span><span>3 activities</span><span>Essay</span><span>Income $38,000</span><span>6 schools</span><span>Florida</span></div>
+    <p class="check"><b>What to check</b>Low chances at UF/FSU, higher at FIU/FAU; net prices low for $38k family; nothing above sticker.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(3)">Open report</button>
+      <button onclick="openFunnel(3)">Edit in funnel</button>
+      <button onclick="openPaywall(3)">Via paywall</button>
+      <button onclick="openScored(3)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">05</span><span class="tier t29">$29</span></div>
+    <h2>Test-optional, New York, private-heavy list</h2>
+    <p class="who">Olivia Chen · Economics</p>
+    <div class="facts"><span>GPA 3.8</span><span>No test score</span><span>6 activities</span><span>Essay</span><span>Income $150,000</span><span>6 schools</span><span>New York</span></div>
+    <p class="check"><b>What to check</b>SAT chip shows &quot;Test-optional&quot;; chances cut most at Northeastern/NYU/BU, little at Fordham/UMass; UMass out-of-state.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(4)">Open report</button>
+      <button onclick="openFunnel(4)">Edit in funnel</button>
+      <button onclick="openPaywall(4)">Via paywall</button>
+      <button onclick="openScored(4)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">06</span><span class="tier t29">$29</span></div>
+    <h2>No essay, 3 activities, New Jersey</h2>
+    <p class="who">Ryan Patel · Biology</p>
+    <div class="facts"><span>GPA 3.7</span><span>SAT 1350</span><span>3 activities</span><span>No essay</span><span>Income $95,000</span><span>6 schools</span><span>New Jersey</span></div>
+    <p class="check"><b>What to check</b>&quot;Your essay is missing&quot; card with Add your essay button; activities chip = 3; Rutgers and TCNJ in-state, Penn State/Pitt/Temple out-of-state.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(5)">Open report</button>
+      <button onclick="openFunnel(5)">Edit in funnel</button>
+      <button onclick="openPaywall(5)">Via paywall</button>
+      <button onclick="openScored(5)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">07</span><span class="tier t29">$29</span></div>
+    <h2>Wealthy family ($600k), Connecticut</h2>
+    <p class="who">William Hayes · Political Science</p>
+    <div class="facts"><span>GPA 3.92</span><span>SAT 1520</span><span>6 activities</span><span>Essay</span><span>Income $600,000</span><span>6 schools</span><span>Connecticut</span></div>
+    <p class="check"><b>What to check</b>Every net price equals full sticker (no aid for $600k); Yale/Princeton = REA; Duke/Vanderbilt/Tufts ED binding.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(6)">Open report</button>
+      <button onclick="openFunnel(6)">Edit in funnel</button>
+      <button onclick="openPaywall(6)">Via paywall</button>
+      <button onclick="openScored(6)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">08</span><span class="tier t29">$29</span></div>
+    <h2>International student (outside the U.S.)</h2>
+    <p class="who">Aigerim Sadykova · Computer Science</p>
+    <div class="facts"><span>GPA 3.95</span><span>SAT 1510</span><span>5 activities</span><span>Essay</span><span>Income $30,000</span><span>6 schools</span><span>Outside the U.S.</span></div>
+    <p class="check"><b>What to check</b>Public schools (UIUC, Purdue, Georgia Tech, ASU) priced out-of-state; MIT/Caltech private; chances computed like a U.S. student.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(7)">Open report</button>
+      <button onclick="openFunnel(7)">Edit in funnel</button>
+      <button onclick="openPaywall(7)">Via paywall</button>
+      <button onclick="openScored(7)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">09</span><span class="tier t29">$29</span></div>
+    <h2>Arts applicant, audition schools</h2>
+    <p class="who">Hannah Kim · Music</p>
+    <div class="facts"><span>GPA 3.75</span><span>SAT 1380</span><span>5 activities</span><span>Essay</span><span>Income $110,000</span><span>6 schools</span><span>Pennsylvania</span></div>
+    <p class="check"><b>What to check</b>Juilliard and Curtis say &quot;Admission by audition&quot;; Curtis has no published net price (shows —) but stays in the report.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(8)">Open report</button>
+      <button onclick="openFunnel(8)">Edit in funnel</button>
+      <button onclick="openPaywall(8)">Via paywall</button>
+      <button onclick="openScored(8)">With mock scoring</button>
+    </div>
+  </article>
+  <article class="card">
+    <div class="top"><span class="n">10</span><span class="tier t19">$19</span></div>
+    <h2>$19 Chances Report only, Illinois</h2>
+    <p class="who">Jacob Miller · Business Administration</p>
+    <div class="facts"><span>GPA 3.55</span><span>SAT 1260</span><span>4 activities</span><span>Essay</span><span>No financials</span><span>8 schools</span><span>Illinois</span></div>
+    <p class="check"><b>What to check</b>All prices blurred with &quot;Unlock in the Full Report&quot;; stickers still visible; chances fully shown; UIUC in-state.</p>
+    <div class="btns">
+      <button class="primary" onclick="openReport(9)">Open report</button>
+      <button onclick="openFunnel(9)">Edit in funnel</button>
+      <button onclick="openPaywall(9)">Via paywall</button>
+      <button onclick="openScored(9)">With mock scoring</button>
+    </div>
+  </article>
+</main>
+<script>
+var PROFILES = [{"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Sofia Ramirez", "gradYear": "2027", "state": "California", "major": "Computer Science", "gpa": "3.97", "rank": "3", "classSize": "412", "sat": "1550", "act": "", "apExams": [{"n": "AP Calculus BC", "s": "5"}, {"n": "AP Computer Science A", "s": "5"}, {"n": "AP Physics C: Mechanics", "s": "5"}, {"n": "AP English Language and Composition", "s": "4"}, {"n": "AP Chemistry", "s": "5"}], "activities": [{"type": "Robotics", "desc": "Captain, led 22-person team to state semifinals", "hrs": "15", "weeks": "35", "grades": ["9", "10", "11", "12"]}, {"type": "Research", "desc": "Summer research on battery materials at a university lab", "hrs": "20", "weeks": "10", "grades": ["11", "12"]}, {"type": "Computer/Technology", "desc": "Built a tutoring-match app used by 300 students", "hrs": "6", "weeks": "40", "grades": ["10", "11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Weekly coding classes at the public library", "hrs": "3", "weeks": "40", "grades": ["10", "11", "12"]}, {"type": "Athletics: JV/Varsity", "desc": "Varsity cross country", "hrs": "10", "weeks": "15", "grades": ["9", "10", "11", "12"]}, {"type": "Music: Instrumental", "desc": "Second violin, youth symphony", "hrs": "5", "weeks": "35", "grades": ["9", "10", "11", "12"]}, {"type": "Science/Math", "desc": "Math club president, AMC 12 qualifier", "hrs": "3", "weeks": "30", "grades": ["9", "10", "11", "12"]}, {"type": "Work (Paid)", "desc": "Weekend barista", "hrs": "8", "weeks": "40", "grades": ["11", "12"]}, {"type": "Journalism/Publication", "desc": "Tech columnist, school paper", "hrs": "2", "weeks": "30", "grades": ["11", "12"]}, {"type": "Student Govt./Politics", "desc": "Class treasurer", "hrs": "2", "weeks": "35", "grades": ["10", "11", "12"]}], "honors": [{"title": "USACO Gold", "grades": ["11"], "levels": ["National"]}, {"title": "AP Scholar with Distinction", "grades": ["11"], "levels": ["National"]}, {"title": "Regional Science Fair 1st", "grades": ["11"], "levels": ["State/Regional"]}], "schools": [{"n": "Harvard University", "d": "harvard.edu"}, {"n": "Stanford University", "d": "stanford.edu"}, {"n": "Princeton University", "d": "princeton.edu"}, {"n": "UCLA", "d": "ucla.edu"}, {"n": "UC Berkeley", "d": "berkeley.edu"}, {"n": "USC", "d": "usc.edu"}, {"n": "University of California-San Diego", "d": "ucsd.edu"}, {"n": "New York University", "d": "nyu.edu"}, {"n": "University of California-Davis", "d": "ucdavis.edu"}, {"n": "San Jose State University", "d": "sjsu.edu"}], "essayPrompt": 0, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "120000", "householdSize": "4", "budget": "35000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Marcus Johnson", "gradYear": "2027", "state": "Texas", "major": "Mechanical Engineering", "gpa": "3.85", "rank": "18", "classSize": "520", "sat": "1440", "act": "", "apExams": [{"n": "AP Calculus AB", "s": "5"}, {"n": "AP Physics 1: Algebra-Based", "s": "4"}], "activities": [{"type": "Athletics: JV/Varsity", "desc": "Varsity football, 3-year starter", "hrs": "14", "weeks": "20", "grades": ["10", "11", "12"]}, {"type": "Robotics", "desc": "FTC team mechanical lead", "hrs": "8", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Work (Paid)", "desc": "Summer job at family auto shop", "hrs": "30", "weeks": "10", "grades": ["10", "11", "12"]}, {"type": "Religious", "desc": "Youth group volunteer leader", "hrs": "3", "weeks": "40", "grades": ["9", "10", "11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Habitat for Humanity builds", "hrs": "4", "weeks": "12", "grades": ["11", "12"]}, {"type": "Career Oriented", "desc": "Engineering shadowing program", "hrs": "4", "weeks": "8", "grades": ["12"]}], "honors": [{"title": "All-District Football", "grades": ["11"], "levels": ["State/Regional"]}], "schools": [{"n": "The University of Texas at Austin", "d": "utexas.edu"}, {"n": "Texas A&M University-College Station", "d": "tamu.edu"}, {"n": "Rice University", "d": "rice.edu"}, {"n": "Stanford University", "d": "stanford.edu"}, {"n": "The University of Texas at Dallas", "d": "utdallas.edu"}, {"n": "University of Houston", "d": "uh.edu"}, {"n": "Texas State University", "d": "txst.edu"}, {"n": "Purdue University", "d": "purdue.edu"}], "essayPrompt": 1, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "65000", "householdSize": "5", "budget": "15000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Emily Carter", "gradYear": "2027", "state": "Ohio", "major": "Psychology", "gpa": "3.6", "rank": "", "classSize": "", "sat": "1290", "act": "", "apExams": [{"n": "AP Psychology", "s": "4"}], "activities": [{"type": "Dance", "desc": "Competitive dance team", "hrs": "8", "weeks": "40", "grades": ["9", "10", "11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Hospital volunteer", "hrs": "3", "weeks": "30", "grades": ["11", "12"]}, {"type": "Work (Paid)", "desc": "Cashier at grocery store", "hrs": "12", "weeks": "40", "grades": ["11", "12"]}, {"type": "Other Club/Activity", "desc": "Psychology club member", "hrs": "1", "weeks": "30", "grades": ["11", "12"]}, {"type": "Foreign Language", "desc": "Spanish club", "hrs": "1", "weeks": "30", "grades": ["10", "11", "12"]}], "honors": [], "schools": [{"n": "Ohio State University-Main Campus", "d": "osu.edu"}, {"n": "University of Michigan", "d": "umich.edu"}, {"n": "Purdue University", "d": "purdue.edu"}, {"n": "Miami University-Oxford", "d": "miamioh.edu"}, {"n": "University of Cincinnati-Main Campus", "d": "uc.edu"}, {"n": "Ohio University-Main Campus", "d": "ohio.edu"}], "essayPrompt": 2, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "85000", "householdSize": "4", "budget": "20000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Daniel Nguyen", "gradYear": "2027", "state": "Florida", "major": "Nursing", "gpa": "3.15", "rank": "", "classSize": "", "sat": "1080", "act": "", "apExams": [], "activities": [{"type": "Family Responsibilities", "desc": "Care for two younger siblings after school", "hrs": "20", "weeks": "40", "grades": ["9", "10", "11", "12"]}, {"type": "Work (Paid)", "desc": "Part-time at fast food restaurant", "hrs": "15", "weeks": "40", "grades": ["11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Food bank volunteer", "hrs": "2", "weeks": "20", "grades": ["11", "12"]}], "honors": [], "schools": [{"n": "University of Florida", "d": "ufl.edu"}, {"n": "Florida State University", "d": "fsu.edu"}, {"n": "University of Central Florida", "d": "ucf.edu"}, {"n": "University of South Florida", "d": "usf.edu"}, {"n": "Florida International University", "d": "fiu.edu"}, {"n": "Florida Atlantic University", "d": "fau.edu"}], "essayPrompt": 3, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "38000", "householdSize": "4", "budget": "5000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Olivia Chen", "gradYear": "2027", "state": "New York", "major": "Economics", "gpa": "3.8", "rank": "", "classSize": "", "sat": "", "act": "", "apExams": [{"n": "AP Macroeconomics", "s": "5"}, {"n": "AP Statistics", "s": "4"}], "activities": [{"type": "Debate/Speech", "desc": "Varsity debate, state qualifier", "hrs": "8", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Career Oriented", "desc": "Founded a small online resale business", "hrs": "5", "weeks": "40", "grades": ["11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Tutoring middle schoolers in math", "hrs": "3", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Cultural", "desc": "Chinese Student Association treasurer", "hrs": "2", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Theater/Drama", "desc": "Stage crew", "hrs": "4", "weeks": "12", "grades": ["11", "12"]}, {"type": "Athletics: Club", "desc": "Club badminton", "hrs": "3", "weeks": "25", "grades": ["11", "12"]}], "honors": [{"title": "State Debate Qualifier", "grades": ["11"], "levels": ["State/Regional"]}], "schools": [{"n": "New York University", "d": "nyu.edu"}, {"n": "Boston University", "d": "bu.edu"}, {"n": "Northeastern University", "d": "northeastern.edu"}, {"n": "Syracuse University", "d": "syracuse.edu"}, {"n": "Fordham University", "d": "fordham.edu"}, {"n": "University of Massachusetts-Amherst", "d": "umass.edu"}], "essayPrompt": 4, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "150000", "householdSize": "4", "budget": "40000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Ryan Patel", "gradYear": "2027", "state": "New Jersey", "major": "Biology", "gpa": "3.7", "rank": "", "classSize": "", "sat": "1350", "act": "", "apExams": [{"n": "AP Biology", "s": "4"}], "activities": [{"type": "Science/Math", "desc": "Science Olympiad member", "hrs": "4", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Athletics: JV/Varsity", "desc": "JV tennis", "hrs": "8", "weeks": "12", "grades": ["11", "12"]}, {"type": "Work (Paid)", "desc": "Pharmacy technician trainee", "hrs": "10", "weeks": "30", "grades": ["12"]}], "honors": [], "schools": [{"n": "Rutgers University-New Brunswick", "d": "newbrunswick.rutgers.edu"}, {"n": "Pennsylvania State University-Main Campus", "d": "psu.edu"}, {"n": "University of Pittsburgh-Pittsburgh Campus", "d": "pitt.edu"}, {"n": "Drexel University", "d": "drexel.edu"}, {"n": "Temple University", "d": "temple.edu"}, {"n": "The College of New Jersey", "d": "tcnj.edu"}], "essayPrompt": null, "essay": "", "wantsAid": true, "income": "95000", "householdSize": "4", "budget": "25000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "William Hayes", "gradYear": "2027", "state": "Connecticut", "major": "Political Science", "gpa": "3.92", "rank": "", "classSize": "", "sat": "1520", "act": "", "apExams": [{"n": "AP United States History", "s": "5"}, {"n": "AP United States Government and Politics", "s": "5"}, {"n": "AP English Literature and Composition", "s": "4"}], "activities": [{"type": "Student Govt./Politics", "desc": "Student body president", "hrs": "6", "weeks": "35", "grades": ["10", "11", "12"]}, {"type": "Athletics: JV/Varsity", "desc": "Varsity lacrosse captain", "hrs": "12", "weeks": "20", "grades": ["9", "10", "11", "12"]}, {"type": "Internship", "desc": "Intern in a state senator office", "hrs": "15", "weeks": "8", "grades": ["12"]}, {"type": "Community Service (Volunteer)", "desc": "Founded a book drive for 4 schools", "hrs": "3", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Debate/Speech", "desc": "Model UN, best delegate twice", "hrs": "4", "weeks": "25", "grades": ["10", "11", "12"]}, {"type": "Foreign Exchange", "desc": "Summer exchange in Spain", "hrs": "40", "weeks": "4", "grades": ["12"]}], "honors": [{"title": "Best Delegate, Yale Model UN", "grades": ["11"], "levels": ["National"]}], "schools": [{"n": "Yale University", "d": "yale.edu"}, {"n": "Princeton University", "d": "princeton.edu"}, {"n": "Duke University", "d": "duke.edu"}, {"n": "Georgetown University", "d": "georgetown.edu"}, {"n": "Vanderbilt University", "d": "vanderbilt.edu"}, {"n": "Tufts University", "d": "tufts.edu"}], "essayPrompt": 5, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "600000", "householdSize": "4", "budget": "95000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Aigerim Sadykova", "gradYear": "2027", "state": "Outside the U.S.", "major": "Computer Science", "gpa": "3.95", "rank": "2", "classSize": "120", "sat": "1510", "act": "", "apExams": [], "activities": [{"type": "Science/Math", "desc": "National math olympiad team", "hrs": "12", "weeks": "40", "grades": ["9", "10", "11", "12"]}, {"type": "Computer/Technology", "desc": "Open-source contributor to a Python library", "hrs": "6", "weeks": "40", "grades": ["11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Teaching coding to village schoolchildren online", "hrs": "3", "weeks": "30", "grades": ["11", "12"]}, {"type": "Foreign Language", "desc": "Self-taught English and Korean", "hrs": "4", "weeks": "40", "grades": ["10", "11", "12"]}, {"type": "Athletics: Club", "desc": "Chess club captain", "hrs": "4", "weeks": "35", "grades": ["9", "10", "11", "12"]}], "honors": [{"title": "National Math Olympiad silver", "grades": ["11"], "levels": ["National"]}, {"title": "IMO team selection camp", "grades": ["11"], "levels": ["International"]}], "schools": [{"n": "Massachusetts Institute of Technology", "d": "mit.edu"}, {"n": "California Institute of Technology", "d": "caltech.edu"}, {"n": "University of Illinois Urbana-Champaign", "d": "illinois.edu"}, {"n": "Purdue University", "d": "purdue.edu"}, {"n": "Georgia Tech", "d": "gatech.edu"}, {"n": "Arizona State University Campus Immersion", "d": "asu.edu"}], "essayPrompt": 0, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "30000", "householdSize": "5", "budget": "10000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Hannah Kim", "gradYear": "2027", "state": "Pennsylvania", "major": "Music", "gpa": "3.75", "rank": "", "classSize": "", "sat": "1380", "act": "", "apExams": [{"n": "AP Music Theory", "s": "5"}], "activities": [{"type": "Music: Instrumental", "desc": "Principal cellist, state youth orchestra", "hrs": "18", "weeks": "45", "grades": ["9", "10", "11", "12"]}, {"type": "Music: Instrumental", "desc": "Chamber quartet, paid gigs", "hrs": "6", "weeks": "30", "grades": ["10", "11", "12"]}, {"type": "Community Service (Volunteer)", "desc": "Free cello lessons for kids", "hrs": "2", "weeks": "30", "grades": ["11", "12"]}, {"type": "Music: Vocal", "desc": "School choir", "hrs": "3", "weeks": "30", "grades": ["11", "12"]}, {"type": "Academic", "desc": "Peer tutor, English", "hrs": "2", "weeks": "30", "grades": ["11", "12"]}], "honors": [{"title": "All-State Orchestra principal", "grades": ["11"], "levels": ["State/Regional"]}, {"title": "National YoungArts merit", "grades": ["11"], "levels": ["National"]}], "schools": [{"n": "The Juilliard School", "d": "juilliard.edu"}, {"n": "Curtis Institute of Music", "d": "curtis.edu"}, {"n": "Carnegie Mellon University", "d": "cmu.edu"}, {"n": "New York University", "d": "nyu.edu"}, {"n": "Berklee College of Music", "d": "berklee.edu"}, {"n": "Oberlin College", "d": "oberlin.edu"}], "essayPrompt": 6, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": true, "income": "110000", "householdSize": "3", "budget": "30000"}, "tier": 29}, {"p": {"seen": [], "email": "", "studentIncome": "", "parentCash": "", "parentInvest": "", "name": "Jacob Miller", "gradYear": "2027", "state": "Illinois", "major": "Business Administration", "gpa": "3.55", "rank": "", "classSize": "", "sat": "1260", "act": "", "apExams": [], "activities": [{"type": "Athletics: JV/Varsity", "desc": "Varsity basketball", "hrs": "12", "weeks": "20", "grades": ["9", "10", "11", "12"]}, {"type": "Work (Paid)", "desc": "Lifeguard", "hrs": "20", "weeks": "10", "grades": ["10", "11", "12"]}, {"type": "Career Oriented", "desc": "DECA member, regional finalist", "hrs": "3", "weeks": "25", "grades": ["11", "12"]}, {"type": "School Spirit", "desc": "Pep club", "hrs": "1", "weeks": "30", "grades": ["11", "12"]}], "honors": [{"title": "DECA regional finalist", "grades": ["11"], "levels": ["State/Regional"]}], "schools": [{"n": "University of Illinois Urbana-Champaign", "d": "illinois.edu"}, {"n": "Northwestern University", "d": "northwestern.edu"}, {"n": "University of Chicago", "d": "uchicago.edu"}, {"n": "Loyola University Chicago", "d": "luc.edu"}, {"n": "DePaul University", "d": "depaul.edu"}, {"n": "Illinois State University", "d": "illinoisstate.edu"}, {"n": "University of Iowa", "d": "uiowa.edu"}, {"n": "University of Wisconsin-Madison", "d": "wisc.edu"}], "essayPrompt": 0, "essay": "The first time I took apart my grandmother's radio I could not put it back together, and she laughed for a full minute before handing me a screwdriver and a notebook. She told me to write down every screw before I touched the next one. That notebook is now four notebooks. Somewhere between the radio, a broken bicycle and the school's ancient 3D printer, I learned that patience is a skill you practice, not a trait you are born with. When our robotics team lost its only programmer in my junior year, I used the same method: write down what you do not understand, then take it apart one piece at a time. We did not win state, but we finished, and I learned more from finishing than I ever did from being good at something.", "wantsAid": false, "income": "", "householdSize": "", "budget": ""}, "tier": 19}];
+function load(i){
+  try{
+    localStorage.setItem('admitmap_profile', JSON.stringify(PROFILES[i].p));
+    localStorage.setItem('admitmap_tier', String(PROFILES[i].tier));
+    localStorage.removeItem('admitmap_activity_scores');
+    localStorage.removeItem('admitmap_essay_scores');
+  }catch(e){ alert('Could not save the profile: ' + e.message); return false; }
+  return true;
+}
+function openReport(i){ if(load(i)) location.href = 'report.html?tier=' + PROFILES[i].tier + '&v=' + Date.now(); }
+/* С имитацией оценок эссе и активностей: проверяет путь «оценка → шансы»
+   без сервера. Числа оценок выдуманные, настоящие даёт только сайт. */
+function openScored(i){
+  if(!load(i)) return;
+  try{ localStorage.setItem('admitmap_mock_api','1'); }catch(e){}
+  location.href = 'report.html?tier=' + PROFILES[i].tier + '&checkout_id=local-test&v=' + Date.now();
+}
+try{ localStorage.removeItem('admitmap_mock_api'); }catch(e){}
+function openFunnel(i){ if(load(i)) location.href = 'funnel.html'; }
+function openPaywall(i){ if(load(i)) location.href = 'paywall-desktop.html'; }
+</script>
+</body>
+</html>

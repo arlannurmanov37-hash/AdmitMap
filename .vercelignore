@@ -7,6 +7,7 @@ funnel-legacy.html
 funnel-v2.html
 landing-original.html
 paywall-flow.html
+test-profiles.html
 pricing-v4.html
 AdmitMap-source.zip
 data/platform.bak.html
@@ -19,3 +20,6 @@ data/platform.pre-2yr-filter.html
 data/*.py
 data/*.log
 graphify-out/
+
+# Local test tooling
+scripts/

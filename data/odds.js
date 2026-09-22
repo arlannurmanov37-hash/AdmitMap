@@ -28,8 +28,22 @@
     // Эссе: шкала 0–10, 5 — нейтрально. essayPer — цена одного балла,
     // essayDecay — как быстро падает роль эссе с ростом процента приёма.
     essayPer: 0.10, essayFloor: 0.30, essayDecay: 18,
-    essayMin: 0.55, essayMax: 1.50
+    essayMin: 0.55, essayMax: 1.50,
+    // Эссе не отправлено — это не «нейтрально», а заметный минус: считаем как 2/10.
+    essayMissing: 2,
+    // Мало активностей — штраф по числу, сильнее в селективных вузах.
+    // Доля, на которую режутся шансы при приёме ~10% и ниже; к 60% почти ноль.
+    actFew: {0: 0.45, 1: 0.25, 2: 0.25, 3: 0.10, 4: 0.10}, actFewRef: 28
   };
+
+  // Без SAT/ACT — считаем как test-optional. В самых селективных вузах таких
+  // абитуриентов принимают реже, в остальных тест почти ничего не решает.
+  function testOptionalCut(rate) {
+    return rate < 10 ? 0.20 : rate < 20 ? 0.12 : rate < 40 ? 0.05 : 0;
+  }
+
+  // Вес «селективности» 0…1: ~1 при приёме 10%, ~0.4 при 30%, ~0.15 при 60%.
+  function selectW(rate) { return 1 / (1 + Math.pow(rate / P.actFewRef, 2)); }
 
   // Зажимаем в [0.3, 99.5]: при rate = 100 деление на ноль давало NaN
   // (в базе есть вузы со 100% приёма), при rate = 0 — нулевые шансы навсегда.
@@ -42,7 +56,17 @@
 
   function actToSat(act) { return ACT_TO_SAT[Math.round(act)] || null; }
 
-  // Глубина активностей: главный вклад даёт самая серьёзная, остальные — меньший.
+  // Оценка активностей по критериям AdmitMap (Leadership 35% · Depth 40% ·
+  // Impact 25%, api/activities.js), 0–100. 50 — обычный список школьных кружков:
+  // нейтрально. Выше — надбавка до потолка actCeil. Часы в этом случае не
+  // считаем: десять лёгких кружков по много часов — не «топ».
+  function activityScoreFactor(score) {
+    var s = Math.max(0, Math.min(100, score));
+    return s > 50 ? 1 + (s - 50) / 50 * (P.actCeil - 1) : 1;
+  }
+
+  // Запасной вариант, пока оценки нет: глубина по часам. Главный вклад даёт
+  // самая серьёзная активность, остальные — меньший.
   function activityFactor(acts) {
     if (!acts || !acts.length) return 1;
     var d = acts.map(function (a) {
@@ -70,6 +94,9 @@
 
     var sat = st.sat != null ? st.sat : (st.act != null ? actToSat(st.act) : null);
     if (st.submitScores === false) sat = null;           // test-optional: не штрафуем
+    // Test-blind (UC и Cal State): тест не читают вовсе — ни плюса, ни штрафа.
+    var blind = school.testBlind === true;
+    if (blind) sat = null;
 
     // ── Академика ──
     var gpaZ = (gpa - sGpa) / P.gpaUnit;
@@ -86,7 +113,7 @@
       prof *= Math.min(1.35, 1 + 0.055 * f5 + 0.03 * f4);
     }
     prof *= ({state: 1.10, national: 1.45, international: 1.80})[st.honorLevel] || 1;
-    prof *= activityFactor(st.activities);
+    prof *= st.activityScore != null ? activityScoreFactor(st.activityScore) : activityFactor(st.activities);
     if (st.rankPct != null) {
       prof *= st.rankPct <= 1 ? 1.25 : st.rankPct <= 5 ? 1.15 : st.rankPct <= 10 ? 1.08 : 1;
     }
@@ -105,24 +132,40 @@
     // Вес зависит от селективности: в вузе с приёмом 4% эссе читают и оно решает,
     // при приёме 60% его роль невелика.
     var essay = 1;
-    if (st.essayScore != null) {
+    var es = st.essayScore != null ? st.essayScore : (st.noEssay ? P.essayMissing : null);
+    if (es != null) {
       var w = P.essayFloor + (1 - P.essayFloor) * Math.exp(-rate / P.essayDecay);
-      essay = 1 + (st.essayScore - 5) * P.essayPer * w;
+      essay = 1 + (es - 5) * P.essayPer * w;
       essay = Math.max(P.essayMin, Math.min(P.essayMax, essay));
     }
 
     // ── Структура подачи ──
     var struct = 1;
     if (school.isPublic && st.inState != null) struct *= st.inState ? 1.50 : 0.70;
-    struct *= ({ED: 2.10, EA: 1.25, RD: 1.00})[st.round] || 1;
+    // Опубликованный приём в ED выше в 2–3 раза, но большую часть разницы дают
+    // спортсмены и дети выпускников, которые почти все подают рано. Обычному
+    // абитуриенту ED даёт меньше — ×1.6 (решение владельца 22.09.2026).
+    // REA/SCEA (Harvard, Yale, Princeton, Stanford…) не обязывает — ×1.3.
+    struct *= ({ED: 1.60, REA: 1.30, EA: 1.25, RD: 1.00})[st.round] || 1;
     struct = Math.min(P.structCap, struct);
 
     // ── Демпфер: внеучебка не вытаскивает провальную академику ──
     var damp = 1 / (1 + Math.exp(-(acad + P.dampShift) * P.dampK));
     var profEff = 1 + (prof - 1) * damp;
 
+    // ── Штрафы за пробелы в заявке ──
+    var gaps = 1;
+    if (sat == null && !blind) gaps *= 1 - testOptionalCut(rate);
+    // слабый список (оценка ниже 50) в селективных вузах — минус, до −35%
+    if (st.activityScore != null && st.activityScore < 50) {
+      gaps *= 1 - (50 - Math.max(0, st.activityScore)) / 50 * 0.35 * selectW(rate);
+    }
+    if (st.activityCount != null && st.activityCount < 5) {
+      gaps *= 1 - (P.actFew[st.activityCount] || 0) * selectW(rate);
+    }
+
     return Math.round(Math.min(96, Math.max(1,
-      toProb(toOdds(rate) * acadLR * profEff * struct * essay))));
+      toProb(toOdds(rate) * acadLR * profEff * struct * essay * gaps))));
   }
 
   // Средний SAT известен не для всех вузов. Когда его нет, оцениваем по

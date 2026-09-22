@@ -73,9 +73,14 @@ for row in csv.DictReader(open(path('college_data_150.csv'), encoding='utf-8')):
         'n': row['name'].strip(), 'state': row['state'].strip(), 'loc': None,
         'rate': num(row['accept_rate_pct']), 'sat': num(row['avg_sat']),
         'act': num(row['avg_act']), 'gpa': num(row['avg_gpa']),
-        'ed': row['ED_date'].strip() or None, 'ea': (row['EA_date'] or row['REA_date']).strip() or None,
         'rd': row['RD_date'].strip() or None,
         'coa': num(row['coa_sticker'])}.items() if v is not None})
+    # Раунды из ручной выверки — окончательные: пустая ячейка значит «такого
+    # раунда нет», а не «не знаем». Иначе ED из старого источника переживал
+    # выверку, и Stanford (REA) выходил в отчёте как binding ED.
+    r['ed'] = row['ED_date'].strip() or None
+    r['ea'] = (row['EA_date'] or row['REA_date']).strip() or None
+    r['rea'] = bool(row['REA_date'].strip()) or None
     inc = [num(row[b]) for b in BANDS]
     if any(x is not None for x in inc): r['inc7'] = inc
     r['src'] = 'verified'

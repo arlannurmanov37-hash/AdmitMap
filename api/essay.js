@@ -6,7 +6,10 @@
  * UI never has to guess at free text.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { cors, bad, validateLicense } from './_lib.js';
+import { cors, bad, verifyPurchase, overLimit } from './_lib.js';
+
+// Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
+export const config = { maxDuration: 120 };
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
 
@@ -70,10 +73,12 @@ export default async function handler(req, res) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
 
-  const { key, essay, prompt, school } = req.body || {};
+  const { key, checkout_id, essay, prompt, school } = req.body || {};
+  const purchase = checkout_id || key;
 
-  const lic = await validateLicense(key);
+  const lic = await verifyPurchase(purchase);
   if (!lic.ok) return bad(res, 402, lic.error);
+  if (overLimit('essay', purchase)) return bad(res, 429, 'Too many re-grades for one report. Try again later.');
 
   const text = typeof essay === 'string' ? essay.trim() : '';
   if (text.length < 200) return bad(res, 400, 'Paste a longer draft — at least a few paragraphs.');
@@ -85,9 +90,13 @@ export default async function handler(req, res) {
   ].filter(Boolean).join('\n');
 
   try {
-    const message = await client.messages.create({
+    // fallbacks: 'default' — если классификатор Opus 5 откажет, сервер Anthropic
+    // сам повторит запрос на рекомендованной модели в том же вызове.
+    const message = await client.beta.messages.create({
       model: 'claude-opus-5',
-      max_tokens: 4000,
+      betas: ['server-side-fallback-2026-07-01'],
+      fallbacks: 'default',
+      max_tokens: 16000,
       system: SYSTEM,
       thinking: { type: 'adaptive' },
       output_config: {
