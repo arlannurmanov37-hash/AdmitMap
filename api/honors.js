@@ -39,7 +39,7 @@ const SCHEMA = {
         type: 'object',
         properties: {
           title: { type: 'string', description: 'The honor as a reader would name it, 2-6 words, e.g. "National Merit Finalist", "ISEF Finalist", "All-State Orchestra". No trailing period.' },
-          tier: { type: 'integer', enum: [1, 2, 3], description: '1 = national/international, 2 = state/regional, 3 = school-level. Judge from what the honor actually is, not only from the level the student ticked.' },
+          tier: { type: 'integer', description: 'Exactly 1, 2 or 3: 1 = national/international, 2 = state/regional, 3 = school-level. Judge from what the honor actually is, not only from the level the student ticked.' },
           selectivity: { type: 'number', description: 'Where this honor sits inside its tier, 0-10, one decimal: how selective and externally validated it is.' },
           note: { type: 'string', description: 'One short clause on why it sits there — name the selectivity or the reason it is weak. No praise for its own sake.' }
         },
@@ -86,6 +86,8 @@ export default async function handler(req, res) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
 
+  if (!process.env.ANTHROPIC_API_KEY) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
+
   const gate = await allowScoring(req);
   if (!gate.ok) return bad(res, gate.status, gate.error);
 
@@ -105,12 +107,8 @@ export default async function handler(req, res) {
   }).join('\n\n');
 
   try {
-    // fallbacks: 'default' — если классификатор Opus 5 откажет, сервер Anthropic
-    // сам повторит запрос на рекомендованной модели в том же вызове.
-    const message = await client.beta.messages.create({
+    const message = await client.messages.create({
       model: 'claude-opus-5',
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
       max_tokens: 16000,
       system: SYSTEM,
       thinking: { type: 'adaptive' },

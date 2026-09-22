@@ -50,7 +50,7 @@ HON_SCHEMA = {
         "items": {"type": "array", "description": "One entry per submitted honor, in the same order they were given.",
                   "items": {"type": "object", "properties": {
                       "title": {"type": "string", "description": 'The honor as a reader would name it, 2-6 words, e.g. "National Merit Finalist", "ISEF Finalist", "All-State Orchestra". No trailing period.'},
-                      "tier": {"type": "integer", "enum": [1, 2, 3], "description": "1 = national/international, 2 = state/regional, 3 = school-level. Judge from what the honor actually is, not only from the level the student ticked."},
+                      "tier": {"type": "integer", "description": "Exactly 1, 2 or 3: 1 = national/international, 2 = state/regional, 3 = school-level. Judge from what the honor actually is, not only from the level the student ticked."},
                       "selectivity": {"type": "number", "description": "Where this honor sits inside its tier, 0-10, one decimal: how selective and externally validated it is."},
                       "note": {"type": "string", "description": "One short clause on why it sits there — name the selectivity or the reason it is weak. No praise for its own sake."}},
                       "required": ["title", "tier", "selectivity", "note"], "additionalProperties": False}},
@@ -127,17 +127,15 @@ client = anthropic.Anthropic()
 
 def call(system, schema, user):
     """Тот же запрос, что делает сайт: Opus 5, адаптивное размышление, effort high,
-    строгая JSON-схема, fallbacks: default."""
+    строгая JSON-схема."""
     t = time.time()
-    msg = client.beta.messages.create(
+    msg = client.messages.create(
         model=MODEL,
-        betas=["server-side-fallback-2026-07-01"],
         max_tokens=16000,
         system=system,
         thinking={"type": "adaptive"},
         messages=[{"role": "user", "content": user}],
         extra_body={
-            "fallbacks": "default",
             "output_config": {"effort": "high", "format": {"type": "json_schema", "schema": schema}},
         },
     )

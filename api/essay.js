@@ -75,6 +75,8 @@ export default async function handler(req, res) {
 
   const { essay, prompt, school } = req.body || {};
 
+  if (!process.env.ANTHROPIC_API_KEY) return bad(res, 503, 'Scoring is not configured.', { detail: 'ANTHROPIC_API_KEY is not set for this environment' });
+
   const gate = await allowScoring(req);
   if (!gate.ok) return bad(res, gate.status, gate.error);
 
@@ -89,12 +91,8 @@ export default async function handler(req, res) {
   ].filter(Boolean).join('\n');
 
   try {
-    // fallbacks: 'default' — если классификатор Opus 5 откажет, сервер Anthropic
-    // сам повторит запрос на рекомендованной модели в том же вызове.
-    const message = await client.beta.messages.create({
+    const message = await client.messages.create({
       model: 'claude-opus-5',
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
       max_tokens: 16000,
       system: SYSTEM,
       thinking: { type: 'adaptive' },
