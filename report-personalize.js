@@ -114,6 +114,14 @@ function activityKey(P) {
     return [a.type || '', a.desc || '', a.hrs || '', a.weeks || '', (a.grades || []).join(',')];
   })));
 }
+function honorsFor(P) {
+  return (P.honors || []).filter(function (h) { return (h.title || '').trim(); }).slice(0, 5);
+}
+function honorKey(P) {
+  return fnv(JSON.stringify(honorsFor(P).map(function (h) {
+    return [h.title || '', (h.grades || []).join(','), (h.levels || []).join(',')];
+  })));
+}
 function essayKey(P) { return fnv(String(P.essayPrompt) + '|' + String(P.essay || '').trim()); }
 function cachedFor(key, h) {
   try {
@@ -142,6 +150,15 @@ function mockApi(path, body) {
       return { ok: true, overall: avg, items: items,
         subs: { depth: avg + 2, leadership: avg + 4, impact: avg - 6, progression: avg - 3, narrative: avg + 5 } };
     });
+  }
+  if (path === '/api/honors') {
+    var hi = body.honors.map(function (h) {
+      var t = /olympiad|isef|national merit finalist|regeneron|publish/i.test(h.title) ? 1
+            : /state|regional|all-state|distinction|semifinal/i.test(h.title) ? 2 : 3;
+      return { name: h.title, tier: t, score: t === 1 ? 85 : t === 2 ? 58 : 22, note: '' };
+    });
+    var best = Math.max.apply(null, hi.map(function (x) { return x.score; }));
+    return wait(1500).then(function () { return { ok: true, overall: best + hi.length - 1, items: hi }; });
   }
   var w = body.essay.split(/\s+/).length;
   var base = Math.min(8.6, 5 + w / 120);
@@ -219,7 +236,7 @@ function showScoring(on) {
     '<div style="width:100%;max-width:440px;background:#fff;border-radius:22px;padding:34px 30px;' +
       'box-shadow:0 2px 0 #eef3fb,0 24px 50px rgba(15,31,75,.12);text-align:center">' +
       '<div style="font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.15">' +
-        'Reading your essay and activities</div>' +
+        'Reading your essay, activities and honors</div>' +
       '<p style="margin:12px 0 22px;font-size:15px;line-height:1.55;color:#5b7098">' +
         'We score them the way an admissions reader would, then factor that into every ' +
         'chance in your report. This takes about a minute.</p>' +
@@ -244,6 +261,15 @@ function scoreProfile(P, id) {
       store('admitmap_activity_scores', { h: ak, overall: r.overall, subs: r.subs,
         items: (r.items || []).slice().sort(function (a, b) { return b.score - a.score; }),
         verdict: r.verdict, fixes: r.fixes });
+    }));
+  }
+  var hons = honorsFor(P), hk = honorKey(P);
+  if (hons.length && !cachedFor('admitmap_honor_scores', hk)) {
+    jobs.push(post('/api/honors', { checkout_id: id, honors: hons.map(function (h) {
+      return { title: h.title, grades: h.grades || [], levels: h.levels || [] };
+    }) }, 115000).then(function (r) {
+      if (!r.ok) { console.warn('AdmitMap: honor scoring failed —', r.error); return; }
+      store('admitmap_honor_scores', { h: hk, overall: r.overall, items: r.items, verdict: r.verdict });
     }));
   }
   var essay = String(P.essay || '').trim(), ek = essayKey(P);
@@ -301,6 +327,8 @@ function modelFrom(P) {
   var as = cachedFor('admitmap_activity_scores', activityKey(P));
   if (as && as.overall > 0) m.activityScore = as.overall;
   /* Оценку эссе берём из кэша грейдера, если он уже отработал. */
+  var hs = cachedFor('admitmap_honor_scores', honorKey(P));
+  if (hs && hs.overall >= 0) m.honorScore = hs.overall;
   var es = cachedFor('admitmap_essay_scores', essayKey(P));
   if (es && es.overall > 0) m.essayScore = Math.max(0, Math.min(10, es.overall / 10));
   /* Эссе нет — модель считает это минусом (см. essayMissing в data/odds.js).

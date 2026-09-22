@@ -41,6 +41,32 @@ def js_rubric(src):
 
 ESSAY_SRC = (ROOT / "api/essay.js").read_text()
 ACTS_SRC = (ROOT / "api/activities.js").read_text()
+HON_SRC = (ROOT / "api/honors.js").read_text()
+HON_SYSTEM = js_template(HON_SRC, "SYSTEM")
+HON_BANDS = {1: (7.0, 10.0), 2: (4.0, 7.5), 3: (0.5, 4.0)}
+HON_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "items": {"type": "array", "description": "One entry per submitted honor, in the same order they were given.",
+                  "items": {"type": "object", "properties": {
+                      "title": {"type": "string", "description": 'The honor as a reader would name it, 2-6 words, e.g. "National Merit Finalist", "ISEF Finalist", "All-State Orchestra". No trailing period.'},
+                      "tier": {"type": "integer", "enum": [1, 2, 3], "description": "1 = national/international, 2 = state/regional, 3 = school-level. Judge from what the honor actually is, not only from the level the student ticked."},
+                      "selectivity": {"type": "number", "description": "Where this honor sits inside its tier, 0-10, one decimal: how selective and externally validated it is."},
+                      "note": {"type": "string", "description": "One short clause on why it sits there — name the selectivity or the reason it is weak. No praise for its own sake."}},
+                      "required": ["title", "tier", "selectivity", "note"], "additionalProperties": False}},
+        "verdict": {"type": "string", "description": "One sentence on what these honors say about the student to a selective admissions reader."},
+    },
+    "required": ["items", "verdict"],
+    "additionalProperties": False,
+}
+HON_CALIBRATION = [
+    ("International Math Olympiad, silver medal", ["International"], "1, высоко"),
+    ("National Merit Finalist", ["National"], "1"),
+    ("State Science Fair, 1st of 240 projects", ["State/Regional"], "2, высоко"),
+    ("AP Scholar with Distinction", ["National"], "2 (отмечено National, но это уровень 2)"),
+    ("Global Excellence Award", ["International"], "3 или низко: громкое название без масштаба"),
+    ("Honor Roll", ["School"], "3, низко"),
+]
 ESSAY_SYSTEM, ESSAY_RUBRIC = js_template(ESSAY_SRC, "SYSTEM"), js_rubric(ESSAY_SRC)
 ACTS_SYSTEM, ACTS_RUBRIC = js_template(ACTS_SRC, "SYSTEM"), js_rubric(ACTS_SRC)
 ACTS_W = {k: w for k, w, _ in ACTS_RUBRIC}
@@ -210,15 +236,37 @@ def run_activities():
         print(f"     «{r['verdict']}»\n")
 
 
+def run_honors():
+    print("\n=== НАГРАДЫ (рамка владельца: уровни 1 / 2 / 3) ===")
+    print("Балл 0–100 внутри полосы уровня: 1 → 70–100, 2 → 40–75, 3 → 5–40.\n")
+    for title, levels, expect in HON_CALIBRATION:
+        user = "1 honor:\n\n1. " + title + "\n   Level ticked by the student: " + ", ".join(levels) + "\n   Grades: 11"
+        try:
+            r, sec, _ = call(HON_SYSTEM, HON_SCHEMA, user)
+        except Exception as e:
+            print(f"  {title}: ОШИБКА — {e}")
+            continue
+        it = r["items"][0]
+        tier = it["tier"] if it["tier"] in HON_BANDS else 3
+        lo, hi = HON_BANDS[tier]
+        score = round((lo + (hi - lo) * max(0, min(10, float(it["selectivity"]))) / 10) * 10)
+        print(f"  уровень {tier}  {score:>3}/100  {title:<45} ожидали: {expect}   [{sec:.0f} с]")
+        print(f"         — {it['note']}")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--essays", action="store_true", help="только эссе")
     ap.add_argument("--activities", action="store_true", help="только активности")
+    ap.add_argument("--honors", action="store_true", help="только награды")
     ap.add_argument("--runs", type=int, default=1, help="сколько раз оценить каждое эссе")
     a = ap.parse_args()
     if not os.environ.get("ANTHROPIC_API_KEY"):
         sys.exit("Нет ANTHROPIC_API_KEY. В терминале: export ANTHROPIC_API_KEY=sk-ant-...")
-    if not a.activities:
+    only = a.essays or a.activities or a.honors
+    if a.essays or not only:
         run_essays(max(1, a.runs))
-    if not a.essays:
+    if a.activities or not only:
         run_activities()
+    if a.honors or not only:
+        run_honors()

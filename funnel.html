@@ -2381,13 +2381,13 @@ function vHonors(){
     onclick="togg(${path},'${v}',this)">${v}</button>`).join('');
   return `<div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5h8v5a4 4 0 0 1-8 0z"/><path d="M8 5.5H5.5v1A3.5 3.5 0 0 0 9 10M16 5.5h2.5v1A3.5 3.5 0 0 1 15 10"/><path d="M12 12.5V16m-3 4.5h6"/></svg></span>
-      <span><span class="c-t">Honors &amp; awards</span><span class="c-s">recognition level matters far more than the count</span></span></div>
+      <span><span class="c-t">Honors &amp; awards</span><span class="c-s">up to 5 — name the selectivity, e.g. "top 1% of 500"</span></span></div>
     <div id="hons">${S.honors.map((h,i)=>`<div class="rep">
       <div class="rep-h"><span class="rep-n">Honor ${i+1}</span>
         <button class="rep-x" onclick="S.honors.splice(${i},1);save();render()">Remove</button></div>
 
       <div class="fg"><span class="fl">Title</span>
-        <input class="fi" placeholder="e.g. National Merit Semifinalist" value="${esc(h.title)}"
+        <input class="fi" maxlength="100" placeholder="e.g. State Science Fair, 1st of 240 projects" value="${esc(h.title)}"
                oninput="S.honors[${i}].title=this.value;save()"></div>
 
       <span class="sub-q">Grade level <em>pick all that apply</em></span>
@@ -2396,7 +2396,8 @@ function vHonors(){
       <span class="sub-q">Level of recognition <em>pick all that apply</em></span>
       <div class="opts">${chips(REC_LEVELS, h.levels||[], `S.honors[${i}].levels`)}</div>
     </div>`).join('')}</div>
-    <button class="btn-dash" style="width:100%" onclick="S.honors.push(BLANK_HON());save();render()">+ Add an honor</button>
+    ${S.honors.length<5 ? `<button class="btn-dash" style="width:100%" onclick="S.honors.push(BLANK_HON());save();render()">+ Add an honor</button>`
+      : `<div class="c-s" style="text-align:center;padding:6px 0">5 honors, the Common App maximum</div>`}
   </div>`;
 }
 

@@ -42,6 +42,17 @@
     return rate < 10 ? 0.20 : rate < 20 ? 0.12 : rate < 40 ? 0.05 : 0;
   }
 
+  // Награды (рамка владельца, 22.09.2026): в топ-20 — главное отличие, в средних
+  // вузах — буфер, в массовых почти ничего не решают. Вес: ~0.9 при приёме 10%,
+  // ~0.66 при 25%, ~0.33 при 50%, ~0.16 при 80%.
+  function honorW(rate) { return 1 / (1 + Math.pow(rate / 35, 2)); }
+  // Оценка наград 0–100 (api/honors.js): 30 (школьные) → ×1.07, 60 (штат) → ×1.29,
+  // 80 (национальные) → ×1.51, 100 → ×1.8. Наград нет — ×1, без штрафа.
+  function honorScoreFactor(score) {
+    var s = Math.max(0, Math.min(100, score)) / 100;
+    return 1 + 0.8 * s * s;
+  }
+
   // Вес «селективности» 0…1: ~1 при приёме 10%, ~0.4 при 30%, ~0.15 при 60%.
   function selectW(rate) { return 1 / (1 + Math.pow(rate / P.actFewRef, 2)); }
 
@@ -112,7 +123,10 @@
       st.apScores.forEach(function (x) { if (x >= 5) f5++; else if (x === 4) f4++; });
       prof *= Math.min(1.35, 1 + 0.055 * f5 + 0.03 * f4);
     }
-    prof *= ({state: 1.10, national: 1.45, international: 1.80})[st.honorLevel] || 1;
+    // Награды: оценка по уровням, если есть; иначе — самый высокий отмеченный уровень.
+    var hf = st.honorScore != null ? honorScoreFactor(st.honorScore)
+           : (({state: 1.10, national: 1.45, international: 1.80})[st.honorLevel] || 1);
+    prof *= 1 + (hf - 1) * honorW(rate);
     prof *= st.activityScore != null ? activityScoreFactor(st.activityScore) : activityFactor(st.activities);
     if (st.rankPct != null) {
       prof *= st.rankPct <= 1 ? 1.25 : st.rankPct <= 5 ? 1.15 : st.rankPct <= 10 ? 1.08 : 1;
