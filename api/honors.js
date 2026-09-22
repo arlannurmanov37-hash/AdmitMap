@@ -26,8 +26,6 @@ const client = new Anthropic({ apiKey: anthropicKey() }); // ключ очище
    награду штата, какой бы громкой ни была формулировка. */
 const BANDS = { 1: [7.0, 10.0], 2: [4.0, 7.5], 3: [0.5, 4.0] };
 const TIER_LABEL = { 1: 'National & international', 2: 'State & regional', 3: 'School-level' };
-/* Качество важнее количества: лучшая награда — вес 1, дальше 0.35, 0.12… */
-const DECAY = 0.35;
 
 const SCHEMA = {
   type: 'object',
@@ -144,12 +142,12 @@ export default async function handler(req, res) {
       };
     });
 
+    // Качество важнее количества: итог — лучшая награда плюс небольшая прибавка
+    // за остальные (10% от каждой, дальше вдвое меньше). Слабая награда никогда
+    // не тянет итог вниз.
     const ranked = items.slice().sort((x, y) => y.score - x.score);
-    const w = ranked.map((_, i) => Math.pow(DECAY, i));
-    const wsum = w.reduce((s, x) => s + x, 0);
-    // итог — не выше лучшей награды: пять слабых не дают одну сильную
-    const overall = Math.min(ranked[0].score + 4,
-      Math.round(ranked.reduce((s, it, i) => s + it.score * w[i], 0) / wsum + Math.min(4, ranked.length - 1)));
+    const bonus = ranked.slice(1).reduce((s, it, i) => s + it.score * 0.10 * Math.pow(0.5, i), 0);
+    const overall = Math.min(100, Math.round(ranked[0].score + bonus));
 
     res.status(200).json({
       ok: true,
