@@ -146,21 +146,31 @@ export function safeDetail(err) {
 
 /* Добавить адрес в список рассылки Resend. Используют api/subscribe (форма) и
    api/verify (почта покупателя из Polar). Ошибки не бросает: рассылка не должна
-   ломать ни воронку, ни выдачу отчёта. */
+   ломать ни воронку, ни выдачу отчёта.
+
+   В новых аккаунтах список один и id не нужен (POST /contacts). Если задан
+   RESEND_AUDIENCE_ID — работаем по старому пути с конкретным списком. */
 export async function addContact(email, opts = {}) {
   const addr = String(email || '').trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(addr)) return { ok: false, error: 'bad email' };
-  const key = process.env.RESEND_API_KEY, audience = process.env.RESEND_AUDIENCE_ID;
-  if (!key || !audience) {
-    console.warn('addContact: RESEND not configured —', addr, opts.source || '');
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    console.warn('addContact: RESEND_API_KEY not set —', addr, opts.source || '');
     return { ok: false, error: 'not configured' };
   }
+  const audience = (process.env.RESEND_AUDIENCE_ID || '').trim();
+  const url = audience
+    ? `https://api.resend.com/audiences/${encodeURIComponent(audience)}/contacts`
+    : 'https://api.resend.com/contacts';
   try {
-    const r = await fetch(`https://api.resend.com/audiences/${encodeURIComponent(audience)}/contacts`, {
+    const r = await fetch(url, {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: addr, first_name: opts.first, last_name: opts.last, unsubscribed: false })
+      body: JSON.stringify({
+        email: addr, firstName: opts.first, lastName: opts.last, unsubscribed: false
+      })
     });
+    // 409 — контакт уже есть, это норма
     if (!r.ok && r.status !== 409) console.error('addContact failed', r.status, (await r.text()).slice(0, 200));
     return { ok: r.ok || r.status === 409 };
   } catch (e) {
