@@ -2162,6 +2162,7 @@ const BLANK = {
       localStorage.removeItem('admitmap_profile');
       localStorage.removeItem('admitmap_activity_scores');
       localStorage.removeItem('admitmap_essay_scores');
+      localStorage.removeItem('admitmap_honor_scores');
       var clean = location.pathname + location.search.replace(/[?&]new=1\b/,'').replace(/^&/,'?') + location.hash;
       history.replaceState(null,'',clean.replace(/\?$/,''));
     }
