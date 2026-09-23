@@ -6,6 +6,7 @@
   2. platform.html SCHOOLS   — 41 вуз с GPA, штатом и дедлайнами
   3. data/scorecard_clean.json — полный дамп College Scorecard, 2083 вуза
   4. data/finaid.js FIN        — выверенные вручную нетто-цены (перекрывает дамп)
+  0. data/deadlines.csv        — ранние раунды, перекрывают все источники
 
 Поле src говорит, откуда взята строка: отчёт помечает оценочные данные.
 """
@@ -84,6 +85,19 @@ for row in csv.DictReader(open(path('college_data_150.csv'), encoding='utf-8')):
     inc = [num(row[b]) for b in BANDS]
     if any(x is not None for x in inc): r['inc7'] = inc
     r['src'] = 'verified'
+
+# ── 0. ранние раунды: перекрывают всё ─────────────────────────────────
+# Отдельный файл, потому что дедлайны живут своей жизнью: строка есть — данные
+# проверены, пустая ячейка значит «такого раунда нет», а не «не знаем».
+# Домены, которых нет в справочнике, тихо пропускаем.
+with open(path('data', 'deadlines.csv'), encoding='utf-8') as fh:
+    lines = [l for l in fh if not l.lstrip().startswith('#')]
+for row in csv.DictReader(lines):
+    r = out.get((row['domain'] or '').strip())
+    if not r: continue
+    r['ed'] = (row['ED_date'] or '').strip() or None
+    r['ea'] = ((row['EA_date'] or '') or (row['REA_date'] or '')).strip() or None
+    r['rea'] = bool((row['REA_date'] or '').strip()) or None
 
 # ── имена: без них строку не показать ─────────────────────────────────
 uni = open(path('funnel.html'), encoding='utf-8').read()

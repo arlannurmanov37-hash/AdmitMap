@@ -646,7 +646,9 @@ function fillCards(D) {
 /* В колонке раннего раунда место на одну строку: «Purdue University»
    переносилась и растягивала логотип. */
 function earlyName(n) {
-  var s = shortName(n);
+  // «Indiana University-Bloomington», «North Carolina State University at Raleigh»
+  // — кампус в названии не нужен, в колонку влезает только короткое имя.
+  var s = shortName(cardName(n)).replace(/[-–] ?[A-Z][A-Za-z .]+$/, '').replace(/ at [A-Z][A-Za-z .]+$/, '');
   return s.length > 13 ? s.replace(/ (University|College|Institute of Technology)$/, '') : s;
 }
 
@@ -672,6 +674,11 @@ function fillEarly(D) {
     var block = badge.closest('div[style*="border-radius:16px"]') || badge.parentElement.parentElement;
     var r = shown[i];
     if (!r) { if (block) block.style.display = 'none'; return; }
+    // карточек может быть меньше трёх: у части вузов раннего раунда нет.
+    // Растягиваем оставшиеся на всю ширину, чтобы рядом не висела пустота.
+    if (block && block.parentElement && shown.length < lifts.length) {
+      block.parentElement.style.gridTemplateColumns = 'repeat(' + shown.length + ', minmax(0, 1fr))';
+    }
     var nodes = $$('span,img', block);
     var img = nodes.filter(function (e) { return e.tagName === 'IMG'; })[0];
     if (img) { img.src = logo(r.d); img.onerror = function () { this.style.visibility = 'hidden'; }; }
@@ -989,11 +996,8 @@ function relayout() {
     art.dataset.amH = String(parseFloat(art.style.height) || art.offsetHeight);
   }
   var gOrig = px(grid.dataset.amRows), oOrig = px(outer.dataset.amRows);
+  /* Высота ряда карточек — ровно как в макете (209px). */
   var HEAD = gOrig[0], CARD = gOrig[1];
-  /* Карточка растягивается на высоту ряда, а содержимое расходится
-     space-between. В макете со строкой «Median pay» ряда 209px хватало; без неё
-     внутри остаётся мало воздуха, поэтому даём ряду +26px. */
-  CARD += 26;
 
   var gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
 
