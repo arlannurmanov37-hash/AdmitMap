@@ -553,8 +553,8 @@ const universities = [
             { name: 'American University', domain: 'american.edu', size: 7266 },
             { name: 'American University of Health Sciences', domain: 'auhs.edu', size: 351 },
             { name: 'Amherst College', domain: 'amherst.edu', size: 1911 },
-            { name: 'Anderson University', domain: 'andersonuniversity.edu', size: 3183 },
-            { name: 'Anderson University', domain: 'anderson.edu', size: 1057 },
+            { name: 'Anderson University · Anderson, SC', domain: 'andersonuniversity.edu', size: 3183 },
+            { name: 'Anderson University · Anderson, IN', domain: 'anderson.edu', size: 1057 },
             { name: 'Andrews University', domain: 'andrews.edu', size: 1224 },
             { name: 'Angelo State University', domain: 'angelo.edu', size: 5643 },
             { name: 'Anna Maria College', domain: 'annamaria.edu', size: 906 },
@@ -631,9 +631,9 @@ const universities = [
             { name: 'Bethany Global University', domain: 'bethanygu.edu', size: 81 },
             { name: 'Bethany Lutheran College', domain: 'blc.edu', size: 669 },
             { name: 'Bethel College-North Newton', domain: 'bethelks.edu', size: 504 },
-            { name: 'Bethel University', domain: 'bethelu.edu', size: 1547 },
-            { name: 'Bethel University', domain: 'betheluniversity.edu', size: 1008 },
-            { name: 'Bethel University', domain: 'bethel.edu', size: 1871 },
+            { name: 'Bethel University · McKenzie, TN', domain: 'bethelu.edu', size: 1547 },
+            { name: 'Bethel University · Mishawaka, IN', domain: 'betheluniversity.edu', size: 1008 },
+            { name: 'Bethel University · Saint Paul, MN', domain: 'bethel.edu', size: 1871 },
             { name: 'Bethune-Cookman University', domain: 'cookman.edu', size: 2732 },
             { name: 'Biola University', domain: 'biola.edu', size: 3474 },
             { name: 'Black Hills State University', domain: 'bhsu.edu', size: 1928 },
@@ -1183,8 +1183,7 @@ const universities = [
             { name: 'Massachusetts College of Art and Design', domain: 'massart.edu', size: 1831 },
             { name: 'Massachusetts College of Liberal Arts', domain: 'mcla.edu', size: 713 },
             { name: 'Massachusetts College of Pharmacy', domain: 'mcphs.edu', size: 3451 },
-            { name: 'Massachusetts Institute of Technology', domain: 'web.mit.edu', size: 4535 },
-            { name: 'Massachusetts Institute of Technology', domain: 'mit.edu', size: 0 },
+            { name: 'Massachusetts Institute of Technology · Cambridge, MA', domain: 'mit.edu', size: 0 },
             { name: 'Massachusetts Maritime Academy', domain: 'maritime.edu', size: 1395 },
             { name: 'McDaniel College', domain: 'mcdaniel.edu', size: 1617 },
             { name: 'McKendree University', domain: 'mckendree.edu', size: 1752 },
@@ -1583,8 +1582,8 @@ const universities = [
             { name: 'State University of New York at Cortland', domain: 'www2.cortland.edu', size: 5901 },
             { name: 'Stephen F. Austin State University', domain: 'sfasu.edu', size: 8728 },
             { name: 'Stephens College', domain: 'stephens.edu', size: 391 },
-            { name: 'Sterling College', domain: 'sterlingcollege.edu', size: 50 },
-            { name: 'Sterling College', domain: 'sterling.edu', size: 538 },
+            { name: 'Sterling College · Craftsbury Common, VT', domain: 'sterlingcollege.edu', size: 50 },
+            { name: 'Sterling College · Sterling, KS', domain: 'sterling.edu', size: 538 },
             { name: 'Stetson University', domain: 'stetson.edu', size: 2297 },
             { name: 'Stevens Institute of Technology', domain: 'stevens.edu', size: 4222 },
             { name: 'Stevens-The Institute of Business & Arts', domain: 'siba.edu', size: 89 },
@@ -2429,7 +2428,9 @@ function searchSchools(q, taken){
   for(let i=0;i<universities.length;i++){
     const u=universities[i]; if(taken[u.name]) continue;
     const n=u.name.toLowerCase(); let sc=-1;
-    if(alias && u.name===alias) sc=0;
+    // у одинаковых названий к имени добавлен город («… · Cambridge, MA»),
+    // поэтому сокращения (mit, caltech) сверяем и с началом имени
+    if(alias && (u.name===alias || u.name.indexOf(alias+' · ')===0)) sc=0;
     else if(n.indexOf(q)===0) sc=1;
     else if(n.indexOf(' '+q)>-1 || n.indexOf(', '+q)>-1) sc=2;
     else if(n.indexOf(q)>-1) sc=3;

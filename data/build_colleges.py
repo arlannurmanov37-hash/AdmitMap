@@ -99,7 +99,10 @@ for f in ('missing_data_schools.csv', 'missing_top100.csv'):
         r = out.get((row.get('domain') or '').strip())
         if r and not r.get('n'): r['n'] = (row.get('name') or '').strip()
 
-out = {d: r for d, r in out.items() if r.get('n')}
+# Один и тот же вуз под двумя доменами: Scorecard отдаёт MIT дважды.
+# Оставляем домен с ручной выверкой, второй убираем — иначе в поиске два MIT.
+DUPLICATES = {'web.mit.edu'}
+out = {d: r for d, r in out.items() if r.get('n') and d not in DUPLICATES}
 for r in out.values():
     for key in ('sat', 'act', 'gpa', 'rate', 'coa'):
         if key in r and r[key] is not None: r[key] = round(float(r[key]), 2)
