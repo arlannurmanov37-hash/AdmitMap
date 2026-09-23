@@ -499,6 +499,7 @@ function daysToNov1() {
 /* У образца дата и счётчик дней живые: застывшие «94 дня» в сентябре
    выглядят как ошибка. Всё остальное у Майи не меняется. */
 function freshenSample() {
+  dropEarnings();
   var date = document.querySelector('[data-am-date]');
   if (date) setText(date, new Date().toLocaleDateString('en-GB',
     { day: 'numeric', month: 'long', year: 'numeric' }));
@@ -506,23 +507,10 @@ function freshenSample() {
   if (d) setText(d, String(daysToNov1()));
 }
 
-/* Медиана заработка выпускников этой специальности — из College Scorecard.
-   Школа-специальность без публикации (Privacy Suppressed) — показываем
-   национальную медиану и помечаем «(US)», чтобы не выдавать её за местную. */
-function fillEarn(card, dom, major) {
-  var row = card.querySelector('[data-am-earn]');
-  if (!row) return;
-  var codes = (typeof EARN !== 'undefined' && major) ? EARN.majors[major] : null;
-  if (!codes) { row.remove(); return; }             // «Undecided» и незнакомые
-  var sc = EARN.schools[dom] || {}, val = null, national = false;
-  codes.some(function (c) { if (sc[c]) { val = sc[c]; return true; } });
-  if (val == null) {
-    codes.some(function (c) { if (EARN.national[c]) { val = EARN.national[c]; national = true; return true; } });
-  }
-  if (val == null) { row.remove(); return; }        // нет и национальной — лучше пусто
-  var l = row.querySelector('[data-am-earn-l]'), v = row.querySelector('[data-am-earn-v]');
-  setText(l, 'Median pay · ' + major + (national ? ' (US)' : ''));
-  setText(v, usd(val));
+/* Строку «Median pay» из макета убрали (решение владельца 23.09.2026): она
+   сжимала карточку, и школа с семьёй смотрят на шанс и цену, а не на зарплату. */
+function dropEarnings() {
+  $$('[data-am-earn]').forEach(function (row) { row.remove(); });
 }
 
 /* Dream / Match / Safety. Вуз с приёмом ниже 40% не бывает «safety»,
@@ -562,6 +550,7 @@ function groupCards(cards) {
 }
 
 function fillCards(D) {
+  dropEarnings();
   var counts = $$('[data-count]');
   var cards = counts.map(function (c) { return c.parentElement.parentElement; });
   if (!cards.length) return;
@@ -623,7 +612,6 @@ function fillCards(D) {
       setText(nodes[14], sticker);
     }
     card.setAttribute('data-am-tier', tierOf(r));
-    fillEarn(card, r.d, D.major);
   });
 
   /* Лишние карточки убираем — у студента может быть меньше десяти школ. */
