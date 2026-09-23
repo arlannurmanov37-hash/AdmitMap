@@ -218,13 +218,27 @@ function oauth(p){
   e.classList.add('on');
 }
 
+/* Адрес уходит на сервер (api/subscribe → список Resend): раньше он оставался
+   только в браузере, и ни одного адреса мы не сохраняли. Ошибка отправки не
+   должна задерживать ученика — уходим на пэйволл в любом случае. */
+function saveEmail(email, source){
+  try{
+    const P = JSON.parse(localStorage.getItem('admitmap_profile')||'null') || {};
+    P.email = email; localStorage.setItem('admitmap_profile', JSON.stringify(P));
+    localStorage.setItem('admitmap_account', JSON.stringify({email:email, ts:Date.now()}));
+    const body = JSON.stringify({email:email, name:P.name||'', gradYear:P.gradYear||'', source:source});
+    if(navigator.sendBeacon){
+      navigator.sendBeacon('/api/subscribe', new Blob([body], {type:'application/json'}));
+    }else{
+      fetch('/api/subscribe', {method:'POST', headers:{'Content-Type':'application/json'}, body:body, keepalive:true}).catch(()=>{});
+    }
+  }catch(err){}
+}
+
 function createAccount(e){
   e.preventDefault();
-  try{
-    localStorage.setItem('admitmap_account', JSON.stringify({
-      email: document.getElementById('email').value.trim(), ts: Date.now()
-    }));
-  }catch(err){}
+  const email = document.getElementById('email').value.trim();
+  saveEmail(email, 'signup');
   window.location.href = 'paywall.html';
   return false;
 }

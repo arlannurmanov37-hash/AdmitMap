@@ -143,3 +143,28 @@ export function safeDetail(err) {
     .replace(/(sk-ant|sk|polar_oat|ghp)[-_][A-Za-z0-9_-]{6,}/gi, '[redacted]')
     .trim().slice(0, 300);
 }
+
+/* Добавить адрес в список рассылки Resend. Используют api/subscribe (форма) и
+   api/verify (почта покупателя из Polar). Ошибки не бросает: рассылка не должна
+   ломать ни воронку, ни выдачу отчёта. */
+export async function addContact(email, opts = {}) {
+  const addr = String(email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(addr)) return { ok: false, error: 'bad email' };
+  const key = process.env.RESEND_API_KEY, audience = process.env.RESEND_AUDIENCE_ID;
+  if (!key || !audience) {
+    console.warn('addContact: RESEND not configured —', addr, opts.source || '');
+    return { ok: false, error: 'not configured' };
+  }
+  try {
+    const r = await fetch(`https://api.resend.com/audiences/${encodeURIComponent(audience)}/contacts`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: addr, first_name: opts.first, last_name: opts.last, unsubscribed: false })
+    });
+    if (!r.ok && r.status !== 409) console.error('addContact failed', r.status, (await r.text()).slice(0, 200));
+    return { ok: r.ok || r.status === 409 };
+  } catch (e) {
+    console.error('addContact failed', safeDetail(e));
+    return { ok: false };
+  }
+}
