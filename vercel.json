@@ -9,7 +9,7 @@
     },
     {
       "source": "/favicon.ico",
-      "destination": "/assets/icon-512.png"
+      "destination": "/assets/icon-192.png"
     }
   ],
   "headers": [
