@@ -2335,7 +2335,7 @@ function vActivities(){
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></span>
       <span><span class="c-t">Activities</span><span class="c-s">at least three, most important first</span></span></div>
     <div id="acts">${S.activities.map((a,i)=>actRow(a,i)).join('')}</div>
-    ${S.activities.length<10 ? `<button class="btn-dash" style="width:100%" onclick="S.activities.push(BLANK_ACT());save();render()">+ Add another activity</button>`
+    ${S.activities.length<10 ? `<button class="btn-dash" style="width:100%" onclick="addRow('activities')">+ Add another activity</button>`
       : `<div class="c-s" style="text-align:center;padding:6px 0">10 activities, the Common App maximum</div>`}
     <div class="err" id="e-act">Add at least one activity.</div>
   </div>`;
@@ -2346,7 +2346,7 @@ function actRow(a,i){
   const d=(a.desc||'').length;
   return `<div class="rep">
     <div class="rep-h"><span class="rep-n">Activity ${i+1}</span>
-      ${i>0?`<button class="rep-x" onclick="S.activities.splice(${i},1);save();render()">Remove</button>`:''}</div>
+      ${i>0?`<button class="rep-x" onclick="removeRow('activities',${i})">Remove</button>`:''}</div>
 
     <div class="fg"><span class="fl">Activity or experience type</span>
       <select class="fi" onchange="S.activities[${i}].type=this.value;save()">
@@ -2384,7 +2384,7 @@ function vHonors(){
       <span><span class="c-t">Honors &amp; awards</span></span></div>
     <div id="hons">${S.honors.map((h,i)=>`<div class="rep">
       <div class="rep-h"><span class="rep-n">Honor ${i+1}</span>
-        <button class="rep-x" onclick="S.honors.splice(${i},1);save();render()">Remove</button></div>
+        <button class="rep-x" onclick="removeRow('honors',${i})">Remove</button></div>
 
       <div class="fg"><span class="fl">Title</span>
         <input class="fi" maxlength="100" placeholder="e.g. State Science Fair, 1st of 240 projects" value="${esc(h.title)}"
@@ -2396,7 +2396,7 @@ function vHonors(){
       <span class="sub-q">Level of recognition <em>pick all that apply</em></span>
       <div class="opts">${chips(REC_LEVELS, h.levels||[], `S.honors[${i}].levels`)}</div>
     </div>`).join('')}</div>
-    ${S.honors.length<5 ? `<button class="btn-dash" style="width:100%" onclick="S.honors.push(BLANK_HON());save();render()">+ Add an honor</button>`
+    ${S.honors.length<5 ? `<button class="btn-dash" style="width:100%" onclick="addRow('honors')">+ Add an honor</button>`
       : `<div class="c-s" style="text-align:center;padding:6px 0">5 honors, the Common App maximum</div>`}
   </div>`;
 }
@@ -2689,7 +2689,11 @@ function mvAcademics(){
 const MVIEWS = [mvBasics, mvAcademics];
 const isPhone = () => window.matchMedia('(max-width:760px)').matches;
 
-function render(){
+/* Перерисовка шага меняет всю разметку, и страница прыгала наверх при каждом
+   «Add another activity» или «Remove». Позицию сохраняем; наверх уходим только
+   при смене шага — render({toTop:true}). */
+function render(opts){
+  const keepY = (opts && opts.toTop) ? 0 : window.scrollY;
   const st=STEPS[step];
   /* Разметка та же, что была: десктоп ничего не теряет. Префикс «Step N · »
      вынесен в отдельный span, а data-step на контейнере позволяет телефону
@@ -2710,16 +2714,27 @@ function render(){
   markSeen(step);
   paintSteps(); paintProgress();
   document.getElementById('main').scrollTop = 0;
+  window.scrollTo(0, keepY);
 }
-function goto(i){ if(i<=step || valid(step)){ step=i; render(); } }
-function prev(){ if(step>0){ step--; render(); } }
+
+/* Добавление и удаление строк: позиция на месте, курсор — в новое поле. */
+function addRow(list){
+  S[list].push(list==='activities' ? BLANK_ACT() : BLANK_HON());
+  save(); render();
+  const rows = document.querySelectorAll('#'+(list==='activities'?'acts':'hons')+' .rep');
+  const last = rows[rows.length-1];
+  if(last){ const f = last.querySelector('input.fi, select.fi'); if(f) f.focus({preventScroll:true}); }
+}
+function removeRow(list, i){ S[list].splice(i,1); save(); render(); }
+function goto(i){ if(i<=step || valid(step)){ step=i; render({toTop:true}); } }
+function prev(){ if(step>0){ step--; render({toTop:true}); } }
 function next(){
   /* Событие на неудачную валидацию тоже важно: если люди упираются в один
      и тот же шаг, это видно только так. */
   if(!valid(step)){ track('funnel_blocked', {step:step+1, name:STEPS[step].k}); return; }
   track('funnel_step_done', {step:step+1, name:STEPS[step].k});
   if(backTo){ save(); window.location.href = backTo; return; }
-  if(step<STEPS.length-1){ step++; render(); return; }
+  if(step<STEPS.length-1){ step++; render({toTop:true}); return; }
   S.completedAt=new Date().toISOString(); save();
   track('funnel_complete', {schools:S.schools.length, activities:S.activities.filter(a=>(a.desc||'').trim()).length});
   window.location.href='loading.html';
