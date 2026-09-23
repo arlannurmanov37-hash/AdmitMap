@@ -469,6 +469,66 @@ document.addEventListener('DOMContentLoaded', async function() {
     host.style.height = Math.ceil(art.offsetHeight * z) + 'px';
   }
 
+  /* Сохранение в PDF — через печать браузера: текст остаётся текстом, а не
+     картинкой, и не нужны тяжёлые библиотеки. Печатаем на A4: макет шириной
+     1080px уменьшаем под ширину листа и запрещаем разрывы внутри карточек,
+     иначе Safari режет их пополам. */
+  var PRINT_SCALE = 0.67;                       // 1080px → ширина A4 с полями 8мм
+  function printPdf() {
+    var host = document.querySelector('#dc-root .sc-host');
+    var art = host && host.firstElementChild;
+    if (!art) { window.print(); return; }
+
+    var keep = [];
+    function noBreak(el) {
+      keep.push([el, el.style.breakInside, el.style.pageBreakInside]);
+      el.style.breakInside = 'avoid';
+      el.style.pageBreakInside = 'avoid';
+    }
+    [].slice.call(art.querySelectorAll('section, [data-am-head]')).forEach(noBreak);
+    [].slice.call(art.querySelectorAll('[data-count]')).forEach(function (c) {
+      if (c.parentElement && c.parentElement.parentElement) noBreak(c.parentElement.parentElement);
+    });
+
+    var st = document.getElementById('am-print');
+    if (!st) { st = document.createElement('style'); st.id = 'am-print'; document.head.appendChild(st); }
+    st.textContent =
+      '@media print{' +
+        '@page{size:A4 portrait;margin:8mm}' +
+        'html,body{background:#fff!important;margin:0!important;padding:0!important}' +
+        '#dc-root{padding:0!important;zoom:1!important}' +
+        '#dc-root>.sc-host{overflow:visible!important;height:' +
+          Math.ceil(art.offsetHeight * PRINT_SCALE) + 'px!important}' +
+        '#dc-root>.sc-host>div{transform:scale(' + PRINT_SCALE + ')!important;' +
+          'transform-origin:top left!important;margin:0!important;border-radius:0!important;' +
+          'box-shadow:none!important;border:0!important}' +
+        '#am-pdf{display:none!important}' +
+      '}';
+
+    var restore = function () {
+      keep.forEach(function (k) { k[0].style.breakInside = k[1]; k[0].style.pageBreakInside = k[2]; });
+      keep = [];
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
+    setTimeout(restore, 60000);                 // Safari не всегда шлёт afterprint
+    window.print();
+  }
+
+  function addPdfButton() {
+    if (document.getElementById('am-pdf')) return;
+    var b = document.createElement('button');
+    b.id = 'am-pdf';
+    b.type = 'button';
+    b.textContent = 'Download PDF';
+    b.style.cssText = 'position:fixed;right:22px;bottom:22px;z-index:2147482000;border:0;' +
+      'padding:14px 20px;border-radius:13px;background:#2563eb;color:#fff;font-size:14px;' +
+      "font-weight:800;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;" +
+      'cursor:pointer;box-shadow:0 2px 0 #1d4ed8,0 10px 24px rgba(37,99,235,.35)';
+    b.addEventListener('click', printPdf);
+    document.body.appendChild(b);
+  }
+
   function inject() {
     var head = document.head || document.documentElement;
     if (head && !document.getElementById('am-center')) {
@@ -495,6 +555,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       (document.head || document.documentElement).appendChild(ic);
     }
     fit();
+    addPdfButton();
   }
 
   window.addEventListener('resize', fit);
@@ -511,7 +572,7 @@ document.addEventListener('DOMContentLoaded', async function() {
      справочники и модель, затем заполняем готовые узлы настоящими
      числами. Профиля нет — на экране остаётся образец Майи. */
   var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'scoring.js', 'report-personalize.js'];
-  var V = '20260923201000';
+  var V = '20260923220000';
 
   function loadNext(i, done) {
     if (i >= SCRIPTS.length) return done();
