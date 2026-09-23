@@ -126,7 +126,7 @@ client = anthropic.Anthropic()
 
 
 def call(system, schema, user):
-    """Тот же запрос, что делает сайт: Opus 5, адаптивное размышление, effort high,
+    """Тот же запрос, что делает сайт: Opus 5, адаптивное размышление, effort medium,
     строгая JSON-схема."""
     t = time.time()
     msg = client.messages.create(
@@ -136,7 +136,7 @@ def call(system, schema, user):
         thinking={"type": "adaptive"},
         messages=[{"role": "user", "content": user}],
         extra_body={
-            "output_config": {"effort": "high", "format": {"type": "json_schema", "schema": schema}},
+            "output_config": {"effort": "medium", "format": {"type": "json_schema", "schema": schema}},
         },
     )
     if msg.stop_reason == "refusal":

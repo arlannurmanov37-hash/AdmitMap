@@ -97,7 +97,9 @@ export default async function handler(req, res) {
       system: SYSTEM,
       thinking: { type: 'adaptive' },
       output_config: {
-        effort: 'high',
+        // medium вместо high: модель думает меньше, ответ по строгой схеме
+        // почти не меняется, а запрос дешевле примерно вдвое
+        effort: 'medium',
         format: { type: 'json_schema', schema: SCHEMA },
       },
       messages: [{ role: 'user', content: `${context}\n\n---\n\n${text}` }],

@@ -111,7 +111,9 @@ export default async function handler(req, res) {
       system: SYSTEM,
       thinking: { type: 'adaptive' },
       output_config: {
-        effort: 'high',
+        // medium вместо high: модель думает меньше, ответ по строгой схеме
+        // почти не меняется, а запрос дешевле примерно вдвое
+        effort: 'medium',
         format: { type: 'json_schema', schema: SCHEMA }
       },
       messages: [{ role: 'user', content: `${list.length} honor${list.length === 1 ? '' : 's'}:\n\n${rendered}` }]
