@@ -35,6 +35,17 @@
 
 /* Кольцо 152px съедало сорок процентов узкого экрана, и текст справа
    ломался на три строки. На телефоне ужимаем его — строка становится шире. */
+/* Макет нарисован телефоном (402×874). На компьютере это узкая полоса во весь
+   экран — показываем его карточкой по центру страницы. */
+@media(min-width:700px){
+  html,body{background:#dbe9fb}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+  [data-screen-label="Loading"]{
+    width:460px!important;height:auto!important;min-height:620px;
+    border:1px solid rgba(15,31,75,.10)!important;border-radius:24px;
+    box-shadow:0 1px 2px rgba(15,31,75,.06),0 10px 24px rgba(15,31,75,.10),0 34px 70px rgba(15,31,75,.14);
+    padding-bottom:26px}
+}
 @media(max-width:430px){
   #ld-ringwrap{width:104px!important;height:104px!important}
   #ld-ringwrap>svg{width:104px;height:104px}
