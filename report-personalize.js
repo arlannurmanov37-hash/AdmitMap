@@ -500,6 +500,8 @@ function daysToNov1() {
    выглядят как ошибка. Всё остальное у Майи не меняется. */
 function freshenSample() {
   dropEarnings();
+  var first = document.querySelector('[data-count]');
+  if (first) { markHeads(first.parentElement.parentElement.parentElement); relayout(); }
   var date = document.querySelector('[data-am-date]');
   if (date) setText(date, new Date().toLocaleDateString('en-GB',
     { day: 'numeric', month: 'long', year: 'numeric' }));
@@ -525,21 +527,33 @@ function tierOf(r) {
 /* В макете секция — плоская сетка: заголовок группы, её карточки, следующий
    заголовок… Карточки заполняются по порядку, поэтому раскладываем их по
    группам заново, а пустые группы прячем. */
-function groupCards(cards) {
-  var tags = byText(/^(dream|match|safety)$/i, 'span');
-  if (!tags.length || !cards.length) return;
-  var grid = cards[0].parentElement;
+/* Заголовки групп помечаем явно: по стилю их не отличить — Safari пишет
+   grid-column как grid-column-start/-end, и заголовок принимается за карточку. */
+function markHeads(grid) {
   var heads = {};
-  tags.forEach(function (t) {
+  byText(/^(dream|match|safety)$/i, 'span').forEach(function (t) {
     var h = t.parentElement;
     while (h && h.parentElement !== grid) h = h.parentElement;
     if (h) { heads[t.textContent.trim().toLowerCase()] = h; h.setAttribute('data-am-head', '1'); }
   });
+  return heads;
+}
+
+function groupCards(cards) {
+  if (!cards.length) return;
+  var grid = cards[0].parentElement;
+  var heads = markHeads(grid);
+  if (!Object.keys(heads).length) return;
+  var firstHead = null;
   ['dream', 'match', 'safety'].forEach(function (g) {
     var h = heads[g];
     var mine = cards.filter(function (c) { return c.getAttribute('data-am-tier') === g; });
     if (!h) return;
-    h.style.display = mine.length ? '' : 'none';
+    // у заголовка свой inline display:flex — запоминаем его, иначе строка
+    // становится обычным блоком: текст липнет к верху, а линия ломается
+    if (h.dataset.amDisplay == null) h.dataset.amDisplay = h.style.display;
+    h.style.display = mine.length ? h.dataset.amDisplay : 'none';
+    if (mine.length && !firstHead) firstHead = h;
     grid.appendChild(h);
     mine.forEach(function (c) { grid.appendChild(c); });
     var cnt = $$('span', h).filter(function (e) {
@@ -547,6 +561,9 @@ function groupCards(cards) {
     })[0];
     if (cnt) setText(cnt, mine.length + (mine.length === 1 ? ' school' : ' schools'));
   });
+  /* Первый заголовок стоит сразу под названием раздела и прилипает к нему:
+     сверху 1px, снизу 26px. Опускаем его на середину этого промежутка. */
+  if (firstHead) firstHead.style.paddingTop = '12px';
 }
 
 function fillCards(D) {
@@ -573,6 +590,10 @@ function fillCards(D) {
       nodes[2].style.display = 'block';
     }
     card.style.minWidth = '0';
+    /* Карточка растягивается на всю высоту ряда: содержимое распределяется
+       space-between, и внутри появляется воздух, как в макете. Без этого
+       карточка сжимается по содержимому, а под ней остаётся пустота. */
+    card.style.height = '100%';
     setText(nodes[3], r.round);
     if (nodes[3]) nodes[3].style.color = '#5f7292';     // синий был у ED-карточек образца
     if (nodes[4]) {
@@ -969,6 +990,11 @@ function relayout() {
   }
   var gOrig = px(grid.dataset.amRows), oOrig = px(outer.dataset.amRows);
   var HEAD = gOrig[0], CARD = gOrig[1];
+  /* Карточка растягивается на высоту ряда, а содержимое расходится
+     space-between. В макете со строкой «Median pay» ряда 209px хватало; без неё
+     внутри остаётся мало воздуха, поэтому даём ряду +26px. */
+  CARD += 26;
+
   var gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
 
   var rows = [], pending = 0;
