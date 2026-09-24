@@ -571,8 +571,8 @@ document.addEventListener('DOMContentLoaded', async function() {
      подставлять данные можно только ПОСЛЕ него. Ждём #dc-root, грузим
      справочники и модель, затем заполняем готовые узлы настоящими
      числами. Профиля нет — на экране остаётся образец Майи. */
-  var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'scoring.js', 'report-personalize.js'];
-  var V = '20260924011500';
+  var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'scoring.js', 'profile-sync.js', 'report-personalize.js'];
+  var V = '20260924150000';
 
   function loadNext(i, done) {
     if (i >= SCRIPTS.length) return done();

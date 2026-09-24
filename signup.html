@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Create your account · AdmitMap</title>
   <script src="/analytics.js" defer></script>
+  <script src="/profile-sync.js?v=1" defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -238,6 +239,7 @@ function saveEmail(email, source){
     const P = JSON.parse(localStorage.getItem('admitmap_profile')||'null') || {};
     P.email = email; localStorage.setItem('admitmap_profile', JSON.stringify(P));
     localStorage.setItem('admitmap_account', JSON.stringify({email:email, ts:Date.now()}));
+    if(window.amSave) window.amSave('signup_done', {method: source});
     const body = JSON.stringify({email:email, name:P.name||'', gradYear:P.gradYear||'', source:source});
     if(navigator.sendBeacon){
       navigator.sendBeacon('/api/subscribe', new Blob([body], {type:'application/json'}));

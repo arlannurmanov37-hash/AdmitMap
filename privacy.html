@@ -203,6 +203,10 @@
                     timestamps. This is used for security, abuse prevention, and debugging.</li>
                 <li><strong>Local storage.</strong> Your progress through the funnel is saved inside your own
                     browser so you do not lose your work. See <a href="#local">section 6</a>.</li>
+                <li><strong>Your progress through the Service.</strong> As you complete each step, we record which
+                    steps you reached (for example, which part of the form you finished, whether you saw the prices,
+                    and whether you opened your report), with the time and whether you used a phone or a computer.
+                    It is linked to a random ID stored in your browser.</li>
             </ul>
 
             <h3>Information we deliberately do not collect</h3>
@@ -246,6 +250,10 @@
                     <tr>
                         <td>Security, fraud prevention, abuse and rate-limit enforcement</td>
                         <td>Legitimate interests in protecting the Service</td>
+                    </tr>
+                    <tr>
+                        <td>See where people stop filling in the form, so we can fix steps that are confusing</td>
+                        <td>Legitimate interests in improving the Service</td>
                     </tr>
                     <tr>
                         <td>Improve our models, data quality and interface using aggregated, non-identifying
@@ -293,9 +301,10 @@
                     storage</strong> — a storage area on your own device, under keys such as
                 <code>admitmap_profile</code>. This is what stops you losing your work if you refresh or close the
                 tab.</p>
-            <p>Data held there stays on that device, in that browser. Clearing your browser data deletes it
-                permanently, including for us — we cannot recover it. Once you create an account, your profile is
-                also saved on our servers so you can return to it from another device.</p></div>
+            <p>As you complete each step, the answers you have entered are also saved on our servers, together
+                with the steps you reached, so we can produce your report and see where the form is confusing.
+                Essay text is never included — only its word count. Clearing your browser data deletes the copy on
+                your device, but not the copy on our servers; to delete that, see <a href="#delete">section 14</a>.</p></div>
       </section>
       <section id="share"><b>07</b><h2>Who we share your information with</h2>
         <div class="lg-body"><p>We share only what is necessary, only with the providers that run the Service:</p>
@@ -330,10 +339,10 @@
                         <td>Your email, billing details and payment information, handled directly by them</td>
                     </tr>
                     <tr>
-                        <td>Database provider</td>
-                        <td>Storing account profiles</td>
-                        <td>Account and academic profile data. <em>The specific provider is named here once
-                                accounts launch.</em></td>
+                        <td>Supabase</td>
+                        <td>Database that stores student profiles</td>
+                        <td>The answers you enter (never essay text), your email if you give it, and the steps you
+                            reached. Stored in the United States.</td>
                     </tr>
                     <tr>
                         <td>Advertising platforms</td>
@@ -443,8 +452,8 @@
                         <td>Not retained — discarded immediately after grading</td>
                     </tr>
                     <tr>
-                        <td>Account and academic profile</td>
-                        <td>While your account is open, and for 12 months after your last sign-in, then deleted</td>
+                        <td>Account and academic profile, and the steps you reached</td>
+                        <td>12 months after your last visit, then deleted automatically</td>
                     </tr>
                     <tr>
                         <td>Generated reports and scores</td>
@@ -527,10 +536,10 @@
                 confirm that in writing.</p></div>
       </section>
       <section id="delete"><b>14</b><h2>How to delete your data</h2>
-        <div class="lg-body"><p>Two ways, and both work:</p>
+        <div class="lg-body"><p>There are two parts to delete:</p>
             <ul>
-                <li><strong>Clear your browser data.</strong> This permanently removes everything held locally on
-                    that device.</li>
+                <li><strong>Clear your browser data.</strong> This permanently removes the copy held on that
+                    device. It does not remove the copy on our servers.</li>
                 <li><strong>Email <a href="mailto:support@admitmap.app">support@admitmap.app</a></strong> asking us
                     to delete your account. We erase your account, academic profile, school list, scores and reports
                     from our systems, and confirm when it is done.</li>

@@ -178,3 +178,30 @@ export async function addContact(email, opts = {}) {
     return { ok: false };
   }
 }
+
+/* ── Supabase: ученики и их путь по воронке ─────────────────────────
+   Одна RPC-функция track_student (см. supabase/schema.sql) обновляет строку
+   ученика и пишет событие в журнал. Ключ секретный, живёт только здесь.
+   Новые ключи (sb_secret_…) идут только в заголовке apikey; старый JWT
+   service_role — ещё и в Authorization. Ошибки не бросает: база не должна
+   ломать ни воронку, ни отчёт. */
+export async function trackStudent(row) {
+  const url = String(process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '');
+  const key = String(process.env.SUPABASE_SERVICE_KEY || '').trim();
+  if (!url || !key) {
+    console.warn('trackStudent: Supabase not configured');
+    return { ok: false, error: 'not configured' };
+  }
+  const headers = { apikey: key, 'Content-Type': 'application/json' };
+  if (key.startsWith('eyJ')) headers.Authorization = `Bearer ${key}`;
+  try {
+    const r = await fetch(`${url}/rest/v1/rpc/track_student`, {
+      method: 'POST', headers, body: JSON.stringify({ p: row })
+    });
+    if (!r.ok) console.error('trackStudent failed', r.status, (await r.text()).slice(0, 300));
+    return { ok: r.ok };
+  } catch (e) {
+    console.error('trackStudent failed', safeDetail(e));
+    return { ok: false };
+  }
+}

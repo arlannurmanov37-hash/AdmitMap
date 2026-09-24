@@ -124,7 +124,9 @@ function purchase() {
   if (!id) return Promise.resolve(null);
   if (saved && saved.id === id && saved.price) return Promise.resolve(saved);
   var attempt = function (n) {
-    return post('/api/verify', { checkout_id: id }, 15000).then(function (r) {
+    var sid = null;
+    try { sid = localStorage.getItem('admitmap_uid'); } catch (e) {}
+    return post('/api/verify', { checkout_id: id, student_id: sid }, 15000).then(function (r) {
       if (r.ok) {
         var p = { id: id, tier: r.tier, price: r.price };
         store('admitmap_purchase', p);
@@ -1071,6 +1073,7 @@ function run() {
       return true;
     }
     PURCHASE = p;
+    if (window.amSave) window.amSave('report_view', { tier: p.price || null });
     /* Оценка эссе и активностей идёт и без оплаты (запросы только с admitmap.app).
        Локально сервера нет — только с имитацией. */
     return (SC.canScore() ? scoreProfile(P, p.id || '') : Promise.resolve()).then(personalize);
