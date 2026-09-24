@@ -30,6 +30,16 @@
     } catch (e) { return null; }
   }
 
+  /* Телефон это или компьютер — по самому устройству, а не по ширине окна:
+     узкое окно браузера на ноутбуке записывалось как «mobile».
+     iPad в Safari представляется Mac'ом, его выдаёт сенсорный экран. */
+  function device() {
+    var ua = navigator.userAgent || '';
+    if (/Mobi|Android|iPhone|iPod|iPad/i.test(ua)) return 'mobile';
+    if (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) return 'mobile';
+    return 'desktop';
+  }
+
   function read(key) {
     try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; }
   }
@@ -48,7 +58,7 @@
     }
     var body = JSON.stringify({
       id: id, event: event, detail: detail || {}, profile: P, essayWords: essayWords,
-      email: acct.email || '', device: (w.innerWidth || 1024) < 768 ? 'mobile' : 'desktop'
+      email: acct.email || '', device: device()
     });
     if (isLocal()) { if (w.__amDebug) console.log('[student]', event, detail); return; }
     try {

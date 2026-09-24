@@ -36,8 +36,7 @@
 /* Кольцо 152px съедало сорок процентов узкого экрана, и текст справа
    ломался на три строки. На телефоне ужимаем его — строка становится шире. */
 /* Макет нарисован телефоном (402×874). На среднем экране показываем его
-   карточкой по центру, на широком — в две колонки: слева прогресс и шаги,
-   справа предпросмотр отчёта. */
+   карточкой по центру, на широком — широкой карточкой по центру. */
 @media(min-width:700px){
   html,body{background:#dbe9fb}
   body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px}
@@ -48,16 +47,25 @@
     padding-bottom:26px}
 }
 @media(min-width:1040px){
+  /* Ноутбук: широкая карточка по центру, по бокам свободное место. Сверху
+     кольцо и заголовок в строку, под ними шаги в две колонки, внизу
+     предпросмотр отчёта, уходящий за нижний край карточки. */
+  body{padding:28px 24px}
   [data-screen-label="Loading"]{
-    width:1000px!important;min-height:0;height:auto!important;
-    display:grid!important;grid-template-columns:470px 1fr;align-items:stretch;
-    padding-bottom:0!important;overflow:hidden}
-  [data-screen-label="Loading"]>div:nth-of-type(1){padding:34px 32px 36px;gap:26px}
-  [data-screen-label="Loading"]>div:nth-of-type(2){
-    margin:0!important;border-radius:0!important;border-left:1px solid #e8eef8;
-    padding:26px 24px 28px}
-  #ld-ringwrap{width:168px!important;height:168px!important}
-  #ld-ringwrap>svg{width:168px;height:168px}
+    width:960px!important;min-height:0;height:min(900px,calc(100vh - 56px))!important;
+    padding-bottom:0!important}
+  [data-screen-label="Loading"]>div:nth-of-type(1){padding:40px 56px 34px;gap:30px}
+  #ld-row{gap:48px!important}
+  #ld-ringwrap{width:216px!important;height:216px!important}
+  #ld-ringwrap>svg{width:216px;height:216px}
+  #ld-pct{font-size:64px!important}
+  #ld-ana{font-size:11px!important}
+  #ld-row h1{font-size:46px!important;white-space:nowrap}
+  #ld-row h1+span{font-size:17px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3){
+    display:grid!important;grid-template-columns:1fr 1fr;column-gap:40px;row-gap:16px;padding-top:26px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3)>span{font-size:16px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(2){margin:0 56px!important;padding:28px 30px 0!important;gap:14px!important}
 }
 @media(max-width:430px){
   #ld-ringwrap{width:104px!important;height:104px!important}
