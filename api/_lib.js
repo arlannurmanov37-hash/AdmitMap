@@ -201,9 +201,12 @@ export async function trackStudent(row) {
     if (r.ok) return { ok: true };
     const text = (await r.text()).slice(0, 300);
     console.error('trackStudent failed', r.status, text);
-    let code = '';
-    try { code = JSON.parse(text).code || ''; } catch (e) {}
-    return { ok: false, error: `db ${r.status} ${code}`.trim() };
+    let code = '', msg = '';
+    try { const j = JSON.parse(text); code = j.code || ''; msg = String(j.message || j.msg || '').slice(0, 80); } catch (e) {}
+    // вид ключа без самого ключа: помогает понять, тот ли ключ вставлен в Vercel
+    const kind = key.startsWith('sb_secret_') ? 'secret' : key.startsWith('sb_publishable_') ? 'publishable'
+      : key.startsWith('eyJ') ? 'jwt' : 'unknown';
+    return { ok: false, error: `db ${r.status} ${code} ${msg} [key:${kind}/${key.length}]`.replace(/\s+/g, ' ').trim() };
   } catch (e) {
     console.error('trackStudent failed', safeDetail(e));
     return { ok: false, error: 'db unreachable' };
