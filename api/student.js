@@ -86,5 +86,6 @@ export default async function handler(req, res) {
   });
 
   const r = await trackStudent(row);
-  return res.status(200).json({ ok: true, stored: !!r.ok });
+  // причина без подробностей (код ответа базы) — чтобы чинить без доступа к логам
+  return res.status(200).json(r.ok ? { ok: true, stored: true } : { ok: true, stored: false, reason: r.error || '' });
 }

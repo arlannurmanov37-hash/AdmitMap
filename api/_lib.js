@@ -198,10 +198,14 @@ export async function trackStudent(row) {
     const r = await fetch(`${url}/rest/v1/rpc/track_student`, {
       method: 'POST', headers, body: JSON.stringify({ p: row })
     });
-    if (!r.ok) console.error('trackStudent failed', r.status, (await r.text()).slice(0, 300));
-    return { ok: r.ok };
+    if (r.ok) return { ok: true };
+    const text = (await r.text()).slice(0, 300);
+    console.error('trackStudent failed', r.status, text);
+    let code = '';
+    try { code = JSON.parse(text).code || ''; } catch (e) {}
+    return { ok: false, error: `db ${r.status} ${code}`.trim() };
   } catch (e) {
     console.error('trackStudent failed', safeDetail(e));
-    return { ok: false };
+    return { ok: false, error: 'db unreachable' };
   }
 }
