@@ -2110,12 +2110,12 @@ const SCHOOL_ALIASES = {mit:'Massachusetts Institute of Technology',caltech:'Cal
 
 const STEPS = [
   {k:'basics',    n:'Basics',     eyebrow:'Basics',     h1:'Let’s start with you.',      sub:'A few basics so every number in your report is scored against the right class year.'},
-  {k:'academics', n:'Academics',  eyebrow:'Academics',  h1:'Your academic record.',            sub:'GPA, test scores and course rigor carry the most weight in your admission probability.'},
-  {k:'activities',n:'Activities', eyebrow:'Activities', h1:'What you do outside class',            sub:'Depth beats length. Three real commitments read stronger than ten club memberships.'},
-  {k:'financial', n:'Financial',  eyebrow:'Financial',  h1:'Cost and Financial Aid',  sub:'Optional. Answer two questions and every school on your list gets a real price instead of a sticker one.'},
+  {k:'academics', n:'Academics',  eyebrow:'Academics',  h1:'Your academic record.',            sub:'Your grades, test scores and the courses you took.'},
+  {k:'activities',n:'Activities', eyebrow:'Activities', h1:'What you do outside class',            sub:''},
+  {k:'financial', n:'Financial',  eyebrow:'Financial',  h1:'Cost and Financial Aid',  sub:'See what each school would actually cost your family after aid.'},
   {k:'honors',    n:'Honors',     eyebrow:'Honors',     h1:'Honors and awards.',               sub:'Recognition level matters far more than the count. It is fine to have none.'},
-  {k:'schools',   n:'Schools',    eyebrow:'Schools',    h1:'Your school list.',                sub:'Add up to 10. Include reaches and safeties — a list of only reaches tells you nothing.'},
-  {k:'essay',     n:'Essay',      eyebrow:'Essay',      h1:'Your personal statement.',         sub:'Optional, but it moves your odds at selective schools. A rough draft is enough.'}
+  {k:'schools',   n:'Schools',    eyebrow:'Schools',    h1:'Your school list.',                sub:'Up to 10 schools. A balanced list gives you the most honest picture.'},
+  {k:'essay',     n:'Essay',      eyebrow:'Essay',      h1:'Your personal statement.',         sub:'A strong essay lifts your odds at selective schools. A rough draft is enough.'}
 ];
 
 /* Структура записи повторяет Common App — так студенту нечего переписывать,
@@ -2295,7 +2295,8 @@ function vAcademics(){
     </div>
     <div class="card">
       <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/></svg></span>
-        <span><span class="c-t">Test scores</span><span class="c-s">leave both blank if you’re applying test-optional</span></span></div>
+        <span><span class="c-t">Test scores</span></span>
+        <span class="c-badge">Optional</span></div>
       <div class="fg"><label class="fl" for="f-sat">SAT composite <em>400–1600</em></label>
         <input class="fi" id="f-sat" inputmode="numeric" placeholder="1480" value="${esc(S.sat)}" oninput="S.sat=this.value;save()">
         <div class="err" id="e-sat">SAT must be between 400 and 1600.</div></div>
@@ -2331,10 +2332,10 @@ function addExam(){
 
 function vActivities(){
   return `<div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/></svg>
-    <p>List your most meaningful commitments first — the ones you would still do if nobody was watching.</p></div>
+    <p>List your most meaningful commitments first — depth beats length.</p></div>
   <div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></span>
-      <span><span class="c-t">Activities</span><span class="c-s">at least three, most important first</span></span></div>
+      <span><span class="c-t">Activities</span></span></div>
     <div id="acts">${S.activities.map((a,i)=>actRow(a,i)).join('')}</div>
     ${S.activities.length<10 ? `<button class="btn-dash" style="width:100%" onclick="addRow('activities')">+ Add another activity</button>`
       : `<div class="c-s" style="text-align:center;padding:6px 0">10 activities, the Common App maximum</div>`}
@@ -2469,7 +2470,7 @@ function vEssay(){
   const w=words(S.essay);
   return `<div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/></svg></span>
-      <span><span class="c-t">Which prompt?</span><span class="c-s">the Common App seven</span></span></div>
+      <span><span class="c-t">Which prompt?</span></span></div>
     <div class="prs">${PROMPTS.map((p,i)=>`<button class="pr ${S.essayPrompt===i?'on':''}" onclick="S.essayPrompt=${i};save();render()">
       <span class="pr-d"></span><span class="pr-t"><span class="pr-k">Prompt ${i+1}</span>${esc(p)}</span></button>`).join('')}</div>
   </div>
@@ -2704,7 +2705,7 @@ function render(opts){
   main.innerHTML =
     `<div class="m-head">
        <div><div class="m-eyebrow"><span class="m-step">Step ${step+1} · </span>${st.eyebrow}</div>
-         <h1 class="m-h1">${isPhone() ? st.h1.replace(/\.$/, '') : st.h1}</h1><p class="m-sub">${st.sub}</p></div>
+         <h1 class="m-h1">${isPhone() ? st.h1.replace(/\.$/, '') : st.h1}</h1>${st.sub ? `<p class="m-sub">${st.sub}</p>` : ''}</div>
        <span class="m-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>${Math.max(1, STEPS.length-step)} min left</span>
      </div>` + ((isPhone() && MVIEWS[step]) ? MVIEWS[step]() : VIEWS[step]());
   document.getElementById('back').style.visibility = step===0 ? 'hidden' : 'visible';

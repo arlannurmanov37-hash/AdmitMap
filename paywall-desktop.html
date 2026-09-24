@@ -72,13 +72,13 @@ ul{list-style:none;margin:0;padding:0}
 .x:hover{transform:translateY(2px);box-shadow:0 0 0 var(--lip)}
 .x svg{width:.875rem;height:.875rem}
 
-.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:.5rem}
+.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:1.125rem}
 .brand img{width:3rem;height:3rem;object-fit:contain}
 .brand-t{font-family:Fraunces,Georgia,serif;font-size:2.625rem;font-weight:900;
   letter-spacing:-.045em;color:var(--ink)}
 .brand-t span{color:var(--royal)}
 
-.eyebrow{display:flex;align-items:center;justify-content:center;gap:.875rem;margin-bottom:.5rem}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:.875rem;margin-bottom:1rem}
 .eyebrow i{width:2.125rem;height:2px;border-radius:2px;background:var(--royal);display:block}
 .eyebrow span{font-size:.6875rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--royal)}
 
@@ -195,10 +195,6 @@ h1 em{font-style:normal;color:var(--royal)}
 .legal a{color:var(--muted-3);text-decoration:none;transition:color .18s ease}
 .legal a:hover{color:var(--royal);text-decoration:underline}
 .legal span{color:var(--muted-3);font-weight:500;opacity:.55}
-.consent{margin:.75rem auto 0;max-width:34rem;text-align:center;font-size:.75rem;font-weight:500;
-  line-height:1.5;color:var(--muted-3)}
-.consent a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px}
-.consent a:hover{color:var(--royal)}
 
 @media(max-width:1100px){
   html{font-size:min(2.4vw,1.581vh)}
@@ -268,7 +264,7 @@ h1 em{font-style:normal;color:var(--royal)}
     </span>
 
     <div class="eyebrow f"><i></i><span id="eyebrow">Your report is ready</span><i></i></div>
-    <h1 class="u d1">See where you <em>actually stand.</em></h1>
+    <h1 class="u d1">Make the right <em>college list.</em></h1>
     <p class="sub f d2">Your chances at every school on your list, measured against the profile you actually
       have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
 
@@ -344,9 +340,6 @@ h1 em{font-style:normal;color:var(--royal)}
       Secured with 256-bit SSL · One payment, never a subscription
     </div>
 
-    <p class="consent f d6">By purchasing, you agree to our <a href="terms.html">Terms of Service</a>.
-      All sales are final, as described in our <a href="terms.html#refunds">Refund Policy</a>.</p>
-
     <nav class="legal f d6">
       <a href="terms.html">Terms of Service</a>
       <span>·</span>
@@ -421,6 +414,30 @@ function buy(tier){
 /* Просмотр пэйволла — знаменатель для конверсии в покупку. */
 if(window.amTrack) window.amTrack('paywall_view');
 else window.addEventListener('load', function(){ if(window.amTrack) window.amTrack('paywall_view'); });
+</script>
+<script>
+/* Ноутбук: страница целиком в окне, без прокрутки. Вёрстка в rem, поэтому
+   если содержимое выше окна, уменьшаем базовый размер шрифта ровно на
+   столько, сколько не хватает. На узких экранах (≤1100px) прокрутка нормальна. */
+(function(){
+  var root = document.documentElement;
+  function fitScreen(){
+    root.style.fontSize = '';
+    if (window.innerWidth <= 1100) return;
+    var wrap = document.querySelector('.wrap'), inn = document.querySelector('.in');
+    if (!wrap || !inn) return;
+    var cs = getComputedStyle(wrap);
+    var need = inn.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var have = window.innerHeight;
+    if (need <= have) return;
+    var base = parseFloat(getComputedStyle(root).fontSize);
+    root.style.fontSize = (base * have / need * 0.99).toFixed(3) + 'px';
+  }
+  fitScreen();
+  window.addEventListener('load', fitScreen);
+  window.addEventListener('resize', fitScreen);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitScreen);
+})();
 </script>
 </body>
 </html>
