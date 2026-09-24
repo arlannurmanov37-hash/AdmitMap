@@ -452,6 +452,11 @@ document.addEventListener('DOMContentLoaded', async function() {
      при zoom сжимал блоки, но не текст — всё налезало друг на друга.
      transform одинаково работает везде; высоту контейнера задаём сами,
      потому что transform места в потоке не освобождает. */
+  /* Масштаб экрана и вёрстка для PDF живут в одном <style id="am-fit">.
+     Раньше экранный масштаб писался в style элемента с !important — такие
+     правила сильнее любых правил печати, и PDF выходил сдвинутым вправо
+     и обрезанным. Теперь экран — в @media screen, печать — в @media print. */
+  var PRINT_W = 794;                            // ширина A4 при 96 dpi
   function fit() {
     var root = document.getElementById('dc-root');
     var host = root && root.querySelector('.sc-host');
@@ -462,58 +467,62 @@ document.addEventListener('DOMContentLoaded', async function() {
     var avail = host.clientWidth;
     if (!avail) return;
     var z = Math.min(0.85, avail / ART_W);
-    art.style.setProperty('transform-origin', 'top left', 'important');
-    art.style.setProperty('transform', 'scale(' + z.toFixed(4) + ')', 'important');
-    art.style.setProperty('margin-left', Math.max(0, (avail - ART_W * z) / 2) + 'px', 'important');
-    art.style.setProperty('margin-right', '0', 'important');
-    host.style.height = Math.ceil(art.offsetHeight * z) + 'px';
+    var pz = PRINT_W / ART_W;
+    var h = art.offsetHeight;
+    var st = document.getElementById('am-fit');
+    if (!st) { st = document.createElement('style'); st.id = 'am-fit'; (document.head || document.documentElement).appendChild(st); }
+    st.textContent =
+      '@media screen{#dc-root>.sc-host>div{transform:scale(' + z.toFixed(4) + ')!important;' +
+        'transform-origin:top left!important;margin-left:' + Math.max(0, (avail - ART_W * z) / 2) + 'px!important;' +
+        'margin-right:0!important}}' +
+      /* PDF — одна длинная страница шириной A4, ровно как лист на экране:
+         без разрывов посреди карточек, без полей и без строк браузера
+         (дата, адрес, номер страницы печатаются только в полях). */
+      '@media print{' +
+        '@page{size:' + PRINT_W + 'px ' + Math.ceil(h * pz + 2) + 'px;margin:0}' +
+        '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}' +
+        /* Анимации появления (amIn, amFade, amGrow) при печати застывают на
+           полпути: полупрозрачные блоки Preview рисует тёмными прямоугольниками.
+           Без анимации всё сразу в конечном виде. */
+        '#dc-root *{animation:none!important;transition:none!important}' +
+        /* Размытые тени Chrome кладёт в PDF картинкой с прозрачностью, и Preview
+           на Mac рисует их тёмными прямоугольниками. У карточек есть рамка —
+           без тени они читаются так же. */
+        '#dc-root *{box-shadow:none!important;text-shadow:none!important}' +
+        'html,body{background:#dbe9fb!important;margin:0!important;padding:0!important}' +
+        '#dc-root{padding:0!important;zoom:1!important}' +
+        '#dc-root>.sc-host{overflow:visible!important;height:auto!important}' +
+        '#dc-root>.sc-host>div{transform:none!important;zoom:' + pz.toFixed(4) + '!important;margin:0!important;' +
+          'border-radius:0!important;box-shadow:none!important;border:0!important}' +
+        '#dc-root section,#dc-root header,#dc-root footer{break-inside:avoid;page-break-inside:avoid}' +
+        /* Мягкие «свечения» — прозрачный радиальный градиент. Safari печатает
+           его чёрным прямоугольником, так что в PDF их нет. */
+        '#dc-root [style*="radial-gradient"][style*="pointer-events"]{display:none!important}' +
+        '#am-pdf{display:none!important}' +
+      '}';
+    art.style.removeProperty('transform');
+    art.style.removeProperty('transform-origin');
+    art.style.removeProperty('margin-left');
+    art.style.removeProperty('margin-right');
+    host.style.height = Math.ceil(h * z) + 'px';
   }
 
   /* Сохранение в PDF — через печать браузера: текст остаётся текстом, а не
-     картинкой, и не нужны тяжёлые библиотеки. Печатаем на A4: макет шириной
-     1080px уменьшаем под ширину листа и запрещаем разрывы внутри карточек,
-     иначе Safari режет их пополам. */
-  var PRINT_SCALE = 0.67;                       // 1080px → ширина A4 с полями 8мм
-  function printPdf() {
-    var host = document.querySelector('#dc-root .sc-host');
-    var art = host && host.firstElementChild;
-    if (!art) { window.print(); return; }
-
-    var keep = [];
-    function noBreak(el) {
-      keep.push([el, el.style.breakInside, el.style.pageBreakInside]);
-      el.style.breakInside = 'avoid';
-      el.style.pageBreakInside = 'avoid';
-    }
-    [].slice.call(art.querySelectorAll('section, [data-am-head]')).forEach(noBreak);
-    [].slice.call(art.querySelectorAll('[data-count]')).forEach(function (c) {
-      if (c.parentElement && c.parentElement.parentElement) noBreak(c.parentElement.parentElement);
+     картинкой, и не нужны тяжёлые библиотеки. Вся вёрстка печати — в fit(). */
+  function preparePrint() {
+    fit();
+    /* Проценты в карточках набегают анимацией, когда карточку видно. Если
+       до неё не долистали, в PDF ушёл бы «0%» — ставим итоговое число. */
+    [].slice.call(document.querySelectorAll('#dc-root [data-count]')).forEach(function (el) {
+      var v = el.getAttribute('data-count');
+      if (/^\d+$/.test(v) && /%$/.test(el.textContent)) el.textContent = v + '%';
     });
-
-    var st = document.getElementById('am-print');
-    if (!st) { st = document.createElement('style'); st.id = 'am-print'; document.head.appendChild(st); }
-    st.textContent =
-      '@media print{' +
-        '@page{size:A4 portrait;margin:8mm}' +
-        'html,body{background:#fff!important;margin:0!important;padding:0!important}' +
-        '#dc-root{padding:0!important;zoom:1!important}' +
-        '#dc-root>.sc-host{overflow:visible!important;height:' +
-          Math.ceil(art.offsetHeight * PRINT_SCALE) + 'px!important}' +
-        '#dc-root>.sc-host>div{transform:scale(' + PRINT_SCALE + ')!important;' +
-          'transform-origin:top left!important;margin:0!important;border-radius:0!important;' +
-          'box-shadow:none!important;border:0!important}' +
-        '#am-pdf{display:none!important}' +
-      '}';
-
-    var restore = function () {
-      keep.forEach(function (k) { k[0].style.breakInside = k[1]; k[0].style.pageBreakInside = k[2]; });
-      keep = [];
-      window.removeEventListener('afterprint', restore);
-    };
-    window.addEventListener('afterprint', restore);
-    setTimeout(restore, 60000);                 // Safari не всегда шлёт afterprint
+  }
+  function printPdf() {
+    preparePrint();
     window.print();
   }
+  window.addEventListener('beforeprint', preparePrint);   // и для Cmd+P
 
   function addPdfButton() {
     if (document.getElementById('am-pdf')) return;
