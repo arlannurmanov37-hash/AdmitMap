@@ -421,6 +421,8 @@ textarea.fi.fi-ta{min-height:0;resize:none;overflow:hidden;padding:.875rem 1.125
   #main[data-step="3"] .opts .opt:nth-child(5){grid-column:1/-1}
   #main[data-step="3"] .opt{padding:13px 8px;border:1.5px solid #e4ecf7;border-radius:13px;
       font-size:15px;font-weight:700;color:#31456b;box-shadow:none}
+  /* выбранный класс — как на компьютере: синяя рамка и текст, а не только фон */
+  #main[data-step="3"] .opt.on{border-color:var(--royal);background:var(--royal-s);color:var(--royal-d)}
   #main[data-step="3"] .info{display:none}
   #main[data-step="3"] .fl em,
   #main[data-step="3"] .sub-q em{display:none}
@@ -2395,7 +2397,7 @@ function actRow(a,i){
     <div class="fg"><span class="fl">Describe it <em>what you did, what you achieved</em></span>
       <textarea class="fi fi-ta" rows="1" maxlength="150" placeholder="e.g. Led a 14-person team to the state final"
              onkeydown="if(event.key==='Enter')event.preventDefault()"
-             oninput="this.value=this.value.replace(/\n/g,' ');S.activities[${i}].desc=this.value;save();growTa(this);this.nextElementSibling.textContent=this.value.length+' / 150'">${esc(a.desc)}</textarea>
+             oninput="this.value=this.value.replace(/\\n/g,' ');S.activities[${i}].desc=this.value;save();growTa(this);this.nextElementSibling.textContent=this.value.length+' / 150'">${esc(a.desc)}</textarea>
       <div class="cc">${d} / 150</div></div>
 
 
