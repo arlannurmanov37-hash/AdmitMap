@@ -111,7 +111,7 @@ ul{list-style:none;margin:0;padding:0}
 .side-f svg{width:.9375rem;height:.9375rem;color:var(--green)}
 
 /* ══════ MAIN ══════ */
-.main{position:relative;overflow-y:auto;overflow-x:hidden;padding:2.25rem 3rem 7rem}
+.main{position:relative;overflow-y:auto;overflow-x:hidden;padding:2.25rem 3rem 7rem;min-width:0}
 .main::-webkit-scrollbar{width:.5rem}
 .main::-webkit-scrollbar-thumb{background:#dbe3ef;border-radius:99px}
 .m-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;margin-bottom:1.75rem}
@@ -155,6 +155,7 @@ select.fi{appearance:none;cursor:pointer;padding-right:2.75rem;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238296b5' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 1.125rem center;background-size:1.125rem}
 textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-weight:500;resize:vertical}
+textarea.fi.fi-ta{min-height:0;resize:none;overflow:hidden;padding:.875rem 1.125rem;line-height:1.45}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1.125rem}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.125rem}
 .err{font-size:.8125rem;font-weight:700;color:#dc2626;margin-top:.5rem;display:none}
@@ -255,6 +256,7 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
 .pr.on .pr-d{border-color:var(--royal);background:var(--royal)}
 .pr.on .pr-d::after{content:'';width:.375rem;height:.375rem;border-radius:50%;background:#fff}
 .pr-t{font-size:.875rem;line-height:1.5;font-weight:600;color:var(--navy)}
+.pr-short{display:none}
 .pr-k{display:block;font-size:.6875rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   color:var(--royal-d);margin-bottom:.25rem}
 .cc{font-size:.75rem;font-weight:700;color:var(--muted-3);margin-top:.375rem;text-align:right}
@@ -266,6 +268,14 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
 .wc .over{color:#dc2626}
 
 /* info */
+.resume{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  padding:1rem 1.125rem;margin-bottom:1.375rem;border-radius:1rem;background:#fff;border:1.5px solid var(--royal)}
+.resume-t{display:flex;flex-direction:column;gap:.2rem;font-size:.875rem;line-height:1.45;color:var(--muted-1,#5b7098)}
+.resume-t b{font-size:.9375rem;color:var(--navy)}
+.resume-b{display:flex;gap:.625rem}
+.resume-b .btn-dash{padding:.625rem 1rem}
+.resume-go{border:0;border-radius:.75rem;padding:.625rem 1.25rem;background:var(--royal);color:#fff;
+  font-family:inherit;font-weight:800;font-size:.875rem;cursor:pointer}
 .info{display:flex;gap:.875rem;padding:1rem 1.125rem;border-radius:1rem;background:var(--royal-s);
   border:1px solid #dbe6fa;margin-bottom:1.375rem}
 .info svg{width:1.125rem;height:1.125rem;flex-shrink:0;color:var(--royal);margin-top:.0625rem}
@@ -380,6 +390,10 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
       background:#fff;font-size:16px;font-weight:600;color:#0f1f4b}
   select.fi{padding-right:44px;background-position:right 16px center}
   textarea.fi{min-height:180px;padding:15px 16px;font-weight:500}
+  textarea.fi.fi-ta{min-height:0;padding:14px 16px}
+  .pr-short{display:block}
+  .pr:not(.on) .pr-full{display:none}
+  .pr.on .pr-short{display:none}
   /* ранг и размер класса в макете стоят рядом — сетку не схлопываем */
   .row2{grid-template-columns:1fr 1fr;gap:12px}
   .row3{grid-template-columns:1fr 1fr;gap:12px}
@@ -391,7 +405,6 @@ textarea.fi{height:auto;min-height:15rem;padding:1.125rem;line-height:1.65;font-
   .m-step{display:none}
   .m-sub{display:none}
   #main[data-step="6"] .m-sub,#main[data-step="7"] .m-sub{display:block}
-  #main[data-step="1"] .m-eyebrow{display:none}
   #main[data-step="1"] .card{background:transparent;border:0;box-shadow:none;padding:0;margin-bottom:0}
   #main[data-step="1"] .c-head{display:none}
   #main[data-step="1"] .fg{margin-bottom:18px}
@@ -2080,6 +2093,12 @@ const AP_COURSES = [
         ];
 const PROMPTS = ["Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story.", "The lessons we take from obstacles we encounter can be fundamental to later success. Recount a time when you faced a challenge, setback, or failure. How did it affect you, and what did you learn from the experience?", "Reflect on a time when you questioned or challenged a belief or idea. What prompted your thinking? What was the outcome?", "Reflect on something that someone has done for you that has made you happy or thankful in a surprising way. How has this gratitude affected or motivated you?", "Discuss an accomplishment, event, or realization that sparked a period of personal growth and a new understanding of yourself or others.", "Describe a topic, idea, or concept you find so engaging that it makes you lose all track of time. Why does it captivate you? What or who do you turn to when you want to learn more?", "Share an essay on any topic of your choice. It can be one you've already written, one that responds to a different prompt, or one of your own design."];
 
+/* На телефоне семь полных формулировок — это несколько экранов прокрутки до поля
+   эссе. Там показываем короткое название, а полный текст — только у выбранной темы. */
+const PROMPT_SHORT = ['Your background, identity, interest or talent','A challenge, setback or failure',
+  'Questioning a belief or idea','Gratitude that surprised you','An accomplishment that sparked growth',
+  'A topic that makes you lose track of time','A topic of your choice'];
+
 const MAJORS = [
   ['Engineering & CS',['Computer Science','Electrical Engineering','Mechanical Engineering','Civil Engineering','Chemical Engineering','Biomedical Engineering','Aerospace Engineering','Software Engineering','Data Science']],
   ['Natural Sciences',['Biology','Chemistry','Physics','Neuroscience','Environmental Science','Biochemistry']],
@@ -2154,16 +2173,22 @@ const BLANK = {
   householdSize:'', studentIncome:'', parentCash:'', parentInvest:'',
   seen:[]
 };
-/* С лендинга приходят начинать заново: «Check my chances» ведёт на
-   funnel.html?new=1. Чистим сохранённое и сразу убираем флаг из адреса —
-   иначе обновление страницы посреди воронки стёрло бы заполненное. */
+/* С лендинга приходят по funnel.html?new=1. Раньше это молча стирало всё
+   сохранённое — закрыл вкладку, вернулся через главную, и анкеты нет. Теперь:
+   если в анкете уже что-то есть, ничего не стираем, а показываем сверху
+   «Continue / Start over». Флаг из адреса убираем сразу, иначе обновление
+   страницы снова показало бы вопрос. */
+const RESET_KEYS = ['admitmap_profile','admitmap_activity_scores','admitmap_essay_scores',
+                    'admitmap_honor_scores','admitmap_step'];
+function wipeSaved(){ RESET_KEYS.forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} }); }
+let resumeAsk = false;
 (function(){
   try{
     if(/[?&]new=1\b/.test(location.search)){
-      localStorage.removeItem('admitmap_profile');
-      localStorage.removeItem('admitmap_activity_scores');
-      localStorage.removeItem('admitmap_essay_scores');
-      localStorage.removeItem('admitmap_honor_scores');
+      const P = JSON.parse(localStorage.getItem('admitmap_profile')||'null');
+      const started = P && ((P.name||'').trim() || String(P.gpa||'').trim() ||
+        (P.schools||[]).length || (P.activities||[]).some(a=>(a.desc||'').trim()));
+      if(started) resumeAsk = true; else wipeSaved();
       var clean = location.pathname + location.search.replace(/[?&]new=1\b/,'').replace(/^&/,'?') + location.hash;
       history.replaceState(null,'',clean.replace(/\?$/,''));
     }
@@ -2183,8 +2208,19 @@ let backTo = null;
     if(i>=0 && b && BACK_OK[b]) backTo = b;
     // пришли с пейволла за $29 — без финансов не выйти, «пропустить» не предлагаем
     if(backTo && k==='financial') S.wantsAid = true;
+    /* Без #шага в адресе открываем тот шаг, на котором человек остановился. */
+    if(i<0 && !backTo){
+      const saved = parseInt(localStorage.getItem('admitmap_step'),10);
+      if(saved>0 && saved<STEPS.length) step = saved;
+    }
   }catch(e){}
 })();
+function resumeContinue(){ resumeAsk = false; render({toTop:true}); }
+function resumeStartOver(){
+  wipeSaved();
+  S = JSON.parse(JSON.stringify(BLANK)); step = 0; resumeAsk = false;
+  save(); render({toTop:true});
+}
 
 function load(){ try{ const r=localStorage.getItem('admitmap_profile');
   if(r) return Object.assign(JSON.parse(JSON.stringify(BLANK)), JSON.parse(r)); }catch(e){}
@@ -2357,8 +2393,9 @@ function actRow(a,i){
       </select></div>
 
     <div class="fg"><span class="fl">Describe it <em>what you did, what you achieved</em></span>
-      <input class="fi" maxlength="150" placeholder="e.g. Led a 14-person team to the state final" value="${esc(a.desc)}"
-             oninput="S.activities[${i}].desc=this.value;save();this.nextElementSibling.textContent=this.value.length+' / 150'">
+      <textarea class="fi fi-ta" rows="1" maxlength="150" placeholder="e.g. Led a 14-person team to the state final"
+             onkeydown="if(event.key==='Enter')event.preventDefault()"
+             oninput="this.value=this.value.replace(/\n/g,' ');S.activities[${i}].desc=this.value;save();growTa(this);this.nextElementSibling.textContent=this.value.length+' / 150'">${esc(a.desc)}</textarea>
       <div class="cc">${d} / 150</div></div>
 
 
@@ -2472,7 +2509,7 @@ function vEssay(){
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/></svg></span>
       <span><span class="c-t">Which prompt?</span></span></div>
     <div class="prs">${PROMPTS.map((p,i)=>`<button class="pr ${S.essayPrompt===i?'on':''}" onclick="S.essayPrompt=${i};save();render()">
-      <span class="pr-d"></span><span class="pr-t"><span class="pr-k">Prompt ${i+1}</span>${esc(p)}</span></button>`).join('')}</div>
+      <span class="pr-d"></span><span class="pr-t"><span class="pr-k">Prompt ${i+1}</span><span class="pr-short">${esc(PROMPT_SHORT[i])}</span><span class="pr-full">${esc(p)}</span></span></button>`).join('')}</div>
   </div>
   <div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg></span>
@@ -2694,6 +2731,7 @@ const isPhone = () => window.matchMedia('(max-width:760px)').matches;
 /* Перерисовка шага меняет всю разметку, и страница прыгала наверх при каждом
    «Add another activity» или «Remove». Позицию сохраняем; наверх уходим только
    при смене шага — render({toTop:true}). */
+function growTa(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
 function render(opts){
   const keepY = (opts && opts.toTop) ? 0 : window.scrollY;
   const st=STEPS[step];
@@ -2702,7 +2740,13 @@ function render(opts){
      показать ровно то, что показывает макет на этом шаге. */
   const main = document.getElementById('main');
   main.setAttribute('data-step', String(step + 1));
-  main.innerHTML =
+  if(!backTo){ try{ localStorage.setItem('admitmap_step', String(step)); }catch(e){} }
+  const resume = !resumeAsk ? '' :
+    `<div class="resume"><div class="resume-t"><b>You have a profile in progress.</b>
+       <span>Pick up where you left off, or start a new one.</span></div>
+       <div class="resume-b"><button type="button" class="btn-dash" onclick="resumeStartOver()">Start over</button>
+       <button type="button" class="resume-go" onclick="resumeContinue()">Continue</button></div></div>`;
+  main.innerHTML = resume +
     `<div class="m-head">
        <div><div class="m-eyebrow"><span class="m-step">Step ${step+1} · </span>${st.eyebrow}</div>
          <h1 class="m-h1">${isPhone() ? st.h1.replace(/\.$/, '') : st.h1}</h1>${st.sub ? `<p class="m-sub">${st.sub}</p>` : ''}</div>
@@ -2714,6 +2758,7 @@ function render(opts){
       : 'Continue')
     + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
   markSeen(step);
+  document.querySelectorAll('.fi-ta').forEach(growTa);
   paintSteps(); paintProgress();
   document.getElementById('main').scrollTop = 0;
   window.scrollTo(0, keepY);
