@@ -383,8 +383,8 @@ body { min-height: 100vh; min-height: 100dvh; background: #eef1f7; }
   /* Оплата через Polar: сервер создаёт чекаут и отдаёт ссылку, после оплаты Polar
      возвращает на /report?checkout_id=… На localhost платёжного сервера нет —
      сразу открываем отчёт, как раньше (для test-profiles.html). */
-  /* Оплата Polar пока выключена — кнопка сразу открывает отчёт. Включать вместе с PAYMENTS_ON в report-personalize.js. */
-var PAYMENTS_ON = false;
+  /* Оплата Polar включена 25.09.2026. Выключить — false здесь, в paywall.html / paywall-desktop.html и в report-personalize.js. */
+var PAYMENTS_ON = true;
 function amLocal(){ return location.protocol==='file:' || /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname); }
   function startCheckout(tier, btn){
     try{ localStorage.setItem('admitmap_tier', String(tier)); }catch(e){}

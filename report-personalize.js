@@ -105,11 +105,11 @@ var fnv = SC.fnv, actsFor = SC.actsFor, activityKey = SC.activityKey, honorsFor 
 /* Оплата: Polar возвращает на /report?checkout_id=…; сервер подтверждает
    чекаут и говорит, какой отчёт куплен. Локально (localhost) проверку
    пропускаем, чтобы test-profiles.html работал без сервера. */
-/* Оплата через Polar ещё не включена (решение владельца 22.09.2026: выкладываем
-   без неё). Пока false — отчёт открывается без проверки, как раньше, тариф берётся
-   из ?tier=. Оценки эссе и активностей запрашиваются и без оплаты.
-   Включить: true здесь и в paywall.html / paywall-desktop.html. */
-var PAYMENTS_ON = false;
+/* Оплата через Polar включена 25.09.2026 (владелец: «включай»). Отчёт открывается
+   только с подтверждённым чекаутом. Оценки эссе и активностей по-прежнему идут и
+   без оплаты (REQUIRE_PURCHASE не задан), чтобы отчёт после оплаты открывался сразу.
+   Выключить: false здесь и в paywall.html / paywall-desktop.html. */
+var PAYMENTS_ON = true;
 
 var PURCHASE = null;
 function purchase() {
