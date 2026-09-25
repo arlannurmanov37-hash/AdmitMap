@@ -226,7 +226,7 @@ function googleSignIn(){
           if(!P.name && u.name){ P.name = u.name; localStorage.setItem('admitmap_profile', JSON.stringify(P)); }
         }catch(err){}
         saveEmail(u.email, 'google');
-        window.location.href = 'paywall.html';
+        window.location.href = 'paywall-desktop.html?ready=1';
       }).catch(function(){ showErr('Could not reach Google. Please try again or use email.'); });
     }
   }).requestAccessToken();
@@ -253,7 +253,7 @@ function createAccount(e){
   e.preventDefault();
   const email = document.getElementById('email').value.trim();
   saveEmail(email, 'signup');
-  window.location.href = 'paywall.html';
+  window.location.href = 'paywall-desktop.html?ready=1';
   return false;
 }
 </script>

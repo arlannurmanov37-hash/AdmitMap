@@ -8,7 +8,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
 /* На компьютере — прежний пэйволл, на телефоне — пошаговый поток. */
-if (window.innerWidth > 700) location.replace('paywall-desktop.html?ready=1' + location.search.replace(/^\?/, '&') + location.hash);
+/* Онбординг (экраны «What we found» и «Proof») отключён 25.09.2026: после
+   регистрации сразу цены, на любом экране. Вернётся после подключения Polar,
+   с настоящими цифрами из профиля. Старые ссылки на paywall.html ведут сюда. */
+location.replace('paywall-desktop.html?ready=1' + location.search.replace(/^\?/, '&') + location.hash);
 </script>
 <title>Your report is ready · AdmitMap</title>
 <script src="/analytics.js" defer></script>

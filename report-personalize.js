@@ -1056,7 +1056,7 @@ function personalize() {
 }
 
 function paywallUrl() {
-  return (window.innerWidth || 1024) < 768 ? 'paywall.html' : 'paywall-desktop.html';
+  return 'paywall-desktop.html';                     // онбординг на телефоне отключён
 }
 
 /* Отчёт — после оплаты. Образец (?sample=1) и пустой профиль — как раньше. */

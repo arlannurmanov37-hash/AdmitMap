@@ -2711,7 +2711,7 @@ function render(opts){
   document.getElementById('back').style.visibility = step===0 ? 'hidden' : 'visible';
   document.getElementById('next').innerHTML = (backTo ? (backTo==='report.html' ? 'Update my report' : 'Save and continue')
       : step===STEPS.length-1 ? 'See my results'
-      : 'Continue<span class="nx-rest"> to '+STEPS[step+1].n.toLowerCase()+'</span>')
+      : 'Continue')
     + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
   markSeen(step);
   paintSteps(); paintProgress();
