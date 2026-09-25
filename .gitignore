@@ -21,3 +21,6 @@ _design/
 .backup-calculator/*.bak
 _new/
 _old-version.html
+
+# College Scorecard raw downloads (large, rebuild with data/build_earnings.py)
+data/fos/

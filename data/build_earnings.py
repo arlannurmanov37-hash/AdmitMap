@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """data/earnings.js — медианный заработок выпускников по специальности.
 
-Источник: College Scorecard, Most-Recent-Cohorts-Field-of-Study (июнь 2026).
-Берём только бакалавриат (CREDLEV=3) и только те специальности, что есть
-в списке воронки. PrivacySuppressed («PS») — это не ноль, а «не публикуется»:
-такие пары школа-специальность пропускаем, в отчёте показываем национальную
-медиану по специальности и честно это подписываем.
+Источник: College Scorecard, Most-Recent-Cohorts-Field-of-Study (10.06.2026).
+Цифра — EARN_MDN_4YR: медиана годового заработка выпускников бакалавриата
+(CREDLEV=3) на четвёртый полный год после выпуска, в долларах 2024 года.
+Только получавшие федеральную помощь, работающие и не продолжающие учёбу.
+
+В школе: если специальности соответствуют несколько кодов CIP (CS = 11.07
+и 11.01), берём программу с большим числом выпускников в расчёте.
+По США: медиана по всем программам этой специальности, взвешенная по
+EARN_COUNT_WNE_4YR, — крупные программы весят больше, как в жизни.
+PrivacySuppressed («PS») — не ноль, а «не публикуется»: такие пары
+пропускаем, ничем не подменяем.
+
+Скачать: https://collegescorecard.ed.gov/data/ → Most Recent Field of Study
+в data/fos/ (в git не хранится).
 """
 import csv, json, os, re, statistics, sys
 
@@ -55,6 +64,8 @@ best = {}
 with open(INST, encoding='utf-8-sig', newline='') as fh:
     for row in csv.DictReader(fh):
         d = domain(row.get('INSTURL'))
+        # web.mit.edu, www2.xxx.edu — у нас домен без поддомена
+        while d and d not in ours and d.count('.') > 1: d = d.split('.', 1)[1]
         if d not in ours: continue
         ugds = num(row.get('UGDS')) or 0
         rank = (1 if row.get('MAIN') == '1' else 0, ugds)
@@ -70,21 +81,43 @@ with open(FOS, encoding='utf-8-sig', newline='') as fh:
         cip = row['CIPCODE']
         if cip not in WANT: continue
         seen_cips.add(cip)
-        e = num(row.get('EARN_MDN_HI_2YR')) or num(row.get('EARN_MDN_HI_1YR'))
+        e = num(row.get('EARN_MDN_4YR'))
         if e is None: continue
-        nat.setdefault(cip, []).append(e)
+        w = num(row.get('EARN_COUNT_WNE_4YR')) or 1
+        nat.setdefault(cip, []).append((e, w))
         d = unit2dom.get(row['UNITID'])
-        if d: by_school.setdefault(d, {})[cip] = e
+        if d:
+            cur = by_school.setdefault(d, {}).get(cip)
+            if cur is None or w > cur[1]: by_school[d][cip] = (e, w)
+
+def wmedian(pairs):
+    pairs = sorted(pairs)
+    total = sum(w for _, w in pairs); acc = 0
+    for e, w in pairs:
+        acc += w
+        if acc * 2 >= total: return e
 
 missing = sorted(WANT - seen_cips)
 print('cips with no rows at all:', missing, file=sys.stderr)
-NAT = {c: int(statistics.median(v)) for c, v in nat.items()}
-out = {'majors': MAJORS, 'national': NAT, 'schools': by_school}
+# Медиана по США — по специальности целиком (все её коды CIP вместе),
+# а в школе — по одной программе с наибольшим числом выпускников.
+NATM = {}
+for m, codes in MAJORS.items():
+    pairs = [p for c in codes for p in nat.get(c, [])]
+    if pairs: NATM[m] = wmedian(pairs)
+SCH = {}
+for d, cips in by_school.items():
+    row = {}
+    for m, codes in MAJORS.items():
+        best = max((cips[c] for c in codes if c in cips), key=lambda p: p[1], default=None)
+        if best: row[m] = best[0]
+    if row: SCH[d] = row
+out = {'national': NATM, 'schools': SCH}
 js = ('// СГЕНЕРИРОВАНО data/build_earnings.py — руками не править.\n'
-      '// College Scorecard, Field of Study (июнь 2026): медиана заработка\n'
-      '// выпускников бакалавриата через 2 года после выпуска (где нет — через 1).\n'
-      '// PrivacySuppressed не заменяем оценкой: такие школы просто без цифры.\n'
+      '// College Scorecard, Field of Study (10.06.2026): EARN_MDN_4YR — медиана заработка\n'
+      '// выпускников бакалавриата на 4-й год после выпуска, $ 2024. По США — медиана\n'
+      '// по специальности, взвешенная по числу выпускников. PrivacySuppressed пропущен.\n'
       'const EARN = ' + json.dumps(out, separators=(',', ':')) + ';\n')
 open(os.path.join(REPO, 'data', 'earnings.js'), 'w').write(js)
-print('schools with data:', len(by_school), 'national medians:', len(NAT),
+print('schools with data:', len(SCH), 'majors with US median:', len(NATM),
       'bytes:', len(js), file=sys.stderr)

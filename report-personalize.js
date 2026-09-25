@@ -11,6 +11,9 @@ var byText = function (re, tag) {
     return e.children.length === 0 && re.test((e.textContent || '').trim());
   });
 };
+var esc = function (t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+};
 var logo = function (d) {
   return 'https://img.logo.dev/' + encodeURIComponent(d) +
          '?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=256&format=png';
@@ -500,8 +503,18 @@ function daysToNov1() {
 
 /* У образца дата и счётчик дней живые: застывшие «94 дня» в сентябре
    выглядят как ошибка. Всё остальное у Майи не меняется. */
+/* Образец: те же школы и специальность, что у Майи на карточках образца. */
+var SAMPLE_EARN = { major: 'Computer Science', items: [
+  { d: 'harvard.edu', name: 'Harvard', tier: 'dream' }, { d: 'stanford.edu', name: 'Stanford', tier: 'dream' },
+  { d: 'duke.edu', name: 'Duke', tier: 'dream' }, { d: 'princeton.edu', name: 'Princeton', tier: 'dream' },
+  { d: 'ucla.edu', name: 'UCLA', tier: 'match' }, { d: 'nyu.edu', name: 'NYU', tier: 'match' },
+  { d: 'bc.edu', name: 'Boston College', tier: 'match' }, { d: 'georgetown.edu', name: 'Georgetown', tier: 'match' },
+  { d: 'psu.edu', name: 'Penn State', tier: 'safety' }, { d: 'purdue.edu', name: 'Purdue', tier: 'safety' }
+] };
+
 function freshenSample() {
   dropEarnings();
+  insertEarnings(earnSection(SAMPLE_EARN.major, SAMPLE_EARN.items));
   var first = document.querySelector('[data-count]');
   if (first) { markHeads(first.parentElement.parentElement.parentElement); relayout(); }
   var date = document.querySelector('[data-am-date]');
@@ -873,6 +886,106 @@ function setAxes(re, subs) {
   sec.setAttribute('data-am-grow', '1');
 }
 
+/* ── «What each degree earns» ─────────────────────────────────────────
+   Дизайн владельца (Desktop/AdmitMap Earnings.html, 25.09.2026). Данные —
+   data/earnings.js: College Scorecard, EARN_MDN_4YR, медиана заработка на
+   4-й год после выпуска; линия — медиана по США для этой же специальности.
+   Нет цифры у вуза — строка остаётся без цифры, ничего не подставляем. */
+var EARN_TIER = {
+  dream:  { label: 'Dream',  chipBg: '#eaf1ff', chip: '#1d4ed8', bar: 'linear-gradient(90deg,#eaf1ff,#2563eb)' },
+  match:  { label: 'Match',  chipBg: '#eef5ff', chip: '#2563eb', bar: 'linear-gradient(90deg,#eef5ff,#60a5fa)' },
+  safety: { label: 'Safety', chipBg: '#e7fbf1', chip: '#08915d', bar: 'linear-gradient(90deg,#e7fbf1,#1ddb87)' }
+};
+function kUSD(v) { return '$' + Math.round(v / 1000) + 'k'; }
+
+function earnSection(major, items) {
+  if (typeof EARN === 'undefined' || !major) return null;
+  var us = EARN.national[major];
+  if (!us) return null;
+  items = items.map(function (it) {
+    var row = EARN.schools[it.d] || {};
+    return Object.assign({}, it, { e: row[major] || null });
+  });
+  if (!items.some(function (it) { return it.e; })) return null;
+  items.sort(function (a, b) { return (b.e || 0) - (a.e || 0); });
+  var top = Math.max.apply(null, items.map(function (it) { return it.e || 0; }).concat([us]));
+  var scale = Math.max(200000, Math.ceil(top / 50000) * 50000);
+
+  var rows = items.map(function (it, i) {
+    var t = EARN_TIER[it.tier] || EARN_TIER.match;
+    var last = i === items.length - 1 ? '' : 'border-bottom:1px solid #f2f5fa;';
+    var diff = it.e ? it.e - us : null;
+    var bar = it.e
+      ? '<span style="display:block;height:10px;border-radius:5px;background:#eef1f7;overflow:hidden">' +
+          '<span style="display:block;height:100%;width:' + (it.e / scale * 100).toFixed(1) + '%;border-radius:5px;background:' + t.bar + '"></span></span>'
+      : '<span style="font-size:12.5px;font-weight:600;color:#94a3b8">Not published for this major</span>';
+    return '<div style="display:grid;grid-template-columns:176px 64px minmax(0,1fr) 74px 70px;align-items:center;column-gap:14px;height:40px;' + last + '">' +
+      '<span style="display:flex;align-items:center;gap:10px;min-width:0">' +
+        '<img src="' + logo(it.d) + '" alt="" onerror="this.style.visibility=\'hidden\'" style="width:26px;height:26px;border-radius:6px;object-fit:cover;background:#fff;flex-shrink:0;box-shadow:0 0 0 1px rgba(15,31,75,.09),0 1px 3px rgba(15,31,75,.1)">' +
+        '<span style="font-size:15px;font-weight:600;letter-spacing:-.012em;color:#0f1f4b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(it.name) + '</span></span>' +
+      '<span style="flex-shrink:0;width:58px;text-align:center;font-size:10px;font-weight:800;line-height:1;letter-spacing:.08em;text-transform:uppercase;padding:5px 0;border-radius:6px;background:' + t.chipBg + ';color:' + t.chip + '">' + t.label + '</span>' +
+      bar +
+      '<span style="text-align:right;font-family:Fraunces,Georgia,serif;font-size:21px;font-weight:900;letter-spacing:-.02em;color:#0f1f4b">' + (it.e ? kUSD(it.e) : '—') + '</span>' +
+      '<span style="text-align:right;font-size:12.5px;font-weight:800;color:' + (diff == null ? '#94a3b8' : diff >= 0 ? '#08915d' : '#64748b') + '">' +
+        (diff == null ? '' : (diff >= 0 ? '+' : '−') + kUSD(Math.abs(diff))) + '</span>' +
+    '</div>';
+  }).join('');
+
+  var sec = document.createElement('section');
+  sec.setAttribute('data-am-earnsec', '1');
+  sec.style.cssText = 'display:flex;flex-direction:column;gap:18px;padding:40px 64px 0;align-self:start';
+  sec.innerHTML =
+    '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:24px">' +
+      '<h1 style="font-family:Fraunces,Georgia,serif;font-size:31px;font-weight:900;line-height:1;letter-spacing:-.024em;margin:0;color:#0f1f4b;white-space:nowrap">What each degree earns</h1>' +
+      '<span style="display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:13.5px;font-weight:700;color:#43536b;white-space:nowrap">' +
+        '<span style="color:#2563eb">' + esc(major) + '</span><span style="width:1px;height:12px;background:#c2d7f0"></span>Median pay 4 yrs after graduation</span>' +
+    '</div>' +
+    '<div data-am-earncard style="position:relative;display:flex;flex-direction:column;padding:40px 26px 18px;background:#fff;border:1px solid #dbe3ef;border-radius:16px;box-shadow:0 1px 2px rgba(15,31,75,.07),0 2px 5px rgba(15,31,75,.06)">' +
+      '<span data-am-earnline style="position:absolute;top:34px;bottom:16px;left:50%;border-left:1.5px dashed #94a3b8"></span>' +
+      '<span data-am-earnpill style="position:absolute;top:12px;left:50%;transform:translateX(-50%);padding:4px 9px;border-radius:999px;background:#0f1f4b;font-size:10.5px;font-weight:800;letter-spacing:.02em;color:#fff;white-space:nowrap">US median ' + kUSD(us) + '</span>' +
+      rows +
+    '</div>';
+  sec.setAttribute('data-am-earnfrac', String(us / scale));
+  return sec;
+}
+
+/* Линия медианы по США — в точке us/scale внутри колонки полос. Колонка
+   одна на всех, берём её по первой строке уже после вставки в документ. */
+function placeEarnLine(sec) {
+  var card = sec.querySelector('[data-am-earncard]');
+  var row = card && card.querySelector('div');
+  var col = row && row.children[2];
+  if (!col) return;
+  var x = col.offsetLeft + col.offsetWidth * parseFloat(sec.getAttribute('data-am-earnfrac'));
+  sec.querySelector('[data-am-earnline]').style.left = x + 'px';
+  sec.querySelector('[data-am-earnpill]').style.left = x + 'px';
+}
+
+/* Вставляем после «What applying early is worth» (перед активностями). */
+function insertEarnings(sec) {
+  $$('[data-am-earnsec]').forEach(function (e) { e.remove(); });
+  if (!sec) return;
+  var early = byText(/^What applying early is worth$/, 'h1')[0];
+  var anchor = early && early.closest('section');
+  if (!anchor || !anchor.parentElement) return;
+  anchor.parentElement.insertBefore(sec, anchor.nextSibling);
+  placeEarnLine(sec);
+}
+
+/* Коротко, как в дизайне: «Purdue», «Rice», «UT Austin». Неоднозначные
+   (Boston University / Boston College) — из ABBR. */
+function earnName(n) {
+  if (ABBR[n]) return ABBR[n];
+  return cardName(n).replace(/^University of /, '').replace(/ University$/, '');
+}
+
+function fillEarnings(D) {
+  if (D.chancesOnly) { insertEarnings(null); return; }         // зарплаты — только в $29
+  insertEarnings(earnSection(D.major, D.rows.map(function (r) {
+    return { d: r.d, name: earnName(r.n), tier: tierOf(r) };
+  })));
+}
+
 function hideUnscored(D) {
   var acts = cachedFor('admitmap_activity_scores', D.actKey);
   fillScoreSection(/What your activities are worth/i, acts, [], 'activitie', D.activityTypes);
@@ -1019,8 +1132,21 @@ function relayout() {
 
   /* Скрытый (display:none) раздел не занимает ряд сетки — все следующие
      сдвигаются вверх. Поэтому его ряд не обнуляем, а убираем совсем. */
-  var oNew = [];
-  [].slice.call(outer.children).forEach(function (c, i) {
+  var oNew = [], idx = 0;
+  [].slice.call(outer.children).forEach(function (c) {
+    /* Раздел «What each degree earns» вставлен нами, своего ряда в макете у него
+       нет: высота — по содержимому, а индексы остальных не сдвигаем. */
+    if (c.hasAttribute('data-am-earnsec')) {
+      if (getComputedStyle(c).display === 'none') return;
+      var ecs = getComputedStyle(c), ekids = [].slice.call(c.children);
+      // последним перед подвалом — воздух снизу, как у остальных последних разделов
+      var nx = c.nextElementSibling;
+      while (nx && getComputedStyle(nx).display === 'none') nx = nx.nextElementSibling;
+      oNew.push(Math.ceil(parseFloat(ecs.paddingTop) + sum(ekids.map(function (k) { return k.offsetHeight; })) +
+                (parseFloat(ecs.rowGap) || 0) * (ekids.length - 1) + (nx && nx.tagName === 'FOOTER' ? 40 : 0)));
+      return;
+    }
+    var i = idx++;
     if (i >= oOrig.length || getComputedStyle(c).display === 'none') return;
     var h = oOrig[i];
     if (c === grid) h = oOrig[i] + hOf(rows) - hOf(gOrig);
@@ -1048,7 +1174,7 @@ function personalize() {
     return false;                                      // профиля нет — остаётся образец
   }
   try {
-    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); hideUnscored(D); relayout();
+    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); fillEarnings(D); hideUnscored(D); relayout();
     document.documentElement.setAttribute('data-am-personal', '1');
     if (D.skipped.length) console.info('AdmitMap: без данных, пропущены —', D.skipped.join(', '));
   } catch (e) { console.error('AdmitMap personalize:', e); return false; }
