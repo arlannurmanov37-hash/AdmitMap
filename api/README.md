@@ -31,5 +31,7 @@ Polar products are looked up by metadata `tier` = `chances` / `full`, so no prod
 - Set a monthly spend limit on the Anthropic key.
 - Scoring endpoints require a paid checkout and are rate-limited per checkout.
 - `DEV_LICENSE` bypasses payment — never set it in production.
-- Both model calls use `fallbacks: "default"`: if Claude Opus 5 declines, Anthropic re-runs
+- Models: the essay grader runs on Claude Opus 5; activities and honors run on Claude Sonnet 5
+  (cheaper, same strict JSON schema).
+- Model calls use `fallbacks: "default"`: if the model declines, Anthropic re-runs
   the request on its recommended fallback model inside the same call.

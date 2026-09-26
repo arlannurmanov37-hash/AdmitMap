@@ -12,7 +12,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { cors, bad, allowScoring, anthropicKey, safeDetail } from './_lib.js';
 
-// Opus с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
+// Модель с размышлением отвечает 20–60 с — дефолтного лимита функции не хватает.
 export const config = { maxDuration: 120 };
 
 const client = new Anthropic({ apiKey: anthropicKey() }); // ключ очищен от пробелов и переносов
@@ -138,7 +138,7 @@ export default async function handler(req, res) {
 
   try {
     const message = await client.messages.create({
-      model: 'claude-opus-5',
+      model: 'claude-sonnet-5',
       max_tokens: 16000,
       system: SYSTEM,
       thinking: { type: 'adaptive' },
