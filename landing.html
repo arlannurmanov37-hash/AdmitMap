@@ -165,7 +165,8 @@
 
         .nav-links {
             display: flex;
-            gap: 36px;
+            gap: clamp(24px, calc((100vw - 1000px) / 4), 108px);
+            white-space: nowrap;
             font-family: 'Inter Tight', sans-serif;
             font-size: 12px;
             font-weight: 700;
@@ -2915,11 +2916,7 @@
 
         <section id="problems" class="problems-section" data-screen-label="Sound familiar" style="display:flex;justify-content:center;padding:clamp(24px,4vh,64px) clamp(24px,4vw,64px)">
           <div style="width:100%;max-width:1400px">
-<div style="position:relative;overflow:hidden;border-radius:24px;background:#eef4ff">
-    <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
-    <span style="position:absolute;bottom:-620px;left:-700px;width:1700px;height:1180px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.34),rgba(238,244,255,0) 76%);pointer-events:none"></span>
-    <span style="position:absolute;top:-300px;left:-300px;width:640px;height:520px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.62),rgba(238,244,255,0) 66%);pointer-events:none"></span>
-    <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px),repeating-linear-gradient(90deg,transparent,transparent 95.5px,rgba(37,99,235,.13) 95.5px,rgba(37,99,235,.13) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
+<div style="position:relative">
     <div style="position:relative;display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(36px,4vw,72px);align-items:center;padding:clamp(40px,3.6vw,60px)">
       <div style="display:flex;flex-direction:column;gap:24px;max-width:480px">
         <span style="display:flex;align-items:center;gap:13px;font-family:'Inter Tight',sans-serif;font-size:13.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#2563eb">
@@ -2955,7 +2952,7 @@
               </span>
             </span>
           </div>
-          <a href="funnel.html" style="display:flex;align-items:center;justify-content:center;height:56px;border-radius:14px;background:linear-gradient(180deg,#3b82f6,#1d4ed8);font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ffffff;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 16px 30px -14px rgba(29,78,216,.9)">Check my chances</a>
+          <a href="funnel.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;height:56px;border-radius:14px;background:linear-gradient(180deg,#3b82f6,#1d4ed8);font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ffffff;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 16px 30px -14px rgba(29,78,216,.9)">Check my chances</a>
           <span style="text-align:center;font-size:12.5px;font-weight:600;color:#5f7292">Free · no card needed · 5 minutes</span>
         </div>
       </div>
@@ -3470,46 +3467,35 @@
   </div>
 </section>
 
-        <section id="waitlist" class="cta-section" style="min-height:calc(100vh - 78px - 84px);display:flex;align-items:center;padding:clamp(14px,2.2vh,52px) clamp(24px,4vw,64px);position:relative;overflow:hidden;background:#eef4ff">
-
-    <span style="position:absolute;top:-420px;right:-520px;width:1900px;height:1300px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(147,180,248,.62),rgba(238,244,255,0) 74%);pointer-events:none"></span>
-
-    <span style="position:absolute;bottom:-460px;left:-540px;width:1800px;height:1250px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(152,184,248,.5),rgba(238,244,255,0) 74%);pointer-events:none"></span>
-
-    <span style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 95px,rgba(37,99,235,.3) 95px,rgba(37,99,235,.3) 96px),repeating-linear-gradient(90deg,transparent,transparent 95px,rgba(37,99,235,.3) 95px,rgba(37,99,235,.3) 96px);filter:blur(.6px);-webkit-mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);mask-image:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,.85) 0%,rgba(0,0,0,.4) 55%,transparent 88%);pointer-events:none"></span>
-
-    <div style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);align-items:center;gap:64px">
-
-      <div style="display:flex;flex-direction:column;gap:26px">
-        <span style="display:flex;align-items:center;gap:14px">
-          <img src="admitmap-mark.svg" alt="AdmitMap" style="width:58px;height:58px;object-fit:contain">
-          <span style="font-family:Fraunces,Georgia,serif;font-size:52px;font-weight:900;letter-spacing:-.034em;color:#101d42">Admit<span style="color:#2563eb">Map</span></span>
-        </span>
-        <h2 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:94px;font-weight:900;line-height:.9;letter-spacing:-.048em;color:#0f1f4b">Your future is waiting.<br><em style="font-style:italic;font-weight:700;color:#2563eb">Go get it.</em></h2>
-        <p style="margin:0;max-width:50ch;font-size:19px;line-height:1.68;font-weight:500;color:#43536b">You’ve already done the hard part — the years of work, the grades, the late nights. Now it’s time to turn that hard work into an application they can’t ignore.</p>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:22px;padding:42px 38px;border-radius:26px;background:rgba(255,255,255,.72);border:1px solid #c9d9f2;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 34px 74px -28px rgba(23,62,140,.4)">
-        <a href="funnel.html?new=1" type="button" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:13px;width:100%;border:0;padding:27px 32px;border-radius:17px;background:#2563eb;color:#ffffff;white-space:nowrap;font-size:16px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;box-shadow:0 16px 40px -12px rgba(37,99,235,.75);transition:background .18s ease,transform .18s ease" style-hover="background:#1d4ed8;transform:translateY(-2px)">Find out your chances<span style="font-size:18px;line-height:1">→</span></a>
-        <div style="display:flex;flex-direction:column;gap:16px;padding-top:22px;border-top:1px solid #dbe4f2">
-          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>Free to start</span>
-          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>No credit card required</span>
-          <span style="display:flex;align-items:center;gap:14px;font-size:18.5px;font-weight:600;color:#243b63"><span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#2563eb;color:#ffffff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>Takes 5 minutes</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-        <footer>
-            <div class="f-logo"><img src="admitmap-mark.svg" alt="" style="height:1.5em;width:1.5em;vertical-align:-0.32em;margin-right:5px">Admit<span>Map</span></div>
-            <nav class="f-links">
-                <a href="paywall-desktop.html">Pricing</a>
-                <a href="terms.html">Terms</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="refunds.html">Refunds</a>
-            </nav>
-            <p>© 2026 AdmitMap. Built for students who mean it.</p>
-        </footer>
+        <!-- Финальный блок + подвал для компьютера (дизайн владельца, 25.09.2026). Телефон — отдельный #m-… ниже. -->
+<section id="final-cta" data-screen-label="Final CTA" style="position: relative; overflow: hidden; border-radius: 0px; width: 100%; background: linear-gradient(118deg, rgb(255, 255, 255) 0%, rgb(242, 246, 255) 30%, rgb(221, 232, 253) 62%, rgb(191, 211, 251) 100%);">
+<span style="position: absolute; top: -340px; right: -260px; width: 1100px; height: 820px; border-radius: 50%; background: radial-gradient(50% 50%, rgba(131, 181, 255, 0.55), rgba(131, 181, 255, 0) 72%); pointer-events: none;"></span>
+<span style="position: absolute; bottom: -380px; left: -300px; width: 900px; height: 700px; border-radius: 50%; background: radial-gradient(50% 50%, rgba(131, 181, 255, 0.35), rgba(131, 181, 255, 0) 72%); pointer-events: none;"></span>
+<div class="final-cta-grid" style="position: relative; display: grid; grid-template-columns: minmax(0px, 1fr) 600px; align-items: center; gap: 64px; padding: 96px 72px 88px; width: 1440px; max-width: none; margin: 0 auto;">
+<div style="display: flex; flex-direction: column; gap: 26px; min-width: 0px;">
+<span style="display: flex; align-items: center; gap: 18px;"><img src="admitmap-mark.svg" alt="" style="width: 44px; height: 52px; object-fit: contain;"><span style="font-family: Fraunces, Georgia, serif; font-size: 58px; font-weight: 900; line-height: 1; letter-spacing: -0.04em; color: rgb(15, 31, 75);">Admit<span style="color: rgb(37, 99, 235);">Map</span></span></span>
+<h2 style="margin: 0px; font-family: Fraunces, Georgia, serif; font-size: 86px; font-weight: 900; line-height: 0.96; letter-spacing: -0.055em; color: rgb(15, 31, 75);">Your future is<br><span id="cta-line2" style="white-space: nowrap;">waiting. <span style="font-style: italic; font-weight: 700; color: rgb(37, 99, 235);">Go get it.</span></span></h2>
+<div style="display: flex; align-items: flex-start; gap: 18px; max-width: none; padding: 22px 24px; border-radius: 22px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgb(215, 229, 250); box-shadow: rgba(15, 31, 75, 0.04) 0px 1px 2px, rgba(23, 62, 140, 0.4) 0px 20px 44px -30px;"><span style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; flex: 1 1 0%; min-width: 0px;"><span style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(140deg, rgb(59, 130, 246), rgb(29, 78, 216)); box-shadow: rgba(37, 99, 235, 0.7) 0px 8px 18px -8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.4" r="3.9"></circle><path d="M4.6 20c1.1-3.9 4-5.8 7.4-5.8s6.3 1.9 7.4 5.8"></path></svg></span><span style="font-size: 16px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Enter your profile</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#83b5ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 13px;"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg><span style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; flex: 1 1 0%; min-width: 0px;"><span style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(140deg, rgb(59, 130, 246), rgb(29, 78, 216)); box-shadow: rgba(37, 99, 235, 0.7) 0px 8px 18px -8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.4-6.1 6.4-10.4A6.4 6.4 0 0 0 5.6 10.6C5.6 14.9 12 21 12 21z"></path><circle cx="12" cy="10.4" r="2.3"></circle></svg></span><span style="font-size: 16px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Pick your schools</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#83b5ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 13px;"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg><span style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; flex: 1 1 0%; min-width: 0px;"><span style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(140deg, rgb(59, 130, 246), rgb(29, 78, 216)); box-shadow: rgba(37, 99, 235, 0.7) 0px 8px 18px -8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.8h8.6L19 8.2v12H6z"></path><path d="M9.4 12.4h6.2M9.4 16h4"></path></svg></span><span style="font-size: 16px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Get your report</span></span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 30px; border-radius: 28px; background: rgb(255, 255, 255); border: 1px solid rgb(219, 230, 246); box-shadow: rgba(15, 31, 75, 0.05) 0px 1px 2px, rgba(23, 62, 140, 0.45) 0px 30px 70px -34px;">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 18px; background: linear-gradient(160deg, rgb(238, 244, 255), rgb(221, 233, 253)); border: 1px solid rgb(211, 226, 251);">
+<span style="display: flex; align-items: center; justify-content: space-between; padding: 0px 4px 4px;"><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(15, 31, 75);">Your AdmitMap report</span><span style="font-size: 12.5px; font-weight: 700; color: rgb(29, 78, 216);">5 sections</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="position: relative; display: block; width: 30px; height: 30px; border-radius: 50%; background: conic-gradient(rgb(37, 99, 235) 0deg, rgb(37, 99, 235) 22%, rgb(219, 231, 251) 22%, rgb(219, 231, 251) 100%);"><span style="position: absolute; inset: 6px; border-radius: 50%; background: rgb(255, 255, 255);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Where your schools land</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; align-items: flex-end; gap: 4px; height: 28px;"><span style="width: 9px; height: 12px; border-radius: 2px; background: rgb(188, 211, 245);"></span><span style="width: 9px; height: 26px; border-radius: 2px; background: rgb(37, 99, 235);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">What applying early is worth</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; flex-direction: column; gap: 4px; width: 32px;"><span style="height: 5px; width: 100%; border-radius: 3px; background: rgb(37, 99, 235);"></span><span style="height: 5px; width: 74%; border-radius: 3px; background: rgb(131, 181, 255);"></span><span style="height: 5px; width: 48%; border-radius: 3px; background: rgb(188, 211, 245);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">What your activities are worth</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: grid; grid-template-columns: repeat(3, 8px); gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(131, 181, 255);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(131, 181, 255);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(188, 211, 245);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">How your essay reads</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; align-items: flex-end; gap: 3px; height: 28px;"><span style="width: 7px; height: 10px; border-radius: 2px; background: rgb(184, 240, 214);"></span><span style="width: 7px; height: 17px; border-radius: 2px; background: rgb(111, 230, 178);"></span><span style="width: 7px; height: 26px; border-radius: 2px; background: rgb(29, 219, 135);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">What each degree earns</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>
+</div>
+<a href="funnel.html?new=1" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 14px; height: 68px; border-radius: 16px; background: rgb(37, 99, 235); font-family: 'Inter Tight', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(255, 255, 255); box-shadow: rgba(37, 99, 235, 0.75) 0px 18px 40px -14px;">Find out your chances<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg></a>
+<div style="display: flex; justify-content: space-between; gap: 10px;"><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgb(30, 47, 85); white-space: nowrap;"><span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: rgb(37, 99, 235);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>Free to start</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgb(30, 47, 85); white-space: nowrap;"><span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: rgb(37, 99, 235);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>No credit card required</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgb(30, 47, 85); white-space: nowrap;"><span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: rgb(37, 99, 235);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5L20 6.5"></path></svg></span>Takes 5 minutes</span></div>
+</div>
+</div>
+<div style="position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 72px; border-top: 1px solid rgba(37, 99, 235, 0.12);">
+<span style="display: flex; align-items: center; gap: 10px;"><img src="admitmap-mark.svg" alt="" style="width: 20px; height: 24px; object-fit: contain;"><span style="font-family: Fraunces, Georgia, serif; font-size: 24px; font-weight: 900; letter-spacing: -0.035em; color: rgb(15, 31, 75);">Admit<span style="color: rgb(37, 99, 235);">Map</span></span></span>
+<span style="display: flex; gap: 36px; font-size: 15px; font-weight: 600; color: rgb(67, 83, 107);"><a href="paywall-desktop.html" style="text-decoration: none; color: rgb(67, 83, 107);">Pricing</a><a href="terms.html" style="text-decoration: none; color: rgb(67, 83, 107);">Terms</a><a href="privacy.html" style="text-decoration: none; color: rgb(67, 83, 107);">Privacy</a><a href="refunds.html" style="text-decoration: none; color: rgb(67, 83, 107);">Refunds</a></span>
+<span style="font-size: 14px; font-weight: 500; color: rgb(67, 83, 107);">© 2026 AdmitMap. Built for students who mean it.</span>
+</div>
+</section>
     </div>
 
 
@@ -3648,6 +3634,17 @@
                 });
             }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
             els.forEach(function (el) { io.observe(el); });
+        })();
+        // ── Финальный блок: нарисован под 1440px, на экранах уже уменьшаем целиком.
+        (function () {
+            var sec = document.getElementById('final-cta'), grid = document.querySelector('.final-cta-grid');
+            if (!sec || !grid) return;
+            function fit() {
+                var z = Math.min(1, sec.clientWidth / 1440);
+                grid.style.zoom = z < 1 ? z.toFixed(4) : '';
+            }
+            fit();
+            window.addEventListener('resize', fit);
         })();
         // ── The process (2C): окно приложения нарисовано под 1328px. На экранах
         // уже — уменьшаем его целиком, как картинку, чтобы панели не обрезались.
