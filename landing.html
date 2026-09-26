@@ -2710,89 +2710,20 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div class="radar-card">
-                    <div class="radar-top">
-                        <span class="radar-school"><img
-                                src="https://www.google.com/s2/favicons?domain=stanford.edu&sz=128"
-                                alt="Stanford">Candidate Analysis · Stanford</span>
-                        <span class="radar-live"><span class="live-dot"></span>Live</span>
-                    </div>
-                    <div class="radar-score-row">
-                        <div>
-                            <div class="radar-prob">14%</div>
-                            <div class="radar-prob-label">Acceptance Probability</div>
-                        </div>
-                        <div style="flex:1">
-                            <div class="radar-strength"><span class="ic-inline" data-icon="bolt"></span>Spike needed</div>
-                            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Overall Strength: <strong
-                                    style="color:var(--navy)">68 / 100</strong></div>
-                        </div>
-                    </div>
-                    <hr class="radar-divider">
-                    <div class="seg-control" role="tablist">
-                        <button class="seg-btn active" id="seg-radar" onclick="setHeroView('radar', true)">Radar</button>
-                        <button class="seg-btn" id="seg-breakdown" onclick="setHeroView('breakdown', true)">Breakdown</button>
-                    </div>
-                    <div class="view-stack">
-                        <div class="view-panel active" id="panel-radar">
-                    <div class="radar-svg-wrap">
-                        <svg width="250" height="238" viewBox="-10 -10 240 230">
-                            <defs>
-                                <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#2563eb;stop-opacity:.35" />
-                                    <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:.2" />
-                                </linearGradient>
-                            </defs>
-                            <polygon points="110,10 196,60 196,150 110,200 24,150 24,60" fill="none" stroke="#e2e8f0"
-                                stroke-width="1.5" />
-                            <polygon points="110,35 178,73 178,137 110,175 42,137 42,73" fill="none" stroke="#e2e8f0"
-                                stroke-width="1" />
-                            <polygon points="110,60 161,86 161,124 110,150 59,124 59,86" fill="none" stroke="#e2e8f0"
-                                stroke-width="1" />
-                            <line x1="110" y1="10" x2="110" y2="200" stroke="#e2e8f0" stroke-width="1" />
-                            <line x1="24" y1="60" x2="196" y2="150" stroke="#e2e8f0" stroke-width="1" />
-                            <line x1="196" y1="60" x2="24" y2="150" stroke="#e2e8f0" stroke-width="1" />
-                            <polygon points="110,27 184,80 183,132 110,165 49,119 42,73" fill="url(#rg)"
-                                stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" opacity=".9" />
-                            <text x="110" y="6" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">GPA</text>
-                            <text x="210" y="58" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">Test</text>
-                            <text x="210" y="156" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">Honors</text>
-                            <text x="110" y="218" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">Essays</text>
-                            <text x="8" y="156" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">EFC</text>
-                            <text x="8" y="58" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b"
-                                font-family="Inter Tight">Activities</text>
-                        </svg>
-                    </div>
-                        </div>
-                        <div class="view-panel" id="panel-breakdown">
-                            <div class="radar-strength-row">
-                                <span class="radar-strength-lbl">Overall Strength</span>
-                                <span class="radar-strength-num">68<small>/100</small></span>
-                            </div>
-                    <div class="radar-bar">
-                        <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="dim"></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="radar-cats">
-                        <div class="radar-cat">GPA &amp; Rigor<span class="radar-cat-right"><span class="radar-cat-score">92</span><span class="rc-badge rc-strong">Strong</span></span></div>
-                        <div class="radar-cat">Testing<span class="radar-cat-right"><span class="radar-cat-score">88</span><span class="rc-badge rc-strong">Strong</span></span></div>
-                        <div class="radar-cat">Honors<span class="radar-cat-right"><span class="radar-cat-score">74</span><span class="rc-badge rc-ok">OK</span></span></div>
-                        <div class="radar-cat">Essays<span class="radar-cat-right"><span class="radar-cat-score">51</span><span class="rc-badge rc-weak">Weak</span></span></div>
-                        <div class="radar-cat">Activities<span class="radar-cat-right"><span class="radar-cat-score">34</span><span class="rc-badge rc-critical">Critical</span></span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="radar-insights">
-                        <div class="radar-insight ri-warn"><b><span class="ic-inline" data-icon="warn"></span>Critical Gap</b>Activities score is in the bottom 40% —
-                            no defined spike.</div>
-                        <div class="radar-insight ri-tip"><b>→ Highest Leverage</b>Essays are dragging your odds. A
-                            rewritten hook can move your probability by +6%.</div>
-                    </div>
-                </div>
+                <!-- Карточка hero (дизайн владельца, 26.09.2026); зелёные ярче по просьбе владельца. -->
+<div class="hero-card-v2" style="width: min(600px, 100%);">
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 30px; border-radius: 28px; background: rgb(255, 255, 255); border: 1px solid rgb(219, 230, 246); box-shadow: rgba(15, 31, 75, 0.05) 0px 1px 2px, rgba(23, 62, 140, 0.45) 0px 30px 70px -34px;">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 18px; background: linear-gradient(160deg, rgb(238, 244, 255), rgb(221, 233, 253)); border: 1px solid rgb(211, 226, 251);">
+<span style="display: flex; align-items: center; justify-content: space-between; padding: 0px 4px 4px;"><span style="display: flex; align-items: center; gap: 10px;"><img src="/assets/mobile/logo-stanford.png" alt="" style="width: 30px; height: 30px; border-radius: 8px; object-fit: cover; background: rgb(255, 255, 255); flex-shrink: 0; box-shadow: rgba(15, 31, 75, 0.09) 0px 0px 0px 1px;"><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(15, 31, 75);">Stanford</span></span><span style="font-size: 12.5px; font-weight: 700; color: rgb(29, 78, 216);">Sample</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="position: relative; display: block; width: 30px; height: 30px; border-radius: 50%; background: conic-gradient(rgb(37, 99, 235) 0deg, rgb(37, 99, 235) 23%, rgb(219, 231, 251) 23%, rgb(219, 231, 251) 100%);"><span style="position: absolute; inset: 6px; border-radius: 50%; background: rgb(255, 255, 255);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Your odds</span><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(37, 99, 235);">23%</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; align-items: flex-end; gap: 4px; height: 28px;"><span style="width: 9px; height: 12px; border-radius: 2px; background: rgb(188, 211, 245);"></span><span style="width: 9px; height: 26px; border-radius: 2px; background: rgb(37, 99, 235);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Restrictive EA</span><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(37, 99, 235);">+9%</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(180deg, rgb(74, 238, 168), rgb(16, 204, 125)); box-shadow: rgba(16, 204, 125, 0.45) 0px 4px 10px -2px; font-family: Fraunces, Georgia, serif; font-size: 19px; font-weight: 900; line-height: 1; color: rgb(255, 255, 255);">$</span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Net cost / year</span><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(16, 185, 110);">$20,900</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: grid; grid-template-columns: repeat(3, 8px); gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(131, 181, 255);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(37, 99, 235);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(131, 181, 255);"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(188, 211, 245);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Activities score</span><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(15, 31, 75);">68/100</span></span>
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; background: rgb(255, 255, 255); border: 1px solid rgb(227, 236, 250);"><span style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0;"><span style="display: flex; flex-direction: column; gap: 4px; width: 32px;"><span style="height: 5px; width: 100%; border-radius: 3px; background: rgb(37, 99, 235);"></span><span style="height: 5px; width: 74%; border-radius: 3px; background: rgb(131, 181, 255);"></span><span style="height: 5px; width: 48%; border-radius: 3px; background: rgb(188, 211, 245);"></span></span></span><span style="flex: 1 1 0%; min-width: 0px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: rgb(15, 31, 75);">Essay score</span><span style="font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 900; letter-spacing: -0.03em; color: rgb(15, 31, 75);">82/100</span></span>
+</div>
+<a href="funnel.html?new=1" style="display: flex; align-items: center; justify-content: center; gap: 14px; height: 68px; border-radius: 16px; background: rgb(37, 99, 235); font-family: 'Inter Tight', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(255, 255, 255); box-shadow: rgba(37, 99, 235, 0.75) 0px 18px 40px -14px; text-decoration: none;">Find out your chances<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"></path></svg></a>
+</div>
+</div>
             </div>
         </section>
 
@@ -3634,6 +3565,19 @@
                 });
             }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
             els.forEach(function (el) { io.observe(el); });
+        })();
+        // ── Карточка в hero: на низких экранах уменьшаем, чтобы первый экран
+        // помещался целиком (100px — шапка и отступ сверху, 40px — снизу).
+        (function () {
+            var card = document.querySelector('.hero-card-v2');
+            if (!card) return;
+            function fit() {
+                card.style.zoom = '';
+                var z = Math.min(1, (window.innerHeight - 140) / card.offsetHeight);
+                card.style.zoom = z < 1 ? z.toFixed(4) : '';
+            }
+            fit();
+            window.addEventListener('resize', fit);
         })();
         // ── Финальный блок: нарисован под 1440px. Уменьшаем целиком, чтобы вместе
         // с подвалом помещался в экран и по ширине, и по высоте.
