@@ -670,8 +670,17 @@ function earlyName(n) {
 function fillEarly(D) {
   var head = byText(/Your (odds|chances) in the early round/i)[0];
   var section = head && head.closest('div[style*="border-radius"]');
-  var list = D.rows.filter(function (r) { return r.oddsEarly != null && r.oddsEarly > r.odds; })
-                   .sort(function (a, b) { return (b.oddsEarly - b.odds) - (a.oddsEarly - a.odds); });
+  /* Три карточки всегда (решение владельца 26.09.2026): сперва вузы, где ранний
+     раунд поднимает шансы, потом остальные с ранним раундом, потом — вузы без
+     раннего раунда с честной пометкой «No early round». Средний прирост и
+     «N of your M schools» считаем только по настоящим ранним раундам. */
+  var lifted = D.rows.filter(function (r) { return r.oddsEarly != null && r.oddsEarly > r.odds; })
+                     .sort(function (a, b) { return (b.oddsEarly - b.odds) - (a.oddsEarly - a.odds); });
+  var flat = D.rows.filter(function (r) { return r.oddsEarly != null && lifted.indexOf(r) < 0; });
+  var none = D.rows.filter(function (r) { return r.oddsEarly == null; })
+                   .sort(function (a, b) { return a.odds - b.odds; });       // сперва самые сложные
+  var withEarly = lifted.concat(flat);
+  var list = withEarly.concat(none);
 
   var lifts = $$('span').filter(function (e) { return /^↑$/.test((e.textContent||'').trim()); })
                         .map(function (e) { return e.parentElement; });
@@ -684,16 +693,17 @@ function fillEarly(D) {
   }
 
   var shown = list.slice(0, lifts.length);          // в макете три колонки
-  var max = Math.max.apply(null, shown.map(function (r) { return r.oddsEarly; })) || 1;
+  var real = shown.filter(function (r) { return r.oddsEarly != null; });
+  var max = Math.max.apply(null, shown.map(function (r) { return Math.max(r.odds, r.oddsEarly || 0); })) || 1;
   lifts.forEach(function (badge, i) {
     var block = badge.closest('div[style*="border-radius:16px"]') || badge.parentElement.parentElement;
     var r = shown[i];
     if (!r) { if (block) block.style.display = 'none'; return; }
-    // карточек может быть меньше трёх: у части вузов раннего раунда нет.
-    // Растягиваем оставшиеся на всю ширину, чтобы рядом не висела пустота.
+    // вузов в списке меньше трёх (минимум — два): оставшиеся на всю ширину
     if (block && block.parentElement && shown.length < lifts.length) {
       block.parentElement.style.gridTemplateColumns = 'repeat(' + shown.length + ', minmax(0, 1fr))';
     }
+    var noEarly = r.oddsEarly == null;
     var nodes = $$('span,img', block);
     var img = nodes.filter(function (e) { return e.tagName === 'IMG'; })[0];
     if (img) { img.src = logo(r.d); img.onerror = function () { this.style.visibility = 'hidden'; }; }
@@ -701,19 +711,26 @@ function fillEarly(D) {
       return e.children.length === 0 && /^[A-Z][A-Za-z .&'-]{2,28}$/.test((e.textContent||'').trim());
     })[0];
     if (name) setText(name, earlyName(r.n));
-    var rnd = nodes.filter(function (e) { return /^(ED|EA)\s·/i.test((e.textContent||'').trim()); })[0];
-    if (rnd) setText(rnd, r.earlyCode + (r.earlyDate ? ' · ' + r.earlyDate : ''));
-    badge.lastChild && (badge.lastChild.nodeValue = (r.oddsEarly - r.odds) + '%');
-    var pcts = nodes.filter(function (e) { return /^\d+%$/.test((e.textContent||'').trim()); });
+    var rnd = nodes.filter(function (e) { return /^(ED|EA|REA|RD|No early)/i.test((e.textContent||'').trim()) && e.children.length === 0; })[0];
+    if (rnd) setText(rnd, noEarly ? 'No early round' : r.earlyCode + (r.earlyDate ? ' · ' + r.earlyDate : ''));
+    var arrow = badge.firstElementChild || null;
+    if (arrow) arrow.style.display = noEarly ? 'none' : '';
+    if (badge.lastChild) badge.lastChild.nodeValue = noEarly ? 'RD only' : ' ' + (r.oddsEarly - r.odds) + '%';
+    badge.style.opacity = noEarly ? '.6' : '';
+    badge.style.filter = noEarly ? 'grayscale(1)' : '';
+    var pcts = nodes.filter(function (e) { return /^(\d+%|—)$/.test((e.textContent||'').trim()); });
     if (pcts[0]) setText(pcts[0], r.odds + '%');
-    if (pcts[1]) setText(pcts[1], r.oddsEarly + '%');
+    if (pcts[1]) setText(pcts[1], noEarly ? '—' : r.oddsEarly + '%');
     // столбцы — два последних узла с высотой в px; первым под фильтр попадал логотип
     var bars = $$('span', block).filter(function (e) { return /height:\s*\d+px/.test(e.getAttribute('style')||''); }).slice(-2);
     if (bars[0]) bars[0].style.height = Math.max(40, Math.round(r.odds / max * 150)) + 'px';
-    if (bars[1]) bars[1].style.height = Math.max(40, Math.round(r.oddsEarly / max * 150)) + 'px';
+    if (bars[1]) {
+      bars[1].style.height = noEarly ? '40px' : Math.max(40, Math.round(r.oddsEarly / max * 150)) + 'px';
+      bars[1].style.opacity = noEarly ? '.18' : '';
+    }
   });
 
-  var lift = shown.reduce(function (a, r) { return a + (r.oddsEarly - r.odds); }, 0) / shown.length;
+  var lift = real.length ? real.reduce(function (a, r) { return a + (r.oddsEarly - r.odds); }, 0) / real.length : 0;
 
   /* «+9.0 points average lift» — это голый текстовый узел внутри обёртки,
      а не отдельный span, поэтому правим именно childNodes. */
@@ -726,7 +743,7 @@ function fillEarly(D) {
   });
 
   var of = byText(/^\d+ of your \d+ schools$/i)[0];
-  if (of) setText(of, shown.length + ' of your ' + D.rows.length + ' schools');
+  if (of) setText(of, withEarly.length + ' of your ' + D.rows.length + ' schools');
 
   /* Подпись про Duke осталась от образца — заменяем на реальные школы. */
   var note = byText(/Early Decision is binding/i)[0];
@@ -848,8 +865,9 @@ function fillScoreSection(re, data, subLabels, itemNoun, types) {
     var sub = $$('span,p,div', sec).filter(function (e) {
       return e.children.length === 0 && /scored|criteria|words/i.test(e.textContent || '');
     })[0];
-    if (sub) setText(sub, items.length + ' ' + itemNoun +
-      (items.length === 1 ? '' : 's') + ', scored against the students admitted to your list');
+    // itemNoun = 'activitie' → «1 activity» / «5 activities»
+    var noun = items.length === 1 ? itemNoun.replace(/ie$/, 'y') : itemNoun + 's';
+    if (sub) setText(sub, items.length + ' ' + noun + ', scored against the students admitted to your list');
   }
 }
 
@@ -984,6 +1002,22 @@ function fillEarnings(D) {
   insertEarnings(earnSection(D.major, D.rows.map(function (r) {
     return { d: r.d, name: earnName(r.n), tier: tierOf(r) };
   })));
+}
+
+/* Карточки активностей в макете делят фиксированную высоту поровну (1fr):
+   при пяти активностях ряды раздувались, а пятая уходила за край. Теперь
+   у карточки своя высота 63–96px, блок — по центру; секция растёт по
+   содержимому (data-am-grow в relayout). Работает и для одной активности. */
+function fitActivityCards() {
+  var head = byText(/activities are worth/i, 'h1,h2,span,div')[0];
+  var sec = head && head.closest('section');
+  if (!sec) return;
+  $$('div', sec).forEach(function (g) {
+    if (!/grid-auto-rows:\s*1fr/.test(g.getAttribute('style') || '')) return;
+    g.style.gridAutoRows = 'minmax(63px, 96px)';
+    g.style.alignContent = 'center';
+  });
+  sec.setAttribute('data-am-grow', '1');
 }
 
 function hideUnscored(D) {
@@ -1154,7 +1188,8 @@ function relayout() {
       var cs = getComputedStyle(c), vis = [].slice.call(c.children).filter(function (k) {
         return getComputedStyle(k).display !== 'none';
       });
-      var natural = Math.ceil(parseFloat(cs.paddingTop) + sum(vis.map(function (k) { return k.offsetHeight; })) +
+      // scrollHeight — вместе с тем, что не влезло и обрезано (overflow:hidden)
+      var natural = Math.ceil(parseFloat(cs.paddingTop) + sum(vis.map(function (k) { return Math.max(k.offsetHeight, k.scrollHeight); })) +
                 (parseFloat(cs.rowGap) || 0) * (vis.length - 1) + 40);
       h = c.getAttribute('data-am-grow') ? Math.max(oOrig[i], natural) : natural;
     }
@@ -1174,7 +1209,7 @@ function personalize() {
     return false;                                      // профиля нет — остаётся образец
   }
   try {
-    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); fillEarnings(D); hideUnscored(D); relayout();
+    fillHeader(D); fillKpis(D); fillCards(D); fillEarly(D); fillEarnings(D); hideUnscored(D); fitActivityCards(); relayout();
     document.documentElement.setAttribute('data-am-personal', '1');
     if (D.skipped.length) console.info('AdmitMap: без данных, пропущены —', D.skipped.join(', '));
   } catch (e) { console.error('AdmitMap personalize:', e); return false; }

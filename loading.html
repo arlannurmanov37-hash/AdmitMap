@@ -47,25 +47,30 @@
     padding-bottom:26px}
 }
 @media(min-width:1040px){
-  /* Ноутбук: широкая карточка по центру, по бокам свободное место. Сверху
-     кольцо и заголовок в строку, под ними шаги в две колонки, внизу
-     предпросмотр отчёта, уходящий за нижний край карточки. */
-  body{padding:28px 24px}
+  /* Ноутбук: одна карточка 1000×600 по центру экрана, две колонки — слева
+     кольцо, заголовок и шаги, справа предпросмотр отчёта целиком (раньше он
+     уходил за нижний край, а справа от заголовка оставалась пустота).
+     Если окно меньше карточки, скрипт ниже уменьшает её через zoom. */
+  body{padding:0;height:100vh;overflow:hidden}
   [data-screen-label="Loading"]{
-    width:960px!important;min-height:0;height:min(900px,calc(100vh - 56px))!important;
-    padding-bottom:0!important}
-  [data-screen-label="Loading"]>div:nth-of-type(1){padding:40px 56px 34px;gap:30px}
-  #ld-row{gap:48px!important}
-  #ld-ringwrap{width:216px!important;height:216px!important}
-  #ld-ringwrap>svg{width:216px;height:216px}
-  #ld-pct{font-size:64px!important}
+    display:grid!important;grid-template-columns:470px 1fr;align-items:center;
+    width:1000px!important;height:600px!important;min-height:0;padding-bottom:0!important;flex:none}
+  [data-screen-label="Loading"]>div:nth-of-type(1){position:static!important;padding:36px 20px 36px 48px;gap:26px;align-self:stretch;justify-content:center}
+  [data-screen-label="Loading"]>div:nth-of-type(1)>div:first-child{position:absolute;z-index:1;top:30px;left:48px;right:40px}
+  #ld-row{gap:26px!important;margin-top:24px}
+  #ld-ringwrap{width:150px!important;height:150px!important}
+  #ld-ringwrap>svg{width:150px;height:150px}
+  #ld-pct{font-size:46px!important}
   #ld-ana{font-size:11px!important}
-  #ld-row h1{font-size:46px!important;white-space:nowrap}
-  #ld-row h1+span{font-size:17px!important}
-  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3){
-    display:grid!important;grid-template-columns:1fr 1fr;column-gap:40px;row-gap:16px;padding-top:26px!important}
-  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3)>span{font-size:16px!important}
-  [data-screen-label="Loading"]>div:nth-of-type(2){margin:0 56px!important;padding:28px 30px 0!important;gap:14px!important}
+  #ld-row h1{font-size:38px!important}
+  #ld-row h1+span{font-size:15px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3){gap:14px!important;padding-top:24px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(1)>div:nth-of-type(3)>span{font-size:15.5px!important}
+  [data-screen-label="Loading"]>div:nth-of-type(2){
+    flex:none!important;margin:0 40px 0 12px!important;padding:26px 26px 28px!important;gap:14px!important;
+    border-radius:20px!important;border-bottom:1px solid #cfdff5!important;
+    box-shadow:0 1px 2px rgba(15,31,75,.05),0 18px 44px -18px rgba(23,62,140,.25)!important}
+  [data-screen-label="Loading"]>div:nth-of-type(2)>div:nth-of-type(3){height:170px!important}
 }
 @media(max-width:430px){
   #ld-ringwrap{width:104px!important;height:104px!important}
@@ -150,6 +155,17 @@
 
   
 </div>
+<script>
+/* Карточка 1000×600: в маленьком окне уменьшаем, на большом экране — до 1.2×. */
+(function () {
+  var el = document.querySelector('[data-screen-label="Loading"]');
+  function fit() {
+    if (innerWidth < 1040) { el.style.zoom = ''; return; }
+    el.style.zoom = Math.min(1.2, (innerWidth - 48) / 1000, (innerHeight - 48) / 600);
+  }
+  fit(); addEventListener('resize', fit);
+})();
+</script>
 <script src="scoring.js?v=20260922230000"></script>
 <script>
 /* Прогресс как на прежней странице: кольцо и процент идут с нуля, подпись
