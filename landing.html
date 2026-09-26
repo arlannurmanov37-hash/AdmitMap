@@ -3566,7 +3566,7 @@
             }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
             els.forEach(function (el) { io.observe(el); });
         })();
-        // ── Меню: раздел встаёт по центру экрана под шапкой и виден целиком.
+        // ── Меню: раздел встаёт чуть выше центра экрана под шапкой и виден целиком.
         // Центрируем содержимое раздела, а не его коробку: у секций большие
         // пустые отступы, из-за них по верхнему краю часть текста уходила вниз.
         (function () {
@@ -3589,7 +3589,7 @@
                 var sec = document.getElementById(id);
                 if (!sec || !sec.offsetParent) return false;
                 var box = contentBox(sec), room = window.innerHeight - HEADER;
-                var y = window.scrollY + box.top - HEADER - Math.max(12, (room - box.height) / 2);
+                var y = window.scrollY + box.top - HEADER - Math.max(12, (room - box.height) * 0.4);   // чуть выше центра: сверху 40% свободного места
                 window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
                 return true;
             }
