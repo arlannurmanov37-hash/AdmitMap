@@ -97,23 +97,18 @@ h1 em{font-style:normal;color:var(--royal)}
 .sub b{font-weight:800;color:var(--navy);white-space:nowrap}
 
 .feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.98rem;width:100%;margin-bottom:2.25rem}
-.feat{position:relative;overflow:hidden;display:flex;align-items:center;gap:.84rem;padding:.69rem .98rem;
-  border-radius:1.12rem;box-shadow:0 1.12rem 2.52rem -1.96rem rgba(23,62,140,.35);text-align:left}
-/* мягкое пятно цвета в правом верхнем углу чипа */
-.feat::after{content:'';position:absolute;top:-2.8rem;right:-2.8rem;width:8.4rem;height:8.4rem;border-radius:50%;
-  background:radial-gradient(50% 50% at 50% 50%,var(--spot),transparent 70%);pointer-events:none}
-.feat-i{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:2.52rem;height:2.52rem;
-  flex-shrink:0;border-radius:.77rem;color:#fff}
+/* Чипы спокойные (владелец 29.09.2026: цветные «отвлекают от тарифов»):
+   белый фон, тонкая рамка, бледная иконка — внимание остаётся на карточках. */
+.feat{display:flex;align-items:center;gap:.84rem;padding:.69rem .98rem;border-radius:1.12rem;
+  background:#fff;border:1px solid var(--line);box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
+.feat-i{display:flex;align-items:center;justify-content:center;width:2.52rem;height:2.52rem;
+  flex-shrink:0;border-radius:.77rem}
 .feat-i svg{width:1.26rem;height:1.26rem}
-.feat b{position:relative;z-index:1;font-size:1.05rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
-.f1{background:linear-gradient(165deg,#eaf1ff 0%,#fff 78%);border:1px solid #d6e4fb;--spot:rgba(59,130,246,.2)}
-.f1 .feat-i{background:linear-gradient(140deg,#3b82f6,#2563eb);box-shadow:0 .56rem 1.26rem -.56rem rgba(37,99,235,.67)}
-.f2{background:linear-gradient(165deg,#e7fbf1 0%,#fff 78%);border:1px solid #c3f0da;--spot:rgba(29,219,135,.2)}
-.f2 .feat-i{background:linear-gradient(140deg,#1ddb87,#0b9f67);box-shadow:0 .56rem 1.26rem -.56rem rgba(11,159,103,.67)}
-.f3{background:linear-gradient(165deg,#f3eeff 0%,#fff 78%);border:1px solid #e1d6fb;--spot:rgba(167,139,250,.2)}
-.f3 .feat-i{background:linear-gradient(140deg,#a78bfa,#7c3aed);box-shadow:0 .56rem 1.26rem -.56rem rgba(124,58,237,.67)}
-.f4{background:linear-gradient(165deg,#fff6e5 0%,#fff 78%);border:1px solid #f8e2b8;--spot:rgba(251,191,36,.2)}
-.f4 .feat-i{background:linear-gradient(140deg,#fbbf24,#d97706);box-shadow:0 .56rem 1.26rem -.56rem rgba(217,119,6,.67)}
+.feat b{font-size:1.05rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
+.f1 .feat-i{background:var(--royal-l);color:var(--royal)}
+.f2 .feat-i{background:var(--green-l);color:var(--green-d)}
+.f3 .feat-i{background:var(--purple-l);color:var(--purple)}
+.f4 .feat-i{background:var(--amber-l);color:var(--amber-d)}
 
 /* the whole ticket block, text included, rendered 10% larger */
 .tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
@@ -259,6 +254,7 @@ h1 em{font-style:normal;color:var(--royal)}
   .secure{font-size:.85rem;text-align:center}
   .legal{font-size:.8rem}
 }
+
 
 
 </style>
