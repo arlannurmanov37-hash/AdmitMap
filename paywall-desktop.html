@@ -76,24 +76,24 @@ ul{list-style:none;margin:0;padding:0}
 /* Верх — по дизайну «AdmitMap Paywall Top» (Claude Design, 29.09.2026):
    зелёная плашка «Your report is ready» над логотипом, крупный заголовок,
    чипы с цветными иконками. Размеры пересчитаны из макета 1440×900 в rem. */
-.badge{display:inline-flex;align-items:center;gap:.84rem;padding:.77rem 2.1rem .77rem 1.68rem;margin-bottom:1.13rem;
-  border-radius:999px;background:#e7fbf1;border:1px solid #b8f0d6;font-size:1.22rem;font-weight:800;
+.badge{display:inline-flex;align-items:center;gap:.75rem;padding:.55rem 1.8rem .55rem 1.45rem;margin-bottom:.85rem;
+  border-radius:999px;background:#e7fbf1;border:1px solid #b8f0d6;font-size:1rem;font-weight:800;
   color:#067a4c;white-space:nowrap}
 .badge i{width:.63rem;height:.63rem;border-radius:50%;background:#1ddb87;box-shadow:0 0 0 .28rem rgba(29,219,135,.22)}
 /* страница тарифов без анкеты: отчёт ещё не готов — плашка синяя */
 .badge.plain{background:#eef4ff;border-color:#d6e4fb;color:#1d4ed8}
 .badge.plain i{background:#2563eb;box-shadow:0 0 0 .28rem rgba(37,99,235,.18)}
-.brand{display:inline-flex;align-items:center;gap:1.26rem;margin-bottom:1.13rem}
-.brand img{width:3.08rem;height:3.7rem;object-fit:contain}
-.brand-t{font-family:Fraunces,Georgia,serif;font-size:3.52rem;font-weight:900;
+.brand{display:inline-flex;align-items:center;gap:1.05rem;margin-bottom:.8rem}
+.brand img{width:2.6rem;height:3.1rem;object-fit:contain}
+.brand-t{font-family:Fraunces,Georgia,serif;font-size:3rem;font-weight:900;
   letter-spacing:-.035em;color:var(--navy)}
 .brand-t span{color:var(--royal)}
 
 
-h1{font-family:Fraunces,Georgia,serif;font-size:3.78rem;font-weight:900;letter-spacing:-.045em;
-  line-height:1;margin:0 0 .63rem}
+h1{font-family:Fraunces,Georgia,serif;font-size:3.4rem;font-weight:900;letter-spacing:-.045em;
+  line-height:1;margin:0 0 .45rem}
 h1 em{font-style:normal;color:var(--royal)}
-.sub{font-size:1.19rem;line-height:1.5;color:#43536b;margin:0 0 1.68rem;max-width:77rem}
+.sub{font-size:1.1rem;line-height:1.5;color:#43536b;margin:0 0 1.3rem;max-width:77rem}
 .sub b{font-weight:800;color:var(--navy);white-space:nowrap}
 
 .feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.98rem;width:100%;margin-bottom:2.25rem}
@@ -471,11 +471,10 @@ else window.addEventListener('load', function(){ if(window.amTrack) window.amTra
     if (!wrap || !inn) return;
     var cs = getComputedStyle(wrap);
     var need = inn.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-    // запас 6% — чтобы сверху и снизу оставался воздух и блок стоял ровно по центру
-    var have = window.innerHeight * 0.94;
+    var have = window.innerHeight;
     if (need <= have) return;
     var base = parseFloat(getComputedStyle(root).fontSize);
-    root.style.fontSize = (base * have / need).toFixed(3) + 'px';
+    root.style.fontSize = (base * have / need * 0.99).toFixed(3) + 'px';
   }
   fitScreen();
   window.addEventListener('load', fitScreen);
