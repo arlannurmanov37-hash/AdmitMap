@@ -79,15 +79,22 @@ ul{list-style:none;margin:0;padding:0}
   letter-spacing:-.045em;color:var(--ink)}
 .brand-t span{color:var(--royal)}
 
-.eyebrow{display:flex;align-items:center;justify-content:center;gap:.875rem;margin-bottom:1rem}
-.eyebrow i{width:2.125rem;height:2px;border-radius:2px;background:var(--royal);display:block}
-.eyebrow span{font-size:.6875rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--royal)}
+/* Зелёная плашка «Your report is ready» над логотипом (из дизайна «Paywall Top»,
+   владелец вернул её 29.09.2026). Без анкеты — синяя «Choose your report». */
+.badge{display:inline-flex;align-items:center;gap:.75rem;padding:.55rem 1.8rem .55rem 1.45rem;margin-bottom:.85rem;
+  border-radius:999px;background:#e7fbf1;border:1px solid #b8f0d6;font-size:1rem;font-weight:800;
+  color:#067a4c;white-space:nowrap}
+.badge i{width:.63rem;height:.63rem;border-radius:50%;background:#1ddb87;box-shadow:0 0 0 .28rem rgba(29,219,135,.22)}
+.badge.plain{background:#eef4ff;border-color:#d6e4fb;color:#1d4ed8}
+.badge.plain i{background:#2563eb;box-shadow:0 0 0 .28rem rgba(37,99,235,.18)}
 
 h1{font-family:Fraunces,Georgia,serif;font-size:2.6875rem;font-weight:900;letter-spacing:-.048em;
   line-height:1.04;margin:0 0 .3125rem}
 h1 em{font-style:normal;color:var(--royal)}
 .sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
-.sub b{font-weight:800;color:var(--navy)}
+.sub b{font-weight:800;color:var(--navy);white-space:nowrap}
+/* ноутбук: подзаголовок одной строкой (владелец, 29.09.2026) */
+@media(min-width:1101px){.sub{white-space:nowrap;max-width:none}}
 
 .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:2.25rem}
 .feat{display:flex;align-items:center;gap:.9375rem;padding:1.0625rem 1.1875rem;border-radius:1.125rem;
@@ -218,8 +225,7 @@ h1 em{font-style:normal;color:var(--royal)}
   .brand{gap:.6rem;margin-bottom:.9rem}
   .brand svg{width:2.4rem;height:2.4rem}
   .brand-t{font-size:2.05rem}
-  .eyebrow{margin-bottom:.7rem}
-  .eyebrow span{font-size:.78rem}
+  .badge{font-size:.95rem;padding:.6rem 1.3rem .6rem 1.05rem;gap:.6rem;margin-bottom:.9rem}
   h1{font-size:2.45rem;line-height:1.05;margin-bottom:.6rem}
   .sub{font-size:1.02rem;margin-bottom:1.5rem}
   .feats{gap:.6rem;margin-bottom:2.3rem}
@@ -259,12 +265,12 @@ h1 em{font-style:normal;color:var(--royal)}
   </button>
 
   <div class="in">
+    <span class="badge f" id="badge"><i></i><span id="eyebrow">Your report is ready</span></span>
     <span class="brand u">
       <img src="/assets/mobile/admitmap-mark.svg" alt="">
       <span class="brand-t">Admit<span>Map</span></span>
     </span>
 
-    <div class="eyebrow f"><i></i><span id="eyebrow">Your report is ready</span><i></i></div>
     <h1 class="u d1">Make the right <em>college list.</em></h1>
     <p class="sub f d2">Your chances at every school on your list, measured against the profile you actually
       have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
@@ -366,9 +372,11 @@ h1 em{font-style:normal;color:var(--royal)}
   // ?ready=1 ставит только конец воронки; ссылка Pricing с сайта ведёт без него
   var done = /[?&]ready=1\b/.test(location.search);
   if (!done) {
-    var eb = document.getElementById('eyebrow');
+    var eb = document.getElementById('eyebrow'), badge = document.getElementById('badge');
     if (eb) eb.textContent = 'Choose your report';
+    if (badge) badge.classList.add('plain');
     var sub = document.querySelector('.sub'), d = document.getElementById('days');
+    if (sub) sub.style.whiteSpace = 'normal';               // этот текст длиннее — в две строки
     if (sub) sub.innerHTML = 'See your chances at every school you apply to, and what each one would really ' +
       'cost after aid. Five minutes to fill in, and you have <b><span id="days">' +
       ((d && d.textContent) || '') + '</span> days</b> until Nov 1 early deadlines.';
