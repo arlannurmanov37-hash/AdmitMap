@@ -119,7 +119,7 @@ export default async function handler(req, res) {
       const t0 = Date.now();
       const pdf = await renderPdf('', '/report?sample=1&pdf=1');
       return res.status(200).json({ ok: true, bytes: pdf.length, ms: Date.now() - t0,
-        head: pdf.slice(0, 8).toString('latin1') });
+        head: pdf.slice(0, 8).toString('latin1'), b64: req.body.full ? pdf.toString('base64') : undefined });
     } catch (e) { return res.status(200).json({ ok: false, error: safeDetail(e).slice(0, 300) }); }
   }
   const id = String((req.body && req.body.checkout_id) || '');
