@@ -18,7 +18,7 @@ const SITE = (process.env.SITE_URL || 'https://www.admitmap.app').replace(/\/$/,
 const FROM = process.env.REPORT_FROM || process.env.EMAIL_FROM || 'AdmitMap <noreply@admitmap.app>';
 const ALLOWED = (process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
 
-async function renderPdf(checkoutId, samplePath) {
+async function renderPdf(checkoutId) {
   const chromium = (await import('@sparticuz/chromium')).default;
   const puppeteer = (await import('puppeteer-core')).default;
   chromium.setGraphicsMode = false;
@@ -30,13 +30,13 @@ async function renderPdf(checkoutId, samplePath) {
   });
   try {
     const page = await browser.newPage();
-    await page.goto(samplePath ? SITE + samplePath : `${SITE}/report?checkout_id=${encodeURIComponent(checkoutId)}&pdf=1`,
+    await page.goto(`${SITE}/report?checkout_id=${encodeURIComponent(checkoutId)}&pdf=1`,
       { waitUntil: 'networkidle0', timeout: 35000 });
     // report.html ставит data-am-done, когда отчёт заполнен
     await page.waitForFunction(() => document.documentElement.getAttribute('data-am-done') === '1',
       { timeout: 25000 });
     const personal = await page.evaluate(() => document.documentElement.getAttribute('data-am-personal') === '1');
-    if (!personal && !samplePath) throw new Error('report did not render as personal');
+    if (!personal) throw new Error('report did not render as personal');
     await page.evaluate(async () => {
       if (document.fonts && document.fonts.ready) await document.fonts.ready;
       if (window.__amPreparePrint) window.__amPreparePrint();
@@ -113,15 +113,6 @@ export default async function handler(req, res) {
   const inside = key && req.headers['x-admitmap-key'] === key;
   const origin = req.headers.origin || '';
   if (!inside && ALLOWED.length && !ALLOWED.includes(origin)) return bad(res, 403, 'Not allowed.');
-  // ВРЕМЕННО (29.09.2026): проверка Chromium на Vercel — PDF образца, только размер
-  if (req.body && req.body.selftest === 'sample-pdf-2026-09-29') {
-    try {
-      const t0 = Date.now();
-      const pdf = await renderPdf('', '/report?sample=1&pdf=1');
-      return res.status(200).json({ ok: true, bytes: pdf.length, ms: Date.now() - t0,
-        head: pdf.slice(0, 8).toString('latin1'), b64: req.body.full ? pdf.toString('base64') : undefined });
-    } catch (e) { return res.status(200).json({ ok: false, error: safeDetail(e).slice(0, 300) }); }
-  }
   const id = String((req.body && req.body.checkout_id) || '');
   if (!/^[A-Za-z0-9_-]{8,80}$/.test(id)) return bad(res, 400, 'Bad checkout id.');
   const out = await sendReport(id);
