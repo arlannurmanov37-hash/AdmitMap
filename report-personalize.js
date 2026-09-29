@@ -125,22 +125,36 @@ function purchase() {
       price: parseInt((location.search.match(/[?&]tier=(\d+)/) || [])[1] || localStorage.getItem('admitmap_tier'), 10) || 29 });
   }
   if (!id) return Promise.resolve(null);
-  if (saved && saved.id === id && saved.price) return Promise.resolve(saved);
-  var attempt = function (n) {
-    var sid = null;
-    try { sid = localStorage.getItem('admitmap_uid'); } catch (e) {}
-    return post('/api/verify', { checkout_id: id, student_id: sid }, 15000).then(function (r) {
-      if (r.ok) {
-        var p = { id: id, tier: r.tier, price: r.price };
-        store('admitmap_purchase', p);
-        try { localStorage.setItem('admitmap_tier', String(r.price)); } catch (e) {}
-        return p;
-      }
-      if (r.pending && n < 8) return wait(2000).then(function () { return attempt(n + 1); });
-      return { error: r.error || 'We could not confirm your payment.' };
-    });
-  };
-  return attempt(0);
+  /* Раньше повторное открытие верило записи admitmap_purchase в браузере — её
+     можно вписать руками и открыть отчёт без оплаты. Теперь покупку каждый раз
+     подтверждает сервер через Polar. Запись осталась только ради номера чекаута.
+     Одна покупка — один отчёт: отправляем отпечатки купленных анкет (снимки с
+     пейволла) и текущей; сервер называет, какая куплена этим чекаутом. */
+  var snaps = window.amPurchaseSnapshots ? window.amPurchaseSnapshots() : {};
+  var live = null;
+  try { live = JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) {}
+  var hashing = window.amProfileHash && live ? window.amProfileHash(live) : Promise.resolve(null);
+  return hashing.then(function (liveHash) {
+    var hashes = Object.keys(snaps);
+    if (liveHash && hashes.indexOf(liveHash) < 0) { hashes.push(liveHash); snaps[liveHash] = live; }
+    var attempt = function (n) {
+      var sid = null;
+      try { sid = localStorage.getItem('admitmap_uid'); } catch (e) {}
+      return post('/api/verify', { checkout_id: id, student_id: sid, profile_hashes: hashes }, 15000).then(function (r) {
+        if (r.ok) {
+          var p = { id: id, tier: r.tier, price: r.price,
+                    profile: r.profile_hash && snaps[r.profile_hash] ? snaps[r.profile_hash] : null };
+          store('admitmap_purchase', { id: id });
+          try { localStorage.setItem('admitmap_tier', String(r.price)); } catch (e) {}
+          return p;
+        }
+        if (r.pending && n < 8) return wait(2000).then(function () { return attempt(n + 1); });
+        if (r.mismatch) return { mismatch: true };
+        return { error: r.error || 'We could not confirm your payment.' };
+      });
+    };
+    return attempt(0);
+  });
 }
 
 function showScoring(on) {
@@ -1078,7 +1092,8 @@ function showNoEssay(D) {
 /* Если профиль есть, но отчёт по нему не строится (школ нет в базе, не
    заполнен GPA), показывать образец Майи НЕЛЬЗЯ: покупатель получит чужой
    отчёт со своим именем во вкладке. Вместо этого — честное объяснение. */
-function showCannotBuild(reason, paid) {
+function showCannotBuild(reason, paid, btn) {
+  btn = btn || { href: 'funnel.html', label: 'Back to my profile →' };
   var host = document.querySelector('#dc-root .sc-host') || document.getElementById('dc-root');
   if (!host) return;
   host.innerHTML =
@@ -1088,9 +1103,9 @@ function showCannotBuild(reason, paid) {
       'line-height:1.1;letter-spacing:-.02em;margin-bottom:16px">' +
         'We could not build your report yet.</div>' +
       '<p style="font-size:16px;line-height:1.65;color:#5b7098;margin:0 0 22px">' + reason + '</p>' +
-      '<a href="funnel.html" style="display:inline-flex;align-items:center;gap:8px;' +
+      '<a href="' + btn.href + '" style="display:inline-flex;align-items:center;gap:8px;' +
       'background:#2563eb;color:#fff;text-decoration:none;font-weight:700;font-size:14px;' +
-      'padding:13px 22px;border-radius:11px">Back to my profile →</a>' +
+      'padding:13px 22px;border-radius:11px">' + btn.label + '</a>' +
       (paid ? '' :
       '<p style="font-size:13px;line-height:1.6;color:#8296b5;margin:26px 0 0">' +
         'If this keeps happening, email support@admitmap.app and we will sort it out. ' +
@@ -1228,6 +1243,18 @@ function run() {
   if (!P || !P.schools || !P.schools.length) return Promise.resolve(personalize());
   return purchase().then(function (p) {
     if (!p) { location.replace(paywallUrl()); return true; }
+    if (p.mismatch) {
+      showCannotBuild('This report was bought for a different profile or school list. Each report covers ' +
+        'one student and one list of schools. To see a report for your current answers, get a new report.', true,
+        { href: paywallUrl(), label: 'Get a new report →' });
+      return true;
+    }
+    /* Отчёт строим по той анкете, за которую заплатили, даже если после
+       покупки ответы поменяли. */
+    if (p.profile) {
+      P = p.profile;
+      try { localStorage.setItem('admitmap_profile', JSON.stringify(P)); } catch (e) {}
+    }
     if (p.error) {
       showCannotBuild('We could not confirm your payment yet: ' + p.error +
         ' If you were charged, email support@admitmap.app with the address you paid with and we will send your report.', true);

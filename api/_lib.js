@@ -98,7 +98,8 @@ export async function verifyPurchase(checkoutId) {
     }
     if (!TIERS[tier]) return { ok: false, error: 'This purchase is not an AdmitMap report.' };
 
-    const out = { ok: true, tier, price: TIERS[tier], email: c.customer_email || null };
+    const out = { ok: true, tier, price: TIERS[tier], email: c.customer_email || null,
+                  profileHash: (c.metadata && c.metadata.profile_hash) || null };
     verified.set(id, out);
     return out;
   } catch (e) {

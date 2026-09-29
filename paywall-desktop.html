@@ -10,7 +10,7 @@
 <meta http-equiv="Expires" content="0">
 <title>Your report is ready · AdmitMap</title>
   <script src="/analytics.js" defer></script>
-  <script src="/profile-sync.js?v=2" defer></script>
+  <script src="/profile-sync.js?v=3" defer></script>
   <meta name="description" content="Your acceptance chances and real cost, school by school.">
   <link rel="canonical" href="https://www.admitmap.app/paywall">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
@@ -384,11 +384,18 @@ function startCheckout(tier, btn){
   try{ localStorage.setItem('admitmap_tier', String(tier)); }catch(e){}
   if(window.amTrack) window.amTrack('checkout_click', {tier:tier});
   if(!PAYMENTS_ON || amLocal()){ window.location.href = 'report.html?tier='+tier; return; }
-  var email = '';
-  try{ email = (JSON.parse(localStorage.getItem('admitmap_profile')||'null')||{}).email || ''; }catch(e){}
+  var P = null;
+  try{ P = JSON.parse(localStorage.getItem('admitmap_profile')||'null'); }catch(e){}
+  var email = (P && P.email) || '';
   if(btn){ btn.disabled = true; btn.style.opacity = '.7'; }
-  fetch('/api/checkout', {method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({tier:tier, email:email})})
+  /* Одна покупка — один отчёт: отпечаток анкеты уходит в чекаут Polar, сама
+     анкета остаётся снимком в браузере (profile-sync.js). */
+  window.amProfileHash(P || {})
+    .then(function(hash){
+      window.amRememberPurchase(hash, P || {});
+      return fetch('/api/checkout', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({tier:tier, email:email, profile_hash:hash})});
+    })
     .then(function(r){ return r.json(); })
     .then(function(j){
       if(j && j.ok && j.url){ window.location.href = j.url; return; }

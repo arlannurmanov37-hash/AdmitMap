@@ -1,9 +1,12 @@
 /**
- * POST /api/checkout  { tier: 19 | 29, email? }  ->  { ok, url }
+ * POST /api/checkout  { tier: 19 | 29, email?, profile_hash }  ->  { ok, url }
  *
  * Creates a Polar checkout for the chosen report and returns its URL. After
  * payment Polar sends the student back to /report?checkout_id=..., where
  * /api/verify confirms the payment.
+ *
+ * profile_hash — отпечаток анкеты (SHA-256). Одна покупка — один отчёт: отчёт
+ * по этому чекауту откроется только с анкетой того же отпечатка.
  */
 import { cors, bad, polar, productForTier } from './_lib.js';
 
@@ -14,9 +17,12 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
   if (!process.env.POLAR_ACCESS_TOKEN) return bad(res, 503, 'Payments are not configured yet.');
 
-  const { tier, email } = req.body || {};
+  const { tier, email, profile_hash } = req.body || {};
   const key = Number(tier) === 29 ? 'full' : Number(tier) === 19 ? 'chances' : null;
   if (!key) return bad(res, 400, 'Choose a report.');
+  if (!/^[a-f0-9]{64}$/.test(String(profile_hash || ''))) {
+    return bad(res, 400, 'Please refresh the page and try again.');
+  }
 
   const product = await productForTier(key);
   if (!product) return bad(res, 503, 'This report is not available right now.');
@@ -25,7 +31,7 @@ export default async function handler(req, res) {
     products: [product.id],
     // {CHECKOUT_ID} Polar подставляет сам
     success_url: SITE + '/report?checkout_id={CHECKOUT_ID}',
-    metadata: { tier: key }
+    metadata: { tier: key, profile_hash: String(profile_hash) }
   };
   if (typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
     body.customer_email = email.trim();

@@ -78,6 +78,37 @@
   if (orig) { w.amTrack.queue = orig.queue; w.amTrack.configured = orig.configured; }
   w.amSave = save;
 
+  /* Одна покупка — один отчёт (решение владельца 29.09.2026): другой список
+     школ или другой человек — новая покупка. При оплате сохраняем отпечаток
+     анкеты (SHA-256) в чекауте Polar, а саму анкету — снимком в браузере.
+     Отчёт по этой покупке открывается только с анкетой того же отпечатка.
+     Почта и служебные поля в отпечаток не входят. */
+  var NOT_IN_HASH = { email: 1, seen: 1 };
+  function canon(v) {
+    if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+    if (v && typeof v === 'object') {
+      return '{' + Object.keys(v).sort().filter(function (k) { return v[k] !== undefined; })
+        .map(function (k) { return JSON.stringify(k) + ':' + canon(v[k]); }).join(',') + '}';
+    }
+    return JSON.stringify(v === undefined ? null : v);
+  }
+  w.amProfileHash = function (P) {
+    var c = {};
+    Object.keys(P || {}).forEach(function (k) { if (!NOT_IN_HASH[k]) c[k] = P[k]; });
+    return w.crypto.subtle.digest('SHA-256', new TextEncoder().encode(canon(c))).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+    });
+  };
+  /* Снимки купленных анкет: { отпечаток: анкета }, не больше десяти. */
+  w.amPurchaseSnapshots = function () { return read('admitmap_paid_profiles') || {}; };
+  w.amRememberPurchase = function (hash, P) {
+    var all = w.amPurchaseSnapshots();
+    all[hash] = P;
+    var keys = Object.keys(all);
+    if (keys.length > 10) delete all[keys[0]];
+    try { localStorage.setItem('admitmap_paid_profiles', JSON.stringify(all)); } catch (e) {}
+  };
+
   /* Открытие страницы — тоже шаг: без этого не видно тех, кто открыл анкету
      и ушёл, не пройдя и первого шага. */
   var path = location.pathname;
