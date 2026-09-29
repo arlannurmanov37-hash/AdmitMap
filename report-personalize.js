@@ -1070,12 +1070,13 @@ function hideUnscored(D) {
       D.essayWords + ' words, scored on six criteria');
   }
   if (D.noEssay) showNoEssay(D);
+  if (!acts && !D.activities) showNoActivities(D);
 }
 
-/* Эссе не отправлено. Раздел не прячем молча: модель за это снижает шансы,
-   и ученик должен видеть, почему и насколько. */
-function showNoEssay(D) {
-  var head = byText(/How your essay reads/i, 'h1,h2,h3,span,div')[0];
+/* Эссе или активностей нет. Раздел не прячем молча: модель за это снижает
+   шансы, и ученик должен видеть, почему. */
+function showMissing(re, marker, title, text, button) {
+  var head = byText(re, 'h1,h2,h3,span,div')[0];
   var sec = head && (head.closest('section') || head.parentElement.parentElement);
   if (!sec) return;
   sec.style.display = sec.dataset.amDisplay != null ? sec.dataset.amDisplay : '';
@@ -1084,9 +1085,8 @@ function showNoEssay(D) {
   var sub = $$('span', top).filter(function (e) { return e !== head && e.children.length === 0; })[0];
   if (sub) setText(sub, 'Not submitted');
 
-  var sel = D.rows.filter(function (r) { return r.admit < 20; }).length;
   var box = document.createElement('div');
-  box.setAttribute('data-am-noessay', '1');
+  box.setAttribute(marker, '1');
   box.style.cssText = 'display:flex;align-items:center;gap:22px;padding:28px 30px;border-radius:22px;' +
     'background:#ffffff;border:1.5px solid #fde7c2;box-shadow:0 3px 0 #fdf3e1,0 12px 26px rgba(15,31,75,.06);' +
     "font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f1f4b";
@@ -1098,16 +1098,34 @@ function showNoEssay(D) {
       '<path d="M13.5 7.5l3 3"/></svg></span>' +
     '<span style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1">' +
       '<span style="font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:800;letter-spacing:-.02em">' +
-        'Your essay is missing, and it is costing you.</span>' +
-      '<span style="font-size:15px;line-height:1.55;color:#5b7098">' +
-        (sel ? 'At ' + sel + (sel === 1 ? ' school' : ' schools') + ' on your list, readers weigh the ' +
-               'personal statement heavily. Every percentage above already counts it as missing. '
-             : 'Every percentage above already counts your essay as missing. ') +
-        'Even a rough draft moves the numbers.</span></span>' +
-    '<a href="funnel.html?back=report.html#essay" style="flex-shrink:0;display:inline-flex;align-items:center;gap:8px;' +
+        title + '</span>' +
+      '<span style="font-size:15px;line-height:1.55;color:#5b7098">' + text + '</span></span>' +
+    (button ? '<a href="' + button.href + '" style="flex-shrink:0;display:inline-flex;align-items:center;gap:8px;' +
       'padding:14px 20px;border-radius:13px;background:#2563eb;color:#ffffff;text-decoration:none;' +
-      'font-size:14px;font-weight:800">Add your essay</a>';
+      'font-size:14px;font-weight:800">' + button.label + '</a>' : '');
   top.parentElement === sec ? sec.appendChild(box) : top.after(box);
+}
+
+function showNoEssay(D) {
+  var sel = D.rows.filter(function (r) { return r.admit < 20; }).length;
+  showMissing(/How your essay reads/i, 'data-am-noessay', 'Your essay is missing, and it is costing you.',
+    (sel ? 'At ' + sel + (sel === 1 ? ' school' : ' schools') + ' on your list, readers weigh the ' +
+           'personal statement heavily. Every percentage above already counts it as missing. '
+         : 'Every percentage above already counts your essay as missing. ') +
+    'Even a rough draft moves the numbers.',
+    { href: 'funnel.html?back=report.html#essay', label: 'Add your essay' });
+}
+
+/* Активностей нет (решение владельца 29.09.2026): раньше раздел исчезал
+   молча, и было непонятно, откуда низкие шансы. Кнопки нет — отчёт куплен
+   по этой анкете, новые активности попадут только в новый отчёт. */
+function showNoActivities(D) {
+  var sel = D.rows.filter(function (r) { return r.admit < 20; }).length;
+  showMissing(/What your activities are worth/i, 'data-am-noacts', 'No activities listed, and it is costing you.',
+    (sel ? 'At ' + sel + (sel === 1 ? ' school' : ' schools') + ' on your list, readers look closely at ' +
+           'what you do outside class. Every percentage above already counts your activities as missing. '
+         : 'Every percentage above already counts your activities as missing. ') +
+    'Even a part-time job or family responsibilities count.');
 }
 
 /* Если профиль есть, но отчёт по нему не строится (школ нет в базе, не
@@ -1220,14 +1238,16 @@ function relayout() {
     if (i >= oOrig.length || getComputedStyle(c).display === 'none') return;
     var h = oOrig[i];
     if (c === grid) h = oOrig[i] + hOf(rows) - hOf(gOrig);
-    else if (c.querySelector('[data-am-noessay]') || c.getAttribute('data-am-grow')) {
+    else if (c.querySelector('[data-am-noessay],[data-am-noacts]') || c.getAttribute('data-am-grow')) {
       var cs = getComputedStyle(c), vis = [].slice.call(c.children).filter(function (k) {
         return getComputedStyle(k).display !== 'none';
       });
       // scrollHeight — вместе с тем, что не влезло и обрезано (overflow:hidden)
       var natural = Math.ceil(parseFloat(cs.paddingTop) + sum(vis.map(function (k) { return Math.max(k.offsetHeight, k.scrollHeight); })) +
                 (parseFloat(cs.rowGap) || 0) * (vis.length - 1) + 40);
-      h = c.getAttribute('data-am-grow') ? Math.max(oOrig[i], natural) : natural;
+      // плашка «Not submitted» — ровно по содержимому, даже в растущей секции
+      var missing = c.querySelector('[data-am-noessay],[data-am-noacts]');
+      h = c.getAttribute('data-am-grow') && !missing ? Math.max(oOrig[i], natural) : natural;
     }
     oNew.push(h);
   });
