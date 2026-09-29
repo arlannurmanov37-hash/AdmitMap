@@ -102,8 +102,26 @@ var ACT_ICON = (function () {
 /* Оценки и общие помощники — scoring.js (грузится раньше этого файла). */
 var SC = window.AdmitScoring;
 var fnv = SC.fnv, actsFor = SC.actsFor, activityKey = SC.activityKey, honorsFor = SC.honorsFor,
-    honorKey = SC.honorKey, essayKey = SC.essayKey, cachedFor = SC.cachedFor, store = SC.store,
+    honorKey = SC.honorKey, essayKey = SC.essayKey, store = SC.store,
     isLocal = SC.isLocal, post = SC.post, wait = SC.wait;
+
+/* Купленный отчёт хранится на сервере (purchases, с 29.09.2026): анкета без
+   текста эссе и готовые оценки. Тогда отчёт строится из них — на любом
+   устройстве и одинаково для страницы и для PDF в письме. Иначе (образец,
+   localhost, старые покупки) — из браузера, как раньше. */
+var SERVER = null;                                   // { profile, scores }
+var PDF_MODE = /[?&]pdf=1(&|$)/.test(location.search);   // сервер делает PDF для письма
+var SCORE_NAME = { admitmap_activity_scores: 'activity', admitmap_honor_scores: 'honor',
+                   admitmap_essay_scores: 'essay' };
+function cachedFor(name, h) {
+  if (SERVER) return (SERVER.scores || {})[SCORE_NAME[name]] || null;
+  return SC.cachedFor(name, h);
+}
+function readProfile() {
+  if (SERVER) return SERVER.profile;
+  try { return JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) { return null; }
+}
+window.AdmitMapProfile = readProfile;
 
 /* Оплата: Polar возвращает на /report?checkout_id=…; сервер подтверждает
    чекаут и говорит, какой отчёт куплен. Локально (localhost) проверку
@@ -142,7 +160,8 @@ function purchase() {
       try { sid = localStorage.getItem('admitmap_uid'); } catch (e) {}
       return post('/api/verify', { checkout_id: id, student_id: sid, profile_hashes: hashes }, 15000).then(function (r) {
         if (r.ok) {
-          var p = { id: id, tier: r.tier, price: r.price,
+          var p = { id: id, tier: r.tier, price: r.price, emailed: !!r.emailed,
+                    server: r.profile && r.profile.schools ? { profile: r.profile, scores: r.scores || {} } : null,
                     profile: r.profile_hash && snaps[r.profile_hash] ? snaps[r.profile_hash] : null };
           store('admitmap_purchase', { id: id });
           try { localStorage.setItem('admitmap_tier', String(r.price)); } catch (e) {}
@@ -233,7 +252,9 @@ function modelFrom(P) {
   if (es && es.overall > 0) m.essayScore = Math.max(0, Math.min(10, es.overall / 10));
   /* Эссе нет — модель считает это минусом (см. essayMissing в data/odds.js).
      Текст есть, но оценки ещё нет — нейтрально. */
-  var essayWords = String(P.essay || '').trim().split(/\s+/).filter(Boolean).length;
+  // в анкете с сервера текста эссе нет — только число слов
+  var essayWords = P.essay != null ? String(P.essay).trim().split(/\s+/).filter(Boolean).length
+                                   : (Number(P.essayWords) || 0);
   m.noEssay = m.essayScore == null && essayWords < 50;
   m.essayWords = essayWords;
   return m;
@@ -337,7 +358,7 @@ function chancesOnly() {
 
 function build() {
   var P;
-  try { P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) { return null; }
+  P = readProfile();
   if (!P || !P.schools || !P.schools.length) return null;
   var model = modelFrom(P);
   if (!model || typeof COLLEGES === 'undefined' || !window.AdmitOdds) return null;
@@ -1116,7 +1137,7 @@ function showCannotBuild(reason, paid, btn) {
 
 function whyCannotBuild() {
   var P;
-  try { P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) { return null; }
+  P = readProfile();
   if (!P) return null;                                  // профиля нет — законный образец
   if (!P.schools || !P.schools.length)
     return 'There are no schools on your list yet. Add at least two and we will score them.';
@@ -1235,12 +1256,17 @@ function paywallUrl() {
   return 'paywall-desktop.html';                     // онбординг на телефоне отключён
 }
 
-/* Отчёт — после оплаты. Образец (?sample=1) и пустой профиль — как раньше. */
+/* Отчёт — после оплаты. Образец (?sample=1) и пустой профиль — как раньше.
+   Ссылка из письма (checkout_id) открывается и там, где анкеты нет вовсе:
+   анкета придёт с сервера. */
 function run() {
   if (sampleRequested()) return Promise.resolve(personalize());
-  var P = null;
-  try { P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null'); } catch (e) {}
-  if (!P || !P.schools || !P.schools.length) return Promise.resolve(personalize());
+  var P = readProfile();
+  var bought = false;
+  try { bought = /[?&]checkout_id=/.test(location.search) || !!JSON.parse(localStorage.getItem('admitmap_purchase') || 'null'); }
+  catch (e) {}
+  var hasList = P && P.schools && P.schools.length;
+  if (!hasList && !(bought && !isLocal() && PAYMENTS_ON)) return Promise.resolve(personalize());
   return purchase().then(function (p) {
     if (!p) { location.replace(paywallUrl()); return true; }
     if (p.mismatch) {
@@ -1249,21 +1275,40 @@ function run() {
         { href: paywallUrl(), label: 'Get a new report →' });
       return true;
     }
-    /* Отчёт строим по той анкете, за которую заплатили, даже если после
-       покупки ответы поменяли. */
-    if (p.profile) {
-      P = p.profile;
-      try { localStorage.setItem('admitmap_profile', JSON.stringify(P)); } catch (e) {}
-    }
     if (p.error) {
       showCannotBuild('We could not confirm your payment yet: ' + p.error +
         ' If you were charged, email support@admitmap.app with the address you paid with and we will send your report.', true);
       return true;
     }
+    if (p.server) {
+      SERVER = p.server;                              // анкета и оценки с сервера
+      P = SERVER.profile;
+    } else if (p.profile) {
+      /* Старые покупки (без строки на сервере): отчёт строим по той анкете,
+         за которую заплатили, даже если после покупки ответы поменяли. */
+      P = p.profile;
+      try { localStorage.setItem('admitmap_profile', JSON.stringify(P)); } catch (e) {}
+    }
+    if (!P || !P.schools || !P.schools.length) {
+      showCannotBuild('This report was bought before reports were saved to your account, so it can only be ' +
+        'opened in the browser you bought it in. Email support@admitmap.app and we will send it to you.', true);
+      return true;
+    }
     PURCHASE = p;
-    if (window.amSave) window.amSave('report_view', { tier: p.price || null });
-    /* Оценка эссе и активностей идёт и без оплаты (запросы только с admitmap.app).
-       Локально сервера нет — только с имитацией. */
+    if (!PDF_MODE) {
+      if (window.amSave) window.amSave('report_view', { tier: p.price || null });
+      /* Письмо с PDF: обычно его уже отправил вебхук Polar. Если нет — просим
+         сервер сейчас; дважды он не отправит. */
+      if (p.server && !p.emailed) {
+        try {
+          fetch('/api/send-report', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ checkout_id: p.id }), keepalive: true }).catch(function () {});
+        } catch (e) {}
+      }
+    }
+    /* С сервера оценки уже готовы. Иначе оценка эссе и активностей идёт и без
+       оплаты (запросы только с admitmap.app); локально — только с имитацией. */
+    if (SERVER) return Promise.resolve().then(personalize);
     return (SC.canScore() ? scoreProfile(P, p.id || '') : Promise.resolve()).then(personalize);
   });
 }

@@ -2,6 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/send-report.js": {
+      "maxDuration": 60,
+      "includeFiles": "node_modules/@sparticuz/chromium/bin/**"
+    },
+    "api/polar-webhook.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
       "source": "/",

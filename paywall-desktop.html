@@ -11,6 +11,7 @@
 <title>Your report is ready · AdmitMap</title>
   <script src="/analytics.js" defer></script>
   <script src="/profile-sync.js?v=3" defer></script>
+  <script src="/scoring.js?v=20260929" defer></script>
   <meta name="description" content="Your acceptance chances and real cost, school by school.">
   <link rel="canonical" href="https://www.admitmap.app/paywall">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
@@ -388,13 +389,34 @@ function startCheckout(tier, btn){
   try{ P = JSON.parse(localStorage.getItem('admitmap_profile')||'null'); }catch(e){}
   var email = (P && P.email) || '';
   if(btn){ btn.disabled = true; btn.style.opacity = '.7'; }
-  /* Одна покупка — один отчёт: отпечаток анкеты уходит в чекаут Polar, сама
-     анкета остаётся снимком в браузере (profile-sync.js). */
-  window.amProfileHash(P || {})
+  /* Одна покупка — один отчёт: отпечаток анкеты уходит в чекаут Polar, а сама
+     анкета (без текста эссе — его вырезает сервер) и готовые оценки — в Supabase.
+     После оплаты отчёт строится из них на любом устройстве, и сервер сам
+     отправляет PDF на почту. Оценки обычно уже есть (их делает экран загрузки);
+     если нет — дожидаемся, но не дольше минуты. */
+  var SC = window.AdmitScoring;
+  var ready = (SC && P && SC.canScore() && SC.needsScoring(P))
+    ? Promise.race([SC.scoreProfile(P, '').catch(function(){}), new Promise(function(r){ setTimeout(r, 60000); })])
+    : Promise.resolve();
+  ready
+    .then(function(){ return window.amProfileHash(P || {}); })
     .then(function(hash){
       window.amRememberPurchase(hash, P || {});
+      var scores = SC && P ? {
+        activity: SC.cachedFor('admitmap_activity_scores', SC.activityKey(P)),
+        honor: SC.cachedFor('admitmap_honor_scores', SC.honorKey(P)),
+        essay: SC.cachedFor('admitmap_essay_scores', SC.essayKey(P))
+      } : null;
+      var sid = null;
+      try{ sid = localStorage.getItem('admitmap_uid'); }catch(e){}
+      // текст эссе на сервер не отправляем — только число слов (Privacy Policy)
+      var saveP = P ? Object.assign({}, P) : null;
+      if(saveP && saveP.essay != null){
+        saveP.essayWords = String(saveP.essay).trim().split(/\s+/).filter(Boolean).length;
+        delete saveP.essay;
+      }
       return fetch('/api/checkout', {method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({tier:tier, email:email, profile_hash:hash})});
+        body: JSON.stringify({tier:tier, email:email, profile_hash:hash, profile:saveP, scores:scores, student_id:sid})});
     })
     .then(function(r){ return r.json(); })
     .then(function(j){

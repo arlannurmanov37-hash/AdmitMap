@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Serverless endpoints for AdmitMap: license validation + Claude essay grading",
+  "description": "Serverless endpoints for AdmitMap: payments, scoring, report PDF by email",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.70.0"
+    "@anthropic-ai/sdk": "^0.70.0",
+    "@sparticuz/chromium": "153.0.0",
+    "puppeteer-core": "25.11.0"
   }
 }

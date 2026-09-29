@@ -523,6 +523,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     window.print();
   }
   window.addEventListener('beforeprint', preparePrint);   // и для Cmd+P
+  window.__amPreparePrint = preparePrint;                 // сервер вызывает перед PDF для письма
 
   function addPdfButton() {
     if (document.getElementById('am-pdf')) return;
@@ -581,7 +582,7 @@ document.addEventListener('DOMContentLoaded', async function() {
      справочники и модель, затем заполняем готовые узлы настоящими
      числами. Профиля нет — на экране остаётся образец Майи. */
   var SCRIPTS = ['data/colleges.js', 'data/finaid.js', 'data/odds.js', 'data/tuition.js', 'scoring.js', 'profile-sync.js', 'data/earnings.js', 'report-personalize.js'];
-  var V = '20260929200000';
+  var V = '20260929230000';
 
   function loadNext(i, done) {
     if (i >= SCRIPTS.length) return done();
@@ -619,7 +620,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       fit();                       // персонализация меняет разметку — пересчитываем
       /* Вкладка — это то, что покупатель сохранит себе. Пусть в ней стоит имя. */
       try {
-        var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
+        // анкета купленного отчёта может прийти с сервера — берём её у report-personalize
+        var P = window.AdmitMapProfile ? window.AdmitMapProfile()
+                                       : JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
         var nm = P && (P.name || '').trim();
         // только если отчёт действительно личный: иначе во вкладке стояло имя
         // студента над образцом Майи
@@ -627,6 +630,8 @@ document.addEventListener('DOMContentLoaded', async function() {
           document.title = nm + '\u2019s SnapScore Report \u00b7 AdmitMap';
         }
       } catch (e) {}
+      // отчёт заполнен: по этому признаку сервер понимает, что можно печатать PDF
+      document.documentElement.setAttribute('data-am-done', '1');
     }
   }
   ready();

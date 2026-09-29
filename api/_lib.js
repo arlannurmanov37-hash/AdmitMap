@@ -4,6 +4,7 @@
  * The one rule that shapes this file: the Anthropic API key and the Polar token
  * must never reach the browser. Everything that touches them runs here.
  */
+import crypto from 'node:crypto';
 
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '')
   .split(',')
@@ -212,4 +213,71 @@ export async function trackStudent(row) {
     console.error('trackStudent failed', safeDetail(e));
     return { ok: false, error: 'db unreachable' };
   }
+}
+
+/* ── Supabase: купленные отчёты (таблица purchases, supabase/schema.sql) ──
+   При нажатии «купить» сервер кладёт сюда анкету (без текста эссе) и готовые
+   оценки. После оплаты отчёт открывается из этой строки с любого устройства,
+   а сервер сам делает PDF и отправляет его на почту. */
+function sbConf() {
+  const url = String(process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '');
+  const key = String(process.env.SUPABASE_SERVICE_KEY || '').trim();
+  if (!url || !key) return null;
+  const headers = { apikey: key, 'Content-Type': 'application/json' };
+  if (key.startsWith('eyJ')) headers.Authorization = `Bearer ${key}`;
+  return { url, key, headers };
+}
+async function sb(path, init = {}) {
+  const c = sbConf();
+  if (!c) return { ok: false, status: 0, data: null };
+  try {
+    const r = await fetch(`${c.url}/rest/v1/${path}`, { ...init, headers: { ...c.headers, ...(init.headers || {}) } });
+    const text = await r.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+    if (!r.ok) console.error('supabase', path.split('?')[0], r.status, text.slice(0, 200));
+    return { ok: r.ok, status: r.status, data };
+  } catch (e) {
+    console.error('supabase unreachable', safeDetail(e));
+    return { ok: false, status: 0, data: null };
+  }
+}
+const enc = encodeURIComponent;
+
+export async function savePurchase(row) {
+  const r = await sb('purchases?on_conflict=checkout_id', {
+    method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify({ ...row, updated_at: new Date().toISOString() })
+  });
+  return r.ok;
+}
+export async function getPurchase(checkoutId) {
+  const r = await sb(`purchases?checkout_id=eq.${enc(checkoutId)}&select=*`);
+  return r.ok && Array.isArray(r.data) && r.data[0] ? r.data[0] : null;
+}
+export async function updatePurchase(checkoutId, patch) {
+  const r = await sb(`purchases?checkout_id=eq.${enc(checkoutId)}`, {
+    method: 'PATCH', headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ ...patch, updated_at: new Date().toISOString() })
+  });
+  return r.ok;
+}
+/* Письмо с отчётом отправляет только тот, кто первым «занял» строку: вебхук
+   Polar и открытие отчёта могут прийти одновременно. Занятое больше 5 минут
+   назад считаем брошенным (упавшая функция) — его можно занять снова. */
+export async function claimReportEmail(checkoutId) {
+  const stale = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  const r = await sb(`purchases?checkout_id=eq.${enc(checkoutId)}&emailed_at=is.null` +
+    `&or=(email_claimed_at.is.null,email_claimed_at.lt.${enc(stale)})`, {
+    method: 'PATCH', headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({ email_claimed_at: new Date().toISOString() })
+  });
+  return r.ok && Array.isArray(r.data) && r.data[0] ? r.data[0] : null;
+}
+
+/* Внутренний ключ для вызова api/send-report из других функций (verify, вебхук). */
+export function internalKey() {
+  const base = String(process.env.SUPABASE_SERVICE_KEY || process.env.POLAR_ACCESS_TOKEN || '');
+  return base ? crypto.createHash('sha256').update('admitmap-send-report:' + base).digest('hex') : '';
 }

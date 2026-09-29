@@ -141,3 +141,5 @@ create extension if not exists pg_cron with schema pg_catalog;
 select cron.unschedule(jobid) from cron.job where jobname = 'admitmap-delete-stale-students';
 select cron.schedule('admitmap-delete-stale-students', '0 3 * * *',
   $$delete from public.students where last_seen_at < now() - interval '12 months'$$);
+
+-- Купленные отчёты — см. supabase/purchases.sql
