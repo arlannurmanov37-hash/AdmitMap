@@ -73,7 +73,9 @@ ul{list-style:none;margin:0;padding:0}
 .x:hover{transform:translateY(2px);box-shadow:0 0 0 var(--lip)}
 .x svg{width:.875rem;height:.875rem}
 
-.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:1.125rem}
+/* заголовок ровно посередине между логотипом и подзаголовком — по видимым краям
+   букв (низ значка и «p», хвосты «g»); сумма отступов прежняя, тарифы не мельчают */
+.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:.644rem}
 .brand img{width:3rem;height:3rem;object-fit:contain}
 .brand-t{font-family:Fraunces,Georgia,serif;font-size:2.625rem;font-weight:900;
   letter-spacing:-.045em;color:var(--ink)}
@@ -89,7 +91,7 @@ ul{list-style:none;margin:0;padding:0}
 .badge.plain i{background:#2563eb;box-shadow:0 0 0 .28rem rgba(37,99,235,.18)}
 
 h1{font-family:Fraunces,Georgia,serif;font-size:2.6875rem;font-weight:900;letter-spacing:-.048em;
-  line-height:1.04;margin:0 0 .3125rem}
+  line-height:1.04;margin:0 0 .7935rem}
 h1 em{font-style:normal;color:var(--royal)}
 .sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
 .sub b{font-weight:800;color:var(--navy);white-space:nowrap}
@@ -102,7 +104,7 @@ h1 em{font-style:normal;color:var(--royal)}
 .feat-i{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;
   flex-shrink:0;border-radius:.875rem}
 .feat-i svg{width:1.125rem;height:1.125rem}
-.feat b{font-size:.9375rem;font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.feat b{font-size:1.05rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
 .f1{background:linear-gradient(160deg,#fff,#f5f9ff);border:1px solid #e2ebfa}
 .f2{background:linear-gradient(160deg,#fff,#f5fdf9);border:1px solid #d8efe4}
 .f3{background:linear-gradient(160deg,#fff,#faf8ff);border:1px solid #e6e0fa}
