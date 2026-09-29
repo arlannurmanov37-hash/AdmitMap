@@ -61,7 +61,7 @@ ul{list-style:none;margin:0;padding:0}
 @media(prefers-reduced-motion:reduce){.u,.f{animation:none!important}}
 
 .wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;min-height:100dvh;padding:2.4rem 3rem;text-align:center}
+  min-height:100vh;min-height:100dvh;padding:2.6rem 3rem 2.2rem;text-align:center}
 .glow{position:absolute;top:-14rem;left:50%;transform:translateX(-50%);width:60rem;height:38rem;
   background:radial-gradient(50% 50% at 50% 50%,rgba(37,99,235,.13),transparent 70%);pointer-events:none}
 .in{position:relative;z-index:1;width:100%;max-width:74rem;display:flex;flex-direction:column;align-items:center}
@@ -73,42 +73,33 @@ ul{list-style:none;margin:0;padding:0}
 .x:hover{transform:translateY(2px);box-shadow:0 0 0 var(--lip)}
 .x svg{width:.875rem;height:.875rem}
 
-/* Верх — по дизайну «AdmitMap Paywall Top» (Claude Design, 29.09.2026):
-   зелёная плашка «Your report is ready» над логотипом, крупный заголовок,
-   чипы с цветными иконками. Размеры пересчитаны из макета 1440×900 в rem. */
-.badge{display:inline-flex;align-items:center;gap:.75rem;padding:.55rem 1.8rem .55rem 1.45rem;margin-bottom:.85rem;
-  border-radius:999px;background:#e7fbf1;border:1px solid #b8f0d6;font-size:1rem;font-weight:800;
-  color:#067a4c;white-space:nowrap}
-.badge i{width:.63rem;height:.63rem;border-radius:50%;background:#1ddb87;box-shadow:0 0 0 .28rem rgba(29,219,135,.22)}
-/* страница тарифов без анкеты: отчёт ещё не готов — плашка синяя */
-.badge.plain{background:#eef4ff;border-color:#d6e4fb;color:#1d4ed8}
-.badge.plain i{background:#2563eb;box-shadow:0 0 0 .28rem rgba(37,99,235,.18)}
-.brand{display:inline-flex;align-items:center;gap:1.05rem;margin-bottom:.8rem}
-.brand img{width:2.6rem;height:3.1rem;object-fit:contain}
-.brand-t{font-family:Fraunces,Georgia,serif;font-size:3rem;font-weight:900;
-  letter-spacing:-.035em;color:var(--navy)}
+.brand{display:inline-flex;align-items:center;gap:.875rem;margin-bottom:1.125rem}
+.brand img{width:3rem;height:3rem;object-fit:contain}
+.brand-t{font-family:Fraunces,Georgia,serif;font-size:2.625rem;font-weight:900;
+  letter-spacing:-.045em;color:var(--ink)}
 .brand-t span{color:var(--royal)}
 
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:.875rem;margin-bottom:1rem}
+.eyebrow i{width:2.125rem;height:2px;border-radius:2px;background:var(--royal);display:block}
+.eyebrow span{font-size:.6875rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--royal)}
 
-h1{font-family:Fraunces,Georgia,serif;font-size:3.4rem;font-weight:900;letter-spacing:-.045em;
-  line-height:1;margin:0 0 .45rem}
+h1{font-family:Fraunces,Georgia,serif;font-size:2.6875rem;font-weight:900;letter-spacing:-.048em;
+  line-height:1.04;margin:0 0 .3125rem}
 h1 em{font-style:normal;color:var(--royal)}
-.sub{font-size:1.1rem;line-height:1.5;color:#43536b;margin:0 0 1.3rem;max-width:77rem}
-.sub b{font-weight:800;color:var(--navy);white-space:nowrap}
+.sub{font-size:1.0625rem;line-height:1.58;color:var(--muted-1);margin:0 0 1.0625rem;max-width:74ch}
+.sub b{font-weight:800;color:var(--navy)}
 
-.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.98rem;width:100%;margin-bottom:2.25rem}
-/* Чипы спокойные (владелец 29.09.2026: цветные «отвлекают от тарифов»):
-   белый фон, тонкая рамка, бледная иконка — внимание остаётся на карточках. */
-.feat{display:flex;align-items:center;gap:.84rem;padding:.69rem .98rem;border-radius:1.12rem;
-  background:#fff;border:1px solid var(--line);box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
-.feat-i{display:flex;align-items:center;justify-content:center;width:2.52rem;height:2.52rem;
-  flex-shrink:0;border-radius:.77rem}
-.feat-i svg{width:1.26rem;height:1.26rem}
-.feat b{font-size:1.05rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
-.f1 .feat-i{background:var(--royal-l);color:var(--royal)}
-.f2 .feat-i{background:var(--green-l);color:var(--green-d)}
-.f3 .feat-i{background:var(--purple-l);color:var(--purple)}
-.f4 .feat-i{background:var(--amber-l);color:var(--amber-d)}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;margin-bottom:2.25rem}
+.feat{display:flex;align-items:center;gap:.9375rem;padding:1.0625rem 1.1875rem;border-radius:1.125rem;
+  box-shadow:0 2px 0 var(--lip),0 .5rem 1.25rem rgba(15,31,75,.05);text-align:left}
+.feat-i{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;
+  flex-shrink:0;border-radius:.875rem}
+.feat-i svg{width:1.125rem;height:1.125rem}
+.feat b{font-size:.9375rem;font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.f1{background:linear-gradient(160deg,#fff,#f5f9ff);border:1px solid #e2ebfa}
+.f2{background:linear-gradient(160deg,#fff,#f5fdf9);border:1px solid #d8efe4}
+.f3{background:linear-gradient(160deg,#fff,#faf8ff);border:1px solid #e6e0fa}
+.f4{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid #f3e5cf}
 
 /* the whole ticket block, text included, rendered 10% larger */
 .tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
@@ -224,16 +215,17 @@ h1 em{font-style:normal;color:var(--royal)}
   .wrap{padding:1.1rem 1.15rem 2.2rem;overflow:visible}
   .glow{top:-10rem;width:36rem;height:26rem}
   .x{top:.9rem;right:.9rem;width:2.6rem;height:2.6rem}
-  .badge{font-size:.95rem;padding:.6rem 1.3rem .6rem 1.05rem;gap:.6rem;margin-bottom:.9rem}
-  .brand{gap:.7rem;margin-bottom:.9rem}
-  .brand img{width:2.4rem;height:2.9rem}
-  .brand-t{font-size:2.4rem}
+  .brand{gap:.6rem;margin-bottom:.9rem}
+  .brand svg{width:2.4rem;height:2.4rem}
+  .brand-t{font-size:2.05rem}
+  .eyebrow{margin-bottom:.7rem}
+  .eyebrow span{font-size:.78rem}
   h1{font-size:2.45rem;line-height:1.05;margin-bottom:.6rem}
   .sub{font-size:1.02rem;margin-bottom:1.5rem}
   .feats{gap:.6rem;margin-bottom:2.3rem}
-  .feat{gap:.65rem;padding:.7rem .8rem;border-radius:1rem}
+  .feat{gap:.65rem;padding:.8rem .85rem;border-radius:1rem}
   .feat-i{width:2.3rem;height:2.3rem;border-radius:.7rem}
-  .feat b{font-size:.92rem;white-space:normal}
+  .feat b{font-size:.92rem}
   .tickets{gap:2.3rem;margin-bottom:1.8rem}
   .tk.hi{order:-1}                        /* $29 — первым */
   .tk-top{padding:1.5rem 1.35rem 1.25rem;border-radius:1.2rem 1.2rem 0 0}
@@ -256,7 +248,6 @@ h1 em{font-style:normal;color:var(--royal)}
 }
 
 
-
 </style>
 </head>
 
@@ -268,31 +259,31 @@ h1 em{font-style:normal;color:var(--royal)}
   </button>
 
   <div class="in">
-    <span class="badge f" id="badge"><i></i><span id="eyebrow">Your report is ready</span></span>
     <span class="brand u">
       <img src="/assets/mobile/admitmap-mark.svg" alt="">
       <span class="brand-t">Admit<span>Map</span></span>
     </span>
 
+    <div class="eyebrow f"><i></i><span id="eyebrow">Your report is ready</span><i></i></div>
     <h1 class="u d1">Make the right <em>college list.</em></h1>
     <p class="sub f d2">Your chances at every school on your list, measured against the profile you actually
       have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
 
     <div class="feats">
       <div class="feat f1 u d2">
-        <span class="feat-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V7M17 16v-8"/></svg></span>
+        <span class="feat-i" style="background:var(--royal-l);color:var(--royal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 20V11m6 9V5m6 15v-6"/></svg></span>
         <b>Chances at every school</b>
       </div>
       <div class="feat f2 u d3">
-        <span class="feat-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.5c-.8-1.3-2.4-2-4.5-2-2.6 0-4.3 1.3-4.3 3.2 0 4.4 9 2.4 9 6.8 0 2-1.9 3.3-4.7 3.3-2.3 0-4-.8-4.8-2.3"/></svg></span>
+        <span class="feat-i" style="background:var(--green-l);color:var(--green-d)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16.5 7.2c-.7-1.4-2.3-2.2-4.5-2.2-2.6 0-4.2 1.2-4.2 3s1.5 2.6 4.2 3.2c3 .7 4.7 1.6 4.7 3.6 0 2-1.8 3.4-4.7 3.4-2.4 0-4.1-.9-4.8-2.5"/></svg></span>
         <b>Real cost after aid</b>
       </div>
       <div class="feat f3 u d4">
-        <span class="feat-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M3.5 19c.8-3.2 3-4.9 5.5-4.9s4.7 1.7 5.5 4.9"/><circle cx="16.8" cy="9.4" r="2.6"/><path d="M16.6 14.2c2 .1 3.4 1.6 3.9 4.3"/></svg></span>
+        <span class="feat-i" style="background:var(--purple-l);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.3"/><path d="M19.5 20v-1.4a3.4 3.4 0 0 0-2.6-3.3"/><path d="M15 4.7a3.4 3.4 0 0 1 0 6.6"/></svg></span>
         <b>Compared to real admits</b>
       </div>
       <div class="feat f4 u d5">
-        <span class="feat-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 4.5l4 4L8 20H4v-4z"/></svg></span>
+        <span class="feat-i" style="background:var(--amber-l);color:var(--amber-d)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5l4 4"/><path d="M4 20l1-4.5L16 4.5a2.1 2.1 0 0 1 3 3L8 18.5z"/></svg></span>
         <b>Your essay, graded</b>
       </div>
     </div>
@@ -375,9 +366,8 @@ h1 em{font-style:normal;color:var(--royal)}
   // ?ready=1 ставит только конец воронки; ссылка Pricing с сайта ведёт без него
   var done = /[?&]ready=1\b/.test(location.search);
   if (!done) {
-    var eb = document.getElementById('eyebrow'), badge = document.getElementById('badge');
+    var eb = document.getElementById('eyebrow');
     if (eb) eb.textContent = 'Choose your report';
-    if (badge) badge.classList.add('plain');
     var sub = document.querySelector('.sub'), d = document.getElementById('days');
     if (sub) sub.innerHTML = 'See your chances at every school you apply to, and what each one would really ' +
       'cost after aid. Five minutes to fill in, and you have <b><span id="days">' +
