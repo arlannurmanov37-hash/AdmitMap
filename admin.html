@@ -488,7 +488,8 @@ select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px so
       app.classList.remove('loading');
       if (!r.ok) {
         if (/Wrong password|ADMIN_PASSWORD|Too many/.test(r.error || '')) { pass = ''; try { sessionStorage.removeItem('am_admin'); } catch (e) {} login(r.error); return; }
-        app.innerHTML = '<div class="center-msg"><div class="oc"><div class="ip"><span class="eyebrow">Admin</span><span class="ff" style="font-size:24px">Not ready yet</span><p style="margin:0;color:#43536b;line-height:1.6">' + esc(r.error || 'Try again in a minute.') + '</p></div></div></div>';
+        app.innerHTML = '<div class="center-msg"><div class="oc"><div class="ip"><span class="eyebrow">Admin</span><span class="ff" style="font-size:24px">Not ready yet</span><p style="margin:0;color:#43536b;line-height:1.6">' + esc(r.error || 'Try again in a minute.') + '</p>' +
+          (r.detail ? '<p style="margin:0;font-size:13px;color:#8a9ab3">Details: ' + esc(r.detail) + '</p>' : '') + '</div></div></div>';
         return;
       }
       DATA = r; render();

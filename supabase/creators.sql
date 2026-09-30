@@ -66,7 +66,12 @@ create table if not exists public.creator_videos (
 );
 
 alter table public.students add column if not exists ref text;
-alter table public.purchases add column if not exists ref text;   -- по чьей ссылке куплен отчёт
+-- по чьей ссылке куплен отчёт (таблица purchases — из supabase/purchases.sql; если её нет, пропускаем)
+do $$ begin
+  if to_regclass('public.purchases') is not null then
+    alter table public.purchases add column if not exists ref text;
+  end if;
+end $$;
 create index if not exists students_ref_idx on public.students (ref);
 
 alter table public.creators        enable row level security;
@@ -309,6 +314,7 @@ revoke all on function public.admin_creators(timestamptz, timestamptz) from publ
 grant execute on function public.admin_creators(timestamptz, timestamptz) to service_role;
 
 -- Посещения старше 13 месяцев не нужны ни для графиков, ни для выплат.
+create extension if not exists pg_cron with schema pg_catalog;
 select cron.unschedule(jobid) from cron.job where jobname = 'admitmap-delete-old-creator-visits';
 select cron.schedule('admitmap-delete-old-creator-visits', '30 3 * * *',
   $$delete from public.creator_visits where hour < now() - interval '13 months'$$);
