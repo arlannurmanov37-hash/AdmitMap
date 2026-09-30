@@ -78,7 +78,7 @@ async function creatorByKey(key) {
   return r.ok && Array.isArray(r.data) && r.data[0] ? r.data[0] : null;
 }
 const publicCreator = (c) => ({ name: c.name, ref: c.ref, platform: c.platform, handle: c.handle,
-  status: c.status, link: `admitmap.app/?ref=${c.ref}` });
+  status: c.status, link: `www.admitmap.app/?ref=${c.ref}` });
 
 /* Название ролика — из oEmbed TikTok и YouTube; Instagram без токена не отдаёт. */
 async function videoMeta(url) {
@@ -214,7 +214,7 @@ export default async function handler(req, res) {
           const head = ['Name', 'Link', 'Platform', 'Email', 'Status', 'Visitors', 'Purchases', '$19', '$29', 'Conversion %',
             'Revenue', 'Commission (period)', 'Lifetime sales', 'Earned (all time)', 'Pending', 'Ready to pay', 'Paid',
             'Payout method', 'Payout details'];
-          const rows = creators.map((c) => [c.name, `admitmap.app/?ref=${c.ref}`, c.platform, c.email, c.status,
+          const rows = creators.map((c) => [c.name, `www.admitmap.app/?ref=${c.ref}`, c.platform, c.email, c.status,
             c.stats.visitors, c.stats.purchases, c.stats.p19, c.stats.p29,
             c.stats.visitors ? (c.stats.purchases / c.stats.visitors * 100).toFixed(1) : '',
             c.stats.revenue, c.stats.earned, c.money.lifetime_sales, c.money.earned, c.money.pending, c.money.ready,
@@ -255,7 +255,7 @@ export default async function handler(req, res) {
             platform: String(b.platform || '').slice(0, 40) || null, handle: String(b.handle || '').slice(0, 80) || null }) });
         if (r.status === 409) return bad(res, 409, 'This link name is taken. Pick another.');
         if (!r.ok) return bad(res, 502, 'Could not save the creator.');
-        return res.status(200).json({ ok: true, link: `admitmap.app/?ref=${ref}`, dashboard: `${SITE}/creator/${dash_key}` });
+        return res.status(200).json({ ok: true, link: `www.admitmap.app/?ref=${ref}`, dashboard: `${SITE}/creator/${dash_key}` });
       }
       if (action === 'admin_update') {
         const id = parseInt(b.id, 10);

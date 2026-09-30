@@ -268,7 +268,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
     var s = d.stats, p = d.prev || {};
     var conv = pct(s.purchases, s.visitors), pconv = pct(p.purchases || 0, p.visitors || 0);
     var linkCard = card(5, 'Your link', 'Share one link',
-      '<div class="tile rt">' + I.link + '<span style="flex:1;min-width:0;font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.015em;overflow-wrap:anywhere">admitmap.app/?ref=<span style="color:#2563eb">' + esc(d.creator.ref) + '</span></span></div>' +
+      '<div class="tile rt">' + I.link + '<span style="flex:1;min-width:0;font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.015em;overflow-wrap:anywhere">www.admitmap.app/?ref=<span style="color:#2563eb">' + esc(d.creator.ref) + '</span></span></div>' +
       '<p style="margin:0;padding:2px 6px;font-size:15px;font-weight:500;line-height:1.55;color:#43536b">Anyone who opens this link is credited to you for 30 days.</p>' +
       '<button class="cta" id="copy" style="margin-top:auto">Copy link' + I.arrow + '</button>');
     var tileHtml = function (icon, dl, value, label, sub, cls) {
@@ -497,7 +497,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
   function wire() {
     var copy = document.getElementById('copy');
     if (copy) copy.onclick = function () {
-      var url = 'https://admitmap.app/?ref=' + DATA.creator.ref;
+      var url = 'https://www.admitmap.app/?ref=' + DATA.creator.ref;
       var done = function () { copy.firstChild.nodeValue = 'Copied'; setTimeout(function () { copy.firstChild.nodeValue = 'Copy link'; }, 1800); };
       if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { prompt('Copy your link:', url); });
       else prompt('Copy your link:', url);
