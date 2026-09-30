@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     var h = art.offsetHeight;
     var st = document.getElementById('am-fit');
     if (!st) { st = document.createElement('style'); st.id = 'am-fit'; (document.head || document.documentElement).appendChild(st); }
-    st.textContent =
+    var css =
       '@media screen{#dc-root>.sc-host>div{transform:scale(' + z.toFixed(4) + ')!important;' +
         'transform-origin:top left!important;margin-left:' + Math.max(0, (avail - ART_W * z) / 2) + 'px!important;' +
         'margin-right:0!important}}' +
@@ -509,6 +509,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         '#dc-root [style*="radial-gradient"][style*="pointer-events"]{display:none!important}' +
         '#am-pdf{display:none!important}' +
       '}';
+    if (st.textContent !== css) st.textContent = css;   // без лишних мутаций
     art.style.removeProperty('transform');
     art.style.removeProperty('transform-origin');
     art.style.removeProperty('margin-left');
@@ -582,7 +583,15 @@ document.addEventListener('DOMContentLoaded', async function() {
   window.addEventListener('orientationchange', fit);
 
   inject();
-  new MutationObserver(inject).observe(document, {childList: true, subtree: true});   // document, а не <html>: бандл заменяет <html> целиком
+  /* Следим за document, а не за <html>: бандл заменяет <html> целиком. Свои же
+     правки стилей (#am-fit, #am-center) пропускаем — иначе fit() → мутация →
+     inject() → fit() зацикливались и страница зависала. */
+  new MutationObserver(function (list) {
+    for (var i = 0; i < list.length; i++) {
+      var t = list[i].target;
+      if (!(t && (t.id === 'am-fit' || t.id === 'am-center'))) { inject(); return; }
+    }
+  }).observe(document, {childList: true, subtree: true});
   document.addEventListener('DOMContentLoaded', inject);
   window.addEventListener('load', inject);
 
