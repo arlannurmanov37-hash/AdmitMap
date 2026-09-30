@@ -29,7 +29,21 @@ var ABBR = {
   'Georgia Institute of Technology':'Georgia Tech',
   'California Institute of Technology':'Caltech',
   'University of North Carolina at Chapel Hill':'UNC',
-  'University of Illinois Urbana-Champaign':'UIUC'
+  'University of Illinois Urbana-Champaign':'UIUC',
+  /* длинные официальные названия — в карточках раннего раунда переносились
+     на 3–4 строки (Virginia Polytechnic Institute and State University) */
+  'Virginia Polytechnic Institute and State University':'Virginia Tech',
+  'California Polytechnic State University-San Luis Obispo':'Cal Poly SLO',
+  'California State Polytechnic University-Pomona':'Cal Poly Pomona',
+  'Rensselaer Polytechnic Institute':'RPI', 'Worcester Polytechnic Institute':'WPI',
+  'Rochester Institute of Technology':'RIT',
+  'Missouri University of Science and Technology':'Missouri S&T',
+  'Florida Agricultural and Mechanical University':'Florida A&M',
+  'Texas A&M University-College Station':'Texas A&M',
+  'University of Maryland-College Park':'Maryland', 'University of Wisconsin-Madison':'UW–Madison',
+  'University of Minnesota-Twin Cities':'Minnesota', 'Rutgers University-New Brunswick':'Rutgers',
+  'University of Massachusetts-Amherst':'UMass Amherst', 'The University of Texas at Austin':'UT Austin',
+  'University of Pittsburgh-Pittsburgh Campus':'Pitt', 'Case Western Reserve University':'Case Western'
 };
 var shortName = function (n) {
   if (ABBR[n]) return ABBR[n];
@@ -745,7 +759,15 @@ function fillEarly(D) {
     var name = nodes.filter(function (e) {
       return e.children.length === 0 && /^[A-Z][A-Za-z .&'-]{2,28}$/.test((e.textContent||'').trim());
     })[0];
-    if (name) setText(name, earlyName(r.n));
+    if (name) {
+      setText(name, earlyName(r.n));
+      // любое другое длинное название — не больше двух строк
+      name.style.display = '-webkit-box';
+      name.style.webkitLineClamp = '2';
+      name.style.webkitBoxOrient = 'vertical';
+      name.style.overflow = 'hidden';
+      name.title = r.n;
+    }
     var rnd = nodes.filter(function (e) { return /^(ED|EA|REA|RD|No early)/i.test((e.textContent||'').trim()) && e.children.length === 0; })[0];
     if (rnd) setText(rnd, noEarly ? 'No early round' : r.earlyCode + (r.earlyDate ? ' · ' + r.earlyDate : ''));
     var arrow = badge.firstElementChild || null;
@@ -1220,7 +1242,7 @@ function relayout() {
 
   /* Скрытый (display:none) раздел не занимает ряд сетки — все следующие
      сдвигаются вверх. Поэтому его ряд не обнуляем, а убираем совсем. */
-  var oNew = [], idx = 0;
+  var oNew = [], els = [], idx = 0;
   [].slice.call(outer.children).forEach(function (c) {
     /* Раздел «What each degree earns» вставлен нами, своего ряда в макете у него
        нет: высота — по содержимому, а индексы остальных не сдвигаем. */
@@ -1232,6 +1254,7 @@ function relayout() {
       while (nx && getComputedStyle(nx).display === 'none') nx = nx.nextElementSibling;
       oNew.push(Math.ceil(parseFloat(ecs.paddingTop) + sum(ekids.map(function (k) { return k.offsetHeight; })) +
                 (parseFloat(ecs.rowGap) || 0) * (ekids.length - 1) + (nx && nx.tagName === 'FOOTER' ? 40 : 0)));
+      els.push(c);
       return;
     }
     var i = idx++;
@@ -1250,7 +1273,39 @@ function relayout() {
       h = c.getAttribute('data-am-grow') && !missing ? Math.max(oOrig[i], natural) : natural;
     }
     oNew.push(h);
+    els.push(c);
   });
+  outer.style.gridTemplateRows = oNew.map(function (r) { return r + 'px'; }).join(' ');
+
+  /* Одинаковое расстояние между разделами при любых данных (владелец, 30.09.2026):
+     длинное название школы переносилось на 4 строки, карточка вырастала за свой
+     ряд и наезжала на следующий заголовок. Теперь ряд каждого раздела — ровно
+     до низа его содержимого плюс SECTION_GAP до верха следующего раздела.
+     Шапку и пару «заголовок → карточки школ» не трогаем — они одно целое. */
+  var SECTION_GAP = 56;
+  var scale = art.getBoundingClientRect().width / (art.offsetWidth || 1) || 1;
+  var kids = function (c) {
+    return [].slice.call(c.children).filter(function (k) {
+      var cs = getComputedStyle(k);
+      return cs.display !== 'none' && cs.position !== 'absolute' && cs.position !== 'fixed';
+    });
+  };
+  var bottomOf = function (c) {
+    var top = c.getBoundingClientRect().top, b = 0;
+    kids(c).forEach(function (k) {
+      b = Math.max(b, (k.getBoundingClientRect().top - top) / scale + Math.max(k.offsetHeight, k.scrollHeight));
+    });
+    return b;
+  };
+  var topOf = function (c) {
+    var top = c.getBoundingClientRect().top, t = Infinity;
+    kids(c).forEach(function (k) { t = Math.min(t, (k.getBoundingClientRect().top - top) / scale); });
+    return t === Infinity ? 0 : t;
+  };
+  for (var j = 0; j < els.length - 1; j++) {
+    if (els[j].tagName === 'HEADER' || els[j + 1] === grid || els[j] === grid && !grid.children.length) continue;
+    oNew[j] = Math.max(0, Math.ceil(bottomOf(els[j]) + SECTION_GAP - topOf(els[j + 1])));
+  }
   outer.style.gridTemplateRows = oNew.map(function (r) { return r + 'px'; }).join(' ');
   art.style.height = (parseFloat(art.dataset.amH) + sum(oNew) - sum(oOrig)) + 'px';
 }
