@@ -99,8 +99,12 @@ export async function verifyPurchase(checkoutId) {
     }
     if (!TIERS[tier]) return { ok: false, error: 'This purchase is not an AdmitMap report.' };
 
+    // paid — сколько покупатель реально заплатил (в центах); 0 при коде на 100%
+    const cents = [c.total_amount, c.net_amount, c.amount].find((x) => typeof x === 'number');
     const out = { ok: true, tier, price: TIERS[tier], email: c.customer_email || null,
-                  profileHash: (c.metadata && c.metadata.profile_hash) || null };
+                  profileHash: (c.metadata && c.metadata.profile_hash) || null,
+                  ref: (c.metadata && c.metadata.ref) || null,
+                  paid: typeof cents === 'number' ? cents / 100 : TIERS[tier] };
     verified.set(id, out);
     return out;
   } catch (e) {
@@ -280,4 +284,62 @@ export async function claimReportEmail(checkoutId) {
 export function internalKey() {
   const base = String(process.env.SUPABASE_SERVICE_KEY || process.env.POLAR_ACCESS_TOKEN || '');
   return base ? crypto.createHash('sha256').update('admitmap-send-report:' + base).digest('hex') : '';
+}
+
+/* Вызов SQL-функции Supabase (rpc). Ошибки не бросает. */
+export async function sbRpc(name, args) {
+  const r = await sb(`rpc/${name}`, { method: 'POST', body: JSON.stringify(args || {}) });
+  return r;
+}
+export { sb as sbRest };
+
+/* ── Программа блогеров ──────────────────────────────────────────────
+   Покупка по ссылке блогера: запись продажи с комиссией по уровню и письмо
+   блогеру «You just earned $X». Вызывается из verify и send-report — кто
+   первым; второй раз запись не создаётся (checkout_id — ключ). */
+const SITE_URL = (process.env.SITE_URL || 'https://www.admitmap.app').replace(/\/$/, '');
+export const LEVELS = [
+  { from: 1, r19: 6.5, r29: 11.5 }, { from: 100, r19: 7, r29: 12 },
+  { from: 250, r19: 7.5, r29: 12.5 }, { from: 500, r19: 8, r29: 13 }
+];
+const usd = (n) => '$' + Number(n).toFixed(2);
+
+export async function recordCreatorSale(checkoutId, v) {
+  if (!v || !v.ok || !v.ref || !(v.paid > 0)) return null;     // без ссылки или тестовая покупка на 100%
+  const r = await sbRpc('record_creator_sale', {
+    p_checkout: checkoutId, p_ref: String(v.ref).toLowerCase(), p_tier: v.tier,
+    p_price: v.paid, p_buyer_email: v.email || null
+  });
+  const sale = r.ok ? r.data : null;
+  if (!sale || !sale.email || !process.env.RESEND_API_KEY) return sale;
+  try {
+    const money = await sbRpc('creator_money', { p_creator: sale.creator_id });
+    const m = money.ok && money.data ? money.data : null;
+    const n = sale.sale_number;
+    const next = LEVELS.find((l) => l.from > n);
+    const first = String(sale.name || '').trim().split(/\s+/)[0] || 'there';
+    const dash = `${SITE_URL}/creator/${encodeURIComponent(sale.dash_key)}`;
+    const progress = next ? `${n} of ${next.from} sales — next level: ${usd(next.r19)} / ${usd(next.r29)} per report`
+                          : `${n} sales — you're on the top level`;
+    const html = `<!doctype html><html><body style="margin:0;padding:32px 16px;background:#f4f8ff;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f1f4b">
+<div style="max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #dbe6fb;border-radius:18px;padding:32px 28px">
+  <div style="font-family:Georgia,serif;font-size:22px;font-weight:900;letter-spacing:-.02em">Admit<span style="color:#2563eb">Map</span></div>
+  <p style="margin:24px 0 0;font-size:15px">Hi ${first},</p>
+  <p style="margin:10px 0 0;font-size:22px;font-weight:800;color:#0f1f4b">You just earned <span style="color:#10b981">${usd(sale.commission)}</span></p>
+  <p style="margin:8px 0 0;font-size:15px;line-height:1.6;color:#43536b">Someone bought a report through your link.</p>
+  <p style="margin:18px 0 0;font-size:14px;line-height:1.6;color:#43536b">${progress}${m ? `<br>Earned so far: ${usd(m.earned)}` : ''}</p>
+  <p style="margin:22px 0 0"><a href="${dash}" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:13px 22px;border-radius:11px">Open my dashboard</a></p>
+</div></body></html>`;
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: process.env.REPORT_FROM || process.env.EMAIL_FROM || 'AdmitMap <noreply@admitmap.app>',
+        to: [sale.email], reply_to: 'support@admitmap.app',
+        subject: `You just earned ${usd(sale.commission)} with AdmitMap`, html,
+        text: `Hi ${first},\n\nYou just earned ${usd(sale.commission)} — someone bought a report through your link.\n\n${progress}\n\nYour dashboard: ${dash}`
+      })
+    });
+  } catch (e) { console.error('creator sale email failed', safeDetail(e)); }
+  return sale;
 }

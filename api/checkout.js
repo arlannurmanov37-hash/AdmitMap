@@ -21,7 +21,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return bad(res, 405, 'Use POST.');
   if (!process.env.POLAR_ACCESS_TOKEN) return bad(res, 503, 'Payments are not configured yet.');
 
-  const { tier, email, profile_hash, profile, scores, student_id } = req.body || {};
+  const { tier, email, profile_hash, profile, scores, student_id, ref } = req.body || {};
+  // по чьей ссылке пришёл покупатель (программа блогеров); засчитывается при оплате
+  const refOk = /^[a-z0-9_-]{2,32}$/.test(String(ref || '').toLowerCase()) ? String(ref).toLowerCase() : null;
   const key = Number(tier) === 29 ? 'full' : Number(tier) === 19 ? 'chances' : null;
   if (!key) return bad(res, 400, 'Choose a report.');
   if (!/^[a-f0-9]{64}$/.test(String(profile_hash || ''))) {
@@ -35,7 +37,8 @@ export default async function handler(req, res) {
     products: [product.id],
     // {CHECKOUT_ID} Polar подставляет сам
     success_url: SITE + '/report?checkout_id={CHECKOUT_ID}',
-    metadata: { tier: key, profile_hash: String(profile_hash) }
+    metadata: refOk ? { tier: key, profile_hash: String(profile_hash), ref: refOk }
+                    : { tier: key, profile_hash: String(profile_hash) }
   };
   if (typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
     body.customer_email = email.trim();
@@ -57,11 +60,13 @@ export default async function handler(req, res) {
     }
     const size = JSON.stringify(P).length + JSON.stringify(scores || {}).length;
     if (size < 200000) {
-      await savePurchase({
+      const row = {
         checkout_id: r.data.id, tier: key, profile_hash: String(profile_hash), profile: P,
         scores: scores && typeof scores === 'object' ? scores : null,
         student_id: /^[A-Za-z0-9-]{8,64}$/.test(String(student_id || '')) ? String(student_id) : null
-      });
+      };
+      // колонки ref может ещё не быть (supabase/creators.sql не запущен) — тогда без неё
+      if (!(await savePurchase(refOk ? { ...row, ref: refOk } : row)) && refOk) await savePurchase(row);
     }
   }
   res.status(200).json({ ok: true, url: r.data.url });

@@ -58,7 +58,7 @@
     }
     var body = JSON.stringify({
       id: id, event: event, detail: detail || {}, profile: P, essayWords: essayWords,
-      email: acct.email || '', device: device()
+      email: acct.email || '', device: device(), ref: refNow() || ''
     });
     if (isLocal()) { if (w.__amDebug) console.log('[student]', event, detail); return; }
     try {
@@ -68,6 +68,21 @@
       fetch('/api/student', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true })
         .catch(function () {});
     } catch (e) {}
+  }
+
+  /* Программа блогеров: ссылка admitmap.app/?ref=emma. Метку храним 30 дней,
+     побеждает последняя ссылка. Она уходит с каждым шагом (api/student) и в
+     оплату (paywall → api/checkout), покупка засчитывается блогеру. */
+  var REF_DAYS = 30;
+  function refNow() {
+    var r = read('admitmap_ref');
+    return r && r.ref && Date.now() - r.at < REF_DAYS * 864e5 ? r.ref : null;
+  }
+  w.amRef = refNow;
+  var refIn = location.search.match(/[?&]ref=([A-Za-z0-9_-]{2,32})(&|$)/);
+  if (refIn) {
+    try { localStorage.setItem('admitmap_ref', JSON.stringify({ ref: refIn[1].toLowerCase(), at: Date.now() })); } catch (e) {}
+    save('ref_visit');
   }
 
   var orig = w.amTrack;

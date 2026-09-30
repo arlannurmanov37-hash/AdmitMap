@@ -11,7 +11,7 @@
  * Если анкета сохранена на сервере (purchases, с 29.09.2026), отдаём её и
  * оценки: отчёт строится из них на любом устройстве, браузеру не верим.
  */
-import { cors, bad, verifyPurchase, addContact, trackStudent, getPurchase, updatePurchase } from './_lib.js';
+import { cors, bad, verifyPurchase, addContact, trackStudent, getPurchase, updatePurchase, recordCreatorSale } from './_lib.js';
 
 export default async function handler(req, res) {
   if (cors(req, res)) return;
@@ -21,6 +21,8 @@ export default async function handler(req, res) {
   const r = await verifyPurchase(id);
   if (!r.ok) return bad(res, r.pending ? 409 : 402, r.error, r.pending ? { pending: true } : null);
   const row = await getPurchase(id);
+  // покупка по ссылке блогера — продажа и письмо блогеру (один раз на чекаут)
+  await recordCreatorSale(id, r).catch(function () {});
   const sent = Array.isArray(req.body && req.body.profile_hashes) ? req.body.profile_hashes.slice(0, 20).map(String) : [];
   if (!row && r.profileHash && sent.indexOf(r.profileHash) < 0) {
     return bad(res, 403, 'This report was bought for a different profile or school list.', { mismatch: true });

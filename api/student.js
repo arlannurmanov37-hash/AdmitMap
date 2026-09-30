@@ -1,5 +1,5 @@
 /**
- * POST /api/student  { id, event, detail?, profile?, email?, device? }  ->  { ok }
+ * POST /api/student  { id, event, detail?, profile?, email?, device?, ref? }  ->  { ok }
  *
  * Сохраняет ученика в Supabase на каждом шаге: анкета, регистрация, цены,
  * клик «купить», отчёт. Так видно каждого, кто начал, и где люди уходят.
@@ -7,15 +7,19 @@
  * Текст эссе сюда не приходит (его вырезает profile-sync.js) и здесь
  * вырезается ещё раз: по Privacy Policy эссе мы не храним.
  *
+ * ref — по чьей ссылке пришёл ученик (программа блогеров, supabase/creators.sql).
+ * Событие ref_visit — сам переход по ссылке: засчитывается блогеру раз в час.
+ *
  * Никогда не ломает воронку: при любой ошибке отвечаем 200.
  */
-import { cors, bad, trackStudent } from './_lib.js';
+import { cors, bad, trackStudent, sbRpc } from './_lib.js';
 
 const STEP_NAMES = ['Basics', 'Academics', 'Activities', 'Financial', 'Honors', 'Schools', 'Essay'];
 
 /* событие → [вес, подпись]. Вес 0 — только журнал, «докуда дошёл» не меняется. */
 function stageOf(event, detail) {
   switch (event) {
+    case 'ref_visit':        return [0, 'Creator link visit'];
     case 'funnel_open':      return [10, 'Opened the form'];
     case 'funnel_step_done': {
       const n = parseInt(detail && detail.step, 10);
@@ -59,8 +63,19 @@ export default async function handler(req, res) {
   const list = (k) => (P && Array.isArray(P[k]) ? P[k] : null);
   const acts = list('activities');
 
+  const ref = /^[a-z0-9_-]{2,32}$/.test(str(b.ref, 32).toLowerCase()) ? str(b.ref, 32).toLowerCase() : '';
+  if (b.event === 'ref_visit') {
+    if (!ref) return bad(res, 400, 'Bad ref.');
+    // боты и превью ссылок в мессенджерах — не посетители
+    if (/bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|headless/i.test(req.headers['user-agent'] || '')) {
+      return res.status(200).json({ ok: true, stored: false });
+    }
+    await sbRpc('track_creator_visit', { p_ref: ref, p_visitor: id });
+  }
+
   const row = {
     id,
+    ref,
     stage: st[0] ? st[1] : '',
     rank: st[0],
     event_label: st[1],

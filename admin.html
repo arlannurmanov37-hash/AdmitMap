@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Creator program · Admin · AdmitMap</title>
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Программа блогеров — страница владельца (дизайн «Admin Dashboard v2», Claude Design,
+     30.09.2026) плюс «Payouts due» в конце (владелец). Пароль = ADMIN_PASSWORD в Vercel,
+     хранится только в этой вкладке (sessionStorage). Данные — api/creators (admin*). -->
+<style>
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+:root{--navy:#0f1f4b;--royal:#2563eb;--royal-d:#1d4ed8;--green:#10b981;--muted:#5f7292;--ink2:#43536b;--line:#d9e5fb;--tile-line:#e3ecfa;--grid:#eef2f8}
+html,body{margin:0;padding:0}
+body{min-height:100vh;background:linear-gradient(118deg,#f8fbff 0%,#edf3fe 42%,#d9e6fb 100%);color:var(--navy);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.006em;-webkit-font-smoothing:antialiased;
+  text-wrap:pretty;font-variant-numeric:lining-nums tabular-nums;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.glow{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.glow.a{top:-420px;right:-320px;width:1300px;height:980px;background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.42),rgba(131,181,255,0) 72%)}
+.glow.b{bottom:-460px;left:-380px;width:1100px;height:900px;background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.28),rgba(131,181,255,0) 72%)}
+.page{position:relative;z-index:1;display:flex;flex-direction:column;gap:24px;max-width:1360px;margin:0 auto;padding:clamp(16px,2.4vw,34px)}
+.ff{font-family:Fraunces,Georgia,serif;font-weight:900;letter-spacing:-.03em;line-height:1}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px}
+.brand{display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:26px;height:31px;object-fit:contain}
+.logo b{font-family:Fraunces,Georgia,serif;font-size:27px;font-weight:900;letter-spacing:-.035em}
+.logo b span{color:var(--royal)}
+.vr{width:1px;height:30px;background:#cfdcf1}
+.who{display:flex;flex-direction:column;gap:3px}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--royal)}
+.who .ff{font-size:21px;letter-spacing:-.025em}
+.hr{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tabs{display:flex;gap:4px;padding:5px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(37,99,235,.5)}
+.tabs button{padding:9px 15px;border:0;border-radius:11px;background:none;font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.tabs button[aria-selected=true]{background:var(--royal);font-weight:700;color:#fff;box-shadow:0 8px 16px -8px rgba(37,99,235,.8)}
+.row{display:flex;flex-wrap:wrap;gap:24px}
+.oc{display:flex;flex-direction:column;min-width:0;padding:clamp(12px,1.5vw,20px);border-radius:clamp(26px,2.6vw,36px);background:#fff;
+  border:1px solid var(--line);box-shadow:0 2px 6px rgba(15,31,75,.04),0 40px 80px -46px rgba(37,99,235,.5)}
+.ip{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;padding:clamp(12px,1.5vw,20px);border-radius:clamp(20px,2vw,26px);
+  background:linear-gradient(180deg,#eef4ff 0%,#e3edfc 100%);border:1px solid #dbe6fb}
+.hd{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;padding:4px 6px 6px}
+.hd .t{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hd .ff{font-size:clamp(21px,1.9vw,26px);line-height:1.05}
+.tile{background:#fff;border:1px solid var(--tile-line);border-radius:18px}
+.cta{display:flex;align-items:center;justify-content:center;gap:12px;height:44px;padding:0 20px;border:0;border-radius:14px;background:var(--royal);
+  font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff;white-space:nowrap;
+  box-shadow:0 18px 36px -16px rgba(37,99,235,.85),0 2px 6px -2px rgba(37,99,235,.4)}
+.cta.big{height:58px;border-radius:16px;font-size:14.5px;width:100%}
+.ghost{display:flex;align-items:center;justify-content:center;gap:10px;height:44px;padding:0 20px;border-radius:14px;background:#f5f8ff;
+  border:1.5px solid #c7d8f7;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--royal-d);white-space:nowrap}
+.muted{color:var(--muted)}
+/* итоги */
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
+.st{display:flex;flex-direction:column;gap:10px;min-width:0;padding:16px 18px 18px}
+.st.money{background:linear-gradient(180deg,#fff 0%,#f0fcf7 100%);border:1.5px solid #bdeedb;box-shadow:0 18px 36px -24px rgba(16,185,129,.55)}
+.st .top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px}
+.delta{font-size:13px;font-weight:700;white-space:nowrap}
+.st .ff{font-size:clamp(24px,2.1vw,30px)}
+.st b.lbl{font-size:15px;font-weight:700}
+.ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0}
+.ring{position:relative;display:block;border-radius:50%}
+.ring::after{content:'';position:absolute;border-radius:50%;background:#fff}
+.ring.s{width:36px;height:36px}.ring.s::after{inset:8px}
+.ring.xs{width:18px;height:18px}.ring.xs::after{inset:4px}
+.bill{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:26px;border-radius:6px;
+  background:linear-gradient(180deg,#5eeab0,#10b981);box-shadow:0 6px 14px -4px rgba(16,185,129,.6),inset 0 0 0 2px rgba(255,255,255,.35)}
+.bill i{position:absolute;top:50%;width:3px;height:3px;margin-top:-1.5px;border-radius:50%;background:rgba(255,255,255,.8)}
+.bill b{display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#fff;font-size:10px;font-weight:900;color:#0c9a6c}
+/* график */
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.legend span{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.legend i{width:12px;height:12px;border-radius:3px}
+select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px solid #c7d8f7;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  appearance:none;font:700 13.5px Inter,sans-serif;color:var(--navy)}
+.plotwrap{flex:1;display:flex;flex-direction:column;padding:28px 58px 16px 64px}
+.plot{position:relative;height:260px;cursor:crosshair}
+.gl{position:absolute;left:0;right:0;border-top:1px solid var(--grid)}
+.yl,.yr{position:absolute;width:40px;transform:translateY(-50%);font-size:12px;font-weight:500;color:#8a9ab3}
+.yl{left:-50px;text-align:right}.yr{right:-50px;text-align:left;color:#0c9a6c}
+.bar{position:absolute;bottom:0;border-radius:4px 4px 0 0}
+.hl{position:absolute;top:0;bottom:0;background:rgba(37,99,235,.06);pointer-events:none}
+.tip{position:absolute;z-index:3;display:flex;flex-direction:column;gap:9px;min-width:200px;padding:14px 16px;border-radius:14px;background:#fff;
+  border:1px solid #dbe5f4;box-shadow:0 24px 48px -20px rgba(15,31,75,.35);pointer-events:none}
+.tip .h{font-size:12.5px;font-weight:700}
+.tip .ln{height:1px;background:var(--grid)}
+.tip .r{display:flex;justify-content:space-between;gap:18px;font-size:13px;font-weight:500;color:var(--ink2)}
+.tip .r b{font-size:14px;font-weight:700}
+.tip .go{font-size:12px;font-weight:600;color:var(--royal)}
+.xl{position:relative;height:18px;margin-top:10px}
+.xl span{position:absolute;transform:translateX(-50%);font-size:12px;font-weight:500;color:#8a9ab3;white-space:nowrap}
+.back{border:0;background:none;padding:0;font-size:13px;font-weight:700;color:var(--royal)}
+/* таблица */
+.tbl{overflow-x:auto}
+.grid{display:grid;grid-template-columns:minmax(220px,2.4fr) minmax(80px,1fr) minmax(90px,1fr) minmax(90px,1fr) minmax(80px,.9fr) minmax(100px,1.1fr) minmax(100px,1.1fr) minmax(80px,.8fr) 148px;
+  align-items:center;gap:14px;min-width:1080px}
+.th{padding:0 20px 2px}
+.th button,.th span{display:flex;align-items:center;justify-content:flex-end;gap:5px;border:0;background:none;padding:0;font-size:11.5px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.th button:first-child{justify-content:flex-start}
+.th button.on{color:var(--royal)}
+.th span.l{justify-content:flex-start}
+.rows{display:flex;flex-direction:column;gap:10px}
+.tr{min-height:76px;padding:12px 20px}
+.tr.best{border:2px solid var(--royal);box-shadow:0 14px 30px -22px rgba(37,99,235,.8)}
+.tr.paused{opacity:.6}
+.av{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;border-radius:50%;background:#eaf1ff;font-size:13px;font-weight:800;color:var(--royal-d)}
+.nm{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:700;white-space:nowrap;min-width:0}
+.nm .t{overflow:hidden;text-overflow:ellipsis}
+.sm{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.lk{display:flex;align-items:center;justify-content:center;width:26px;height:26px;flex-shrink:0;border-radius:8px;background:#eef4ff;border:1px solid #d6e2f6}
+.bst{padding:3px 8px;border-radius:999px;background:var(--royal);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.n19{font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:900;line-height:1;letter-spacing:-.03em;white-space:nowrap}
+.r{text-align:right}
+.pill{display:inline-flex;padding:5px 11px;border-radius:999px;background:#eaf1ff;color:var(--royal-d);font-size:12.5px;font-weight:700}
+.pill.off{background:#f1f5f9;color:var(--muted)}
+.acts{display:flex;justify-content:flex-end;gap:5px}
+.acts button{display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border-radius:10px;background:#f5f8ff;border:1px solid var(--line)}
+.acts button:hover{background:#eaf1ff}
+/* формы */
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+.fl{display:flex;flex-direction:column;gap:8px;padding:12px 14px}
+.fl span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fl input,.fl select,.fl textarea{height:42px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:#f7faff;font:500 14.5px Inter,sans-serif;color:var(--navy);outline:none;width:100%}
+.fl textarea{height:84px;padding:10px 12px;resize:vertical}
+.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--royal);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.pre{display:flex;align-items:center;border-radius:10px;border:1px solid var(--line);background:#f7faff;overflow:hidden;text-transform:none!important;letter-spacing:0!important;font-size:14.5px!important;font-weight:500!important;color:var(--navy)!important}
+.pre em{padding-left:12px;font-style:normal;font-size:14.5px;color:var(--muted);white-space:nowrap}
+.pre input{border:0;background:none;box-shadow:none!important;padding-left:2px}
+.out{display:flex;flex-direction:column;gap:12px}
+.lnk{display:flex;align-items:center;gap:14px;padding:16px 18px}
+.lnk .sq{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(140deg,#3b82f6,#1d4ed8);box-shadow:0 8px 18px -8px rgba(37,99,235,.8)}
+.lnk .sq.l{background:#eef4ff;box-shadow:none;border:1px solid #d6e2f6}
+.lnk .tx{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.lnk .tx b{font-size:15px;font-weight:700}
+.lnk .tx span{font-size:13.5px;font-weight:600;color:var(--royal-d);overflow-wrap:anywhere}
+.copy{height:36px;padding:0 14px;border-radius:10px;border:1.5px solid #c7d8f7;background:#f5f8ff;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--royal-d)}
+.err{font-size:13px;font-weight:600;color:#dc2626;padding:0 6px}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px;padding:20px;text-align:center}
+.empty b{font-size:15px}.empty span{font-size:13.5px;color:var(--muted)}
+.alerts{display:flex;flex-direction:column;gap:10px}
+.al{display:flex;align-items:center;gap:14px;padding:14px 18px;border-color:#fde2c4;background:#fffaf2}
+.pay{display:grid;grid-template-columns:minmax(200px,1.6fr) minmax(110px,.8fr) minmax(200px,1.6fr) 180px;align-items:center;gap:14px;padding:12px 20px;min-height:72px}
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,31,75,.35)}
+.modal .oc{width:min(560px,100%)}
+.center-msg{max-width:440px;margin:14vh auto 0;width:100%}
+.loading{opacity:.55;transition:opacity .2s}
+@media(max-width:700px){.plotwrap{padding:24px 40px 12px 44px}.yl{left:-42px}.yr{right:-42px}.pay{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<span class="glow a"></span><span class="glow b"></span>
+<div class="page">
+  <header>
+    <div class="brand">
+      <a class="logo" href="/"><img src="/admitmap-mark.svg" alt=""><b>Admit<span>Map</span></b></a>
+      <span class="vr"></span>
+      <span class="who"><span class="eyebrow">Creator program</span><span class="ff">Admin</span></span>
+    </div>
+    <div class="hr" id="hr" hidden>
+      <div class="tabs" id="periods"><button data-p="today">Today</button><button data-p="7d">7 days</button><button data-p="30d">30 days</button><button data-p="all">All time</button></div>
+      <button class="ghost" id="csv">Export CSV</button>
+      <a class="cta" href="#add">Add creator<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"/></svg></a>
+    </div>
+  </header>
+  <div id="app"></div>
+</div>
+<div id="modal"></div>
+
+<script>
+(function () {
+  'use strict';
+  var tz = 'UTC';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) {}
+  var pass = '';
+  try { pass = sessionStorage.getItem('am_admin') || ''; } catch (e) {}
+  var period = '30d', DATA = null, ZOOM = null, PICK = '', SORT = { k: 'conv', dir: -1 }, LAST = null;
+  try { period = localStorage.getItem('am_admin_period') || '30d'; } catch (e) {}
+  var app = document.getElementById('app');
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var money = function (n) { return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+  var pct = function (a, b) { return b ? a / b * 100 : 0; };
+  var fmtPct = function (x) { return (Math.round(x * 10) / 10).toFixed(1) + '%'; };
+  var PLABEL = { today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', all: 'All time' };
+  var ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"/></svg>';
+  var LINK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>';
+  var IC = function (d) { return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+
+  function api(body) {
+    if (window.__amMock && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return Promise.resolve(window.__amMock(body));
+    return fetch('/api/creators', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-admin-password': pass },
+      body: JSON.stringify(Object.assign({ tz: tz }, body)) })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: 'Something went wrong.' }; }); })
+      .catch(function () { return { ok: false, error: 'Could not reach the server.' }; });
+  }
+  function card(flex, eyebrow, title, inner, head, id) {
+    return '<div class="oc"' + (id ? ' id="' + id + '"' : '') + ' style="flex:' + flex + ' 1 0;min-width:min(100%,' + (flex >= 12 ? 0 : 360) + 'px)"><div class="ip">' +
+      '<div class="hd"><div class="t">' + (eyebrow ? '<span class="eyebrow">' + esc(eyebrow) + '</span>' : '') + '<span class="ff">' + title + '</span></div>' +
+      (head || '') + '</div>' + inner + '</div></div>';
+  }
+  var ring = function (p, cls, color) { p = Math.max(0, Math.min(100, p)); return '<span class="ring ' + cls + '" style="background:conic-gradient(' + (color || '#2563eb') + ' 0 ' + p + '%,#dbe7fb ' + p + '% 100%)"></span>'; };
+
+  /* ── вход ── */
+  function login(msg) {
+    document.getElementById('hr').hidden = true;
+    app.innerHTML = '<div class="center-msg"><div class="oc"><div class="ip"><div class="hd"><div class="t"><span class="eyebrow">Admin</span><span class="ff">Sign in</span></div></div>' +
+      '<form id="lf" style="display:flex;flex-direction:column;gap:12px"><label class="tile fl"><span>Password</span><input id="pw" type="password" autocomplete="current-password" required></label>' +
+      '<div class="err">' + esc(msg || '') + '</div><button class="cta big" type="submit">Open dashboard' + ARROW + '</button></form></div></div></div>';
+    document.getElementById('lf').onsubmit = function (e) {
+      e.preventDefault(); pass = document.getElementById('pw').value;
+      try { sessionStorage.setItem('am_admin', pass); } catch (x) {}
+      load();
+    };
+    document.getElementById('pw').focus();
+  }
+
+  /* ── итоги ── */
+  function delta(cur, prev, kind, green) {
+    if (!DATA.prev || period === 'all') return '';
+    var d = cur - prev, txt;
+    if (kind === 'pct') { if (!prev) return ''; txt = Math.abs(Math.round(d / prev * 100)) + '%'; }
+    else if (kind === 'pts') txt = Math.abs(Math.round(d * 10) / 10) + ' pts';
+    else if (kind === 'usd') txt = money(Math.abs(d));
+    else txt = String(Math.abs(d));
+    if (!d) return '<span class="delta muted">no change</span>';
+    return '<span class="delta" style="color:' + (d > 0 ? (green ? '#10b981' : '#2563eb') : '#8a9ab3') + '">' + (d > 0 ? '↑ ' : '↓ ') + txt + '</span>';
+  }
+  function totals(d) {
+    var t = d.totals, p = d.prev || {};
+    var conv = pct(t.purchases, t.visitors), pconv = pct(p.purchases || 0, p.visitors || 0);
+    var net = t.revenue - t.commission, pnet = (p.revenue || 0) - (p.commission || 0);
+    var tile = function (icon, dl, val, color, label, cls) {
+      return '<div class="tile st ' + (cls || '') + '"><span class="top">' + icon + dl + '</span><span class="ff" style="color:' + color + '">' + val + '</span><b class="lbl">' + label + '</b></div>';
+    };
+    var people = '<span class="ico"><svg width="36" height="30" viewBox="0 0 36 30"><circle cx="24" cy="8.5" r="6" fill="#bcd3f5"/><path d="M13 29.5c0-6.6 4.9-10.6 11-10.6s11 4 11 10.6z" fill="#bcd3f5"/><circle cx="12.5" cy="10" r="6.5" fill="#2563eb"/><path d="M.5 29.5c0-7 5.2-11 12-11s12 4 12 11z" fill="#2563eb"/></svg></span>';
+    var bag = '<span class="ico"><svg width="32" height="34" viewBox="0 0 32 34"><path d="M10 11V8.5a6 6 0 0 1 12 0V11" fill="none" stroke="#0c9a6c" stroke-width="2.6" stroke-linecap="round"/><path d="M8 10h16a6 6 0 0 1 6 6v11a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6z" fill="url(#bga)"/><defs><linearGradient id="bga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5eeab0"/><stop offset="1" stop-color="#10b981"/></linearGradient></defs><circle cx="11" cy="17" r="1.8" fill="#fff"/><circle cx="21" cy="17" r="1.8" fill="#fff"/></svg></span>';
+    var bill = '<span class="ico"><span class="bill"><i style="left:5px"></i><i style="right:5px"></i><b>$</b></span></span>';
+    return '<div class="row">' + card(12, PLABEL[period], 'Program totals', '<div class="totals">' +
+      tile(people, delta(t.visitors, p.visitors, 'pct'), t.visitors.toLocaleString('en-US'), '#2563eb', 'Visitors') +
+      tile(bag, delta(t.purchases, p.purchases, 'n', true), t.purchases, '#10b981', 'Purchases') +
+      tile('<span class="ico">' + ring(conv * 4, 's') + '</span>', delta(conv, pconv, 'pts'), fmtPct(conv), '#2563eb', 'Conversion') +
+      tile(bill, delta(t.revenue, p.revenue || 0, 'usd', true), money(t.revenue), '#10b981', 'Revenue') +
+      tile(bill, delta(net, pnet, 'usd', true), money(net), '#10b981', 'Net after commissions', 'money') + '</div>') + '</div>';
+  }
+
+  /* ── график: столбики посетителей и покупок ── */
+  var dayKey = function (t) { return new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(t)); };
+  var dayLabel = function (t) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric' }).format(new Date(t)); };
+  var hourLabel = function (t) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric' }).format(new Date(t)).toLowerCase(); };
+  function niceMax(v) {
+    if (v <= 4) return 4;
+    var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+    return (n <= 1.5 ? 1.5 : n <= 2 ? 2 : n <= 3 ? 3 : n <= 4 ? 4 : n <= 6 ? 6 : n <= 8 ? 8 : 10) * p;
+  }
+  function chart(d) {
+    var opts = '<option value="">All creators</option>' + d.creators.map(function (c) {
+      return '<option value="' + c.id + '"' + (String(c.id) === PICK ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join('');
+    var head = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px"><div class="legend"><span><i style="background:#9dbcf2"></i>Visitors</span>' +
+      '<span><i style="background:#10b981"></i>Purchases</span></div><select class="pick" id="pick">' + opts + '</select></div>';
+    var eyebrow = ZOOM ? dayLabel(ZOOM.day + 'T12:00:00') + ' · by hour' : PLABEL[period];
+    return '<div class="row">' + card(12, eyebrow, 'Visitors and purchases',
+      '<div class="tile plotwrap"><div class="plot" id="plot"></div><div class="xl" id="xl"></div>' +
+      (ZOOM ? '<div style="margin-top:12px"><button class="back" id="back">← Back</button></div>' : '') + '</div>', head) + '</div>';
+  }
+  function drawChart() {
+    var S = (ZOOM ? ZOOM.series : DATA.series) || [], hourly = !!ZOOM || DATA.unit === 'hour';
+    var plot = document.getElementById('plot'), xl = document.getElementById('xl');
+    if (!plot) return;
+    var n = Math.max(S.length, 1);
+    var maxV = niceMax(Math.max.apply(null, S.map(function (x) { return x.v; }).concat([1])));
+    var maxP = niceMax(Math.max.apply(null, S.map(function (x) { return x.p; }).concat([1])));
+    var w = 100 / n, bw = Math.min(w * 0.36, 2.2);
+    var h = '';
+    [1, .5, 0].forEach(function (f) {
+      var y = 100 - f * 94;
+      h += '<span class="gl" style="top:' + y + '%"></span><span class="yl" style="top:' + y + '%">' + Math.round(maxV * f).toLocaleString('en-US') + '</span>' +
+        '<span class="yr" style="top:' + y + '%">' + Math.round(maxP * f * 10) / 10 + '</span>';
+    });
+    S.forEach(function (x, i) {
+      var cx = (i + 0.5) * w;
+      h += '<span class="bar" style="left:' + (cx - bw - 0.15) + '%;width:' + bw + '%;height:' + (x.v / maxV * 94) + '%;background:#9dbcf2"></span>' +
+        '<span class="bar" style="left:' + (cx + 0.15) + '%;width:' + bw + '%;height:' + (x.p / maxP * 94) + '%;background:#10b981"></span>';
+    });
+    h += '<span class="hl" id="hl" hidden></span><div class="tip" id="tip" hidden></div>';
+    plot.innerHTML = h;
+    var step = hourly ? 3 : Math.max(1, Math.ceil(n / 7)), xh = '';
+    for (var i = 0; i < n; i += step) if (S[i]) xh += '<span style="left:' + (i + 0.5) * w + '%">' + (hourly ? hourLabel(S[i].t) : dayLabel(S[i].t)) + '</span>';
+    xl.innerHTML = xh;
+    var tip = document.getElementById('tip'), hl = document.getElementById('hl');
+    var at = function (ev) { var r = plot.getBoundingClientRect(); return Math.max(0, Math.min(n - 1, Math.floor((ev.clientX - r.left) / r.width * n))); };
+    plot.onmousemove = function (ev) {
+      if (!S.length) return;
+      var i = at(ev), x = S[i];
+      hl.hidden = tip.hidden = false;
+      hl.style.left = i * w + '%'; hl.style.width = w + '%';
+      tip.innerHTML = '<span class="h">' + (hourly ? dayLabel(x.t) + ', ' + hourLabel(x.t) : dayLabel(x.t)) + ' · ' + (PICK ? esc((DATA.creators.find(function (c) { return String(c.id) === PICK; }) || {}).name) : 'All creators') + '</span><span class="ln"></span>' +
+        '<span class="r">Visitors<b style="color:#2563eb">' + x.v + '</b></span><span class="r">Purchases<b style="color:#10b981">' + x.p + '</b></span>' +
+        '<span class="r">Conversion<b>' + fmtPct(pct(x.p, x.v)) + '</b></span>' + (hourly ? '' : '<span class="go">Click to see by hour</span>');
+      tip.style.left = (i + 0.5) * w > 62 ? 'calc(' + (i + 0.5) * w + '% - 216px)' : 'calc(' + (i + 0.5) * w + '% + 16px)';
+      tip.style.top = '4%';
+    };
+    plot.onmouseleave = function () { hl.hidden = tip.hidden = true; };
+    plot.onclick = function (ev) {
+      if (hourly || !S.length) return;
+      var day = dayKey(S[at(ev)].t);
+      api({ action: 'admin_hours', day: day, creator_id: PICK || null }).then(function (r) { if (r.ok) { ZOOM = { day: day, series: r.series }; render(); } });
+    };
+  }
+
+  /* ── таблица блогеров ── */
+  var COLS = [['name', 'Creator'], ['visitors', 'Visitors'], ['purchases', 'Purchases'], ['conv', 'Conv.'], ['lifetime', 'Lifetime'], ['earned', 'Earned'], ['paid', 'Paid']];
+  function val(c, k) {
+    if (k === 'name') return c.name.toLowerCase();
+    if (k === 'visitors') return c.stats.visitors;
+    if (k === 'purchases') return c.stats.purchases;
+    if (k === 'conv') return c.stats.visitors ? c.stats.purchases / c.stats.visitors : -1;
+    if (k === 'lifetime') return Number(c.money.lifetime_sales);
+    if (k === 'earned') return Number(c.money.earned);
+    if (k === 'paid') return Number(c.money.paid);
+    return 0;
+  }
+  function table(d) {
+    var list = d.creators.slice().sort(function (a, b) { var x = val(a, SORT.k), y = val(b, SORT.k); return (x < y ? -1 : x > y ? 1 : 0) * SORT.dir; });
+    var best = null, bc = -1;
+    d.creators.forEach(function (c) { if (c.stats.visitors >= 50 && c.status === 'active') { var v = c.stats.purchases / c.stats.visitors; if (v > bc) { bc = v; best = c.id; } } });
+    var th = '<div class="grid th">' + COLS.map(function (c, i) {
+      var on = SORT.k === c[0];
+      return '<button data-sort="' + c[0] + '" class="' + (on ? 'on' : '') + '">' + c[1] + (on ? (SORT.dir < 0 ? ' ↓' : ' ↑') : '') + '</button>';
+    }).join('') + '<span class="l">Status</span><span>Actions</span></div>';
+    var rows = list.map(function (c) {
+      var s = c.stats, conv = pct(s.purchases, s.visitors);
+      var ini = c.name.split(/\s+/).map(function (w) { return w[0] || ''; }).join('').slice(0, 2).toUpperCase();
+      return '<div class="grid tile tr' + (c.id === best ? ' best' : '') + (c.status === 'paused' ? ' paused' : '') + '">' +
+        '<span style="display:flex;align-items:center;gap:13px;min-width:0"><span class="av">' + esc(ini) + '</span><span style="display:flex;flex-direction:column;gap:4px;min-width:0">' +
+        '<span class="nm"><span class="t">' + esc(c.name) + '</span><button class="lk" data-copy="https://admitmap.app/?ref=' + esc(c.ref) + '" title="Copy public link">' + LINK + '</button>' +
+        (c.id === best ? '<span class="bst">Best</span>' : '') + '</span><span class="sm">?ref=' + esc(c.ref) + (c.platform ? ' · ' + esc(c.platform) : '') + '</span></span></span>' +
+        '<span class="r"><span class="n19" style="color:#2563eb">' + s.visitors.toLocaleString('en-US') + '</span></span>' +
+        '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="n19" style="color:#10b981">' + s.purchases + '</span><span class="sm">' + s.p19 + ' / ' + s.p29 + '</span></span>' +
+        '<span style="display:flex;align-items:center;justify-content:flex-end;gap:8px">' + (s.visitors ? ring(conv * 10, 'xs') + '<span class="n19" style="color:#1d4ed8">' + fmtPct(conv) + '</span>' : '<span class="n19 muted">—</span>') + '</span>' +
+        '<span class="r"><span class="n19">' + c.money.lifetime_sales + '</span></span>' +
+        '<span class="r"><span class="n19" style="color:#10b981">' + money(c.money.earned) + '</span></span>' +
+        '<span class="r"><span class="n19" style="color:' + (Number(c.money.paid) ? '#10b981' : '#8a9ab3') + '">' + money(c.money.paid) + '</span></span>' +
+        '<span><span class="pill' + (c.status === 'paused' ? ' off' : '') + '">' + (c.status === 'paused' ? 'Paused' : 'Active') + '</span></span>' +
+        '<span class="acts">' +
+          '<button data-open="' + esc(c.dashboard) + '" title="Open creator page">' + IC('<path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>') + '</button>' +
+          '<button data-pay="' + c.id + '" title="Mark as paid">' + IC('<path d="M4.5 12.5l5 5L20 6.5"/>') + '</button>' +
+          '<button data-status="' + c.id + '" title="' + (c.status === 'paused' ? 'Resume' : 'Pause') + '">' + (c.status === 'paused' ? IC('<path d="M7 4.5l13 7.5-13 7.5z"/>') : IC('<path d="M9 5v14M15 5v14"/>')) + '</button>' +
+          '<button data-edit="' + c.id + '" title="Notes and payout details">' + IC('<path d="M6 4h9l4 4v12H6z"/><path d="M9.5 12h6M9.5 15.5h4"/>') + '</button>' +
+        '</span></div>';
+    }).join('');
+    var body = d.creators.length ? '<div class="tbl"><div style="display:flex;flex-direction:column;gap:10px">' + th + '<div class="rows">' + rows + '</div></div></div>'
+      : '<div class="tile empty"><b>No creators yet</b><span>Add your first creator below. Their link and private dashboard link appear right after you save.</span></div>';
+    var alerts = (d.alerts || []).length ? '<div class="alerts">' + d.alerts.map(function (a) {
+      return '<div class="tile al"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>' +
+        '<span style="font-size:14px;line-height:1.5"><b>' + esc(a.name) + '</b> — ' + esc(a.text) + '</span></div>'; }).join('') + '</div>' : '';
+    return '<div class="row">' + card(12, 'Creators', d.creators.length + (d.creators.length === 1 ? ' creator' : ' creators'), alerts + body,
+      '<span class="sm">Sorted by ' + (COLS.find(function (c) { return c[0] === SORT.k; }) || [0, ''])[1].toLowerCase() + ' · ' + PLABEL[period].toLowerCase() + '</span>') + '</div>';
+  }
+
+  /* ── новый блогер ── */
+  function addForm() {
+    var form = '<form id="addf" style="display:flex;flex-direction:column;gap:12px"><div class="fg">' +
+      '<label class="tile fl"><span>Name</span><input name="name" placeholder="Full name" required></label>' +
+      '<label class="tile fl"><span>Email</span><input name="email" type="email" placeholder="name@example.com"></label>' +
+      '<label class="tile fl"><span>Platform</span><select name="platform"><option>TikTok</option><option>Instagram</option><option>YouTube</option><option>Other</option></select></label>' +
+      '<label class="tile fl"><span>Handle</span><input name="handle" placeholder="@handle"></label></div>' +
+      '<label class="tile fl"><span>Link name</span><span class="pre"><em>admitmap.app/?ref=</em><input name="ref" placeholder="name" pattern="[A-Za-z0-9_-]{2,32}" required></span></label>' +
+      '<div class="err" id="adderr"></div><button class="cta big" type="submit">Save creator' + ARROW + '</button></form>';
+    var out = LAST ? '<div class="out"><div class="tile lnk"><span class="sq"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span class="tx"><b>Public link</b><span>' + esc(LAST.link) + '</span><span class="muted" style="color:#5f7292;font-weight:500">For their bio and posts.</span></span><button class="copy" data-copy="https://' + esc(LAST.link) + '">Copy</button></div>' +
+      '<div class="tile lnk"><span class="sq l"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg></span><span class="tx"><b>Private dashboard link</b><span>' + esc(LAST.dashboard.replace(/^https:\/\//, '')) + '</span><span class="muted" style="color:#5f7292;font-weight:500">Send only to ' + esc(LAST.name) + '. Anyone with this link can see their dashboard.</span></span><button class="copy" data-copy="' + esc(LAST.dashboard) + '">Copy</button></div></div>'
+      : '<div class="tile empty" style="flex:1"><b>Links appear here</b><span>After you save a creator you get their public link for posts and their private dashboard link to send them.</span></div>';
+    return '<div class="row" id="add">' + card(7, 'Add creator', 'New creator', form) + card(5, LAST ? 'Saved' : 'Links', LAST ? esc(LAST.name) + ' added' : 'Ready to send', out) + '</div>';
+  }
+
+  /* ── выплаты (в конце, по просьбе владельца) ── */
+  function payouts(d) {
+    var list = d.payouts_due || [];
+    var total = list.reduce(function (a, p) { return a + Number(p.ready); }, 0);
+    var rows = list.map(function (p) {
+      return '<div class="tile pay"><span style="font-size:16px;font-weight:700">' + esc(p.name) + '</span>' +
+        '<span class="n19" style="color:#10b981;font-size:22px">' + money(p.ready) + '</span>' +
+        '<span style="display:flex;flex-direction:column;gap:3px;min-width:0"><b style="font-size:14px">' + esc(p.method || 'No payout method') + '</b><span class="sm" style="white-space:normal;overflow-wrap:anywhere">' + esc(p.details || 'Add PayPal email or Wise details in Notes') + '</span></span>' +
+        '<button class="cta" data-pay="' + p.id + '" style="justify-self:end">Mark as paid</button></div>';
+    }).join('');
+    var body = rows ? '<div class="rows">' + rows + '</div>' : '<div class="tile empty"><b>Nothing to pay right now</b><span>Creators appear here once they have $25 or more ready to pay (sales older than 14 days, minus what was already paid).</span></div>';
+    return '<div class="row">' + card(12, 'Monthly payouts', 'Payouts due', body, rows ? '<span class="ff" style="font-size:22px;color:#10b981">' + money(total) + '</span>' : '') + '</div>';
+  }
+
+  function render() {
+    document.getElementById('hr').hidden = false;
+    app.innerHTML = '<div style="display:flex;flex-direction:column;gap:24px">' + totals(DATA) + chart(DATA) + table(DATA) + addForm() + payouts(DATA) + '</div>';
+    drawChart(); wire();
+  }
+  function find(id) { return DATA.creators.find(function (c) { return String(c.id) === String(id); }); }
+  function modal(html, onsubmit) {
+    var m = document.getElementById('modal');
+    m.innerHTML = '<div class="modal"><div class="oc"><div class="ip">' + html + '</div></div></div>';
+    m.querySelector('.modal').onclick = function (e) { if (e.target === this) m.innerHTML = ''; };
+    var f = m.querySelector('form');
+    if (f) f.onsubmit = function (e) { e.preventDefault(); onsubmit(f, function () { m.innerHTML = ''; }); };
+    var c = m.querySelector('[data-close]'); if (c) c.onclick = function () { m.innerHTML = ''; };
+  }
+  function copyText(t, btn) {
+    var done = function () { if (btn) { var o = btn.innerHTML; btn.textContent = 'Copied'; setTimeout(function () { btn.innerHTML = o; }, 1500); } };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () { prompt('Copy:', t); }); else prompt('Copy:', t);
+  }
+  function payModal(id) {
+    var c = find(id); if (!c) return;
+    modal('<div class="hd"><div class="t"><span class="eyebrow">Mark as paid</span><span class="ff">' + esc(c.name) + '</span></div></div>' +
+      '<form style="display:flex;flex-direction:column;gap:12px"><div class="fg"><label class="tile fl"><span>Amount paid ($)</span><input name="amount" type="number" step="0.01" min="0.01" value="' + Number(c.money.ready).toFixed(2) + '" required></label>' +
+      '<label class="tile fl"><span>Method</span><select name="method"><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option><option>Other</option></select></label></div>' +
+      '<label class="tile fl"><span>Note (optional)</span><input name="note" placeholder="e.g. September payout"></label>' +
+      '<p class="sm" style="margin:0 6px;white-space:normal">Ready to pay: ' + money(c.money.ready) + ' · Pending (14-day hold): ' + money(c.money.pending) + ' · Paid so far: ' + money(c.money.paid) + (c.payout_details ? ' · Send to: ' + esc(c.payout_details) : '') + '</p>' +
+      '<div class="err" id="merr"></div><div style="display:flex;gap:10px"><button class="ghost" type="button" data-close style="flex:1">Cancel</button><button class="cta" type="submit" style="flex:1">Save payout</button></div></form>',
+      function (f, close) {
+        api({ action: 'admin_pay', id: c.id, amount: f.amount.value, method: f.method.value, note: f.note.value }).then(function (r) {
+          if (!r.ok) { document.getElementById('merr').textContent = r.error || 'Could not save.'; return; }
+          close(); load();
+        });
+      });
+  }
+  function editModal(id) {
+    var c = find(id); if (!c) return;
+    modal('<div class="hd"><div class="t"><span class="eyebrow">Notes and payout details</span><span class="ff">' + esc(c.name) + '</span></div></div>' +
+      '<form style="display:flex;flex-direction:column;gap:12px"><div class="fg"><label class="tile fl"><span>Email</span><input name="email" type="email" value="' + esc(c.email || '') + '"></label>' +
+      '<label class="tile fl"><span>Payout method</span><select name="payout_method"><option value="">—</option><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option></select></label></div>' +
+      '<label class="tile fl"><span>Payout details (PayPal email or Wise)</span><input name="payout_details" value="' + esc(c.payout_details || '') + '"></label>' +
+      '<label class="tile fl"><span>Notes</span><textarea name="notes">' + esc(c.notes || '') + '</textarea></label>' +
+      '<div class="tile fl"><span>Private dashboard link</span><span style="font-size:13.5px;font-weight:600;color:#1d4ed8;overflow-wrap:anywhere">' + esc(c.dashboard) + '</span></div>' +
+      '<div class="err" id="merr"></div><div style="display:flex;gap:10px"><button class="ghost" type="button" data-close style="flex:1">Cancel</button><button class="cta" type="submit" style="flex:1">Save</button></div></form>',
+      function (f, close) {
+        api({ action: 'admin_update', id: c.id, email: f.email.value, payout_method: f.payout_method.value, payout_details: f.payout_details.value, notes: f.notes.value })
+          .then(function (r) { if (!r.ok) { document.getElementById('merr').textContent = r.error || 'Could not save.'; return; } close(); load(); });
+      });
+  }
+  function wire() {
+    document.querySelectorAll('[data-sort]').forEach(function (b) { b.onclick = function () {
+      var k = b.dataset.sort; SORT = { k: k, dir: SORT.k === k ? -SORT.dir : (k === 'name' ? 1 : -1) }; render(); }; });
+    document.querySelectorAll('[data-copy]').forEach(function (b) { b.onclick = function (e) { e.preventDefault(); copyText(b.dataset.copy, b); }; });
+    document.querySelectorAll('[data-open]').forEach(function (b) { b.onclick = function () { window.open(b.dataset.open, '_blank', 'noopener'); }; });
+    document.querySelectorAll('[data-pay]').forEach(function (b) { b.onclick = function () { payModal(b.dataset.pay); }; });
+    document.querySelectorAll('[data-edit]').forEach(function (b) { b.onclick = function () { editModal(b.dataset.edit); }; });
+    document.querySelectorAll('[data-status]').forEach(function (b) { b.onclick = function () {
+      var c = find(b.dataset.status); if (!c) return;
+      var to = c.status === 'paused' ? 'active' : 'paused';
+      if (to === 'paused' && !confirm('Pause ' + c.name + '? New purchases through their link will not earn commission.')) return;
+      api({ action: 'admin_update', id: c.id, status: to }).then(load); }; });
+    var pick = document.getElementById('pick');
+    if (pick) pick.onchange = function () { PICK = pick.value; ZOOM = null; load(); };
+    var back = document.getElementById('back'); if (back) back.onclick = function () { ZOOM = null; render(); };
+    var f = document.getElementById('addf');
+    if (f) f.onsubmit = function (e) {
+      e.preventDefault();
+      api({ action: 'admin_add', name: f.name.value, email: f.email.value, platform: f.platform.value, handle: f.handle.value, ref: f.ref.value })
+        .then(function (r) {
+          if (!r.ok) { document.getElementById('adderr').textContent = r.error || 'Could not save.'; return; }
+          LAST = { name: f.name.value, link: r.link, dashboard: r.dashboard };
+          load().then(function () { var el = document.getElementById('add'); if (el) el.scrollIntoView({ block: 'center' }); });
+        });
+    };
+  }
+  document.getElementById('periods').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    period = b.dataset.p; ZOOM = null;
+    try { localStorage.setItem('am_admin_period', period); } catch (x) {}
+    setTabs(); load();
+  };
+  document.getElementById('csv').onclick = function () {
+    api({ action: 'admin_csv', period: period }).then(function (r) {
+      if (!r.ok) { alert(r.error || 'Could not export.'); return; }
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([r.csv], { type: 'text/csv' }));
+      a.download = 'admitmap-creators-' + period + '.csv'; a.click();
+    });
+  };
+  function setTabs() { document.querySelectorAll('#periods button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.p === period)); }); }
+  function load() {
+    if (!pass) { login(); return Promise.resolve(); }
+    app.classList.add('loading');
+    return api({ action: 'admin', period: period, creator_id: PICK || null }).then(function (r) {
+      app.classList.remove('loading');
+      if (!r.ok) {
+        if (/Wrong password|ADMIN_PASSWORD|Too many/.test(r.error || '')) { pass = ''; try { sessionStorage.removeItem('am_admin'); } catch (e) {} login(r.error); return; }
+        app.innerHTML = '<div class="center-msg"><div class="oc"><div class="ip"><span class="eyebrow">Admin</span><span class="ff" style="font-size:24px">Not ready yet</span><p style="margin:0;color:#43536b;line-height:1.6">' + esc(r.error || 'Try again in a minute.') + '</p></div></div></div>';
+        return;
+      }
+      DATA = r; render();
+    });
+  }
+  window.__amReload = load;
+  setTabs(); load();
+})();
+</script>
+</body>
+</html>

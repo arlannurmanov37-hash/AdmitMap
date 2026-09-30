@@ -12,7 +12,7 @@
  * Текста эссе в отчёте нет — только оценки.
  */
 import { bad, cors, verifyPurchase, getPurchase, claimReportEmail, updatePurchase,
-         internalKey, safeDetail } from './_lib.js';
+         internalKey, safeDetail, recordCreatorSale } from './_lib.js';
 
 const SITE = (process.env.SITE_URL || 'https://www.admitmap.app').replace(/\/$/, '');
 const FROM = process.env.REPORT_FROM || process.env.EMAIL_FROM || 'AdmitMap <noreply@admitmap.app>';
@@ -84,6 +84,8 @@ export async function sendReport(checkoutId) {
   if (!process.env.RESEND_API_KEY) return { ok: false, error: 'email not configured' };
   const v = await verifyPurchase(checkoutId);
   if (!v.ok) return { ok: false, error: v.pending ? 'pending' : 'not paid' };
+  // покупка по ссылке блогера засчитывается, даже если ученик так и не открыл отчёт
+  await recordCreatorSale(checkoutId, v).catch(() => {});
   const row = await claimReportEmail(checkoutId);
   if (!row) {
     const r = await getPurchase(checkoutId);

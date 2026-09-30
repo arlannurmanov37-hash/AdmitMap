@@ -19,6 +19,10 @@
     {
       "source": "/favicon.ico",
       "destination": "/assets/icon-192.png"
+    },
+    {
+      "source": "/creator/:key",
+      "destination": "/creator"
     }
   ],
   "headers": [

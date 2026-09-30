@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Creator dashboard · AdmitMap</title>
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Кабинет блогера (дизайн «Creator Dashboard v2», Claude Design, 30.09.2026).
+     Открывается по секретной ссылке admitmap.app/creator/<ключ>; цифры — из
+     api/creators (action: me / hours / add_video / del_video). Только суммы,
+     ничего о конкретных посетителях. -->
+<style>
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+:root{--navy:#0f1f4b;--royal:#2563eb;--royal-d:#1d4ed8;--green:#10b981;--muted:#5f7292;--ink2:#43536b;
+  --line:#d9e5fb;--tile-line:#e3ecfa;--grid:#eef2f8}
+html,body{margin:0;padding:0}
+body{min-height:100vh;background:linear-gradient(118deg,#f8fbff 0%,#edf3fe 42%,#d9e6fb 100%);color:var(--navy);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.006em;
+  -webkit-font-smoothing:antialiased;text-wrap:pretty;font-variant-numeric:lining-nums tabular-nums;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.glow{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.glow.a{top:-420px;right:-320px;width:1300px;height:980px;background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.42),rgba(131,181,255,0) 72%)}
+.glow.b{bottom:-460px;left:-380px;width:1100px;height:900px;background:radial-gradient(50% 50% at 50% 50%,rgba(131,181,255,.28),rgba(131,181,255,0) 72%)}
+.page{position:relative;z-index:1;display:flex;flex-direction:column;gap:24px;max-width:1360px;margin:0 auto;padding:clamp(16px,2.4vw,34px)}
+.ff{font-family:Fraunces,Georgia,serif;font-weight:900;letter-spacing:-.03em;line-height:1}
+
+/* шапка */
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px}
+.brand{display:flex;align-items:center;gap:16px;min-width:0}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:26px;height:31px;object-fit:contain}
+.logo b{font-family:Fraunces,Georgia,serif;font-size:27px;font-weight:900;letter-spacing:-.035em;color:var(--navy)}
+.logo b span{color:var(--royal)}
+.vr{width:1px;height:30px;background:#cfdcf1}
+.who{display:flex;flex-direction:column;gap:3px;min-width:0}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--royal)}
+.who .ff{font-size:21px;letter-spacing:-.025em}
+.tabs{display:flex;gap:4px;padding:5px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(37,99,235,.5)}
+.tabs button{padding:9px 15px;border:0;border-radius:11px;background:none;font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.tabs button[aria-selected=true]{background:var(--royal);font-weight:700;color:#fff;box-shadow:0 8px 16px -8px rgba(37,99,235,.8)}
+
+/* карточки в стиле hero: белая внешняя, внутри голубая панель */
+.row{display:flex;flex-wrap:wrap;gap:24px}
+.oc{display:flex;flex-direction:column;min-width:0;padding:clamp(12px,1.5vw,20px);border-radius:clamp(26px,2.6vw,36px);
+  background:#fff;border:1px solid var(--line);box-shadow:0 2px 6px rgba(15,31,75,.04),0 40px 80px -46px rgba(37,99,235,.5)}
+.ip{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;padding:clamp(12px,1.5vw,20px);border-radius:clamp(20px,2vw,26px);
+  background:linear-gradient(180deg,#eef4ff 0%,#e3edfc 100%);border:1px solid #dbe6fb}
+.hd{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;padding:4px 6px 6px}
+.hd .t{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hd .ff{font-size:clamp(21px,1.9vw,26px);line-height:1.05}
+.tile{background:#fff;border:1px solid var(--tile-line);border-radius:18px}
+.rt{flex:1;display:flex;align-items:center;gap:clamp(12px,1.3vw,18px);min-height:74px;padding:14px clamp(14px,1.5vw,22px)}
+.ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0}
+.sq{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(140deg,#3b82f6,#1d4ed8);box-shadow:0 8px 18px -8px rgba(37,99,235,.8)}
+.cta{display:flex;align-items:center;justify-content:center;gap:12px;height:58px;padding:0 26px;border:0;border-radius:16px;background:var(--royal);
+  font-size:14.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff;white-space:nowrap;width:100%;
+  box-shadow:0 18px 36px -16px rgba(37,99,235,.85),0 2px 6px -2px rgba(37,99,235,.4);transition:transform .15s ease}
+.cta:active{transform:translateY(1px)}
+.ghost{display:flex;align-items:center;justify-content:center;gap:10px;height:44px;padding:0 20px;border-radius:14px;background:#f5f8ff;
+  border:1.5px solid #c7d8f7;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--royal-d);white-space:nowrap}
+.muted{color:var(--muted)}
+
+/* плитки цифр */
+.stats{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,312px),1fr));gap:12px}
+.stats>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px}
+.st{display:flex;flex-direction:column;gap:10px;min-width:0;padding:16px 18px 18px}
+.st.money{background:linear-gradient(180deg,#fff 0%,#f0fcf7 100%);border:1.5px solid #bdeedb;box-shadow:0 18px 36px -24px rgba(16,185,129,.55)}
+.st .top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px}
+.delta{font-size:13px;font-weight:700;white-space:nowrap}
+.st .ff{font-size:clamp(24px,2.1vw,30px)}
+.st .lb{display:flex;flex-direction:column;gap:3px}
+.st .lb b{font-size:15px;font-weight:700;line-height:1.3}
+.st .lb span{font-size:13px;font-weight:500;line-height:1.4;color:var(--muted)}
+.ring{position:relative;display:block;border-radius:50%}
+.ring::after{content:'';position:absolute;border-radius:50%;background:#fff}
+.ring.s{width:36px;height:36px}.ring.s::after{inset:8px}
+.bill{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:26px;border-radius:6px;
+  background:linear-gradient(180deg,#5eeab0,#10b981);box-shadow:0 6px 14px -4px rgba(16,185,129,.6),inset 0 0 0 2px rgba(255,255,255,.35)}
+.bill i{position:absolute;top:50%;width:3px;height:3px;margin-top:-1.5px;border-radius:50%;background:rgba(255,255,255,.8)}
+.bill b{display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#fff;
+  font-size:10px;font-weight:900;color:#0c9a6c}
+
+/* график */
+.chart-hd{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.legend span{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.plotwrap{flex:1;display:flex;flex-direction:column;padding:44px 24px 16px 84px}
+.plot{position:relative;height:250px;cursor:crosshair}
+.gl{position:absolute;left:0;right:0;border-top:1px solid var(--grid)}
+.yl{position:absolute;left:-44px;width:34px;transform:translateY(-50%);text-align:right;font-size:12px;font-weight:500;color:#8a9ab3}
+.plot>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.vm{position:absolute;top:0;bottom:0;border-left:1px dashed #b7cbef}
+.vpill{position:absolute;top:-30px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;
+  background:#fff;border:1px solid #d6e2f6;font-size:11.5px;font-weight:700;color:var(--royal-d);white-space:nowrap;box-shadow:0 4px 10px -6px rgba(23,62,140,.4)}
+.hl{position:absolute;top:0;bottom:0;border-left:1px solid var(--navy);opacity:.55;pointer-events:none}
+.hdot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;border:3px solid var(--royal);
+  box-shadow:0 0 0 5px rgba(37,99,235,.15);pointer-events:none}
+.tip{position:absolute;z-index:3;display:flex;flex-direction:column;gap:9px;min-width:200px;padding:14px 16px;border-radius:14px;background:#fff;
+  border:1px solid #dbe5f4;box-shadow:0 24px 48px -20px rgba(15,31,75,.35);pointer-events:none}
+.tip .h{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;font-weight:700}
+.tip .h span{font-size:11.5px;font-weight:600;color:var(--muted)}
+.tip .ln{height:1px;background:var(--grid)}
+.tip .r{display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:13px;font-weight:500;color:var(--ink2)}
+.tip .r span{display:flex;align-items:center;gap:8px}
+.tip .r b{font-size:14px;font-weight:700}
+.tip .go{font-size:12px;font-weight:600;color:var(--royal)}
+.pstrip{position:relative;height:56px;margin-top:14px;border-top:1px solid var(--grid);border-bottom:1px solid #dfe7f3}
+.pstick{position:absolute;bottom:0;width:2px;margin-left:-1px;border-radius:2px 2px 0 0;background:var(--green)}
+.pdot{position:absolute;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--green);box-shadow:0 0 0 2.5px #fff}
+.xl{position:relative;height:18px;margin-top:10px}
+.xl span{position:absolute;transform:translateX(-50%);font-size:12px;font-weight:500;color:#8a9ab3;white-space:nowrap}
+.back{border:0;background:none;padding:0;font-size:13px;font-weight:700;color:var(--royal)}
+
+/* ролики */
+.cols{display:grid;grid-template-columns:repeat(3,86px);gap:8px;text-align:right;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--muted)}
+.vids{flex:1;display:flex;flex-direction:column;gap:10px}
+.vrow{flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;min-height:74px;padding:14px 18px}
+.vrow.best{border:1.5px solid #bcd3f5}
+.num{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex-shrink:0;border-radius:11px;
+  background:linear-gradient(140deg,#3b82f6,#1d4ed8);box-shadow:0 8px 18px -8px rgba(37,99,235,.8);
+  font-family:Fraunces,Georgia,serif;font-size:18px;font-weight:900;line-height:1;color:#fff}
+.vt{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:5px}
+.vt a{font-size:15.5px;font-weight:700;line-height:1.3;letter-spacing:-.015em;overflow-wrap:anywhere}
+.chip{display:inline-block;margin-left:6px;padding:3px 8px;border-radius:999px;background:#eaf1ff;font-size:10.5px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;vertical-align:2px;color:var(--royal-d)}
+.vm2{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:13px;font-weight:500;color:var(--muted)}
+.vm2 .x{border:0;background:none;padding:0;font-size:12px;font-weight:600;color:#8a9ab3}
+.vm2 .x:hover{color:#dc2626}
+.vn{display:grid;grid-template-columns:repeat(3,86px);gap:8px;text-align:right}
+.vn b{font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--royal);white-space:nowrap}
+.vn b.g{color:var(--green)}
+.addv{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px}
+.addv input{flex:1 1 170px;min-width:0;height:48px;padding:0 14px;border-radius:12px;background:#f7faff;border:1px solid var(--line);
+  font:500 14.5px Inter,sans-serif;color:var(--navy);outline:none}
+.addv input:focus{border-color:var(--royal);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.addv .cta{width:auto;height:48px;border-radius:12px;font-size:13px;padding:0 20px}
+.err{font-size:13px;font-weight:600;color:#dc2626;padding:0 6px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:160px;padding:24px;text-align:center}
+.empty b{font-size:15.5px;font-weight:700}
+.empty span{font-size:13.5px;color:var(--muted);max-width:360px;line-height:1.5}
+
+/* уровень */
+.next{display:flex;align-items:center;gap:16px;padding:16px 20px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:30px}
+.bars i{width:10px;border-radius:3px}
+.track{display:block;height:8px;border-radius:4px;background:#e6eefb;overflow:hidden}
+.track i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7aa7f5,#2563eb)}
+.lvl{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:190px;padding:18px 12px;text-align:center}
+.lvl.cur{border:2px solid var(--royal);box-shadow:0 16px 34px -20px rgba(37,99,235,.7)}
+.you{position:absolute;top:10px;right:10px;padding:4px 9px;border-radius:999px;background:var(--royal);font-size:10.5px;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.ring.l{display:flex;align-items:center;justify-content:center;width:88px;height:88px}.ring.l::after{inset:9px}
+.ring.l b{position:relative;z-index:1;font-family:Fraunces,Georgia,serif;font-size:34px;font-weight:900;line-height:1;letter-spacing:-.04em}
+.lvl .n{font-size:15px;font-weight:700}
+.lvl .s{font-size:13px;font-weight:500;color:var(--muted)}
+.lvl .rate{font-family:Fraunces,Georgia,serif;font-size:17px;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--green);white-space:nowrap}
+
+.note{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:500;color:var(--muted);text-align:center}
+.center-msg{max-width:560px;margin:12vh auto 0}
+.center-msg .ip{align-items:flex-start;gap:14px;padding:32px}
+.center-msg p{margin:0;font-size:15.5px;line-height:1.6;color:var(--ink2)}
+.loading{opacity:.55;transition:opacity .2s}
+
+@media(max-width:700px){
+  .plotwrap{padding:40px 12px 12px 48px}
+  .yl{left:-40px}
+  .cols{display:none}
+  .vn{grid-template-columns:repeat(3,64px)}
+  .vn b{font-size:19px}
+  .tabs button{padding:8px 11px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<span class="glow a"></span><span class="glow b"></span>
+<div class="page" id="page">
+  <header>
+    <div class="brand">
+      <a class="logo" href="/"><img src="/admitmap-mark.svg" alt=""><b>Admit<span>Map</span></b></a>
+      <span class="vr"></span>
+      <span class="who"><span class="eyebrow">Creator dashboard</span><span class="ff" id="name">&nbsp;</span></span>
+    </div>
+    <div class="tabs" role="tablist" id="periods">
+      <button data-p="today">Today</button><button data-p="7d">7 days</button><button data-p="30d">30 days</button><button data-p="all">All time</button>
+    </div>
+  </header>
+  <div id="app"></div>
+  <p class="note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>This page only shows totals. It never shows anything about individual visitors.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var key = (location.pathname.match(/\/creator\/([A-Za-z0-9_-]{12,64})/) || [])[1] ||
+            (location.search.match(/[?&]key=([A-Za-z0-9_-]{12,64})/) || [])[1] || '';
+  var tz = 'UTC';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) {}
+  var period = '30d';
+  try { period = localStorage.getItem('am_creator_period') || '30d'; } catch (e) {}
+  var DATA = null, ZOOM = null;          // ZOOM = { day, series } — один день по часам
+  var app = document.getElementById('app');
+
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var money = function (n) { return '$' + Number(n || 0).toFixed(2); };
+  var rate = function (n) { n = Number(n); return '$' + (n % 1 ? n.toFixed(2) : n.toFixed(0)); };
+  var rate2 = function (n) { return '$' + Number(n).toFixed(2); };
+  var pct = function (a, b) { return b ? (a / b * 100) : 0; };
+  var fmtPct = function (x) { return (Math.round(x * 10) / 10).toFixed(1) + '%'; };
+  var PLABEL = { today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', all: 'All time' };
+  var PREV = { today: 'yesterday', '7d': 'previous 7 days', '30d': 'previous 30 days' };
+
+  function api(body) {
+    // проверка вёрстки на localhost: window.__amMock(body) вместо сервера
+    if (window.__amMock && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return Promise.resolve(window.__amMock(body));
+    return fetch('/api/creators', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ key: key, tz: tz }, body)) })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: 'Something went wrong.' }; }); })
+      .catch(function () { return { ok: false, error: 'Could not reach AdmitMap. Check your connection.' }; });
+  }
+  function message(title, text) {
+    app.innerHTML = '<div class="center-msg"><div class="oc"><div class="ip"><span class="eyebrow">Creator dashboard</span>' +
+      '<span class="ff" style="font-size:26px">' + esc(title) + '</span><p>' + esc(text) + '</p></div></div></div>';
+  }
+
+  /* ── иконки из дизайна ── */
+  var I = {
+    link: '<span class="ico"><span class="sq"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span></span>',
+    people: '<span class="ico"><svg width="36" height="30" viewBox="0 0 36 30"><circle cx="24" cy="8.5" r="6" fill="#bcd3f5"/><path d="M13 29.5c0-6.6 4.9-10.6 11-10.6s11 4 11 10.6z" fill="#bcd3f5"/><circle cx="12.5" cy="10" r="6.5" fill="#2563eb"/><path d="M.5 29.5c0-7 5.2-11 12-11s12 4 12 11z" fill="#2563eb"/></svg></span>',
+    bag: '<span class="ico"><svg width="32" height="34" viewBox="0 0 32 34"><path d="M10 11V8.5a6 6 0 0 1 12 0V11" fill="none" stroke="#0c9a6c" stroke-width="2.6" stroke-linecap="round"/><path d="M8 10h16a6 6 0 0 1 6 6v11a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6z" fill="url(#bgc)"/><defs><linearGradient id="bgc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5eeab0"/><stop offset="1" stop-color="#10b981"/></linearGradient></defs><circle cx="11" cy="17" r="1.8" fill="#fff"/><circle cx="21" cy="17" r="1.8" fill="#fff"/></svg></span>',
+    bill: '<span class="ico"><span class="bill"><i style="left:5px"></i><i style="right:5px"></i><b>$</b></span></span>',
+    arrow: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5L19 12l-6.5 6.5"/></svg>',
+    tiktok: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 4c.5 2.6 2.3 4.2 5 4.4"/></svg>',
+    instagram: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.8 7.2h.01"/></svg>',
+    youtube: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.5l4 2.5-4 2.5z" fill="#5f7292"/></svg>',
+    play: '<svg width="10" height="10" viewBox="0 0 24 24" fill="#2563eb"><path d="M7 4.5l13 7.5-13 7.5z"/></svg>'
+  };
+  var ring = function (p, cls, color) {
+    p = Math.max(0, Math.min(100, p));
+    return '<span class="ring ' + cls + '" style="background:conic-gradient(' + (color || '#2563eb') + ' 0 ' + p + '%,#dde8fb ' + p + '% 100%)">';
+  };
+  function delta(cur, prev, kind, green) {
+    if (!DATA || !DATA.prev || period === 'all') return '';
+    var d, txt;
+    if (kind === 'pct') { if (!prev) return ''; d = (cur - prev) / prev * 100; txt = Math.abs(Math.round(d)) + '%'; }
+    else if (kind === 'pts') { d = cur - prev; txt = Math.abs(Math.round(d * 10) / 10) + ' pts'; }
+    else if (kind === 'usd') { d = cur - prev; txt = money(Math.abs(d)); }
+    else { d = cur - prev; txt = String(Math.abs(d)); }
+    if (!d) return '<span class="delta muted">no change</span>';
+    var up = d > 0;
+    return '<span class="delta" style="color:' + (up ? (green ? '#10b981' : '#2563eb') : '#8a9ab3') + '">' + (up ? '↑ ' : '↓ ') + txt + '</span>';
+  }
+  function card(flex, eyebrow, title, inner, headExtra) {
+    return '<div class="oc" style="flex:' + flex + ' 1 0;min-width:min(100%,' + (flex >= 12 ? 0 : flex >= 7 ? 420 : 340) + 'px)"><div class="ip">' +
+      '<div class="hd"><div class="t">' + (eyebrow ? '<span class="eyebrow">' + esc(eyebrow) + '</span>' : '') +
+      '<span class="ff">' + title + '</span></div>' + (headExtra || '') + '</div>' + inner + '</div></div>';
+  }
+
+  /* ── ряд 1: ссылка и цифры ── */
+  function topRow(d) {
+    var s = d.stats, p = d.prev || {};
+    var conv = pct(s.purchases, s.visitors), pconv = pct(p.purchases || 0, p.visitors || 0);
+    var linkCard = card(5, 'Your link', 'Share one link',
+      '<div class="tile rt">' + I.link + '<span style="flex:1;min-width:0;font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.015em;overflow-wrap:anywhere">admitmap.app/?ref=<span style="color:#2563eb">' + esc(d.creator.ref) + '</span></span></div>' +
+      '<p style="margin:0;padding:2px 6px;font-size:15px;font-weight:500;line-height:1.55;color:#43536b">Anyone who opens this link is credited to you for 30 days.</p>' +
+      '<button class="cta" id="copy" style="margin-top:auto">Copy link' + I.arrow + '</button>');
+    var tileHtml = function (icon, dl, value, label, sub, cls) {
+      return '<div class="tile st ' + (cls || '') + '"><span class="top">' + icon + dl + '</span><span class="ff"' +
+        (cls === 'money' ? ' style="color:#10b981"' : label === 'Purchases' ? ' style="color:#10b981"' : ' style="color:#2563eb"') + '>' + value + '</span>' +
+        '<span class="lb"><b>' + label + '</b><span>' + sub + '</span></span></div>';
+    };
+    var numbers = card(7, PLABEL[period], 'Your numbers',
+      '<div class="stats"><div>' +
+        tileHtml(I.people, delta(s.visitors, p.visitors, 'pct'), s.visitors, 'Visitors',
+          period === 'all' ? 'Opened the site via your link' : 'vs ' + (p.visitors || 0) + ' ' + PREV[period]) +
+        tileHtml(I.bag, delta(s.purchases, p.purchases, 'n', true), s.purchases, 'Purchases', s.p19 + ' × $19 · ' + s.p29 + ' × $29') +
+      '</div><div>' +
+        tileHtml('<span class="ico">' + ring(conv * 4, 's') + '</span></span>', delta(conv, pconv, 'pts'), fmtPct(conv), 'Conversion', 'Purchases ÷ visitors') +
+        tileHtml(I.bill, delta(Number(s.earned), Number(p.earned || 0), 'usd', true), money(s.earned), 'Earned',
+          period === 'all' ? 'All time' : PLABEL[period].replace('Last', 'In last'), 'money') +
+      '</div></div>');
+    return '<div class="row">' + linkCard + numbers + '</div>';
+  }
+
+  /* ── график ── */
+  function niceMax(v) {
+    if (v <= 4) return 4;
+    var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+    var m = n <= 1.5 ? 1.5 : n <= 2 ? 2 : n <= 3 ? 3 : n <= 4 ? 4 : n <= 6 ? 6 : n <= 8 ? 8 : 10;
+    return m * p;
+  }
+  function smooth(pts) {
+    if (pts.length < 2) return pts.length ? 'M' + pts[0][0] + ' ' + pts[0][1] : '';
+    var d = 'M' + pts[0][0].toFixed(2) + ' ' + pts[0][1].toFixed(2);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      var c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      var c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      c1[1] = Math.max(0, Math.min(100, c1[1])); c2[1] = Math.max(0, Math.min(100, c2[1]));
+      d += ' C' + c1[0].toFixed(2) + ' ' + c1[1].toFixed(2) + ' ' + c2[0].toFixed(2) + ' ' + c2[1].toFixed(2) + ' ' + p2[0].toFixed(2) + ' ' + p2[1].toFixed(2);
+    }
+    return d;
+  }
+  var dayKey = function (t) {
+    var p = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(t));
+    return p;
+  };
+  var dayLabel = function (t) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric' }).format(new Date(t)); };
+  var hourLabel = function (t) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric' }).format(new Date(t)).toLowerCase().replace(' ', ' '); };
+  var dateTime = function (t) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(new Date(t)).replace(' AM', ' am').replace(' PM', ' pm'); };
+
+  function chartCard(d) {
+    var hourly = !!ZOOM || d.unit === 'hour';
+    var series = ZOOM ? ZOOM.series : d.series;
+    var eyebrow = ZOOM ? dayLabel(ZOOM.day + 'T12:00:00') + ' · by hour' : PLABEL[period];
+    var tabs = '<div class="tabs" id="unit"><button data-u="day" aria-selected="' + !hourly + '"' + (d.unit === 'hour' ? ' disabled style="opacity:.5"' : '') + '>By day</button>' +
+      '<button data-u="hour" aria-selected="' + hourly + '">By hour</button></div>';
+    var legend = '<div class="legend"><span><span style="width:16px;height:3px;border-radius:2px;background:#2563eb"></span>Visitors</span>' +
+      '<span><span style="display:flex;flex-direction:column;align-items:center;height:14px;justify-content:flex-end"><span style="width:6px;height:6px;border-radius:50%;background:#10b981"></span><span style="width:2px;height:8px;background:#10b981"></span></span>Purchases</span>' +
+      '<span><span style="width:0;height:14px;border-left:1.5px dashed #93b4f0"></span>Video</span></div>';
+    var head = '<div class="chart-hd">' + legend + tabs + '<a class="ghost" href="#addvideo">Add video' + I.arrow + '</a></div>';
+    var inner = '<div class="tile plotwrap"><div class="plot" id="plot"></div><div class="pstrip" id="pstrip"></div><div class="xl" id="xl"></div>' +
+      (ZOOM ? '<div style="margin-top:12px"><button class="back" id="back">← Back to ' + (period === 'all' ? 'all time' : PLABEL[period].toLowerCase()) + '</button></div>' : '') + '</div>';
+    return '<div class="row">' + card(12, eyebrow, 'Visitors and purchases', inner, head) + '</div>';
+  }
+  function drawChart(d) {
+    var hourly = !!ZOOM || d.unit === 'hour';
+    var S = (ZOOM ? ZOOM.series : d.series) || [];
+    var plot = document.getElementById('plot'), strip = document.getElementById('pstrip'), xl = document.getElementById('xl');
+    if (!plot) return;
+    var n = Math.max(S.length, 1);
+    var maxV = niceMax(Math.max.apply(null, S.map(function (x) { return x.v; }).concat([1])));
+    var maxP = Math.max.apply(null, S.map(function (x) { return x.p; }).concat([1]));
+    var X = function (i) { return (i + 0.5) / n * 100; };
+    var Y = function (v) { return 100 - v / maxV * 92; };
+    var html = '';
+    [1, 2 / 3, 1 / 3, 0].forEach(function (f) {
+      var y = 100 - f * 92;
+      html += '<span class="gl" style="top:' + y + '%' + (f === 0 ? ';border-color:#dfe7f3' : '') + '"></span><span class="yl" style="top:' + y + '%">' + Math.round(maxV * f) + '</span>';
+    });
+    var pts = S.map(function (x, i) { return [X(i) * 3, Y(x.v)]; });
+    var line = smooth(pts);
+    html += '<svg viewBox="0 0 300 100" preserveAspectRatio="none"><defs><linearGradient id="va" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".22"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>' +
+      (pts.length ? '<path d="' + line + ' L' + pts[pts.length - 1][0].toFixed(2) + ' 100 L' + pts[0][0].toFixed(2) + ' 100 Z" fill="url(#va)"/>' +
+      '<path d="' + line + '" fill="none" stroke="#2563eb" stroke-width="2.25" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' : '') + '</svg>';
+    // ролики — флажки на графике
+    var vids = (d.videos || []).slice().sort(function (a, b) { return new Date(a.published_at) - new Date(b.published_at); });
+    var bucketOf = function (t) {
+      var k = hourly ? null : dayKey(t);
+      for (var i = 0; i < S.length; i++) {
+        if (hourly) { var a = new Date(S[i].t).getTime(); if (new Date(t).getTime() >= a && new Date(t).getTime() < a + 3600e3) return i; }
+        else if (dayKey(S[i].t) === k) return i;
+      }
+      return -1;
+    };
+    var videoAt = {};
+    vids.forEach(function (v, i) {
+      var b = bucketOf(v.published_at);
+      if (b < 0) return;
+      videoAt[b] = 'Video ' + (i + 1);
+      html += '<span class="vm" style="left:' + X(b) + '%"></span><span class="vpill" style="left:' + X(b) + '%">' + I.play + 'Video ' + (i + 1) + '</span>';
+    });
+    html += '<span class="hl" id="hl" hidden></span><span class="hdot" id="hdot" hidden></span><div class="tip" id="tip" hidden></div>';
+    plot.innerHTML = html;
+    // покупки — «леденцы» под графиком
+    var sh = '<span style="position:absolute;left:-84px;width:74px;bottom:18px;text-align:right;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0c9a6c">Purchases</span>' +
+      '<span class="yl" style="top:auto;bottom:0;transform:translateY(50%)">0</span>';
+    S.forEach(function (x, i) {
+      if (!x.p) return;
+      var h = Math.max(12, Math.round(x.p / maxP * 44));
+      sh += '<span class="pstick" style="left:' + X(i) + '%;height:' + h + 'px"></span><span class="pdot" style="left:' + X(i) + '%;bottom:' + (h - 3) + 'px"></span>';
+    });
+    strip.innerHTML = sh;
+    // подписи по оси X
+    var step = hourly ? 3 : Math.max(1, Math.ceil(n / 7));
+    var xh = '';
+    for (var i = 0; i < n; i += step) xh += '<span style="left:' + X(i) + '%">' + (hourly ? hourLabel(S[i].t) : dayLabel(S[i].t)) + '</span>';
+    if (!hourly && n > 1 && (n - 1) % step > step / 2) xh += '<span style="left:' + X(n - 1) + '%">' + dayLabel(S[n - 1].t) + '</span>';
+    xl.innerHTML = xh;
+
+    // наведение и нажатие
+    var tip = document.getElementById('tip'), hl = document.getElementById('hl'), dot = document.getElementById('hdot');
+    var at = function (ev) {
+      var r = plot.getBoundingClientRect();
+      var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      return Math.max(0, Math.min(n - 1, Math.floor(cx / r.width * n)));
+    };
+    var show = function (ev) {
+      if (!S.length) return;
+      var i = at(ev), x = S[i];
+      hl.hidden = dot.hidden = tip.hidden = false;
+      hl.style.left = dot.style.left = X(i) + '%';
+      dot.style.top = Y(x.v) + '%';
+      tip.innerHTML = '<span class="h">' + (hourly ? dayLabel(x.t) + ', ' + hourLabel(x.t) : dayLabel(x.t)) +
+        (videoAt[i] ? '<span>' + videoAt[i] + '</span>' : '') + '</span><span class="ln"></span>' +
+        '<span class="r"><span><span style="width:12px;height:3px;border-radius:2px;background:#2563eb"></span>Visitors</span><b style="color:#2563eb">' + x.v + '</b></span>' +
+        '<span class="r"><span><span style="width:8px;height:8px;border-radius:50%;background:#10b981;margin:0 2px"></span>Purchases</span><b style="color:#10b981">' + x.p + '</b></span>' +
+        '<span class="r"><span><span style="width:12px"></span>Conversion</span><b>' + fmtPct(pct(x.p, x.v)) + '</b></span>' +
+        (hourly ? '' : '<span class="go">Tap to see by hour</span>');
+      var left = X(i) > 62 ? 'calc(' + X(i) + '% - 216px)' : 'calc(' + X(i) + '% + 16px)';
+      tip.style.left = left; tip.style.top = '8%';
+    };
+    plot.onmousemove = show; plot.ontouchstart = show;
+    plot.onmouseleave = function () { hl.hidden = dot.hidden = tip.hidden = true; };
+    plot.onclick = function (ev) {
+      if (hourly || !S.length) return;
+      zoomTo(dayKey(S[at(ev)].t));
+    };
+  }
+  function zoomTo(day) {
+    api({ action: 'hours', day: day }).then(function (r) {
+      if (!r.ok) return;
+      ZOOM = { day: day, series: r.series };
+      render();
+      var el = document.getElementById('plot'); if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
+  }
+
+  /* ── воронка ── */
+  function funnel(d) {
+    var s = d.stats;
+    var steps = [['Visited', s.visitors], ['Finished the form', s.finished], ['Saw prices', s.saw_prices], ['Purchased', s.purchases]];
+    var tiles = steps.map(function (x, i) {
+      var p = i ? pct(x[1], s.visitors) : (s.visitors ? 100 : 0);
+      var last = i === 3;
+      return '<div class="tile rt"><span class="ico">' + ring(p, 's', last ? '#10b981' : '#2563eb') + '</span></span>' +
+        '<span style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:0"><span style="font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.015em">' +
+        '<span style="display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5f7292;margin-bottom:3px">Step ' + (i + 1) + '</span>' + x[0] + '</span>' +
+        '<span style="font-size:13.5px;font-weight:500;line-height:1.4;color:#5f7292">' + fmtPct(p) + '</span></span>' +
+        '<span class="ff" style="font-size:clamp(22px,2vw,28px);color:' + (last ? '#10b981' : '#2563eb') + '">' + x[1] + '</span></div>';
+    });
+    return '<div class="row">' + card(12, PLABEL[period], 'From visit to purchase',
+      '<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,472px),1fr))"><div style="grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))">' +
+      tiles[0] + tiles[1] + '</div><div style="grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))">' + tiles[2] + tiles[3] + '</div></div>') + '</div>';
+  }
+
+  /* ── ролики и уровень ── */
+  function videos(d) {
+    var list = (d.videos || []).slice().sort(function (a, b) { return new Date(a.published_at) - new Date(b.published_at); });
+    var best = null, bestConv = -1;
+    list.forEach(function (v) { if (v.visitors >= 20 && pct(v.purchases, v.visitors) > bestConv) { bestConv = pct(v.purchases, v.visitors); best = v.id; } });
+    var rows = list.map(function (v, i) {
+      var plat = (v.platform || '').toLowerCase();
+      return '<div class="tile vrow' + (v.id === best ? ' best' : '') + '"><span class="num">' + (i + 1) + '</span>' +
+        '<span class="vt"><a href="' + esc(v.url) + '" target="_blank" rel="noopener">' + esc(v.title || v.url.replace(/^https?:\/\/(www\.)?/, '').slice(0, 60)) +
+        (v.id === best ? '<span class="chip">Best hook</span>' : '') + '</a>' +
+        '<span class="vm2"><span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap">' + (I[plat] || '') + esc(v.platform || '') + '</span>' +
+        '<span>' + dateTime(v.published_at) + '</span><button class="x" data-del="' + v.id + '">Remove</button></span></span>' +
+        '<span class="vn"><b>' + v.visitors + '</b><b class="g">' + v.purchases + '</b><b>' + fmtPct(pct(v.purchases, v.visitors)) + '</b></span></div>';
+    }).join('');
+    var body = rows ? '<div class="vids">' + rows + '</div>'
+      : '<div class="tile empty"><b>No videos yet</b><span>Add each video you post with your link. You will see how many visitors and purchases it brought in the first 48 hours, so you know which hooks work.</span></div>';
+    var add = '<form class="tile addv" id="addvideo"><input id="vurl" type="url" placeholder="Paste video link" required>' +
+      '<input id="vtime" type="datetime-local" required aria-label="Publish date and time">' +
+      '<button class="cta" type="submit">Add video' + I.arrow + '</button></form><div class="err" id="verr"></div>';
+    var cols = '<span class="cols"><span>Visitors</span><span>Purchases</span><span>Conv.</span></span>';
+    return card(7, 'First 48 hours after posting', 'Video statistics', body + add, cols);
+  }
+  function levelCard(d) {
+    var sales = Number(d.money.lifetime_sales) || 0, L = d.level, all = L.levels;
+    var next = L.next;
+    var prevFrom = all[L.index - 1].from - 1;               // продаж до начала текущего уровня
+    var within = next ? (sales - prevFrom) / (next.at - 1 - prevFrom) * 100 : 100;
+    var title = next ? sales + ' of ' + next.at + ' sales' : sales + ' sales';
+    var nextRow = '<div class="tile next"><span class="ico"><span class="bars"><i style="height:14px;background:#bcd3f5"></i><i style="height:30px;background:#2563eb"></i></span></span>' +
+      '<span style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:0"><span style="font-size:15px;font-weight:700">' +
+      (next ? 'Next level: <span style="color:#10b981">' + rate(next.r19) + ' / ' + rate(next.r29) + '</span> per report' : 'You are on the top level') + '</span>' +
+      '<span class="track"><i style="width:' + (next ? Math.min(100, sales / next.at * 100) : 100) + '%"></i></span></span>' +
+      '<span class="ff" style="font-size:24px;color:#2563eb;white-space:nowrap">' + sales + (next ? '<span style="font-size:.6em;color:#5f7292">/' + next.at + '</span>' : '') + '</span></div>';
+    var tiles = all.map(function (l, i) {
+      var cur = i + 1 === L.index, done = i + 1 < L.index;
+      var fill = done ? 100 : cur ? Math.max(0, Math.min(100, within)) : 0;
+      var range = i === 0 ? '1–' + (all[1].from - 1) + ' sales' : l.from + '+ sales';
+      return '<div class="tile lvl' + (cur ? ' cur' : '') + '">' + (cur ? '<span class="you">You</span>' : '') +
+        ring(fill, 'l', cur || done ? '#2563eb' : '#7aa7f5') + '<b style="color:' + (cur || done ? '#1d4ed8' : '#6b7fa3') + '">' + (i + 1) + '</b></span>' +
+        '<span class="n">Level ' + (i + 1) + '</span><span class="s">' + range + '</span><span class="rate">' + rate2(l.r19) + ' / ' + rate2(l.r29) + '</span></div>';
+    });
+    return card(5, 'Your level', title, nextRow + '<div class="stats"><div>' + tiles[0] + tiles[1] + '</div><div>' + tiles[2] + tiles[3] + '</div></div>');
+  }
+
+  function render() {
+    var d = DATA;
+    document.getElementById('name').textContent = d.creator.name;
+    document.title = d.creator.name + ' · Creator dashboard · AdmitMap';
+    app.innerHTML = '<div style="display:flex;flex-direction:column;gap:24px">' + topRow(d) + chartCard(d) + funnel(d) +
+      '<div class="row">' + videos(d) + levelCard(d) + '</div></div>';
+    drawChart(d);
+    wire();
+  }
+  function wire() {
+    var copy = document.getElementById('copy');
+    if (copy) copy.onclick = function () {
+      var url = 'https://admitmap.app/?ref=' + DATA.creator.ref;
+      var done = function () { copy.firstChild.nodeValue = 'Copied'; setTimeout(function () { copy.firstChild.nodeValue = 'Copy link'; }, 1800); };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { prompt('Copy your link:', url); });
+      else prompt('Copy your link:', url);
+    };
+    var unit = document.getElementById('unit');
+    if (unit) unit.onclick = function (e) {
+      var b = e.target.closest('button'); if (!b || b.disabled) return;
+      if (b.dataset.u === 'day') { ZOOM = null; render(); }
+      else if (!ZOOM && DATA.unit !== 'hour') zoomTo(dayKey(DATA.series[DATA.series.length - 1].t));
+    };
+    var back = document.getElementById('back');
+    if (back) back.onclick = function () { ZOOM = null; render(); };
+    var form = document.getElementById('addvideo');
+    if (form) form.onsubmit = function (e) {
+      e.preventDefault();
+      var url = document.getElementById('vurl').value.trim(), t = document.getElementById('vtime').value;
+      var err = document.getElementById('verr');
+      var when = new Date(t);
+      if (!url || isNaN(when.getTime())) { err.textContent = 'Paste the video link and pick when it went live.'; return; }
+      form.classList.add('loading');
+      api({ action: 'add_video', url: url, published_at: when.toISOString() }).then(function (r) {
+        form.classList.remove('loading');
+        if (!r.ok) { err.textContent = r.error || 'Could not add the video.'; return; }
+        load();
+      });
+    };
+    Array.prototype.forEach.call(document.querySelectorAll('[data-del]'), function (b) {
+      b.onclick = function () {
+        if (!confirm('Remove this video from your list?')) return;
+        api({ action: 'del_video', id: b.dataset.del }).then(load);
+      };
+    });
+  }
+  function setTabs() {
+    Array.prototype.forEach.call(document.querySelectorAll('#periods button'), function (b) {
+      b.setAttribute('aria-selected', String(b.dataset.p === period));
+    });
+  }
+  document.getElementById('periods').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    period = b.dataset.p; ZOOM = null;
+    try { localStorage.setItem('am_creator_period', period); } catch (x) {}
+    setTabs(); load();
+  };
+  function load() {
+    app.classList.add('loading');
+    return api({ action: 'me', period: period }).then(function (r) {
+      app.classList.remove('loading');
+      if (!r.ok) {
+        message(r.error && /not valid/.test(r.error) ? 'This link is not valid' : 'Dashboard unavailable',
+          r.error || 'Please try again in a minute.');
+        return;
+      }
+      DATA = r; render();
+    });
+  }
+  window.__amReload = load;
+  setTabs();
+  if (!key) message('This link is not valid', 'Open the private dashboard link AdmitMap sent you.');
+  else load();
+})();
+</script>
+</body>
+</html>
