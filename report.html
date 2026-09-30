@@ -431,6 +431,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     'html[data-am-wait="1"] #dc-root{visibility:hidden!important}'
   ].join('');
 
+  /* WAIT — пока личный отчёт не собран, лист скрыт. Бандл при разворачивании
+     пересоздаёт документ, и атрибут на <html> теряется, поэтому inject()
+     ставит его заново, пока WAIT не снят (afterPersonal или страховка). */
+  var WAIT = false;
   (function () {
     try {
       var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
@@ -440,9 +444,10 @@ document.addEventListener('DOMContentLoaded', async function() {
          иначе на секунду мелькал образец Майи. */
       var bought = /[?&]checkout_id=/.test(location.search) || !!localStorage.getItem('admitmap_purchase');
       if (((P && P.schools && P.schools.length) || bought) && !sample) {
+        WAIT = true;
         document.documentElement.setAttribute('data-am-wait', '1');
         // страховка: что бы ни случилось, через 3 минуты показать страницу
-        setTimeout(function () { document.documentElement.removeAttribute('data-am-wait'); }, 180000);
+        setTimeout(function () { WAIT = false; document.documentElement.removeAttribute('data-am-wait'); }, 180000);
       }
     } catch (e) {}
   })();
@@ -556,6 +561,7 @@ document.addEventListener('DOMContentLoaded', async function() {
        important выигрывает у любого правила — «стол» под листом остаётся наш. */
     var d = document.documentElement, b = document.body;
     if (d) d.style.setProperty('background', '#c9dcf5', 'important');
+    if (d && WAIT && !d.hasAttribute('data-am-wait')) d.setAttribute('data-am-wait', '1');
     if (b) b.style.setProperty('background', '#c9dcf5', 'important');
 
     /* Бандл переписывает документ целиком и заголовок из <head> теряется —
@@ -576,7 +582,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   window.addEventListener('orientationchange', fit);
 
   inject();
-  new MutationObserver(inject).observe(document.documentElement, {childList: true, subtree: true});
+  new MutationObserver(inject).observe(document, {childList: true, subtree: true});   // document, а не <html>: бандл заменяет <html> целиком
   document.addEventListener('DOMContentLoaded', inject);
   window.addEventListener('load', inject);
 
@@ -620,6 +626,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
   function afterPersonal() {
     {
+      WAIT = false;
       document.documentElement.removeAttribute('data-am-wait');
       fit();                       // персонализация меняет разметку — пересчитываем
       /* Вкладка — это то, что покупатель сохранит себе. Пусть в ней стоит имя. */
