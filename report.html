@@ -435,7 +435,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
       var P = JSON.parse(localStorage.getItem('admitmap_profile') || 'null');
       var sample = /[?&]sample=1\b/.test(location.search) || location.hash === '#sample';
-      if (P && P.schools && P.schools.length && !sample) {
+      /* Купленный отчёт по ссылке (checkout_id) приходит с сервера — анкеты в этом
+         браузере может не быть (ссылка из письма, другое устройство). Ждём и тогда,
+         иначе на секунду мелькал образец Майи. */
+      var bought = /[?&]checkout_id=/.test(location.search) || !!localStorage.getItem('admitmap_purchase');
+      if (((P && P.schools && P.schools.length) || bought) && !sample) {
         document.documentElement.setAttribute('data-am-wait', '1');
         // страховка: что бы ни случилось, через 3 минуты показать страницу
         setTimeout(function () { document.documentElement.removeAttribute('data-am-wait'); }, 180000);
