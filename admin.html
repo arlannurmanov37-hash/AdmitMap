@@ -433,6 +433,7 @@ select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px so
       '<label class="tile fl"><span>Payout method</span><select name="payout_method"><option value="">—</option><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option></select></label></div>' +
       '<label class="tile fl"><span>Payout details (PayPal email or Wise)</span><input name="payout_details" value="' + esc(c.payout_details || '') + '"></label>' +
       '<label class="tile fl"><span>Notes</span><textarea name="notes">' + esc(c.notes || '') + '</textarea></label>' +
+      '<div class="tile fl"><span>Creator Program Terms</span><span style="font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;color:' + (c.terms_accepted_at ? '#0c9a6c">Accepted ' + esc(new Date(c.terms_accepted_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) : '#b45309">Not accepted yet — shown on their first dashboard visit') + '</span></div>' +
       '<div class="tile fl"><span>Private dashboard link</span><span style="font-size:13.5px;font-weight:600;color:#1d4ed8;overflow-wrap:anywhere">' + esc(c.dashboard) + '</span></div>' +
       '<div class="err" id="merr"></div><div style="display:flex;gap:10px"><button class="ghost" type="button" data-close style="flex:1">Cancel</button><button class="cta" type="submit" style="flex:1">Save</button></div></form>',
       function (f, close) {

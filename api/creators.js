@@ -10,6 +10,7 @@
  *   hours      { key, day, tz }          один день по часам
  *   add_video  { key, url, published_at }
  *   del_video  { key, id }
+ *   accept_terms { key }                первое открытие кабинета: согласие с Creator Terms
  *
  * Страница владельца (admin.html, admitmap.app/admin) — заголовок
  * x-admin-password = ADMIN_PASSWORD из настроек Vercel:
@@ -78,7 +79,9 @@ async function creatorByKey(key) {
   return r.ok && Array.isArray(r.data) && r.data[0] ? r.data[0] : null;
 }
 const publicCreator = (c) => ({ name: c.name, ref: c.ref, platform: c.platform, handle: c.handle,
-  status: c.status, link: `www.admitmap.app/?ref=${c.ref}` });
+  status: c.status, link: `www.admitmap.app/?ref=${c.ref}`,
+  // колонки нет (SQL не обновлён) — не держим блогера на окне согласия вечно
+  terms_accepted: c.terms_accepted_at !== null });
 
 /* Название ролика — из oEmbed TikTok и YouTube; Instagram без токена не отдаёт. */
 async function videoMeta(url) {
@@ -156,7 +159,7 @@ export default async function handler(req, res) {
 
   try {
     /* ── страница блогера ── */
-    if (['me', 'hours', 'add_video', 'del_video'].includes(action)) {
+    if (['me', 'hours', 'add_video', 'del_video', 'accept_terms'].includes(action)) {
       const c = await creatorByKey(b.key);
       if (!c) return bad(res, 404, 'This dashboard link is not valid. Ask AdmitMap for your link.');
 
@@ -189,6 +192,12 @@ export default async function handler(req, res) {
         if (!r.ok) return bad(res, 502, 'Could not save the video. Try again.');
         return res.status(200).json({ ok: true });
       }
+      if (action === 'accept_terms') {
+        const r = await sbRest(`creators?id=eq.${c.id}&terms_accepted_at=is.null`, { method: 'PATCH',
+          headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ terms_accepted_at: new Date().toISOString() }) });
+        if (!r.ok) console.error('accept_terms failed', r.status);
+        return res.status(200).json({ ok: true });
+      }
       if (action === 'del_video') {
         const id = parseInt(b.id, 10);
         if (!(id > 0)) return bad(res, 400, 'Bad video.');
@@ -213,12 +222,12 @@ export default async function handler(req, res) {
         if (action === 'admin_csv') {
           const head = ['Name', 'Link', 'Platform', 'Email', 'Status', 'Visitors', 'Purchases', '$19', '$29', 'Conversion %',
             'Revenue', 'Commission (period)', 'Lifetime sales', 'Earned (all time)', 'Pending', 'Ready to pay', 'Paid',
-            'Payout method', 'Payout details'];
+            'Payout method', 'Payout details', 'Terms accepted'];
           const rows = creators.map((c) => [c.name, `www.admitmap.app/?ref=${c.ref}`, c.platform, c.email, c.status,
             c.stats.visitors, c.stats.purchases, c.stats.p19, c.stats.p29,
             c.stats.visitors ? (c.stats.purchases / c.stats.visitors * 100).toFixed(1) : '',
             c.stats.revenue, c.stats.earned, c.money.lifetime_sales, c.money.earned, c.money.pending, c.money.ready,
-            c.money.paid, c.payout_method, c.payout_details]);
+            c.money.paid, c.payout_method, c.payout_details, c.terms_accepted_at || '']);
           const csv = [head, ...rows].map((r) => r.map(csvCell).join(',')).join('\n');
           return res.status(200).json({ ok: true, csv });
         }

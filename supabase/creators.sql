@@ -24,6 +24,8 @@ create table if not exists public.creators (
   notes          text,
   created_at     timestamptz not null default now()
 );
+-- когда блогер принял Creator Program Terms (первое открытие кабинета)
+alter table public.creators add column if not exists terms_accepted_at timestamptz;
 
 create table if not exists public.creator_visits (
   creator_id bigint not null references public.creators(id) on delete cascade,
@@ -304,7 +306,7 @@ as $$
   select coalesce(jsonb_agg(jsonb_build_object(
     'id', c.id, 'ref', c.ref, 'name', c.name, 'email', c.email, 'platform', c.platform, 'handle', c.handle,
     'status', c.status, 'payout_method', c.payout_method, 'payout_details', c.payout_details, 'notes', c.notes,
-    'dash_key', c.dash_key, 'created_at', c.created_at,
+    'dash_key', c.dash_key, 'created_at', c.created_at, 'terms_accepted_at', c.terms_accepted_at,
     'stats', creator_stats(c.id, p_from, p_to),
     'money', creator_money(c.id)
   ) order by c.created_at), '[]'::jsonb)

@@ -168,6 +168,15 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .center-msg .ip{align-items:flex-start;gap:14px;padding:32px}
 .center-msg p{margin:0;font-size:15.5px;line-height:1.6;color:var(--ink2)}
 .loading{opacity:.55;transition:opacity .2s}
+/* первое открытие кабинета: приветствие и согласие с правилами программы */
+.welcome{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(15,31,75,.32);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.welcome .oc{width:min(600px,100%);max-height:calc(100vh - 40px);overflow:auto}
+.welcome ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.welcome li{display:flex;align-items:center;gap:14px;padding:14px 16px;font-size:15px;font-weight:600;line-height:1.4}
+.welcome li .ico{width:36px;height:36px}
+.welcome .agree{margin:0;padding:0 6px;font-size:13px;line-height:1.6;color:var(--muted);text-align:center}
+.welcome .agree a{color:var(--royal-d);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 
 @media(max-width:700px){
   .plotwrap{padding:40px 12px 12px 48px}
@@ -486,6 +495,34 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
     return card(5, 'Your level', title, nextRow + '<div class="stats"><div>' + tiles[0] + tiles[1] + '</div><div>' + tiles[2] + tiles[3] + '</div></div>');
   }
 
+  /* Согласие с Creator Program Terms — при первом открытии кабинета. Блогеры
+     не регистрируются сами (их добавляет владелец), поэтому это и есть их
+     «регистрация»; дата согласия сохраняется в базе (creators.terms_accepted_at). */
+  function welcome(d) {
+    if (d.creator.terms_accepted || document.getElementById('welcome')) return;
+    var first = String(d.creator.name || '').split(/\s+/)[0];
+    var row = function (icon, text) { return '<li class="tile">' + icon + '<span>' + text + '</span></li>'; };
+    var w = document.createElement('div');
+    w.className = 'welcome'; w.id = 'welcome';
+    w.innerHTML = '<div class="oc"><div class="ip">' +
+      '<div class="hd"><div class="t"><span class="eyebrow">Creator program</span><span class="ff">Welcome, ' + esc(first) + '</span></div></div>' +
+      '<ul>' +
+        row(I.link, 'Share one link: <b style="color:#2563eb">www.admitmap.app/?ref=' + esc(d.creator.ref) + '</b>. It never expires.') +
+        row(I.people, 'Anyone who opens it is credited to you for 30 days from their last visit.') +
+        row(I.bill, 'You earn $6.50 per $19 report and $11.50 per $29 report, more as your sales grow.') +
+        row(I.bag, 'Payouts monthly by PayPal or Wise, 14 days after each purchase, from $25.') +
+      '</ul>' +
+      '<button class="cta" id="accept">Continue to my dashboard' + I.arrow + '</button>' +
+      '<p class="agree">By continuing, you agree to our <a href="/creator-terms" target="_blank" rel="noopener">Creator Program Terms</a>' +
+      ' and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>' +
+    '</div></div>';
+    document.body.appendChild(w);
+    document.getElementById('accept').onclick = function () {
+      this.disabled = true;
+      api({ action: 'accept_terms' }).then(function () { d.creator.terms_accepted = true; w.remove(); });
+    };
+  }
+
   function render() {
     var d = DATA;
     document.getElementById('name').textContent = d.creator.name;
@@ -494,6 +531,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
       '<div class="row">' + videos(d) + levelCard(d) + '</div></div>';
     drawChart(d);
     wire();
+    welcome(d);
   }
   function wire() {
     var copy = document.getElementById('copy');
