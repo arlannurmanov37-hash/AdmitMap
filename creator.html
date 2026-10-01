@@ -193,7 +193,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
     </div>
   </header>
   <div id="app"></div>
-  <p class="note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>This page only shows totals. It never shows anything about individual visitors.</p>
+  <p class="note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5f7292" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>This page only shows totals. It never shows anything about individual visitors. · <a href="/creator-terms" style="color:#1d4ed8;font-weight:600">Creator Program Terms</a></p>
 </div>
 
 <script>
@@ -467,7 +467,8 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
     var sales = Number(d.money.lifetime_sales) || 0, L = d.level, all = L.levels;
     var next = L.next;
     var prevFrom = all[L.index - 1].from - 1;               // продаж до начала текущего уровня
-    var within = next ? (sales - prevFrom) / (next.at - 1 - prevFrom) * 100 : 100;
+    // нарастающим итогом, как у владельца: после 100 продаж — 101 из 250, ничего не обнуляется
+    var within = next ? sales / next.at * 100 : 100;
     var title = next ? sales + ' of ' + next.at + ' sales' : sales + ' sales';
     var nextRow = '<div class="tile next"><span class="ico"><span class="bars"><i style="height:14px;background:#bcd3f5"></i><i style="height:30px;background:#2563eb"></i></span></span>' +
       '<span style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:0"><span style="font-size:15px;font-weight:700">' +
