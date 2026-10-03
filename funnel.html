@@ -10,7 +10,7 @@
 <title>AdmitMap — Build your profile</title>
   <script src="/analytics.js" defer></script>
   <script src="/profile-sync.js?v=4" defer></script>
-  <meta name="description" content="Five minutes to your odds and real cost at every school on your list.">
+  <meta name="description" content="Five minutes to your student’s odds and your family’s real cost at every school on their list.">
   <link rel="canonical" href="https://www.admitmap.app/funnel">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png?v=3">
@@ -18,14 +18,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AdmitMap">
   <meta property="og:title" content="Build your profile · AdmitMap">
-  <meta property="og:description" content="Five minutes to your odds and real cost at every school on your list.">
+  <meta property="og:description" content="Five minutes to your student’s odds and your family’s real cost at every school on their list.">
   <meta property="og:url" content="https://www.admitmap.app/funnel">
   <meta property="og:image" content="https://www.admitmap.app/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Build your profile · AdmitMap">
-  <meta name="twitter:description" content="Five minutes to your odds and real cost at every school on your list.">
+  <meta name="twitter:description" content="Five minutes to your student’s odds and your family’s real cost at every school on their list.">
   <meta name="twitter:image" content="https://www.admitmap.app/assets/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2139,6 +2139,29 @@ const STEPS = [
   {k:'essay',     n:'Essay',      eyebrow:'Essay',      h1:'Your personal statement.',         sub:'A strong essay lifts your odds at selective schools. A rough draft is enough.'}
 ];
 
+/* Родительский режим (30.09.2026): AdmitMap — прежде всего для родителей,
+   платит взрослый. Если анкету заполняет родитель, заголовки говорят
+   «your student», а не «you». */
+const PARENT_TEXT = {
+  basics:    {h1:'Let’s start with your student.', sub:'A few basics so every number in the report is scored against the right class year.'},
+  academics: {h1:'Your student’s academic record.', sub:'Their grades, test scores and the courses they took.'},
+  activities:{h1:'What your student does outside class'},
+  schools:   {h1:'Your student’s school list.', sub:'Up to 10 schools. A balanced list gives you the most honest picture.'},
+  essay:     {h1:'Your student’s personal statement.', sub:'A strong essay lifts the odds at selective schools. A rough draft is enough.'}
+};
+const isParent = () => S.role === 'parent';
+const stepView = st => isParent() && PARENT_TEXT[st.k] ? Object.assign({}, st, PARENT_TEXT[st.k]) : st;
+/* «Кто заполняет» — первая карточка первого шага */
+function roleCard(){
+  const o = (v, label) => `<button type="button" class="opt ${S.role===v?'on':''}" onclick="S.role='${v}';save();render()">${label}</button>`;
+  return `<div class="card">
+    <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M3.5 19c.8-3.2 3-4.9 5.5-4.9s4.7 1.7 5.5 4.9"/><circle cx="16.8" cy="9.4" r="2.6"/><path d="M16.6 14.2c2 .1 3.4 1.6 3.9 4.3"/></svg></span>
+      <span><span class="c-t">Who’s filling this out?</span><span class="c-s">the report is written for you either way</span></span></div>
+    <div class="opts">${o('parent','I’m a parent or guardian')}${o('student','I’m the student')}</div>
+    <div class="err" id="e-role">Choose who’s filling this out.</div>
+  </div>`;
+}
+
 /* Структура записи повторяет Common App — так студенту нечего переписывать,
    он переносит то, что уже заполнил там. */
 const ACT_TYPES = ['Academic','Art','Athletics: Club','Athletics: JV/Varsity','Career Oriented',
@@ -2168,7 +2191,7 @@ function togg(arr, v, el){
 }
 
 const BLANK = {
-  name:'', gradYear:'', state:'', major:'',
+  role:'', name:'', gradYear:'', state:'', major:'',
   gpa:'', rank:'', classSize:'', sat:'', act:'', apExams:[],
   activities:[BLANK_ACT()], honors:[], schools:[], essayPrompt:null, essay:'',
   wantsAid:null, income:'', budget:'', email:'',
@@ -2287,11 +2310,12 @@ function paintSteps(){
 /* ── step bodies ── */
 function vBasics(){
   const y0=new Date().getFullYear(), years=[]; for(let y=y0;y<=y0+4;y++) years.push(y);
-  return `<div class="card">
+  const P = isParent();
+  return roleCard() + `<div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg></span>
-      <span><span class="c-t">About you</span><span class="c-s">so we can address the report to you</span></span></div>
+      <span><span class="c-t">${P ? 'About your student' : 'About you'}</span><span class="c-s">${P ? 'the report is about them' : 'so we can address the report to you'}</span></span></div>
     <div class="row2">
-      <div class="fg"><label class="fl" for="f-name">First name</label>
+      <div class="fg"><label class="fl" for="f-name">${P ? 'Student’s first name' : 'First name'}</label>
         <input class="fi" id="f-name" placeholder="Maya" value="${esc(S.name)}" oninput="S.name=this.value;save()">
         <div class="err" id="e-name">Enter your first name.</div></div>
       <div class="fg"><label class="fl" for="f-year">Graduation year</label>
@@ -2309,7 +2333,7 @@ function vBasics(){
   <div class="card">
     <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 12 4l9 4.5-9 4.5z"/><path d="M7 11v5c0 1.5 2.2 2.8 5 2.8s5-1.3 5-2.8v-5"/></svg></span>
       <span><span class="c-t">Intended major</span><span class="c-s">admit rates differ a lot by program</span></span></div>
-    <div class="fg"><label class="fl" for="f-major">What do you want to study?</label>
+    <div class="fg"><label class="fl" for="f-major">${isParent() ? 'What do they want to study?' : 'What do you want to study?'}</label>
       <select class="fi" id="f-major" onchange="S.major=this.value;save()"><option value="">Select a major</option>
       ${MAJORS.map(g=>`<optgroup label="${esc(g[0])}">${g[1].map(m=>`<option ${S.major===m?'selected':''}>${esc(m)}</option>`).join('')}</optgroup>`).join('')}
       </select><div class="err" id="e-major">Pick a major.</div></div>
@@ -2625,8 +2649,11 @@ function mField(label, inner, errId, errText){
 
 function mvBasics(){
   const y0=new Date().getFullYear(), years=[]; for(let y=y0;y<=y0+4;y++) years.push(y);
+  const ro = (v, label) => `<button type="button" class="opt ${S.role===v?'on':''}" onclick="S.role='${v}';save();render()">${label}</button>`;
   return `<div style="display:flex;flex-direction:column;gap:14px">
-    ${mField('First name',
+    ${mField('Who’s filling this out?', `<div class="opts">${ro('parent','I’m a parent or guardian')}${ro('student','I’m the student')}</div>`,
+      'e-role','Choose who’s filling this out.')}
+    ${mField(isParent() ? 'Student’s first name' : 'First name',
       `<input id="f-name" type="text" placeholder="Arlan" autocomplete="given-name" style="${M_FLD}"
               value="${esc(S.name)}" oninput="S.name=this.value;save()">`,
       'e-name','Enter your first name.')}
@@ -2736,7 +2763,7 @@ const isPhone = () => window.matchMedia('(max-width:760px)').matches;
 function growTa(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
 function render(opts){
   const keepY = (opts && opts.toTop) ? 0 : window.scrollY;
-  const st=STEPS[step];
+  const st=stepView(STEPS[step]);
   /* Разметка та же, что была: десктоп ничего не теряет. Префикс «Step N · »
      вынесен в отдельный span, а data-step на контейнере позволяет телефону
      показать ровно то, что показывает макет на этом шаге. */
@@ -2791,7 +2818,7 @@ function next(){
 function track(n,p){ if(window.amTrack) window.amTrack(n,p); }
 function bad(id,is){ const e=document.getElementById(id); if(e) e.classList.toggle('on',is); return !is; }
 function valid(i){
-  if(i===0){ let ok=bad('e-name',!S.name.trim()); ok=bad('e-year',!S.gradYear)&&ok;
+  if(i===0){ let ok=bad('e-role',!S.role); ok=bad('e-name',!S.name.trim())&&ok; ok=bad('e-year',!S.gradYear)&&ok;
     ok=bad('e-state',!S.state)&&ok; ok=bad('e-major',!S.major)&&ok; return ok; }
   if(i===1){ S.gpa=String(S.gpa).replace(',','.'); const g=parseFloat(S.gpa); let ok=bad('e-gpa',!(g>=0&&g<=4));
     const hasSat=String(S.sat).trim()!=='', hasAct=String(S.act).trim()!=='';
