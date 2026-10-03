@@ -12,7 +12,7 @@
   <script src="/analytics.js" defer></script>
   <script src="/profile-sync.js?v=4" defer></script>
   <script src="/scoring.js?v=20260929" defer></script>
-  <meta name="description" content="Your student’s chances and your family’s real cost, school by school.">
+  <meta name="description" content="Your acceptance chances and real cost, school by school.">
   <link rel="canonical" href="https://www.admitmap.app/paywall">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/icon-48.png?v=3">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png?v=3">
@@ -20,14 +20,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AdmitMap">
   <meta property="og:title" content="Your report is ready · AdmitMap">
-  <meta property="og:description" content="Your student’s chances and your family’s real cost, school by school.">
+  <meta property="og:description" content="Your acceptance chances and real cost, school by school.">
   <meta property="og:url" content="https://www.admitmap.app/paywall">
   <meta property="og:image" content="https://www.admitmap.app/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Your report is ready · AdmitMap">
-  <meta name="twitter:description" content="Your student’s chances and your family’s real cost, school by school.">
+  <meta name="twitter:description" content="Your acceptance chances and real cost, school by school.">
   <meta name="twitter:image" content="https://www.admitmap.app/assets/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,7 +112,7 @@ h1 em{font-style:normal;color:var(--royal)}
 
 /* the whole ticket block, text included, rendered 10% larger */
 .tickets{display:grid;grid-template-columns:1fr 1fr;gap:2.42rem;width:100%;max-width:74rem;
-  margin-bottom:1.05rem;}   /* меньше, чем было: под карточками добавилась строка «18+ или родитель» */
+  margin-bottom:2.1175rem;}
 .tk{--bw:2px;--ring:2px;position:relative;text-align:left;display:flex;flex-direction:column}
 .tk-top{flex:1;display:flex;flex-direction:column;border-radius:1.3613rem 1.3613rem 0 0;background:#fff;
   border:2px solid transparent;border-bottom:0;padding:1.815rem 2.1175rem 1.6637rem;
@@ -194,12 +194,7 @@ h1 em{font-style:normal;color:var(--royal)}
   font-size:.7562rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   box-shadow:0 2px 0 #1e51c4,0 .4537rem 1.0587rem rgba(37,99,235,.4)}
 
-.adult{display:flex;align-items:center;justify-content:center;gap:.6rem;margin:0 0 .2rem;font-size:.9rem;font-weight:600;
-  color:var(--navy);cursor:pointer;user-select:none}
-.adult input{width:1.15rem;height:1.15rem;margin:0;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
-.adult.need{color:#dc2626;animation:shake .4s ease}
-@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.secure{margin-top:.2rem;display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
+.secure{margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.5625rem;font-size:.8125rem;
   font-weight:600;color:var(--muted-3)}
 .secure svg{width:.9375rem;height:.9375rem;color:var(--green)}
 
@@ -279,8 +274,8 @@ h1 em{font-style:normal;color:var(--royal)}
     </span>
 
     <h1 class="u d1">Make the right <em>college list.</em></h1>
-    <p class="sub f d2">Your student’s chances at every school on their list, and what each one would really cost your
-      family. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
+    <p class="sub f d2">Your chances at every school on your list, measured against the profile you actually
+      have. You have <b><span id="days">85</span> days</b> until Nov 1 early deadlines.</p>
 
     <div class="feats">
       <div class="feat f1 u d2">
@@ -308,7 +303,7 @@ h1 em{font-style:normal;color:var(--royal)}
             <span class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5v1a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5Z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg></span>
             <span class="tk-n">Chances Report</span>
           </div>
-          <p class="tk-s">Your student’s chances at every school on their list.</p>
+          <p class="tk-s">Know your chances at every school on your list.</p>
           <div class="tk-hr"></div>
           <ul class="tk-ul">
             <li><span class="tk-b b-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/></svg></span>Acceptance probability for every school</li>
@@ -331,7 +326,7 @@ h1 em{font-style:normal;color:var(--royal)}
             <span class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></span>
             <span class="tk-n">Chances <em>+ Financial Aid</em></span>
           </div>
-          <p class="tk-s">Their chances — and what each school would actually cost your family.</p>
+          <p class="tk-s">Know your chances — and what each school could actually cost.</p>
           <div class="tk-hr"></div>
           <ul class="tk-ul">
             <li><span class="tk-b b-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Everything in the Chances Report</li>
@@ -349,10 +344,6 @@ h1 em{font-style:normal;color:var(--royal)}
       </div>
     </div>
 
-    <!-- Покупает только взрослый (Terms, раздел 2; требование Polar к сервисам для
-         школьников): без этой отметки оплата не начинается. -->
-    <label class="adult f d6" id="adultRow"><input type="checkbox" id="adult">
-      <span>I’m 18 or older, or I’m a parent or guardian buying for my student.</span></label>
     <div class="secure f d6">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg>
       Secured with 256-bit SSL · One payment, never a subscription
@@ -388,8 +379,8 @@ h1 em{font-style:normal;color:var(--royal)}
     if (badge) badge.classList.add('plain');
     var sub = document.querySelector('.sub'), d = document.getElementById('days');
     if (sub) sub.style.whiteSpace = 'normal';               // этот текст длиннее — в две строки
-    if (sub) sub.innerHTML = 'See your student’s chances at every school on their list, and what each one would really ' +
-      'cost your family after aid. Five minutes to fill in, and you have <b><span id="days">' +
+    if (sub) sub.innerHTML = 'See your chances at every school you apply to, and what each one would really ' +
+      'cost after aid. Five minutes to fill in, and you have <b><span id="days">' +
       ((d && d.textContent) || '') + '</span> days</b> until Nov 1 early deadlines.';
   }
 })();
@@ -457,13 +448,6 @@ function needsFinancials(){
   }catch(e){ return true; }
 }
 function buy(tier){
-  var adult = document.getElementById('adult');
-  if(adult && !adult.checked){
-    var row = document.getElementById('adultRow');
-    row.classList.remove('need'); void row.offsetWidth; row.classList.add('need');
-    row.scrollIntoView({block:'center', behavior:'smooth'});
-    return;
-  }
   if(tier===29 && needsFinancials()){ window.location.href='funnel.html?back=paywall-desktop.html#financial'; return; }
   startCheckout(tier, window.event && window.event.currentTarget);
 }
