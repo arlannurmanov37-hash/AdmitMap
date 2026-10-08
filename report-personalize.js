@@ -1372,6 +1372,8 @@ function run() {
     PURCHASE = p;
     if (!PDF_MODE) {
       if (window.amSave) window.amSave('report_view', { tier: p.price || null });
+      // покупка с рекламы Google: один раз на заказ, только у пришедших по клику (ads-tag.js)
+      if (window.amAdsPurchase && p.id && !p.local) window.amAdsPurchase(p.id, p.price);
       /* Письмо с PDF: обычно его уже отправил вебхук Polar. Если нет — просим
          сервер сейчас; дважды он не отправит. */
       if (p.server && !p.emailed) {
