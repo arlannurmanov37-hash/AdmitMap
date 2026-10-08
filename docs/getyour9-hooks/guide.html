@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GetYour9 Creator Hooks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800;9..144,900&family=Inter:wght@500;600;700;800&display=block" rel="stylesheet">
+<style>
+  /* Brand tokens: swap these for GetYour9's exact colors. */
+  :root {
+    --ink: #14123a;
+    --accent: #5b3df5;
+    --accent-2: #7c5cff;
+    --tint: #eeebff;
+    --tint-2: #f7f5ff;
+    --muted: #6b6a85;
+    --line: #e4e0fb;
+  }
+  @page { size: 210mm 297mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    color: var(--ink);
+    font-variant-numeric: lining-nums tabular-nums;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .page {
+    width: 210mm; height: 297mm; position: relative; overflow: hidden;
+    padding: 11mm 11mm 0;
+    background:
+      radial-gradient(120mm 90mm at 100% 0%, #dcd4ff 0%, transparent 70%),
+      linear-gradient(180deg, var(--tint-2), #f1eeff);
+    page-break-after: always; break-after: page;
+    display: flex; flex-direction: column;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; height: 12mm; }
+  .logo { display: flex; align-items: center; gap: 8px; font-family: Fraunces, serif; font-weight: 900; font-size: 25px; letter-spacing: -0.5px; }
+  .logo .mark {
+    width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center;
+    background: linear-gradient(160deg, var(--accent-2), var(--accent)); color: #fff;
+    font-family: Inter, sans-serif; font-weight: 800; font-size: 16px;
+  }
+  .logo b { color: var(--accent); font-weight: 900; }
+  .pill {
+    background: #fff; border-radius: 10px; padding: 7px 14px;
+    font-size: 11px; font-weight: 800; letter-spacing: 1.4px; color: var(--ink);
+    box-shadow: 0 1px 0 var(--line), 0 0 0 1px var(--line) inset;
+  }
+  .frame {
+    margin-top: 6mm; flex: 1 1 auto; max-height: 254mm;
+    background: #fff; border-radius: 26px; padding: 3mm;
+    box-shadow: 0 10px 30px rgba(60, 40, 180, .08);
+  }
+  .card {
+    height: 100%; border-radius: 20px; padding: 7mm 6mm 6mm;
+    background: linear-gradient(180deg, #f3f0ff, var(--tint));
+    border: 1px solid var(--line); overflow: hidden;
+  }
+  .foot { height: 13mm; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; color: var(--muted); }
+  .foot a { color: var(--accent); font-weight: 800; text-decoration: none; }
+
+  .kicker { font-size: 12px; font-weight: 800; letter-spacing: 1.6px; color: var(--accent); margin: 0 1mm 3mm; }
+  h1 { font-family: Fraunces, serif; font-weight: 900; font-size: 52px; line-height: 1.02; letter-spacing: -1.2px; margin: 0 1mm 5mm; }
+  h2 { font-family: Fraunces, serif; font-weight: 900; font-size: 30px; letter-spacing: -0.6px; }
+  .sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 1mm 3mm; }
+  .sec-head + .item, .item + .sec-head { }
+  .item + .sec-head { margin-top: 6mm; }
+  .sec-head .sub { font-size: 12.5px; font-weight: 600; color: var(--muted); text-align: right; }
+
+  .item {
+    display: flex; align-items: center; gap: 13px;
+    background: #fff; border-radius: 12px; padding: 11px 14px 11px 10px;
+    margin-bottom: 2mm; min-height: 48px;
+    box-shadow: 0 1px 2px rgba(20, 18, 58, .05);
+  }
+  .num {
+    flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+    background: linear-gradient(160deg, var(--accent-2), var(--accent)); color: #fff;
+    font-size: 13px; font-weight: 800;
+    box-shadow: 0 3px 8px rgba(91, 61, 245, .35);
+  }
+  .txt { font-size: 15.5px; font-weight: 600; line-height: 1.3; }
+  .meta { margin-left: auto; flex: none; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .toc .item { padding-top: 7px; padding-bottom: 7px; min-height: 0; margin-bottom: 1.4mm; }
+  .toc .txt { font-weight: 700; font-size: 15px; }
+  .toc h1 { font-size: 46px; margin-bottom: 4mm; }
+  .toc .num { width: 26px; height: 26px; font-size: 12px; }
+
+  .howto p { font-size: 15px; line-height: 1.5; font-weight: 500; margin: 0 1mm 4mm; }
+  .howto .item .txt { font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script src="hooks.js"></script>
+<script>
+document.fonts.ready.then(() => {
+const BRAND = '<div class="logo"><span class="mark">9</span><span>GetYour<b>9</b></span></div>';
+const FOOT = '<div class="foot"><span>Say it in your own words. Add #ad.</span><a>getyour9.app</a></div>';
+const out = document.getElementById('out');
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const pages = [];
+
+function newPage() {
+  const p = document.createElement('section');
+  p.className = 'page';
+  p.innerHTML = `<div class="top">${BRAND}<div class="pill"></div></div>
+    <div class="frame"><div class="card"></div></div>${FOOT}`;
+  out.appendChild(p);
+  pages.push(p);
+  return p.querySelector('.card');
+}
+const overflows = card => card.scrollHeight > card.clientHeight + 1;
+const itemHTML = (n, text, meta) =>
+  `<div class="num">${n}</div><div class="txt">${esc(text)}</div>${meta ? `<div class="meta">${meta}</div>` : ''}`;
+
+const total = SECTIONS.reduce((a, s) => a + s.hooks.length, 0);
+
+// Page 1: title and contents.
+const cover = newPage();
+cover.classList.add('toc');
+cover.innerHTML = `<div class="kicker">CREATOR GUIDE</div>
+  <h1>${total} hooks for videos about IELTS</h1>`;
+const tocRows = SECTIONS.map((s, i) => {
+  const row = document.createElement('div');
+  row.className = 'item';
+  row.innerHTML = itemHTML(i + 1, s.title, `${s.hooks.length} hooks · page ?`);
+  cover.appendChild(row);
+  return row;
+});
+
+// Page 2: how to use the guide.
+const how = newPage();
+how.classList.add('howto');
+how.innerHTML = `<div class="sec-head"><h2>How to use these hooks</h2></div>
+  <p>A hook is the first one or two seconds of your video. Its only job is to make an IELTS candidate stop scrolling. Pick one, say it in your own words, then show GetYour9 doing the work on screen.</p>
+  <div class="sec-head"><h2 style="font-size:24px">What you can show</h2></div>
+  ${[
+    'Writing Task 1 checker: paste a report or letter, get a band estimate and feedback on each criterion.',
+    'Writing Task 2 checker: paste an essay and see the sentence or idea holding your band back.',
+    'Real-time AI examiner: a live voice conversation for Speaking Parts 1, 2 and 3.',
+    'Speaking feedback on fluency, vocabulary, filler words and pauses.',
+    'Progress tracking across Speaking, Writing, Reading and Listening.'
+  ].map((t, i) => `<div class="item">${itemHTML(i + 1, t)}</div>`).join('')}
+  <div class="sec-head" style="margin-top:6mm"><h2 style="font-size:24px">Keep it honest</h2></div>
+  ${[
+    'Band scores from GetYour9 are estimates. Never promise a specific band or a guaranteed result.',
+    'Show your real answers and your real feedback. Do not stage results.',
+    'GetYour9 is not the official IELTS test. Do not say it is.',
+    'Disclose the partnership: add #ad or use the platform’s paid-partnership label.'
+  ].map((t, i) => `<div class="item">${itemHTML(i + 1, t)}</div>`).join('')}`;
+
+// Section pages: flow hooks, breaking onto a "continued" page on overflow.
+let card = newPage();
+SECTIONS.forEach((s, si) => {
+  const head = document.createElement('div');
+  head.className = 'sec-head';
+  head.innerHTML = `<h2>${s.title}</h2><div class="sub">${s.sub}</div>`;
+  card.appendChild(head);
+  // Keep a heading together with at least two hooks.
+  const probe = [];
+  s.hooks.slice(0, 2).forEach((h, i) => {
+    const r = document.createElement('div'); r.className = 'item';
+    r.innerHTML = itemHTML(i + 1, h); card.appendChild(r); probe.push(r);
+  });
+  if (overflows(card) && card.children.length > 3) {
+    head.remove(); probe.forEach(r => r.remove());
+    card = newPage(); card.appendChild(head); probe.forEach(r => card.appendChild(r));
+  }
+  tocRows[si].dataset.page = pages.length;
+  s.hooks.slice(2).forEach((h, j) => {
+    const r = document.createElement('div'); r.className = 'item';
+    r.innerHTML = itemHTML(j + 3, h);
+    card.appendChild(r);
+    if (overflows(card)) {
+      r.remove();
+      card = newPage();
+      const ch = document.createElement('div');
+      ch.className = 'sec-head';
+      ch.innerHTML = `<h2>${s.title}, continued</h2>`;
+      card.appendChild(ch);
+      card.appendChild(r);
+    }
+  });
+});
+
+pages.forEach((p, i) => {
+  p.querySelector('.pill').textContent = `CREATOR GUIDE · PAGE ${i + 1} OF ${pages.length}`;
+});
+tocRows.forEach((row, i) => {
+  row.querySelector('.meta').textContent = `${SECTIONS[i].hooks.length} hooks · page ${row.dataset.page}`;
+});
+document.title = 'GetYour9 Creator Hooks';
+document.body.dataset.ready = '1';
+});
+</script>
+</body>
+</html>
