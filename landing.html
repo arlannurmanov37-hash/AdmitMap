@@ -2634,6 +2634,13 @@
                резал подвал отдельной полосой от финальной секции. */
             #am-mobile footer { border-top: 0; padding: 22px 22px 34px !important; }
             #am-mobile { display: block; }
+            /* Переход из меню: раздел встаёт сразу под шапкой (62px), заголовок
+               раздела — в ~27px под ней. Десктопные 78px давали лишнюю пустоту. */
+            html { scroll-padding-top: 50px !important; }
+            /* Круги-подсветки последнего раздела выступали за низ страницы —
+               после подвала можно было докрутить пустую полосу. clip, а не hidden:
+               hidden ломает липкую шапку. */
+            #am-mobile > div { overflow: clip; }
             #am-mobile *, #am-mobile *::before, #am-mobile *::after { box-sizing: border-box; }
             html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: clip; background: #dfe6f2; color: #0f1f4b; font-variant-numeric: lining-nums tabular-nums; }
             #am-mobile a { color: #2563eb; text-decoration: none; }
@@ -4581,8 +4588,38 @@
       sheet.style.animation = 'none'; sheet.offsetHeight; sheet.style.animation = '';
     }
     menu.style.background = '';
+    markCurrent();
     menu.dataset.open = 'true'; document.body.style.overflow = 'hidden';
   };
+
+  /* «You're here» — у того раздела, который сейчас на экране, а не всегда у Home.
+     Текущий раздел — последний, чей верх уже поднялся выше трети экрана. */
+  var links = sheet ? [].slice.call(sheet.querySelectorAll('a[href^="#m-"]')) : [];
+  var marker = null;
+  links.forEach(function (a) {
+    var inner = a.firstElementChild;
+    if (inner && inner.lastElementChild && inner.lastElementChild.style.position === 'absolute') marker = inner.lastElementChild;
+  });
+  links.forEach(function (a) {                // у каждого пункта — обёртка, к которой крепится метка
+    if (a.firstElementChild && a.firstElementChild.style.position === 'relative') return;
+    var w = document.createElement('span'); w.style.position = 'relative';
+    while (a.firstChild) w.appendChild(a.firstChild);
+    a.appendChild(w);
+  });
+  function markCurrent() {
+    if (!marker || !links.length) return;
+    var cur = links[0], line = window.innerHeight / 3;
+    links.forEach(function (a) {
+      var sec = document.getElementById(a.getAttribute('href').slice(1));
+      if (sec && sec.getBoundingClientRect().top <= line) cur = a;
+    });
+    links.forEach(function (a) {
+      var on = a === cur;
+      a.style.fontWeight = on ? '700' : '600';
+      a.style.color = on ? '#0f1f4b' : '#43536b';
+    });
+    cur.firstElementChild.appendChild(marker);
+  }
   window.closeMenu = function () { if (menu) { menu.dataset.open = 'false'; document.body.style.overflow = ''; } };
 
   /* Меню можно смахнуть вниз. Тянем, только если список прокручен к началу,

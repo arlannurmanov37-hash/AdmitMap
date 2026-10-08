@@ -429,6 +429,9 @@ document.addEventListener('DOMContentLoaded', async function() {
        две колонки карточек остаются двумя колонками. */
     /* Бейдж «Sample report» только у образца. */
     'html[data-am-personal="1"] [data-am-sample]{display:none!important}',
+    /* Строку «Median pay» в карточках школ скрипт удаляет (dropEarnings), но только
+       после загрузки справочников — полсекунды цена стояла впритык к названию. */
+    '[data-am-earn]{display:none!important}',
     /* Свой профиль есть — пример Майи не показываем даже на мгновение:
        лист скрыт, пока в него не подставлены данные ученика. */
     'html[data-am-wait="1"] #dc-root{visibility:hidden!important}'
