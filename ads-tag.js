@@ -11,13 +11,14 @@
  *     шлёт рекламные данные: по часовому поясу Европы не грузим его вовсе,
  *     а consent mode по региону — вторая страховка.
  *
- * Аккаунт: AdmitMap MCC 328-642-2192 (кросс-аккаунтные конверсии для 621-573-6123).
+ * Аккаунт: GetYour9 992-769-7749 (вход nurmanovarlan0) — кампания и конверсия «Покупка» в нём же.
+ * Старые MCC 328-642-2192 / 621-573-6123 больше не используются (кампания там на паузе).
  */
 (function (w, d) {
   'use strict';
 
-  var ID = 'AW-18501380281';
-  var PURCHASE = ID + '/Ms_ZCODQ6JUdELnRkvZE';
+  var ID = 'AW-18019321787';
+  var PURCHASE = ID + '/0fvCCLD8u5YdELuPpJBD';
 
   var EEA_UK_CH = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE',
     'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'CH'];
