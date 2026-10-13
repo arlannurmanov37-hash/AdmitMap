@@ -369,7 +369,7 @@ select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px so
     var form = '<form id="addf" style="display:flex;flex-direction:column;gap:12px"><div class="fg">' +
       '<label class="tile fl"><span>Name</span><input name="name" placeholder="Full name" required></label>' +
       '<label class="tile fl"><span>Email</span><input name="email" type="email" placeholder="name@example.com"></label>' +
-      '<label class="tile fl"><span>Platform</span><select name="platform"><option>TikTok</option><option>Instagram</option><option>YouTube</option><option>Other</option></select></label>' +
+      '<label class="tile fl"><span>Platform</span><select name="platform"><option>TikTok</option><option>Instagram</option><option>YouTube</option><option>SideShift</option><option>Other</option></select></label>' +
       '<label class="tile fl"><span>Handle</span><input name="handle" placeholder="@handle"></label></div>' +
       '<label class="tile fl"><span>Link name</span><span class="pre"><em>www.admitmap.app/?ref=</em><input name="ref" placeholder="name" pattern="[A-Za-z0-9_-]{2,32}" required></span></label>' +
       '<div class="err" id="adderr"></div><button class="cta big" type="submit">Save creator' + ARROW + '</button></form>';
@@ -415,7 +415,7 @@ select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px so
     var c = find(id); if (!c) return;
     modal('<div class="hd"><div class="t"><span class="eyebrow">Mark as paid</span><span class="ff">' + esc(c.name) + '</span></div></div>' +
       '<form style="display:flex;flex-direction:column;gap:12px"><div class="fg"><label class="tile fl"><span>Amount paid ($)</span><input name="amount" type="number" step="0.01" min="0.01" value="' + Number(c.money.ready).toFixed(2) + '" required></label>' +
-      '<label class="tile fl"><span>Method</span><select name="method"><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option><option>Other</option></select></label></div>' +
+      '<label class="tile fl"><span>Method</span><select name="method"><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option><option' + (c.payout_method === 'SideShift' ? ' selected' : '') + '>SideShift</option><option>Other</option></select></label></div>' +
       '<label class="tile fl"><span>Note (optional)</span><input name="note" placeholder="e.g. September payout"></label>' +
       '<p class="sm" style="margin:0 6px;white-space:normal">Ready to pay: ' + money(c.money.ready) + ' · Pending (14-day hold): ' + money(c.money.pending) + ' · Paid so far: ' + money(c.money.paid) + (c.payout_details ? ' · Send to: ' + esc(c.payout_details) : '') + '</p>' +
       '<div class="err" id="merr"></div><div style="display:flex;gap:10px"><button class="ghost" type="button" data-close style="flex:1">Cancel</button><button class="cta" type="submit" style="flex:1">Save payout</button></div></form>',
@@ -430,7 +430,7 @@ select.pick{height:44px;padding:0 36px 0 16px;border-radius:14px;border:1.5px so
     var c = find(id); if (!c) return;
     modal('<div class="hd"><div class="t"><span class="eyebrow">Notes and payout details</span><span class="ff">' + esc(c.name) + '</span></div></div>' +
       '<form style="display:flex;flex-direction:column;gap:12px"><div class="fg"><label class="tile fl"><span>Email</span><input name="email" type="email" value="' + esc(c.email || '') + '"></label>' +
-      '<label class="tile fl"><span>Payout method</span><select name="payout_method"><option value="">—</option><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option></select></label></div>' +
+      '<label class="tile fl"><span>Payout method</span><select name="payout_method"><option value="">—</option><option' + (c.payout_method === 'PayPal' ? ' selected' : '') + '>PayPal</option><option' + (c.payout_method === 'Wise' ? ' selected' : '') + '>Wise</option><option' + (c.payout_method === 'SideShift' ? ' selected' : '') + '>SideShift</option></select></label></div>' +
       '<label class="tile fl"><span>Payout details (PayPal email or Wise)</span><input name="payout_details" value="' + esc(c.payout_details || '') + '"></label>' +
       '<label class="tile fl"><span>Notes</span><textarea name="notes">' + esc(c.notes || '') + '</textarea></label>' +
       '<div class="tile fl"><span>Creator Program Terms</span><span style="font-size:14px;font-weight:600;letter-spacing:0;text-transform:none;color:' + (c.terms_accepted_at ? '#0c9a6c">Accepted ' + esc(new Date(c.terms_accepted_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) : '#b45309">Not accepted yet — shown on their first dashboard visit') + '</span></div>' +

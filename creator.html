@@ -502,6 +502,8 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
     if (d.creator.terms_accepted || document.getElementById('welcome')) return;
     var first = String(d.creator.name || '').split(/\s+/)[0];
     var row = function (icon, text) { return '<li class="tile">' + icon + '<span>' + text + '</span></li>'; };
+    // блогеры из SideShift (platform = SideShift) получают комиссию через SideShift, а не PayPal/Wise
+    var via = /^sideshift$/i.test(d.creator.platform || '') ? 'through SideShift' : 'by PayPal or Wise';
     var w = document.createElement('div');
     w.className = 'welcome'; w.id = 'welcome';
     w.innerHTML = '<div class="oc"><div class="ip">' +
@@ -510,7 +512,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
         row(I.link, 'Share one link: <b style="color:#2563eb">www.admitmap.app/?ref=' + esc(d.creator.ref) + '</b>. It never expires.') +
         row(I.people, 'Anyone who opens it is credited to you for 30 days from their last visit.') +
         row(I.bill, 'You earn $6.50 per $19 report and $11.50 per $29 report, more as your sales grow.') +
-        row(I.bag, 'Payouts monthly by PayPal or Wise, 14 days after each purchase, from $25.') +
+        row(I.bag, 'Payouts monthly ' + via + ', 14 days after each purchase, from $25.') +
       '</ul>' +
       '<button class="cta" id="accept">Continue to my dashboard' + I.arrow + '</button>' +
       '<p class="agree">By continuing, you agree to our <a href="/creator-terms" target="_blank" rel="noopener">Creator Program Terms</a>' +
