@@ -200,6 +200,17 @@ h1{font-family:Fraunces,Georgia,serif; font-size:27px; font-weight:900;
 
 <script>
 
+/* Регистрация теперь перед анкетой: после неё — в анкету (адрес из ?next=,
+   только funnel.html), а не на пэйволл. Уже есть аккаунт — сразу дальше. */
+const NEXT = (function(){
+  const m = location.search.match(/[?&]next=([^&]+)/);
+  let n = ''; try{ n = m ? decodeURIComponent(m[1]) : ''; }catch(e){}
+  return /^funnel\.html(?:[?#]|$)/.test(n) ? n : 'funnel.html?new=1';
+})();
+try{
+  const acct = JSON.parse(localStorage.getItem('admitmap_account')||'null');
+  if(acct && acct.email) location.replace(NEXT);
+}catch(e){}
 /* Вход через Google: Google Identity Services отдаёт токен, по нему берём адрес
    и имя и дальше идём тем же путём, что и форма с почтой. Client ID создаётся в
    Google Cloud Console (APIs & Services → Credentials → OAuth client ID, Web). */
@@ -223,12 +234,17 @@ function googleSignIn(){
         headers: {Authorization: 'Bearer ' + r.access_token}
       }).then(function(res){ return res.json(); }).then(function(u){
         if(!u.email){ showErr('Google did not share an email address. Please use email.'); return; }
+        let next = NEXT;
         try{
           const P = JSON.parse(localStorage.getItem('admitmap_profile')||'null') || {};
-          if(!P.name && u.name){ P.name = u.name; localStorage.setItem('admitmap_profile', JSON.stringify(P)); }
+          if(!P.name && u.name){
+            P.name = u.name; localStorage.setItem('admitmap_profile', JSON.stringify(P));
+            // анкета ещё пустая: имя из Google не должно включать в ней вопрос «Continue / Start over»
+            next = NEXT.replace(/([?&])new=1(&|$)/, function(_, a, b){ return b ? a : ''; });
+          }
         }catch(err){}
         saveEmail(u.email, 'google');
-        window.location.href = 'paywall-desktop.html?ready=1';
+        window.location.href = next;
       }).catch(function(){ showErr('Could not reach Google. Please try again or use email.'); });
     }
   }).requestAccessToken();
@@ -270,7 +286,7 @@ function busy(id, on, label){
 }
 function finish(email){
   saveEmail(email, 'signup');
-  window.location.href = 'paywall-desktop.html?ready=1';
+  window.location.href = NEXT;
 }
 function sendCode(e){
   if (e) e.preventDefault();

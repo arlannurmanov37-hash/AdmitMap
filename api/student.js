@@ -31,8 +31,9 @@ function stageOf(event, detail) {
       return [0, `Stuck on step ${n >= 1 && n <= 7 ? n + ': ' + STEP_NAMES[n - 1] : '?'}`];
     }
     case 'funnel_complete':  return [20, 'Finished the form'];
-    case 'signup_view':      return [30, 'Saw sign-up'];
-    case 'signup_done':      return [35, 'Signed up'];
+    // регистрация перед анкетой (с 14.10.2026); 30/35 — старый порядок, после анкеты
+    case 'signup_view':      return [5, 'Saw sign-up'];
+    case 'signup_done':      return [8, 'Signed up'];
     case 'paywall_view':     return [40, 'Saw prices'];
     case 'checkout_click':   return [50, 'Clicked buy'];
     case 'report_view':      return [60, 'Opened report'];

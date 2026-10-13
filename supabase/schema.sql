@@ -105,6 +105,8 @@ $$;
 -- Сводка по воронке. reached — дошли до шага или дальше; stopped_here — дальше этого шага не ушли.
 create or replace view public.funnel with (security_invoker = true) as
 with steps(rank, step) as (values
+  (5,  '00a Saw sign-up'),
+  (8,  '00b Signed up'),
   (10, '01 Opened the form'),
   (11, '02 Step 1 done: Basics'),
   (12, '03 Step 2 done: Academics'),
@@ -114,8 +116,8 @@ with steps(rank, step) as (values
   (16, '07 Step 6 done: Schools'),
   (17, '08 Step 7 done: Essay'),
   (20, '09 Finished the form'),
-  (30, '10 Saw sign-up'),
-  (35, '11 Signed up'),
+  (30, '10 Saw sign-up (before 14.10.2026)'),
+  (35, '11 Signed up (before 14.10.2026)'),
   (40, '12 Saw prices'),
   (50, '13 Clicked buy'),
   (60, '14 Opened report'),
