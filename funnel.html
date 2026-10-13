@@ -2521,6 +2521,14 @@ function vEssay(){
       <span id="wc" class="${w>650?'over':''}"><b>${w}</b> words</span></div>
     <div class="err" id="e-essay">The Common App accepts up to 650 words. Trim it to continue.</div>
   </div>
+  <div class="card">
+    <div class="c-head"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7.5 8 6 8-6"/></svg></span>
+      <span><span class="c-t">Your email</span><span class="c-s">optional · so we can reach you about your report</span></span></div>
+    <input class="fi" type="email" id="f-email" placeholder="you@example.com" autocomplete="email" inputmode="email"
+           value="${esc(S.email||'')}" oninput="S.email=this.value.trim();save()">
+    <div class="err" id="e-email">Check your email address, or leave it empty.</div>
+    <p class="fine">We'll only email you about your report and college deadlines. Unsubscribe anytime. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>
+  </div>
 
 `;
 }
@@ -2786,9 +2794,22 @@ function next(){
   if(step<STEPS.length-1){ step++; render({toTop:true}); return; }
   S.completedAt=new Date().toISOString(); save();
   track('funnel_complete', {schools:S.schools.length, activities:S.activities.filter(a=>(a.desc||'').trim()).length});
+  subscribe();
   window.location.href='loading.html';
 }
 function track(n,p){ if(window.amTrack) window.amTrack(n,p); }
+/* Необязательная почта в конце анкеты (регистрации до цен больше нет):
+   адрес уходит в список рассылки, как раньше со страницы регистрации. */
+const RE_MAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function subscribe(){
+  const em=(S.email||'').trim().toLowerCase();
+  if(!RE_MAIL.test(em)) return;
+  const body=JSON.stringify({email:em, name:S.name||'', gradYear:S.gradYear||'', source:'funnel'});
+  try{
+    if(navigator.sendBeacon && navigator.sendBeacon('/api/subscribe', new Blob([body],{type:'application/json'}))) return;
+    fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(()=>{});
+  }catch(e){}
+}
 function bad(id,is){ const e=document.getElementById(id); if(e) e.classList.toggle('on',is); return !is; }
 function valid(i){
   if(i===0){ let ok=bad('e-name',!S.name.trim()); ok=bad('e-year',!S.gradYear)&&ok;
@@ -2807,7 +2828,8 @@ function valid(i){
     ok=bad('e-hh',!(parseInt(S.householdSize)>0))&&ok;
     ok=bad('e-bud',!(parseInt(S.budget)>0))&&ok; return ok; }
   if(i===5) return bad('e-sch',S.schools.length<3);
-  if(i===6) return bad('e-essay',words(S.essay)>650);
+  if(i===6){ let ok=bad('e-essay',words(S.essay)>650);
+    const em=(S.email||'').trim(); return bad('e-email',!!em && !RE_MAIL.test(em))&&ok; }
 
   return true;
 }

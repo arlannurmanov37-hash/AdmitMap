@@ -388,7 +388,8 @@
     }
 
     if (done) { closeAll(); clearInterval(id);
-      setTimeout(function () { window.location.href = 'signup.html'; }, TAIL); }
+      // регистрации перед ценами больше нет: почту спрашивает Polar при оплате
+      setTimeout(function () { window.location.href = 'paywall-desktop.html?ready=1'; }, TAIL); }
   }, TICK);
 })();
 </script>
